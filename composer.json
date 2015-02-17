@@ -1,0 +1,19 @@
+{
+    "name": "laravel-addons/crud",
+    "description": "Under development",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vitaly Nikolenko",
+            "email": "vit@webstandart.ru"
+        },
+        {
+            "name": "Sergey Kulyamin",
+            "email": "kulyamin_sergey@mail.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"LaravelCrud\\": "src"}
+    },
+    "minimum-stability": "dev"
+}

@@ -1,0 +1,1 @@
+<textarea {{ input.config.rows ? ('rows="'~input.config.rows~'"')|raw }} class="form-control {{ input.config.editor ? 'html_editor' }}"    {{ input.config.required ? 'required' }} name="{{ input.name }}" >{{ input.getValue()|raw}}</textarea>

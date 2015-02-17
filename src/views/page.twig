@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+{% set PACKAGE= 'crud' %}
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+   <link rel="icon" href="/favicon.ico">
+    <title>{{ PAGE_TITLE }}</title>
+    <link href="{{ cmsHelper.asset(PACKAGE,'css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ cmsHelper.asset(PACKAGE,'font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+    <link href="{{ cmsHelper.asset(PACKAGE,'css/plugins/iCheck/custom.css') }}" rel="stylesheet">
+    <link href="{{ cmsHelper.asset(PACKAGE,'css/plugins/select2/select2.css') }}" rel="stylesheet">
+    <link href="{{ cmsHelper.asset(PACKAGE,'css/plugins/select2/select2-bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ cmsHelper.asset(PACKAGE,'css/plugins/summernote/summernote.css') }}" rel="stylesheet">
+    <link href="{{ cmsHelper.asset(PACKAGE,'css/plugins/summernote/summernote-bs3.css') }}" rel="stylesheet">
+    <link href="{{ cmsHelper.asset(PACKAGE,'css/plugins/datapicker/datepicker3.css') }}" rel="stylesheet">
+    <link href="{{ cmsHelper.asset(PACKAGE,'css/animate.css') }}" rel="stylesheet">
+    <link href="{{ cmsHelper.asset(PACKAGE,'css/style.css') }}" rel="stylesheet">
+    {% block head %}{% endblock %}
+
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+{% include "crud::blocks/left_nav.twig" %}
+
+<div id="page-wrapper" class="gray-bg">
+{% include "crud::blocks/top_bar.twig" %}
+    {% block bc %}{% endblock %}
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    {%block content%}{%endblock%}
+</div>
+
+
+</div>
+</div>
+
+
+</div>
+
+<!-- Mainly scripts -->
+<script src="{{ cmsHelper.asset(PACKAGE,'js/jquery-1.10.2.js') }}" ></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/bootstrap.min.js') }}" ></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/metisMenu/jquery.metisMenu.js') }}" ></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/slimscroll/jquery.slimscroll.min.js') }}" ></script>
+
+
+<!-- Custom and plugin javascript -->
+<script src="{{ cmsHelper.asset(PACKAGE,'js/inspinia.js') }}" ></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/pace/pace.min.js') }}" ></script>
+
+<!-- iCheck -->
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/iCheck/icheck.min.js') }}" ></script>
+<!-- SELECT 2 -->
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/select2/select2.js') }}" ></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/select2/select2_locale_ru.js') }}" ></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/summernote/summernote.js') }}" ></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/datapicker/bootstrap-datepicker.js') }}" ></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/datapicker/ru.js') }}"  charset="UTF-8"></script>
+
+<script>
+    var crud_object_conf = {{  crudObj.config|json_encode()|raw }};
+    var crud_tooltip_pattern = '{{ config_get('crud_tooltip.pattern')|raw }}';
+</script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/dataTables/jquery.dataTables.js') }}"></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/dataTables/dataTables.bootstrap.js') }}"></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/modules/crud.js') }}"></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/modules/crud_common.js') }}"></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/modules/crud_table.js') }}"></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/modules/crud_form.js') }}"></script>
+<script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/ajaxform/jquery.form.js') }}"></script>
+
+<div id="crud_form" class="modal fade" aria-hidden="true">
+</div>
+{% if config_get('crut_tooltip.acl')|allowed %}
+    {% include "crud::blocks/tooltip_edit.twig" %}
+{% endif %}
+
+
+{% block modals %}
+{% endblock %}
+</body>
+
+</html>

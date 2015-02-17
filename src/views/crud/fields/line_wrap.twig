@@ -1,0 +1,17 @@
+<div class="form-group " >
+
+    <div class="row">
+    <label for="{{ input.name }}" class="control-label col-lg-12 text-left">{{ input.config.title|raw }} {{ input.config.required ? '<span class="asterix"> * </span>' }}
+        {% if input.config.hint %}
+        {{ input.config.hint|tooltip }}
+        {% endif %}
+    </label>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+        {% include 'crud::crud/fields/'~input.config.type~'.twig' %}
+         </div>
+    </div>
+
+</div>

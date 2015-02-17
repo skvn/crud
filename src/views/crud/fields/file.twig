@@ -1,0 +1,10 @@
+<div class="col-md-8">
+<input class="form-control" placeholder="{{ input.config.placeholder }}" {%  if  (input.config.required and  not crudObj.getAttribute(input.name)) %}  required {% endif %} name="{{ input.name }}" type="file">
+</div>
+
+{% if input.getValue() %}
+<div class="col-md-4">
+    <a class="badge badge-primary" href="{{ input.getValue().getAttribute('download_link') }}"><i class="fa fa-paperclip"></i> {{ input.getValue().getAttribute('file_name') }} ({{ input.getValue().getAttribute('file_size')|readable_filesize}})</a><br />
+    <a class="badge badge-danger crud_command" href="/admin/crud/{{ crudObj.conf.class_name }}/{{ crudObj.id }}/command/delete_single_attach" data-confirm="Действительно удалить файл?" data-args='{"field":"{{ input.name }}" }' data-callback="$self.parent().remove();"><i class="fa fa-times-circle"></i> Удалить</a>
+</div>
+{% endif %}

@@ -1,0 +1,19 @@
+<select data-grouped="{{ input.isGrouped?'1':'0' }}" class="form-control" data-placeholder="-- Выберите"  {{ input.config.required ? 'required' }} name="{{ input.name }}{{input.config.multiple?'[]'}}" {{ input.config.multiple ? 'multiple' }} >
+
+{% if input.isGrouped %}
+    <option value=""> </option>
+    {% for gr in input.getOptions() %}
+        <optgroup label="{{ gr.title }}">
+            {% for op in gr.options %}
+                <option value="{{ op.value }}" data-group="{{ gr.title }}" {{ op.selected ? 'selected' }}>{{ op.text }}</option>
+            {% endfor %}
+        </optgroup>
+       {% endfor %}
+
+{% else %}
+    {% for op in input.getOptions() %}
+        <option value="{{ op.value }}" {{ op.selected ? 'selected' }}>{{ op.text }}</option>
+    {% endfor %}
+
+{% endif %}
+</select>

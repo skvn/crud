@@ -1,0 +1,39 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            <li class="nav-header">
+
+                <div class="dropdown profile-element"> <span>
+                            <!--<img alt="image" class="img-circle" src="/img/profile_small.jpg"> -->
+                             </span>
+
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ cmsHelper.user.full_name }}</strong>
+                             </span> <span class="text-muted text-xs block">{{ cmsHelper.user.acl_role_title }}</span> </span>
+
+                </div>
+                <div class="logo-element">
+
+                </div>
+
+            </li>
+
+            {% for m in cmsHelper.getAdminMenu() %}
+            <li {{ m.active?"class='active'"}}>
+                <a href="{{ m.href ? m.href : '#' }}" ><i class="{{ m.icon_class }}"></i> <span class="nav-label">{{ m.title }}</span>{% if m.kids %}<span class="fa arrow"></span>{% endif %}</a>
+                {%  if m.kids %}
+                    <ul class="nav nav-second-level">
+                    {%  for kid in m.kids %}
+                        <li  {{ kid.active?"class='active'"}}><a href="{{ route(kid.route.name,kid.route.args) }}"> {% if kid.active %}<i class="fa fa-arrow-circle-o-right"></i>{% endif %}{{ kid.title }}</a></li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+           </li>
+            {% endfor %}
+
+
+
+            </li>
+        </ul>
+
+    </div>
+</nav>
