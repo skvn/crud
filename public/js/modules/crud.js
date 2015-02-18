@@ -19,6 +19,7 @@ function CRUD(crudObj) {
             CRUD.init_selects($('#crud_form'));
             CRUD.init_date_pickers();
             CRUD.init_html_editors();
+            CRUD.init_ichecks($('#crud_form'));
             $('#crud_form input[type=text]:first').focus();
             $(document).trigger("crud.content_loaded", {cont: $('#crud_form')});
         });
@@ -110,9 +111,9 @@ function CRUD(crudObj) {
 
 
 
-    this.init_ichecks = function()
+    this.init_ichecks = function(cont)
     {
-        $('.i-checks').iCheck({
+        $('.i-checks', cont).iCheck({
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green'
         }).on('ifChanged', function ()
