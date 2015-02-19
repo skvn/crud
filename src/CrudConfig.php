@@ -15,6 +15,7 @@ class CrudConfig implements JsonSerializable {
     const FIELD_DATE = 'date';
     const FIELD_RANGE = 'range';
     const FIELD_DATE_RANGE = 'date_range';
+    const FIELD_NUMBER = 'number';
 
     const RELATION_BELONGS_TO_MANY = 'belongsToMany';
     const RELATION_BELONGS_TO = 'belongsTo';

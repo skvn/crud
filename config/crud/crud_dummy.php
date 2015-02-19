@@ -46,6 +46,19 @@ return [
                 'hint' => 'ref id of hint (tooltip system)'
             ],
 
+
+        //number field
+        'sfc_num_links' =>
+            [
+                'type'=>\LaravelCrud\CrudConfig::FIELD_NUMBER,
+                'required'=>0,
+                'title' => 'Кол-во позиций на ссылку',
+                'min' =>0, //optional
+                'max' =>10, //optional
+                'step'=>1, //optional
+                'tab' => "tab_sfc"
+            ],
+
 //        'first_name' =>
 //            [
 //                'type'=>'text',
