@@ -165,10 +165,28 @@ class CmsHelper
 //        return false;
 //    }//
 
-    function asset($package, $asset)
+    function asset($package, $asset, $use_skin=0)
     {
-        return '/vendor/'.$package.'/'.$asset;
+        if (!$use_skin) {
+            return '/vendor/' . $package . '/' . $asset;
+        } else
+        {
+
+            $path = '/skins/';
+            $path  .= \Config::get('view.skin').'/';
+
+            if (!empty($package))
+            {
+                $path .= 'vendor/'.$package.'/';
+            }
+
+            $path .= $asset;
+
+
+            return $path;
+        }
     }
+
 
 
     function setMenu($name, $data)
