@@ -114,78 +114,7 @@ class CmsHelper
         return false;
     }
 
-//    function checkAcl($acl)
-//    {
-//        if (in_array('*',$this->acls))
-//        {
-//            return true;
-//
-//        } else {
-//
-//
-//
-//            if (in_array($acl, $this->acls))
-//            {
-//                return true;
-//            }
-//
-//            $arr = explode('_',$acl);
-//
-//            //check any
-//            // if user has any rights for given prefix
-//            if ($arr[1] == '*')
-//            {
-//                foreach ($this->acls as $r)
-//                {
-//                    $rarr = explode('_',$r);
-//                    if ($rarr[0]  == $arr[0])
-//                    {
-//
-//                        return true;
-//                    }
-//
-//                }
-//            }
-//
-//            //check all - if user has all rights for given prefix
-//            foreach ($this->acls as $r)
-//            {
-//                $rarr = explode('_',$r);
-//                if (($rarr[0]  == $arr[0]) && ($rarr[1] == '*'))
-//                {
-//
-//                    return true;
-//                }
-//
-//            }
-//
-//
-//        }
-//
-//        return false;
-//    }//
 
-    function asset($package, $asset, $use_skin=0)
-    {
-        if (!$use_skin) {
-            return '/vendor/' . $package . '/' . $asset;
-        } else
-        {
-
-            $path = '/skins/';
-            $path  .= \Config::get('view.skin').'/';
-
-            if (!empty($package))
-            {
-                $path .= 'vendor/'.$package.'/';
-            }
-
-            $path .= $asset;
-
-
-            return $path;
-        }
-    }
 
 
 

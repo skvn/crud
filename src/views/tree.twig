@@ -1,8 +1,8 @@
 {% extends "crud::page.twig" %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ cmsHelper.asset(PACKAGE,'css/plugins/treegrid/jquery.treegrid.css') }}">
-    <link rel="stylesheet" href="{{ cmsHelper.asset(PACKAGE,'css/plugins/sortable/sortable.css') }}">
+    <link rel="stylesheet" href="{{ 'css/plugins/treegrid/jquery.treegrid.css'|asset }}">
+    <link rel="stylesheet" href="{{ 'css/plugins/sortable/sortable.css'|asset }}">
 {% endblock %}
 {% block content %}
 
@@ -85,15 +85,15 @@
         var crud_object_conf = {{  crudObj.config|json_encode()|raw }};
     </script>
 
-    <script type="text/javascript" src="{{ cmsHelper.asset(PACKAGE,'js/plugins/treegrid/jquery.treegrid.js') }}"></script>
-    <script type="text/javascript" src="{{ cmsHelper.asset(PACKAGE,'js/plugins/treegrid/jquery.treegrid.bootstrap3.js') }}"></script>
-    <script type="text/javascript" src="{{ cmsHelper.asset(PACKAGE,'js/plugins/sortable/jquery.sortable.js') }}"></script>
-    <script src="{{ cmsHelper.asset(PACKAGE,'js/modules/crud.js') }}"></script>
-    <script src="{{ cmsHelper.asset(PACKAGE,'js/modules/crud_common.js') }}"></script>
-    <script src="{{ cmsHelper.asset(PACKAGE,'js/modules/crud_tree.js') }}"></script>
-    <script src="{{ cmsHelper.asset(PACKAGE,'js/modules/crud_form.js') }}"></script>
+    <script type="text/javascript" src="{{ 'js/plugins/treegrid/jquery.treegrid.js'|asset }}"></script>
+    <script type="text/javascript" src="{{ 'js/plugins/treegrid/jquery.treegrid.bootstrap3.js'|asset }}"></script>
+    <script type="text/javascript" src="{{ 'js/plugins/sortable/jquery.sortable.js'|asset }}"></script>
+    <script src="{{ 'js/modules/crud.js'|asset }}"></script>
+    <script src="{{ 'js/modules/crud_common.js'|asset }}"></script>
+    <script src="{{ 'js/modules/crud_tree.js'|asset }}"></script>
+    <script src="{{ 'js/modules/crud_form.js'|asset }}"></script>
 
-    <script src="{{ cmsHelper.asset(PACKAGE,'js/plugins/ajaxform/jquery.form.js') }}"></script>
+    <script src="{{ 'js/plugins/ajaxform/jquery.form.js'|asset }}"></script>
     <!-- Page-Level Scripts -->
 
 

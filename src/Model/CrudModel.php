@@ -32,7 +32,10 @@ class CrudModel extends Model {
 
 
         $this->classShortName = class_basename($this);
-        $this->table = snake_case($this->classShortName);
+        if (empty($this->table))
+        {
+            $this->table = snake_case($this->classShortName);
+        }
 
         $this->config = new CrudConfig($this->table);
         $this->fillable = $this->config->getFillable();
