@@ -64,12 +64,16 @@ class CrudNotify extends CrudModel{
                 \DB :: table('crud_notify')->where('id', '=', $entry->id)->update(['delivered' => 1]);
                 continue;
             }
-            if ($entry->target_user_id)
+            if ($entry->target_user_id > 0)
             {
                 if ($uid && $uid == $entry->target_user_id)
                 {
                     $notify= $entry;
                     break;
+                }
+                else
+                {
+                    continue;
                 }
             }
             if (in_array($entry->id, $received))
