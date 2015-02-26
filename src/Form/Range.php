@@ -28,7 +28,8 @@ class Range extends Field {
     }
     function getFilterCondition()
     {
-        if (!empty($this->value)) {
+        if (!empty($this->value))
+        {
             $split = explode('~',$this->value);
             $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->config['column'];
             if ($split[0] != '' && $split[1] != '')

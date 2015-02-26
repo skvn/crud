@@ -37,6 +37,10 @@ class Filter {
         {
 
             $this->fill(\Session::get($this->getStorageKey()));
+
+        } else
+        {
+            $this->fill($this->crudObj->config->getListDefaultFilter());
         }
     }
 

@@ -275,5 +275,18 @@ class CrudConfig implements JsonSerializable {
         }
 
         return $colName;
+    }//
+
+
+    function getListDefaultFilter()
+    {
+
+
+        if (!empty($this->config['list'][$this->context]['filter']))
+        {
+            return $this->config['list'][$this->context]['filter'];
+        }
+
+        return [];
     }
 }

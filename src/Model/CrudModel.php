@@ -541,6 +541,7 @@ class CrudModel extends Model {
         if ($listOrContext != CrudConfig::EMPTY_CONTEXT_LIST) {
             $this->config->setContext($listOrContext);
         }
+
         $filter =  FilterFactory::create([$this->classShortName,$listOrContext]);
         $this->setFilter($filter);
     }

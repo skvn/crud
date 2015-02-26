@@ -36,6 +36,7 @@ class Form {
 //                    $this->visibleFields[$col] = $this->fields[$col];
 //                }
 
+                
                 if ($data) {
 
                     switch ($colConfig['type']) {
@@ -48,17 +49,22 @@ class Form {
 
                             } else {
 
-                                $from = 0;
-                                $to = '';
-                                if (isset($data[$col . '_from'])) {
-                                    $from = $data[$col . '_from'];
-                                }
+                                if (isset($data[$col . '_from']) || isset ($data[$col . '_to'])) {
 
-                                if (isset($data[$col . '_to'])) {
-                                    $to = $data[$col . '_to'];
-                                }
+                                    $from = 0;
+                                    $to = 0;
 
-                                $this->fields[$col]->setValue($from . '~' . $to);
+                                    if (isset($data[$col . '_from'])) {
+                                        $from = $data[$col . '_from'];
+                                    }
+
+                                    if (isset($data[$col . '_to'])) {
+                                        $to = $data[$col . '_to'];
+                                    }
+
+
+                                    $this->fields[$col]->setValue($from . '~' . $to);
+                                }
                             }
 
                             break;
