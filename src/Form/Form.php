@@ -79,7 +79,7 @@ class Form {
                             } else {
 
                                 if (isset($data[$col . '_from']) || isset ($data[$col . '_to'])) {
-                                    
+
                                     $from = 0;
                                     $to = '';
                                     if (isset($data[$col . '_from'])) {

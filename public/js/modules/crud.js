@@ -118,6 +118,18 @@ function CRUD(crudObj) {
             radioClass: 'iradio_square-green'
         }).on('ifChanged', function ()
         {
+
+            var name = $(this).data('name');
+            if (name) {
+                var hidden = $(this).parents('form').first().find('input[name=' + name + ']');
+                if (hidden.length) {
+                    if ($(this).prop('checked')) {
+                        hidden.val('1');
+                    } else {
+                        hidden.val('0');
+                    }
+                }
+            }
             var disabled = true;
             $(this).parents('table').find('tr td input.i-checks').each(function () {
                 if ($(this).prop('checked'))

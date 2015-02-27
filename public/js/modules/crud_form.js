@@ -17,13 +17,13 @@
         $(document).on('change','.crud_checkbox', function () {
 
             var name = $(this).data('name');
-
+            var hidden = $(this).parents('form').first().find('input[name='+name+']');
             if ($(this).prop('checked'))
             {
-                $(this).next().val('1');
+                hidden.val('1');
             } else
             {
-                $(this).next().val('0');
+                hidden.val('0');
             }
         });
         $(document).on('crud.update', function(ev,res)
