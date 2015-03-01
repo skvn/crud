@@ -37,7 +37,7 @@ class CrudModel extends Model {
             $this->table = snake_case($this->classShortName);
         }
 
-        $this->config = new CrudConfig($this->table);
+        $this->config = new CrudConfig($this);
         $this->fillable = $this->config->getFillable();
         $this->crudRelations = $this->config->getCrudRelations();
 
@@ -513,6 +513,11 @@ class CrudModel extends Model {
                 return $this->getRelationshipFromMethod($key, $camelKey);
             }
         }
+        $method = camel_case("attr_" . $key);
+        if (method_exists($this, $method))
+        {
+            return $this->$method();
+        }
 
 
         return parent::getAttribute($key);
@@ -704,7 +709,10 @@ class CrudModel extends Model {
     }
 
 
-
+    function attrModelName()
+    {
+        return snake_case($this->classShortName);
+    }
 
 
 }

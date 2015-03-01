@@ -239,6 +239,26 @@ class CrudController extends Controller {
 
     }
 
+    function crudTableColumns()
+    {
+        if (\Auth :: check())
+        {
+            $user = \Auth :: user();
+            if ($user instanceof \LaravelCrud\Contracts\PrefSubject)
+            {
+                return $user->crudPrefUI(constant(get_class($user) . '::PREF_TYPE_COLUMN_LIST'));
+            }
+            else
+            {
+                return ['success' => true];
+            }
+        }
+        else
+        {
+            return \Response('Access denied', 403);
+        }
+    }
+
 
 
 }

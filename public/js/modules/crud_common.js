@@ -27,9 +27,10 @@
             {
                 $('<div id="'+popup+'" style="display: none;"></div>').appendTo($(document.body));
             }
-            $.get(elem.data('uri'), {}, function(res){
+            $.get(elem.data('uri'), $.extend({}, elem.data()), function(res){
                 $('#'+popup).replaceWith(res);
                 $('#'+popup).modal('show');
+                CRUD.init_ichecks($('#'+popup));
             });
         }
 

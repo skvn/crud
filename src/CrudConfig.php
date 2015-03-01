@@ -2,9 +2,9 @@
 
 namespace LaravelCrud;
 
-use JsonSerializable;
+use JsonSerializable, ArrayAccess;
 
-class CrudConfig implements JsonSerializable {
+class CrudConfig implements JsonSerializable, ArrayAccess {
 
     const FIELD_SELECT = 'select';
     const FIELD_TEXT = 'text';
@@ -26,21 +26,26 @@ class CrudConfig implements JsonSerializable {
 
 
 
+
+
     protected $config;
     protected $crudRelations = [];
     protected $processableRelations = [];
     protected $fillable = [];
     protected $manyRelations = array('hasMany','belongsToMany', 'morphToMany', 'morphedByMany');
     protected $context;
+    protected $model;
+    protected $list_prefs = null;
 
 
-    public function __construct($table_name)
+    public function __construct($model)
     {
 
+        $this->model = $model;
 
-        $this->config =   \Config::get('crud_'.$table_name);
+        $this->config =   \Config::get('crud_'.$model->getTable());
 
-        $this->config['class_name'] = $table_name;
+        $this->config['class_name'] = snake_case(class_basename($model));
 
 
         if (!empty($this->config['fields']))
@@ -126,6 +131,11 @@ class CrudConfig implements JsonSerializable {
             return;
         }
         $this->context = $context;
+    }
+
+    function getContext()
+    {
+        return $this->context;
     }
 
     public  function getListName()
@@ -226,6 +236,31 @@ class CrudConfig implements JsonSerializable {
 
     }
 
+    function isColumnVisible($column)
+    {
+        if (is_null($this->list_prefs))
+        {
+            $this->list_prefs = false;
+            if (\Auth :: check())
+            {
+                $user = \Auth :: user();
+                if ($user instanceof \LaravelCrud\Contracts\PrefSubject)
+                {
+                    $this->list_prefs = $user->crudPrefForModel(constant(get_class($user) . "::PREF_TYPE_COLUMN_LIST"), $this->model);
+                }
+            }
+        }
+        if (empty($this->list_prefs))
+        {
+            return true;
+        }
+        if (empty($this->list_prefs['columns']))
+        {
+            return true;
+        }
+        return in_array($column, $this->list_prefs['columns']);
+    }
+
     protected   function resolveColumnByRelationName($col, $scope='fields')
     {
         foreach ($this->config[$scope] as $col_name => $desc) {
@@ -253,6 +288,14 @@ class CrudConfig implements JsonSerializable {
                 if (!empty($cdesc['title'])) {
                     $this->config['list']['columns'][$k]['title'] = $cdesc['title'];
                 }
+            }
+        }
+        if (\Auth :: check())
+        {
+            $user = \Auth :: user();
+            if ($user instanceof Contracts\PrefSubject)
+            {
+                $this->config['list']['columns'] = $user->crudPrefFilterTableColumns($this->config['list']['columns'], $this);
             }
         }
 
@@ -288,5 +331,29 @@ class CrudConfig implements JsonSerializable {
         }
 
         return [];
+    }
+
+    function offsetExists($offset)
+    {
+        return true;
+    }
+
+    function offsetGet($offset)
+    {
+        $method = camel_case("get_" . $offset);
+        if (method_exists($this, $method))
+        {
+            return $this->$method();
+        }
+    }
+
+    function offsetSet($offset, $value)
+    {
+
+    }
+
+    function offsetUnset($offset)
+    {
+
     }
 }

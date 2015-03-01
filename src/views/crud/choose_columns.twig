@@ -1,0 +1,44 @@
+<div id="crud_table_columns" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Показывать колонки</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="tooltip_edit_form" action="{{ route('crud_table_columns') }}" method="post"  class="ajax_form" role="form" data-reload="1">
+
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                    <input type="hidden" name="model" value="{{ crudObj.model_name }}" />
+                    <input type="hidden" name="context" value="{{ crudObj.config.context }}" />
+                    <input type="hidden" name="pref_type" value="{{ pref_type }}" />
+                    <input type="hidden" name="pref[name]" value="cols" />
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% for c in crudObj.config.list.columns %}
+                                {% if not c.ctype %}
+                                    <label class="control-label text-left">
+                                        <input class="i-checks" type="checkbox" name="pref[columns][]" value="{{ c.data }}" {{ crudObj.config.isColumnVisible(c.data) ? 'checked="checked"' }}/> {{ c.title }}
+                                    </label><br />
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row"><div class="hr-line-dashed"></div></div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-default"  data-close="1" data-dismiss="modal">Отмена</button>
+                        <button class="btn btn-primary" type="submit">Сохранить</button>
+
+                        {% include 'crud::blocks/progress_bar.twig' %}
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
