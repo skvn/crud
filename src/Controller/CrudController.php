@@ -206,7 +206,7 @@ class CrudController extends Controller {
 
             return ['success'=>true, 'ret'=>$ret];
 
-        } catch(Exception $e)
+        } catch(\Exception $e)
         {
             return ['success'=>false, 'error'=>$e->getMessage()];
         }
