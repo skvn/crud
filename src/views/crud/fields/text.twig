@@ -1,1 +1,7 @@
-<input class="form-control" placeholder="{{ input.config.placeholder }}" {{ input.config.required ? 'required' }} {{ input.config.readonly ? 'readonly="readonly"' }} name="{{ input.name }}" type="text" value="{{ input.getValue() }}">
+<input class="form-control"
+       placeholder="{{ input.config.placeholder }}" {{ input.config.required ? 'required' }} {{ input.config.readonly ? 'readonly="readonly"' }}
+       name="{{ input.name }}"
+       type="text"
+       value="{{ input.getValue() }}"
+       {{ input.config.disable_autocomplete ? 'autocomplete="off"' }}
+        />

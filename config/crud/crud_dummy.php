@@ -43,7 +43,8 @@ return [
                 'type'=>'text',
                 'required'=>1,
                 'title' => 'Email',
-                'hint' => 'ref id of hint (tooltip system)'
+                'hint' => 'ref id of hint (tooltip system)',
+                'disable_autocomplete' => false
             ],
 
 
