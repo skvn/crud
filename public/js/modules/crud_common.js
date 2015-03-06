@@ -32,6 +32,12 @@
                 $('#'+popup).modal('show');
                 CRUD.init_ichecks($('#'+popup));
             });
+        },
+        call_uri: function(elem)
+        {
+            $.get(elem.data('uri'), $.extend({}, elem.data()), function(res){
+                alert(res['message']);
+            });
         }
 
     };
@@ -70,7 +76,16 @@
             }
         });
 
-        $(document).on('click','*[data-click]', function (e) {
+        $(document).on('click','*[data-click]', function (e)
+            {
+                if ($(this).data('confirm'))
+                {
+                    console.log($(this).data('confirm'));
+                    if (!confirm($(this).data('confirm')))
+                    {
+                        return;
+                    }
+                }
 
                 switch ($(this).data('click'))
                 {
