@@ -37,10 +37,10 @@ class Range extends Field {
                 return ['cond' => [$col, 'BETWEEN', $split]];
 
             } elseif ($split[0] != ''){
-                return ['cond' => [$col, '>', $split[0]]];
+                return ['cond' => [$col, '>=', $split[0]]];
             }
             elseif ($split[1] != ''){
-                return ['cond' => [$col, '<', $split[1]]];
+                return ['cond' => [$col, '=<', $split[1]]];
             }
         }
 
