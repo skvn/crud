@@ -39,7 +39,7 @@
                 {
                     if (!crud_cols[i].ctype)
                     {
-                        crud_cols[i].title += ' ' + crud_tooltip_pattern.replace('%s', crud_cols[i].hint);
+                        crud_cols[i].title += ' ' + crud_tooltip_pattern.replace('%s', crud_cols[i].hint['index']).replace('%t', crud_cols[i].hint['default']);
                     }
                 }
             }

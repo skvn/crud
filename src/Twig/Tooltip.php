@@ -12,11 +12,7 @@ class Tooltip extends Twig_Extension
 
     public function tooltip($t, $text = "")
     {
-        if (!empty($text))
-        {
-            return str_replace('%s', $text, \Config :: get('crud_tooltip.pattern_static'));
-        }
-        return str_replace('%s', $t, \Config :: get('crud_tooltip.pattern'));
+        return str_replace("%t", $text, str_replace('%s', $t, \Config :: get('crud_tooltip.pattern')));
     }
 
 

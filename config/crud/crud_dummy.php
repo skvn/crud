@@ -24,7 +24,7 @@ return [
         'title'=>'Список пользователей',
         'columns'=>[
             [ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox'],
-            [ "data"=> "id", "orderable"=>true, 'hint' => 'tooltip index'],
+            [ "data"=> "id", "orderable"=>true, 'hint' => ['index' => 'tooltip index', 'default' => 'tooltip default text']],
             [ "data"=> "email", "orderable"=>true, 'title'=>'Email'],
 
         ]
