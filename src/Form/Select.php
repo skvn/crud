@@ -12,9 +12,24 @@ class Select extends Field {
         $options = array();
         $options[] = ['value'=>'', 'text'=>$empty_option];
 
+
         if (!empty($this->config['select_options']))
         {
+            if (!$this->value)
+            {
+                if (!empty($this->config['relation']) && $this->form->crudObj->config->isManyRelation($this->config['relation'])) {
+
+                    $this->value = $this->form->crudObj->getRelationIds($this->getName());
+
+
+                } else {
+                    $this->value = $this->form->crudObj->getAttribute($this->getName());
+                }
+
+            }
+
             $opts = [];
+
             foreach ($this->config['select_options'] as $k=>$v)
             {
                 $selected = 0;
