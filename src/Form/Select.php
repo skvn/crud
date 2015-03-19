@@ -34,7 +34,7 @@ class Select extends Field {
             {
                 $this->config['select_options'] = $this->form->crudObj->getAttribute($this->config['select_options']);
             }
-            var_dump($this->config['select_options']);
+           
 
             foreach ($this->config['select_options'] as $k=>$v)
             {
