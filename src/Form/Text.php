@@ -21,9 +21,17 @@ class Text extends Field {
 
     function getFilterCondition()
     {
-        if (!empty($this->value)) {
+        if (!empty($this->value))
+        {
             $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
-            return ['cond' => [$col, 'LIKE',  $this->value ]];
+            if (strpos($this->value, "~") === 0)
+            {
+                return ['cond' => [$col, 'NOT LIKE',  substr($this->value, 2) ]];
+            }
+            else
+            {
+                return ['cond' => [$col, 'LIKE',  $this->value ]];
+            }
         }
 
 
