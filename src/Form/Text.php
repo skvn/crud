@@ -26,7 +26,7 @@ class Text extends Field {
             $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
             if (strpos($this->value, "~") === 0)
             {
-                return ['cond' => [$col, 'NOT LIKE',  substr($this->value, 2) ]];
+                return ['cond' => [$col, 'NOT LIKE',  substr($this->value, 1) ]];
             }
             else
             {
