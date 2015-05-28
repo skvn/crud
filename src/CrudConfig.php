@@ -229,10 +229,14 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
 
         if (!empty($this->config[$scope][$col]))
         {
-            return $this->config[$scope][$col];
+            $conf =  $this->config[$scope][$col];
+            $conf['column_index'] = $col;
         } else {
-            return $this->resolveColumnByRelationName($col, $scope);
+            $conf =  $this->resolveColumnByRelationName($col, $scope);
         }
+
+
+        return $conf;
 
     }
 
@@ -266,6 +270,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
         foreach ($this->config[$scope] as $col_name => $desc) {
             if (!empty($desc['relation_name']) &&  $desc['relation_name'] == $col)
             {
+                $desc['column_index'] = $col_name;
                 return $desc;
             }
         }

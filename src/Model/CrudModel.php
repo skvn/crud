@@ -234,6 +234,7 @@ class CrudModel extends Model {
 
 
 
+
         if (!empty($context) && method_exists($this, $method))
         {
 
@@ -470,10 +471,12 @@ class CrudModel extends Model {
     public function __call($method, $parameters)
     {
 
+
         if (array_key_exists($method, $this->config->getCrudRelations()))
         {
             $relType =  $this->config->getCrudRelations()[$method];
             $relAttributes = $this->config->getColumn($method);
+
             return $this->createCrudRelation($relType, $relAttributes, $method);
 
         }
@@ -482,10 +485,12 @@ class CrudModel extends Model {
 
     private function createCrudRelation($relType, $relAttributes, $method)
     {
+
+
         switch ($relType)
         {
             case 'belongsTo':
-                return $this->$relType('\App\Model\\'.$relAttributes['model'],null, null, $method);
+                return $this->$relType('\App\Model\\'.$relAttributes['model'],$relAttributes['column_index'], null, $method);
             break;
 
             case 'belongsToMany':
@@ -630,11 +635,13 @@ class CrudModel extends Model {
     function getDescribedColumnValue($col)
     {
 
+
         if ($relSpl = $this->resolveListRelation($col))
         {
 
             $rel = $relSpl[0];
             $attr = $relSpl[1];
+
             return $this->$rel->$attr;
             
 
