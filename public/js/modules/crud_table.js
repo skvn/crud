@@ -114,6 +114,10 @@
 
         $('.crud_table').on('dblclick', 'tbody>tr', function (){
 
+            if ($(this).data('crud_noedit') == '1')
+            {
+                return;
+            }
             CRUD.init_modal($(this).find('td').first().data('id'));
 
 
