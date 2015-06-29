@@ -329,6 +329,8 @@ class CrudModel extends Model {
 
     public function applyConditions($coll, $conditions)
     {
+        $conditions = $this->preApplyConditions($coll,$conditions);
+
         foreach ($conditions as $cond) {
 
             if (empty($cond['join'])) {
@@ -348,6 +350,10 @@ class CrudModel extends Model {
         return $coll;
     }//
 
+    public  function preApplyConditions($coll,$conditions)
+    {
+        return $conditions;
+    }
 
     protected function applyFilterWhere($coll, $cond)
     {
