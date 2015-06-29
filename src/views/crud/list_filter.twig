@@ -17,7 +17,11 @@
                     <form id="crud_filter_form"  data-crud_model="{{ crudObj.config.get('class_name') }}" data-crud_context="{{ crudObj.getFilter().getContext() }}">
                      <fieldset style="padding-bottom: 20px;">
                     {% for input in crudObj.getFilter().getForm().fields %}
-                        {% include 'crud::crud/fields/line_wrap.twig' %}
+                        {% if input.config.type=='checkbox' %}
+                            {% include 'crud::crud/fields/line_wrap_compact.twig' %}
+                        {% else %}
+                            {% include 'crud::crud/fields/line_wrap.twig' %}
+                        {% endif %}
                     {% endfor %}
                      </fieldset>
                         <div class="modal-footer">
