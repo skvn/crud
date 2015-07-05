@@ -83,7 +83,8 @@ class CrudHelper {
         {
             $total = 0;
         }
-        
+        $q = $coll->getQuery();
+        \Session :: set("current_query_info", ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
         $coll = $coll->get();
 
         foreach ($coll as $obj)
@@ -104,7 +105,8 @@ class CrudHelper {
         return [
             "recordsTotal"=>$total ,
             "recordsFiltered"=>$total,
-            'data'=>$data];
+            'data'=>$data
+        ];
     }//
 
 
