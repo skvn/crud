@@ -408,7 +408,7 @@ trait TreeTrait  {
         $parent = self::find($parent);
         switch ($treeAction) {
             case 'makeFirstChild':
-                if ($this->tree_depth == 1)
+                if ($this->tree_depth == 1 && empty($parent))
                 {
                     $parent = self :: find(self :: ROOT_ID);
                 }
