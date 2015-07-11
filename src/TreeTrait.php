@@ -376,6 +376,10 @@ trait TreeTrait  {
         $treeAction = (!empty($input['tree_action'])?$input['tree_action']:'');
 
         $oldParent = $this->getAttribute($this->getColumnTreePid());
+        if (!isset($input[$this->getColumnTreePid()]))
+        {
+            $input[$this->getColumnTreePid()] = self :: ROOT_ID;
+        }
         $parent = $input[$this->getColumnTreePid()];
 
         if (empty($parent))
