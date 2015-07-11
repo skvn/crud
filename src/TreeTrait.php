@@ -408,6 +408,10 @@ trait TreeTrait  {
         $parent = self::find($parent);
         switch ($treeAction) {
             case 'makeFirstChild':
+                if ($this->tree_depth == 1)
+                {
+                    $parent = self :: find(self :: ROOT_ID);
+                }
                 if ($this->exists and $this->isAncestor($parent))
                 {
                     return 'Невозможно передвинуть родительский элемент в дочерний';
