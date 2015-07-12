@@ -366,7 +366,7 @@ trait TreeTrait  {
 
     function saveTree($input)
     {
-        if ($this->id == self::ROOT_ID)
+        if ($this->id == $this->rootId())
         {
             // no tree actions on root
             $this->fill($input);
@@ -378,13 +378,13 @@ trait TreeTrait  {
         $oldParent = $this->getAttribute($this->getColumnTreePid());
         if (!isset($input[$this->getColumnTreePid()]))
         {
-            $input[$this->getColumnTreePid()] = self :: ROOT_ID;
+            $input[$this->getColumnTreePid()] = $this->rootId();
         }
         $parent = $input[$this->getColumnTreePid()];
 
         if (empty($parent))
         {
-            $parent = self::ROOT_ID;
+            $parent = $this->rootId();
         }
 
         if (!$this->exists)
@@ -414,7 +414,7 @@ trait TreeTrait  {
             case 'makeFirstChild':
                 if ($this->tree_depth == 1 && empty($parent))
                 {
-                    $parent = self :: find(self :: ROOT_ID);
+                    $parent = self :: find($this->rootId());
                 }
                 if ($this->exists and $this->isAncestor($parent))
                 {
@@ -447,7 +447,7 @@ trait TreeTrait  {
             $p_ids = explode('.', $this->getTreePath());
             $this->parents = [];
             foreach ($p_ids as $id) {
-                if (intval($id) > self::ROOT_ID) {
+                if (intval($id) > $this->rootId) {
                     $this->parents[] = $id;
                 }
             }
@@ -457,5 +457,21 @@ trait TreeTrait  {
         }
 
         return $this->parents;
+    }
+
+    function rootId()
+    {
+        if (defined('static::ROOT_ID'))
+        {
+            return static :: ROOT_ID;
+        }
+        else if (defined('static::ROOT_ENV'))
+        {
+            return env(static :: ROOT_ENV);
+        }
+        else
+        {
+            return 1;
+        }
     }
 }
