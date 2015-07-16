@@ -3,7 +3,7 @@
     <div class="row">
     <label for="{{ input.name }}" class="control-label col-lg-12 text-left">{{ input.config.title|raw }} {{ input.config.required ? '<span class="asterix"> * </span>' }}
         {% if input.config.hint %}
-        {{ input.config.hint|tooltip }}
+        {{ input.config.hint|tooltip(input.config.hint_default) }}
         {% endif %}
     </label>
     </div>
