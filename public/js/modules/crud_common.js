@@ -78,6 +78,7 @@
 
         $(document).on('click','*[data-click]', function (e)
             {
+                e.preventDefault();
                 if ($(this).data('confirm'))
                 {
                     console.log($(this).data('confirm'));
@@ -89,7 +90,6 @@
 
                 switch ($(this).data('click'))
                 {
-                    e.preventDefault();
                     case 'crud_action':
                         if (crud_actions[$(this).data('action')]) {
                             crud_actions[$(this).data('action')]($(this));
