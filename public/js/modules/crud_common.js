@@ -78,6 +78,7 @@
 
         $(document).on('click','*[data-click]', function (e)
             {
+                e.preventDefault();
                 if ($(this).data('confirm'))
                 {
                     console.log($(this).data('confirm'));

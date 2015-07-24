@@ -44,6 +44,7 @@ return [
                 'required'=>1,
                 'title' => 'Email',
                 'hint' => 'ref id of hint (tooltip system)',
+                'hint_default' => 'default hit countent',
                 'disable_autocomplete' => false
             ],
 
@@ -53,7 +54,9 @@ return [
             [
                 'type'=>\LaravelCrud\CrudConfig::FIELD_NUMBER,
                 'required'=>0,
-                'title' => 'Кол-во позиций на ссылку',
+                'title' => 'caption',
+                'hint' => '',
+                'hint_default' => '',
                 'min' =>0, //optional
                 'max' =>10, //optional
                 'step'=>1, //optional
