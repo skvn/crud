@@ -114,7 +114,7 @@
 
         $('.crud_table').on('dblclick', 'tbody>tr', function (){
 
-            if ($(this).data('crud_noedit') == '1')
+            if ($(this).parents('.crud_table').first().data('crud_noedit') == '1')
             {
                 return;
             }

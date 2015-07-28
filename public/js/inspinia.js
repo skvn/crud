@@ -1,6 +1,15 @@
 // Custom scripts
 $(document).ready(function () {
 
+    //slimscroll
+    $('.full-height-scroll').slimscroll({
+        height: '100%'
+    });
+
+    $('.scroll-220').slimscroll({
+        height: '210px'
+    });
+
     // MetsiMenu
     $('#side-menu').metisMenu();
 
@@ -30,7 +39,7 @@ $(document).ready(function () {
         var label = $(this).next('span');
         button.toggleClass('fa-check-square').toggleClass('fa-square-o');
         label.toggleClass('todo-completed');
-        return false;
+        //return false;
     });
 
 
