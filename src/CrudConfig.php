@@ -43,7 +43,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
 
         $this->model = $model;
 
-        $this->config =   \Config::get('crud_'.$model->getTable());
+        $this->config =   \Config::get('crud.crud_'.$model->getTable());
 
         $this->config['class_name'] = snake_case(class_basename($model));
 
@@ -104,7 +104,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
             return (!empty($this->config[$key]) ? $this->config[$key] : false);
         } else
         {
-            return \Config::get('crud_'.$this->config['class_name'].'.'.$key);
+            return \Config::get('crud.crud_'.$this->config['class_name'].'.'.$key);
 
         }
     }

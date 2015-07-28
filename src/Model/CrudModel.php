@@ -476,8 +476,6 @@ class CrudModel extends Model {
 
     public function __call($method, $parameters)
     {
-
-
         if (array_key_exists($method, $this->config->getCrudRelations()))
         {
             $relType =  $this->config->getCrudRelations()[$method];

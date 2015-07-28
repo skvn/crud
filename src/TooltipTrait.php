@@ -10,7 +10,7 @@ trait TooltipTrait
         $tooltips = \DB :: table('crud_tooltip')->whereIn('tt_index', $ids)->get();
 
 
-        $data = ['allow_edit' => $helper->checkAcl(\Config :: get('crud_tooltip.acl')), 'tips' => []];
+        $data = ['allow_edit' => $helper->checkAcl(\Config :: get('crud.crud_tooltip.acl')), 'tips' => []];
         foreach ($tooltips as $tooltip)
         {
             $data['tips'][$tooltip->tt_index] = $tooltip->tt_text;
@@ -28,7 +28,7 @@ trait TooltipTrait
     function crudTooltipUpdate()
     {
         $helper = \App :: make('CmsHelper');
-        if (!$helper->checkAcl(\Config :: get('crud_tooltip.acl')))
+        if (!$helper->checkAcl(\Config :: get('crud.crud_tooltip.acl')))
         {
             return \Response('Access denied',403);
         }
