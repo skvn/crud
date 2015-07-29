@@ -357,22 +357,67 @@ class CrudModel extends Model {
 
     protected function applyFilterWhere($coll, $cond)
     {
+        if (is_array($cond[0]))
+        {
+            //OR in AND
+            $or_where = function ($query) use ($cond) {
+
+                foreach ($cond as $i=>$one_cond)
+                {
+                    list($col, $act, $val) = $one_cond;
+                    if ($i ==0)
+                    {
+                        $query = $this->applyFilterWhere($query,$one_cond);
+                    } else {
+                        $query = $this->applyFilterOrWhere($query,$one_cond);
+                    }
+
+                }
+            };
+            
+            $coll->where($or_where);
+
+        } else {
+
+            //simple and
+            list($col, $act, $val) = $cond;
+            switch (strtolower($act))
+            {
+                case 'in':
+                    $coll->whereIn($col, $val);
+                    break;
+
+                case 'between':
+                    $coll->whereBetween($col, $val);
+                    break;
+
+                default:
+                    $coll->where($col, $act, $val);
+                    break;
+            }
+        }
+
+        return $coll;
+    }//
+
+
+    protected function applyFilterOrWhere($coll, $cond)
+    {
         list($col, $act, $val) = $cond;
         switch (strtolower($act))
         {
             case 'in':
-                $coll->whereIn($col, $val);
+                $coll->orWhereIn($col, $val);
                 break;
 
             case 'between':
-                $coll->whereBetween($col, $val);
+                $coll->orWhereBetween($col, $val);
                 break;
 
             default:
-                $coll->where($col, $act, $val);
+                $coll->orWhere($col, $act, $val);
                 break;
         }
-
 
         return $coll;
     }
