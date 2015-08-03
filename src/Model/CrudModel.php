@@ -357,7 +357,11 @@ class CrudModel extends Model {
 
     protected function applyFilterWhere($coll, $cond)
     {
-        if (is_array($cond[0]))
+        if (is_string($cond))
+        {
+            $coll->whereRaw($cond);
+        }
+        else if (is_array($cond[0]))
         {
             //OR in AND
             $or_where = function ($query) use ($cond) {
