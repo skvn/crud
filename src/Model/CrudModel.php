@@ -14,7 +14,7 @@ class CrudModel extends Model {
 
     public $config;
     protected $dirtyRelations = [];
-    protected $classShortName;
+    public $classShortName;
     protected $filterObj;
     protected $form;
     protected $crudRelations;
