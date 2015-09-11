@@ -300,7 +300,15 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
             $user = \Auth :: user();
             if ($user instanceof Contracts\PrefSubject)
             {
-                $this->config['list']['columns'] = $user->crudPrefFilterTableColumns($this->config['list']['columns'], $this);
+                $cols = $user->crudPrefFilterTableColumns($this->config['list']['columns'], $this);
+                foreach($this->config['list']['columns'] as $col)
+                {
+                    if (isset($col['visible']) && !$col['visible'])
+                    {
+                        $cols[] = $col;
+                    }
+                }
+                $this->config['list']['columns'] = $cols;
             }
         }
 
