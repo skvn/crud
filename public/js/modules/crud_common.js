@@ -29,6 +29,7 @@
             }
             $.get(elem.data('uri'), $.extend({}, elem.data()), function(res){
                 $('#'+popup).replaceWith(res);
+                $(document).trigger("crud.content_loaded", {cont: $('#'+popup)});
                 $('#'+popup).modal('show');
                 CRUD.init_ichecks($('#'+popup));
             });
