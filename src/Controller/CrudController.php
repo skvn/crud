@@ -134,7 +134,7 @@ class CrudController extends Controller {
             }
             return ['success'=>true,'crud_id'=>$obj->id,'crud_model'=>$obj->classShortName];
 
-        } catch(Exception $e)
+        } catch( \Exception $e)
         {
             return ['success'=>false, 'error'=>$e->getMessage()];
         }
