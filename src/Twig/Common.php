@@ -14,7 +14,7 @@ class Common extends Twig_Extension
     {
         if (!$use_skin)
         {
-            return '/vendor/' . $package . '/' . $asset;
+            return '/vendor/' . $package . '/' . $asset . '?s=' . \Config :: get('app.serial');
         }
         else
         {
@@ -27,6 +27,7 @@ class Common extends Twig_Extension
             }
 
             $path .= $asset;
+            $path .= '?s=' . \Config :: get('app.serial');
 
 
             return $path;
