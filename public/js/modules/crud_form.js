@@ -1,12 +1,24 @@
-;(function($, window, CRUD){
+;(function($, crud){
 
 
     var close = false;
+    var crud_actions = {
+            open_form: function(elem)
+            {
+                crud.init_modal(elem.data("id"), elem.data("model"));
+            }
+    };
 
-    $(document).ready(function ()
+    crud.bind('page.start', function()
     {
+        crud.add_actions(crud_actions);
         init_events();
     });
+
+    //$(crud.doc).ready(function ()
+    //{
+    //    init_events();
+    //});
 
 
 
@@ -14,7 +26,7 @@
     {
         $('#crud_form').modal({backdrop:'static', 'keyboard':false, 'show':false})
 
-        $(document).on('change','.crud_checkbox', function () {
+        $(crud.doc).on('change','.crud_checkbox', function () {
 
             var name = $(this).data('name');
             var hidden = $(this).parents('form').first().find('input[name='+name+']');
@@ -26,20 +38,32 @@
                 hidden.val('0');
             }
         });
-        $(document).on('crud.update', function(ev,res)
-        {
+        crud.bind('crud.update', function(res){
             // console.log(res);
             if (res.success)
             {
 
                 $('#crud_form form').trigger('reset');
-                CRUD.reset_selects();
+                crud.reset_selects();
                 $('#crud_form').modal('hide');
 
 
             }
         });
-        $(document).on('ajax_form.return', function(ev, data){
+        //$(crud.doc).on('crud.update', function(ev,res)
+        //{
+        //    // console.log(res);
+        //    if (res.success)
+        //    {
+        //
+        //        $('#crud_form form').trigger('reset');
+        //        crud.reset_selects();
+        //        $('#crud_form').modal('hide');
+        //
+        //
+        //    }
+        //});
+        crud.bind('ajax_form.return', function(data){
             if(data.res['success'])
             {
                 if (data.frm.data('close'))
@@ -48,7 +72,7 @@
                 }
                 if (data.frm.data("reload"))
                 {
-                    window.location.reload();
+                    crud.loc.reload();
                 }
             }
             else
@@ -56,20 +80,38 @@
                 alert(data.res['error']);
             }
         });
+        //$(crud.doc).on('ajax_form.return', function(ev, data){
+        //    if(data.res['success'])
+        //    {
+        //        if (data.frm.data('close'))
+        //        {
+        //            data.frm.parents(".modal:first").modal('hide');
+        //        }
+        //        if (data.frm.data("reload"))
+        //        {
+        //            crud.loc.reload();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        alert(data.res['error']);
+        //    }
+        //});
 
-        $(document).on('submit', '#crud_filter_form', function (e) {
+        $(crud.doc).on('submit', '#crud_filter_form', function (e) {
             e.preventDefault();
             var $form = $(this);
-            CRUD.toggle_form_progress($form);
-            CRUD.init_form_progress($form);
+            crud.toggle_form_progress($form);
+            crud.init_form_progress($form);
             $form.ajaxSubmit(
                 {
                     type:'POST',
-                    url: '/admin/crud/'+CRUD.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
+                    url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
                     dataType: 'json',
                     success: function (res) {
-                        CRUD.toggle_form_progress($form)
-                        $(document).trigger('crud.filter_set',res);
+                        crud.toggle_form_progress($form)
+                        crud.trigger('crud.filter_set',res);
+                        //$(crud.doc).trigger('crud.filter_set',res);
 
                     }
 
@@ -78,7 +120,7 @@
 
         });
 
-        $(document).on('reset', '#crud_filter_form', function (e) {
+        $(crud.doc).on('reset', '#crud_filter_form', function (e) {
             //e.preventDefault();
             var $form = $(this);
             $('select', $form).each(function (){
@@ -90,16 +132,17 @@
             });
 
 
-            CRUD.toggle_form_progress($form);
-            CRUD.init_form_progress($form);
+            crud.toggle_form_progress($form);
+            crud.init_form_progress($form);
             $form.ajaxSubmit(
                 {
                     type:'POST',
-                    url: '/admin/crud/'+CRUD.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
+                    url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
                     dataType: 'json',
                     success: function (res) {
-                        CRUD.toggle_form_progress($form)
-                        $(document).trigger('crud.filter_set',res);
+                        crud.toggle_form_progress($form)
+                        crud.trigger('crud.filter_set',res);
+                        //$(crud.doc).trigger('crud.filter_set',res);
                     }
 
                 }
@@ -107,7 +150,7 @@
 
         });
 
-        $(document).on('click', '.crud_submit', function (e) {
+        $(crud.doc).on('click', '.crud_submit', function (e) {
             e.preventDefault();
             close = parseInt($(this).data('close'))
             $(this).parents('form').find('input[type=submit]').click();
@@ -115,12 +158,12 @@
         });
 
 
-        $(document).on('submit', '*[data-crud_role=form_container] form', function (e) {
+        $(crud.doc).on('submit', '*[data-crud_role=form_container] form', function (e) {
             e.preventDefault();
             var $form = $(this);
-            CRUD.toggle_editors_content($form);
-            CRUD.toggle_form_progress($form);
-            CRUD.init_form_progress($form);
+            crud.toggle_editors_content($form);
+            crud.toggle_form_progress($form);
+            crud.init_form_progress($form);
 
             $(this).ajaxSubmit(
                 {
@@ -129,19 +172,45 @@
                     url: $form.attr('action'),
                     dataType: 'json',
                     success: function (res) {
-                        CRUD.toggle_form_progress($form)
+                        crud.toggle_form_progress($form)
 
-                        if (close>0) {
-                            $(document).trigger('crud.update', res);
+                        if (res.success) {
 
-                        } else
-                        {
-                            var id = res.crud_id
-                            $(document).trigger('crud.reload', res);
-                            CRUD.init_modal(id, $form.parent().data('crud_model'));
+                            if (close > 0) {
+                                //$(crud.doc).trigger('crud.update', res);
+                                crud.trigger('crud.update', res);
+
+                            } else {
+                                var id = res.crud_id
+                                crud.trigger('crud.reload', res);
+                                //$(crud.doc).trigger('crud.reload', res);
+                                crud.init_modal(id, $form.parent().data('crud_model'));
+                            }
+
+                        } else {
+
+                            if (res.error.indexOf("SQLSTATE[23000]")>=0)
+                            {
+                                alert('Невозможно сохранить: ДУБЛИКАТ');
+
+                            } else {
+                                alert('Произошла ошибка: ' + res.error);
+                            }
                         }
 
+                    },
+                    error: function(data){
+                        //console.log(data);
+                        crud.toggle_form_progress($form);
+                        if (data.responseJSON.error.code == 23000)
+                        {
+                            alert('Невозможно сохранить: ДУБЛИКАТ');
+
+                        } else {
+                            alert('Произошла ошибка: ' + data.responseJSON.error.message);
+                        }
                     }
+
 
                 }
             );
@@ -149,12 +218,12 @@
         });
 
 
-        $(document).on('submit', 'form.ajax_form', function (e) {
+        $(crud.doc).on('submit', 'form.ajax_form', function (e) {
             e.preventDefault();
             var $form = $(this);
-            CRUD.toggle_editors_content($form);
-            CRUD.toggle_form_progress($form);
-            CRUD.init_form_progress($form);
+            crud.toggle_editors_content($form);
+            crud.toggle_form_progress($form);
+            crud.init_form_progress($form);
 
             $(this).ajaxSubmit(
                 {
@@ -163,8 +232,20 @@
                     dataType: 'json',
                     success: function (res) {
 
-                        CRUD.toggle_form_progress($form)
-                        $(document).trigger('ajax_form.return',{form_id:$form.attr('id'), res:res, frm: $form});
+
+                        crud.toggle_form_progress($form)
+                        if (res.success) {
+                            //$(crud.doc).trigger('ajax_form.return', {form_id: $form.attr('id'), res: res, frm: $form});
+                            crud.trigger('ajax_form.return', {form_id: $form.attr('id'), res: res, frm: $form});
+                        } else {
+                            alert('Произошла ошибка: ' + res.error);
+                        }
+
+                    },
+                    error: function(data){
+
+                        crud.toggle_form_progress($form);
+                        alert('Произошла ошибка: ' + data.responseJSON.error.message);
 
                     }
 
@@ -173,7 +254,7 @@
 
         });
 
-        $(document).on('click', '*[data-clone_fragment]', function (e) {
+        $(crud.doc).on('click', '*[data-clone_fragment]', function (e) {
             e.preventDefault();
             clone_fragment($(this).data('clone_fragment'),$(this).data('clone_container'));
 
@@ -181,7 +262,7 @@
 
         function clone_fragment(tpl_id, container_id)
         {
-            $tpl = $('#'+tpl_id).clone(true).attr('id','');
+            var $tpl = $('#'+tpl_id).clone(true).attr('id','');
             var qtyAdded = $('#'+container_id).find('*[data-added]').length;
 
             $tpl.find('*[name]').each(function ()
@@ -209,4 +290,4 @@
 
     }
 
-})(jQuery, window, CRUD)
+})(jQuery, CRUD)

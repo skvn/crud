@@ -1,9 +1,13 @@
-;(function($, CRUD){
+;(function($, crud){
 
-    $(function(){
-        window.setInterval(tick, 30000);
+    crud.bind('page.start', function(){
+        crud.win.setInterval(tick, 30000);
         tick();
     });
+    //$(function(){
+    //    window.setInterval(tick, 30000);
+    //    tick();
+    //});
 
     function tick()
     {

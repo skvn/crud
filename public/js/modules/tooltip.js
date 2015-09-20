@@ -1,20 +1,35 @@
-;(function($, CRUD){
+;(function($, crud){
     var _tips = {};
     var _admin = false;
-    $(document).bind('crud.content_loaded', function(e, data){
+
+    crud.bind('crud.content_loaded', function(data){
         init_tooltips(data['cont']);
     });
-    $(document).bind('ajax_form.return', function(e, data){
+    //$(document).bind('crud.content_loaded', function(e, data){
+    //    init_tooltips(data['cont']);
+    //});
+    crud.bind('ajax_form.return', function(data){
         var frm = $('#tooltip_edit');
         var idx = $('input[name=tt_index]', frm).val();
         var txt = $('textarea[name=tt_text]', frm).val();
         $('*[data-crud_tooltip_id='+idx+']').data('original-title', txt).attr('data-original-title', txt);
         _tips[idx] = txt;
     });
+    //$(document).bind('ajax_form.return', function(e, data){
+    //    var frm = $('#tooltip_edit');
+    //    var idx = $('input[name=tt_index]', frm).val();
+    //    var txt = $('textarea[name=tt_text]', frm).val();
+    //    $('*[data-crud_tooltip_id='+idx+']').data('original-title', txt).attr('data-original-title', txt);
+    //    _tips[idx] = txt;
+    //});
 
-    $(function(){
+    crud.bind('page.start', function(){
         init_tooltips();
     });
+
+    //$(function(){
+    //    init_tooltips();
+    //});
 
     function bind_admin(c)
     {
@@ -29,7 +44,7 @@
 
     function init_tooltips(p)
     {
-        p = p || $(document);
+        p = p || $(crud.doc);
         var remote = [];
         $("*[data-crud_tooltip]", p).each(function(){
             var e = $(this);

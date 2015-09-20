@@ -1,11 +1,15 @@
-;(function($, window, CRUD){
+;(function($, crud){
 
 
-    $(document).ready(function ()
-    {
+    crud.bind('page.start', function(){
         init();
         init_events();
     });
+    //$(crud.doc).ready(function ()
+    //{
+    //    init();
+    //    init_events();
+    //});
 
 
 
@@ -52,44 +56,42 @@
             }
         });
 
-        CRUD.init_ichecks();
+        crud.init_ichecks();
     }
 
 
     function init_events()
     {
-        $(document).on('crud.update', function(ev,res)
-        {
-            // console.log(res);
-            //if (res.success)
-           // {
-
-                reload_tree();
-
-           // }
+        crud.bind('crud.update', function(res){
+            reload_tree();
         });
+        //$(crud.doc).on('crud.update', function(ev,res)
+        //{
+        //    // console.log(res);
+        //    //if (res.success)
+        //   // {
+        //
+        //        reload_tree();
+        //
+        //   // }
+        //});
 
         $('.crud_tree').on('tree.ready',  function (){
-
-            CRUD.init_ichecks();
-
+            crud.init_ichecks();
         });
 
         $('.crud_tree').on('dblclick', 'tbody>tr', function (){
-
             if ($(this).data('id'))
             {
-                CRUD.init_modal($(this).data('id'));
+                crud.init_modal($(this).data('id'));
             }
-
-
         });
 
         $('.crud_tree').on('click', '.crud_edit', function (){
 
             if ($(this).data('id'))
             {
-                CRUD.init_modal($(this).data('id'));
+                crud.init_modal($(this).data('id'));
             }
 
 
@@ -119,8 +121,9 @@
                 if (ids.length)
                 {
 
-                    $.post('/admin/crud/'+CRUD.crudObj['class_name']+'/delete',{'ids':ids}, function (res) {
-                        $(document).trigger('crud.update',res);
+                    $.post('/admin/crud/'+crud.crudObj['class_name']+'/delete',{'ids':ids}, function (res) {
+                        crud.trigger('crud.update',res);
+                        //$(crud.doc).trigger('crud.update',res);
                     })
                 }
             }
@@ -131,20 +134,21 @@
 
     function send_move_tree(node_id, relate_node, command)
     {
-        var url = '/admin/crud/'+CRUD.crudObj['class_name']+'/move_tree';
+        var url = '/admin/crud/'+crud.crudObj['class_name']+'/move_tree';
         $('#tree_move').modal('hide');
         $.post(url, {'self_id':node_id,'rel_id':relate_node, 'command': command}, function (res) {
-            $(document).trigger('crud.update',res);
+            crud.trigger('crud.update',res);
+            //$(crud.doc).trigger('crud.update',res);
         });
 
     };
 
     function reload_tree ()
     {
-        var url = '/admin/crud/tree/'+CRUD.crudObj['class_name'];
+        var url = '/admin/crud/tree/'+crud.crudObj['class_name'];
         $('.crud_tree tbody').load(url, function () {
             init();
         });
     }
 
-})(jQuery, window, CRUD)
+})(jQuery, CRUD)
