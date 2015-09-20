@@ -136,6 +136,10 @@
                             {
                                 alert(res.message);
                             }
+                            if ($form.data('callback_event'))
+                            {
+                                crud.trigger($form.data('callback_event'));
+                            }
                             crud.trigger('crud.submitted', {form_id: $form.attr('id'), res: res, frm: $form});
                         }
                         if ($form.data("close"))
