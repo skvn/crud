@@ -2,7 +2,8 @@
     var listeners = {};
     var events = {};
     var settings = {
-        'model_edit_url': '/admin/crud/{model}/edit/{id}'
+        model_edit_url: '/admin/crud/{model}/edit/{id}',
+        model_filter_url: '/admin/crud/{model}/filter/{context}'
     };
     var crud_actions = {};
 
@@ -40,8 +41,9 @@
             }
             events[event] = data;
         },
-        format_string: function(str, args)
+        format_setting: function(key, args)
         {
+            var str = settings[key] || "";
             for (var i in args)
             {
                 str = str.replace('{' + i + '}', args[i]);
@@ -66,7 +68,7 @@
         {
             var model = class_name || this.crudObj['class_name'];
             //var url = '/admin/crud/'+model+'/edit/'+id;
-            var url = this.format_string(settings.model_edit_url, {model: model, id: id});
+            var url = this.format_setting("model_edit_url", {model: model, id: id});
             $('#crud_form').html('');
             $('#crud_form').modal('show');
             var self = this;
@@ -300,13 +302,13 @@
 
         }
     );
-    crud.bind('crud.update', function(res)
-    {
-        if (res.success == false)
-        {
-            alert(res.error);
-        }
-    });
+    //crud.bind('crud.update', function(res)
+    //{
+    //    if (res.success == false)
+    //    {
+    //        alert(res.error);
+    //    }
+    //});
 
     $(function(){
         crud.init_selects($('form'));

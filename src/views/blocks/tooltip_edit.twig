@@ -7,7 +7,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="tooltip_edit_form" action="/util/tooltip/update" method="post"  class="ajax_form" role="form">
+                <form id="tooltip_edit_form" action="/util/tooltip/update" method="post"  role="form" data-crud_form="ajax">
 
                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                     <input type="hidden" name="tt_index" />

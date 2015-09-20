@@ -1,12 +1,11 @@
 ;(function($, crud){
 
 
-    var close = false;
     var crud_actions = {
-            open_form: function(elem)
-            {
-                crud.init_modal(elem.data("id"), elem.data("model"));
-            }
+        open_form: function(elem)
+        {
+            crud.init_modal(elem.data("id"), elem.data("model"));
+        }
     };
 
     crud.bind('page.start', function()
@@ -15,10 +14,6 @@
         init_events();
     });
 
-    //$(crud.doc).ready(function ()
-    //{
-    //    init_events();
-    //});
 
 
 
@@ -38,65 +33,6 @@
                 hidden.val('0');
             }
         });
-        crud.bind('crud.update', function(res){
-            // console.log(res);
-            if (res.success)
-            {
-
-                $('#crud_form form').trigger('reset');
-                crud.reset_selects();
-                $('#crud_form').modal('hide');
-
-
-            }
-        });
-        //$(crud.doc).on('crud.update', function(ev,res)
-        //{
-        //    // console.log(res);
-        //    if (res.success)
-        //    {
-        //
-        //        $('#crud_form form').trigger('reset');
-        //        crud.reset_selects();
-        //        $('#crud_form').modal('hide');
-        //
-        //
-        //    }
-        //});
-        crud.bind('ajax_form.return', function(data){
-            if(data.res['success'])
-            {
-                if (data.frm.data('close'))
-                {
-                    data.frm.parents(".modal:first").modal('hide');
-                }
-                if (data.frm.data("reload"))
-                {
-                    crud.loc.reload();
-                }
-            }
-            else
-            {
-                alert(data.res['error']);
-            }
-        });
-        //$(crud.doc).on('ajax_form.return', function(ev, data){
-        //    if(data.res['success'])
-        //    {
-        //        if (data.frm.data('close'))
-        //        {
-        //            data.frm.parents(".modal:first").modal('hide');
-        //        }
-        //        if (data.frm.data("reload"))
-        //        {
-        //            crud.loc.reload();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        alert(data.res['error']);
-        //    }
-        //});
 
         $(crud.doc).on('submit', '#crud_filter_form', function (e) {
             e.preventDefault();
@@ -106,12 +42,12 @@
             $form.ajaxSubmit(
                 {
                     type:'POST',
-                    url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
+                    url: crud.format_setting("model_filter_url", {model: crud.crudObj['class_name'], context: $(this).data('crud_context')}),
+                    //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
                     dataType: 'json',
                     success: function (res) {
                         crud.toggle_form_progress($form)
-                        crud.trigger('crud.filter_set',res);
-                        //$(crud.doc).trigger('crud.filter_set',res);
+                        crud.trigger('crud.filter_set', res);
 
                     }
 
@@ -131,18 +67,17 @@
                 $(this).val('');
             });
 
-
             crud.toggle_form_progress($form);
             crud.init_form_progress($form);
             $form.ajaxSubmit(
                 {
                     type:'POST',
-                    url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
+                    url: crud.format_setting('model_filter_url', {model: crud.crudObj['class_name'], context: $(this).data('crud_context')}),
+                    //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
                     dataType: 'json',
                     success: function (res) {
                         crud.toggle_form_progress($form)
                         crud.trigger('crud.filter_set',res);
-                        //$(crud.doc).trigger('crud.filter_set',res);
                     }
 
                 }
@@ -150,108 +85,78 @@
 
         });
 
-        $(crud.doc).on('click', '.crud_submit', function (e) {
+        $(crud.doc).on('click', '.crud_submit', function (e)
+        {
             e.preventDefault();
-            close = parseInt($(this).data('close'))
-            $(this).parents('form').find('input[type=submit]').click();
+            var frm = $(this).parents("form:first");
+            var attrs = ['close', 'reload'];
+            for (var i =0; i<attrs.length; i++)
+            {
+                if ($(this).data(attrs[i]) != undefined)
+                {
+                    frm.data(attrs[i], $(this).data(attrs[i]));
+                }
+            }
+            frm.submit();
 
         });
 
-
-        $(crud.doc).on('submit', '*[data-crud_role=form_container] form', function (e) {
+        $(crud.doc).on('submit', 'form[data-crud_form=ajax]', function(e)
+        {
             e.preventDefault();
             var $form = $(this);
             crud.toggle_editors_content($form);
             crud.toggle_form_progress($form);
             crud.init_form_progress($form);
-
-            $(this).ajaxSubmit(
-                {
-                    type:'POST',
-                    //url: '/admin/crud/'+CRUD.crudObj['class_name']+'/update/'+$(this).parent().data('crud_id'),
-                    url: $form.attr('action'),
-                    dataType: 'json',
-                    success: function (res) {
-                        crud.toggle_form_progress($form)
-
-                        if (res.success) {
-
-                            if (close > 0) {
-                                //$(crud.doc).trigger('crud.update', res);
-                                crud.trigger('crud.update', res);
-
-                            } else {
-                                var id = res.crud_id
-                                crud.trigger('crud.reload', res);
-                                //$(crud.doc).trigger('crud.reload', res);
-                                crud.init_modal(id, $form.parent().data('crud_model'));
-                            }
-
-                        } else {
-
-                            if (res.error.indexOf("SQLSTATE[23000]")>=0)
-                            {
-                                alert('Невозможно сохранить: ДУБЛИКАТ');
-
-                            } else {
-                                alert('Произошла ошибка: ' + res.error);
-                            }
-                        }
-
-                    },
-                    error: function(data){
-                        //console.log(data);
-                        crud.toggle_form_progress($form);
-                        if (data.responseJSON.error.code == 23000)
+            $form.ajaxSubmit({
+                type: $form.attr('method'),
+                url: $form.attr('action'),
+                dataType: 'json',
+                success: function(res){
+                    crud.toggle_form_progress($form);
+                    if (res.success)
+                    {
+                        if ($form.data('crud_model'))
                         {
-                            alert('Невозможно сохранить: ДУБЛИКАТ');
-
-                        } else {
-                            alert('Произошла ошибка: ' + data.responseJSON.error.message);
+                            if ($form.data('close'))
+                            {
+                                crud.trigger('crud.update', res);
+                            }
+                            else
+                            {
+                                crud.trigger("crud.reload", res);
+                                crud.init_modal(res.crud_id, $form.data("crud_model"));
+                            }
+                            $('#crud_form form').trigger('reset');
+                            crud.reset_selects();
+                        }
+                        else
+                        {
+                            if (res.message)
+                            {
+                                alert(res.message);
+                            }
+                            crud.trigger('crud.submitted', {form_id: $form.attr('id'), res: res, frm: $form});
+                        }
+                        if ($form.data("close"))
+                        {
+                            $form.parents(".modal:first").modal('hide');
+                        }
+                        if ($form.data("reload"))
+                        {
+                            crud.loc.reload();
                         }
                     }
-
-
-                }
-            );
-
-        });
-
-
-        $(crud.doc).on('submit', 'form.ajax_form', function (e) {
-            e.preventDefault();
-            var $form = $(this);
-            crud.toggle_editors_content($form);
-            crud.toggle_form_progress($form);
-            crud.init_form_progress($form);
-
-            $(this).ajaxSubmit(
-                {
-                    type:$form.attr('method'),
-                    url: $form.attr('action'),
-                    dataType: 'json',
-                    success: function (res) {
-
-
-                        crud.toggle_form_progress($form)
-                        if (res.success) {
-                            //$(crud.doc).trigger('ajax_form.return', {form_id: $form.attr('id'), res: res, frm: $form});
-                            crud.trigger('ajax_form.return', {form_id: $form.attr('id'), res: res, frm: $form});
-                        } else {
-                            alert('Произошла ошибка: ' + res.error);
-                        }
-
-                    },
-                    error: function(data){
-
-                        crud.toggle_form_progress($form);
-                        alert('Произошла ошибка: ' + data.responseJSON.error.message);
-
+                    else
+                    {
+                        alert(format_error(res.error));
                     }
-
+                },
+                error: function(res){
+                    crud.toggle_form_progress($form);
+                    alert(format_error(res.responseJSON.error.message))
                 }
-            );
-
+            });
         });
 
         $(crud.doc).on('click', '*[data-clone_fragment]', function (e) {
@@ -282,6 +187,19 @@
 
 
             $tpl.appendTo($('#'+container_id)).show();
+
+        }
+
+        function format_error(error)
+        {
+            if (error.indexOf("SQLSTATE[23000]")>=0)
+            {
+                return 'Невозможно сохранить: ДУБЛИКАТ';
+            }
+            else
+            {
+                return 'Произошла ошибка: ' + error;
+            }
 
         }
 

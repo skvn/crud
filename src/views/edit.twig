@@ -5,8 +5,8 @@
             <h4 class="modal-title">Данные {{ crudObj.config.get('ent_name_r') }}</h4>
         </div>
 
-        <div class="modal-body" data-crud_role="form_container" data-crud_model="{{ crudObj.config.get('class_name') }}" data-crud_id="{{ id }}">
-            <form action="{{ route('crud_update',{'model':crudObj.config.get('class_name'),'id':id}) }}" method="post" enctype="multipart/form-data" role="form">
+        <div class="modal-body">
+            <form action="{{ route('crud_update',{'model':crudObj.config.get('class_name'),'id':id}) }}" method="post" enctype="multipart/form-data" role="form" data-crud_form="ajax" data-crud_model="{{ crudObj.config.get('class_name') }}" data-crud_id="{{ id }}">
                 <input type="hidden" id="tree_action" name="tree_action" value=""/>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
                 <fieldset style="padding-bottom: 20px;">
@@ -22,10 +22,9 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Отмена</button>
                     {% if crudObj.config.get('acl')|allowed('u') %}
-                    <button class="btn btn-success crud_submit" type="button" data-close="1">Сохранить и закрыть</button>
-                    <button class="btn btn-primary crud_submit" type="button" data-close="0">Сохранить</button>
+                    <button class="btn btn-success crud_submit" type="submit" data-close="1">Сохранить и закрыть</button>
+                    <button class="btn btn-primary crud_submit" type="submit" data-close="0">Сохранить</button>
                     {% endif %}
-                    <input type="submit" name="submit" style="display: none" />
                     {% include 'crud::blocks/progress_bar.twig' %}
                 </div>
 

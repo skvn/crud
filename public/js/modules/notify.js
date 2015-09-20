@@ -4,10 +4,6 @@
         crud.win.setInterval(tick, 30000);
         tick();
     });
-    //$(function(){
-    //    window.setInterval(tick, 30000);
-    //    tick();
-    //});
 
     function tick()
     {
