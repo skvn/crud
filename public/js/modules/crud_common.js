@@ -1,4 +1,4 @@
-;(function($, window, CRUD){
+;(function($, crud){
 
 
     $.ajaxSetup({
@@ -18,20 +18,20 @@
         },
         open_form: function(elem)
         {
-            CRUD.init_modal(elem.data("id"), elem.data("model"));
+            crud.init_modal(elem.data("id"), elem.data("model"));
         },
         open_popup: function(elem)
         {
             var popup = elem.data('popup');
             if ($('#'+popup).length <= 0)
             {
-                $('<div id="'+popup+'" style="display: none;"></div>').appendTo($(document.body));
+                $('<div id="'+popup+'" style="display: none;"></div>').appendTo($(crud.doc.body));
             }
             $.get(elem.data('uri'), $.extend({}, elem.data()), function(res){
                 $('#'+popup).replaceWith(res);
-                $(document).trigger("crud.content_loaded", {cont: $('#'+popup)});
+                $(crud.doc).trigger("crud.content_loaded", {cont: $('#'+popup)});
                 $('#'+popup).modal('show');
-                CRUD.init_ichecks($('#'+popup));
+                crud.init_ichecks($('#'+popup));
             });
         },
         call_uri: function(elem)
@@ -44,29 +44,23 @@
     };
 
 
-    $(document).ready(function ()
+    $(crud.doc).ready(function ()
     {
-        init();
         init_events();
-        CRUD.init_selects($('form'));
-        CRUD.init_date_pickers();
+        crud.init_selects($('form'));
+        crud.init_date_pickers();
     });
 
 
 
 
-    function init()
-    {
-
-
-    }
 
 
     function init_events()
     {
 
 
-        $(document).on('crud.update', function(ev,res)
+        $(crud.doc).on('crud.update', function(ev,res)
         {
             // console.log(res);
             if (res.success == false)
@@ -77,12 +71,12 @@
             }
         });
 
-        $(document).on('click','*[data-click]', function (e)
+        $(crud.doc).on('click','*[data-click]', function (e)
             {
                 e.preventDefault();
                 if ($(this).data('confirm'))
                 {
-                    console.log($(this).data('confirm'));
+                    crud.con.log($(this).data('confirm'));
                     if (!confirm($(this).data('confirm')))
                     {
                         return;
@@ -104,7 +98,7 @@
             }
         );
 
-        $(document).on('click', '.crud_command', function (e) {
+        $(crud.doc).on('click', '.crud_command', function (e) {
             e.preventDefault()
             var conf = $(this).data('confirm');
             var args = $(this).data('args');
@@ -128,7 +122,7 @@
                     {
                         if ($self.data('callback_event'))
                         {
-                            $(document).trigger($self.data('callback_event'), res);
+                            $(crud.doc).trigger($self.data('callback_event'), res);
                         } else if ($self.data('callback')) {
                             eval($self.data('callback'));
                         }
@@ -142,7 +136,7 @@
 
         });
 
-        $(document).on('click', '.ajax_popup', function (e) {
+        $(crud.doc).on('click', '.ajax_popup', function (e) {
             e.preventDefault()
             var popup_id = $(this).data('popup');
             $.get($(this).attr('href'), function (data){
@@ -168,4 +162,4 @@
 
 
 
-})(jQuery, window, CRUD)
+})(jQuery, CRUD)
