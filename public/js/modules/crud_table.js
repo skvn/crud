@@ -1,30 +1,21 @@
 ;(function($, crud){
 
     var crud_actions = {
-            refresh_table: function (elem)
-            {
-                $('.crud_table').DataTable().ajax.reload();
-            }
+        refresh_table: function (elem)
+        {
+            $('.crud_table').DataTable().ajax.reload();
+        }
 
     };
 
     crud.bind('page.start', function()
     {
         crud.add_actions(crud_actions);
-        init();
+        init_table();
         init_events();
     });
-    //$(crud.doc).ready(function ()
-    //{
-    //    init();
-    //    init_events();
-    //});
 
-
-
-
-
-    function init()
+    function init_table()
     {
         if (crud.crudObj)
         {
@@ -45,12 +36,10 @@
 
             for (var i=0; i<crud_cols.length; i++)
             {
-
                 if (i>0) {
-                    crud_cols[i]["fnCreatedCell"] = function (td, cellData, rowData, row, col) {
-
+                    crud_cols[i]["fnCreatedCell"] = function (td, cellData, rowData, row, col)
+                    {
                        $(td).attr('id',crud_cols[col]['data']+'_'+rowData.id);
-
                     };
                 }
 
@@ -68,17 +57,15 @@
                 var rowCallBack = crud.win.crudRowCallback ? crud.win.crudRowCallback : null;
                 $('.crud_table').dataTable(
                     {
-
-
-                        "searching": false,
-                        "processing": true,
-                        "serverSide": true,
-                        "ajax": "/admin/crud/"+crud.crudObj.class_name +"/list/"+list_name+"?list_context="+crud.crudObj.context,
-                        "columns": crud_cols,
-                        "language": {
-                            "url": "/vendor/crud/js/plugins/dataTables/lang/russian.json"
+                        searching: false,
+                        processing: true,
+                        serverSide: true,
+                        ajax: crud.format_setting("model_list_url", {model: crud.crudObj.class_name, list_name: list_name, context: crud.crudObj.context}),
+                        columns: crud_cols,
+                        language: {
+                            url: "/vendor/crud/js/plugins/dataTables/lang/russian.json"
                         },
-                        "rowCallback": rowCallBack
+                        rowCallback: rowCallBack
 
 
                     }
@@ -98,34 +85,12 @@
             }
         });
 
-        //$(crud.doc).on('crud.update', function(ev,res)
-        //{
-        //    //alert(11);
-        //   // console.log(res);
-        //    if (res.success)
-        //    {
-        //
-        //        $('.crud_table').DataTable().ajax.reload(null, false);
-        //
-        //    }
-        //});
-
         crud.bind('crud.reload', function(res){
             if (res.success)
             {
                 $('.crud_table').DataTable().ajax.reload(null, false);
             }
         });
-        //$(crud.doc).on('crud.reload', function(ev,res)
-        //{
-        //
-        //    if (res.success)
-        //    {
-        //
-        //        $('.crud_table').DataTable().ajax.reload(null, false);
-        //
-        //    }
-        //});
 
         crud.bind('crud.filter_set', function(res){
             if (res.success)
@@ -133,30 +98,13 @@
                 $('.crud_table').DataTable().ajax.reload();
             }
         });
-        //$(crud.doc).on('crud.filter_set', function(ev,res)
-        //{
-        //    // console.log(res);
-        //    if (res.success)
-        //    {
-        //
-        //        $('.crud_table').DataTable().ajax.reload();
-        //    }
-        //});
+
         crud.bind('crud.delete', function(res){
             if (res.success)
             {
                 $('.crud_table').DataTable().ajax.reload(null, false);
             }
         });
-
-        //$(crud.doc).on('crud.delete', function(ev,res)
-        //{
-        //    // console.log(res);
-        //    if (res.success)
-        //    {
-        //        $('.crud_table').DataTable().ajax.reload(null, false);
-        //    }
-        //});
 
         $('.crud_table').on('dblclick', 'tbody>tr', function (){
 
@@ -165,14 +113,11 @@
                 return;
             }
             crud.init_modal($(this).find('td').first().data('id'));
-
-
         })
 
         $('.crud_table').on( 'draw.dt', function (e, o) {
             init_checkboxes();
             crud.trigger('crud.content_loaded', {cont: $(e.target)});
-            //$(crud.doc).trigger("crud.content_loaded", {cont: $(e.target)});
         } );
 
         $('.crud_delete').on('click', function (){
@@ -189,9 +134,8 @@
                 if (ids.length)
                 {
 
-                    $.post('/admin/crud/'+crud.crudObj['class_name']+'/delete',{'ids':ids}, function (res) {
+                    $.post(crud.format_setting('model_delete_url', {model: crud.crudObj['class_name']}),{'ids':ids}, function (res) {
                         crud.trigger('crud.delete',res);
-                        //$(crud.doc).trigger('crud.delete',res);
                     })
                 }
             }
@@ -211,8 +155,6 @@
                     $(this).data('args',{ids:ids});
                 }
         })
-
-
 
     }
 

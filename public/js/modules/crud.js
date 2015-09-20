@@ -3,7 +3,11 @@
     var events = {};
     var settings = {
         model_edit_url: '/admin/crud/{model}/edit/{id}',
-        model_filter_url: '/admin/crud/{model}/filter/{context}'
+        model_filter_url: '/admin/crud/{model}/filter/{context}',
+        model_list_url: '/admin/crud/{model}/list/{list_name}?list_context={context}',
+        model_delete_url: '/admin/crud/{model}/delete',
+        model_move_tree_url: '/admin/crud/{model}/move_tree',
+        model_tree_url: '/admin/crud/tree/{model}'
     };
     var crud_actions = {};
 
