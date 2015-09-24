@@ -15,7 +15,7 @@
    </div>
         <div class="col-md-6" style="text-align: right; height: 52px;">
             <a class="badge badge-primary" href="{{ fileObj.getAttribute('download_link') }}"><i class="fa fa-paperclip"></i> {{ fileObj.getAttribute('file_name') }} ({{ fileObj.getAttribute('file_size')|readable_filesize}})</a><br />
-            <a class="badge badge-danger crud_command" href="/admin/crud/{{ crudObj.config.get('class_name') }}/{{ crudObj.id }}/command/delete_single_attach" data-confirm="Действительно удалить файл?" data-args='{"field":"{{ input.name }}","id":"{{ fileObj.id }}" }'  data-callback="$self.parent().parent().remove();"><i class="fa fa-times-circle"></i> Удалить</a>
+            <a class="badge badge-danger" href="/admin/crud/{{ crudObj.config.get('class_name') }}/{{ crudObj.id }}/command/delete_single_attach" data-confirm="Действительно удалить файл?" data-args='{"field":"{{ input.name }}","id":"{{ fileObj.id }}" }'  data-click="crud_action" data-action="crud_command" data-callback="$self.parent().parent().remove();"><i class="fa fa-times-circle"></i> Удалить</a>
         </div>
     </div>
     {% endfor %}

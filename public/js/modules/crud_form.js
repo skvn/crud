@@ -1,12 +1,19 @@
-;(function($, window, CRUD){
+;(function($, crud){
 
 
-    var close = false;
+    var crud_actions = {
+        open_form: function(elem)
+        {
+            crud.init_modal(elem.data("id"), elem.data("model"));
+        }
+    };
 
-    $(document).ready(function ()
+    crud.bind('page.start', function()
     {
+        crud.add_actions(crud_actions);
         init_events();
     });
+
 
 
 
@@ -14,7 +21,7 @@
     {
         $('#crud_form').modal({backdrop:'static', 'keyboard':false, 'show':false})
 
-        $(document).on('change','.crud_checkbox', function () {
+        $(crud.doc).on('change','.crud_checkbox', function () {
 
             var name = $(this).data('name');
             var hidden = $(this).parents('form').first().find('input[name='+name+']');
@@ -26,50 +33,21 @@
                 hidden.val('0');
             }
         });
-        $(document).on('crud.update', function(ev,res)
-        {
-            // console.log(res);
-            if (res.success)
-            {
 
-                $('#crud_form form').trigger('reset');
-                CRUD.reset_selects();
-                $('#crud_form').modal('hide');
-
-
-            }
-        });
-        $(document).on('ajax_form.return', function(ev, data){
-            if(data.res['success'])
-            {
-                if (data.frm.data('close'))
-                {
-                    data.frm.parents(".modal:first").modal('hide');
-                }
-                if (data.frm.data("reload"))
-                {
-                    window.location.reload();
-                }
-            }
-            else
-            {
-                alert(data.res['error']);
-            }
-        });
-
-        $(document).on('submit', '#crud_filter_form', function (e) {
+        $(crud.doc).on('submit', '#crud_filter_form', function (e) {
             e.preventDefault();
             var $form = $(this);
-            CRUD.toggle_form_progress($form);
-            CRUD.init_form_progress($form);
+            crud.toggle_form_progress($form);
+            crud.init_form_progress($form);
             $form.ajaxSubmit(
                 {
                     type:'POST',
-                    url: '/admin/crud/'+CRUD.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
+                    url: crud.format_setting("model_filter_url", {model: crud.crudObj['class_name'], context: $(this).data('crud_context')}),
+                    //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
                     dataType: 'json',
                     success: function (res) {
-                        CRUD.toggle_form_progress($form)
-                        $(document).trigger('crud.filter_set',res);
+                        crud.toggle_form_progress($form)
+                        crud.trigger('crud.filter_set', res);
 
                     }
 
@@ -78,7 +56,7 @@
 
         });
 
-        $(document).on('reset', '#crud_filter_form', function (e) {
+        $(crud.doc).on('reset', '#crud_filter_form', function (e) {
             //e.preventDefault();
             var $form = $(this);
             $('select', $form).each(function (){
@@ -89,17 +67,17 @@
                 $(this).val('');
             });
 
-
-            CRUD.toggle_form_progress($form);
-            CRUD.init_form_progress($form);
+            crud.toggle_form_progress($form);
+            crud.init_form_progress($form);
             $form.ajaxSubmit(
                 {
                     type:'POST',
-                    url: '/admin/crud/'+CRUD.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
+                    url: crud.format_setting('model_filter_url', {model: crud.crudObj['class_name'], context: $(this).data('crud_context')}),
+                    //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
                     dataType: 'json',
                     success: function (res) {
-                        CRUD.toggle_form_progress($form)
-                        $(document).trigger('crud.filter_set',res);
+                        crud.toggle_form_progress($form)
+                        crud.trigger('crud.filter_set',res);
                     }
 
                 }
@@ -107,73 +85,85 @@
 
         });
 
-        $(document).on('click', '.crud_submit', function (e) {
+        $(crud.doc).on('click', '.crud_submit', function (e)
+        {
             e.preventDefault();
-            close = parseInt($(this).data('close'))
-            $(this).parents('form').find('input[type=submit]').click();
+            var frm = $(this).parents("form:first");
+            var attrs = ['close', 'reload'];
+            for (var i =0; i<attrs.length; i++)
+            {
+                if ($(this).data(attrs[i]) != undefined)
+                {
+                    frm.data(attrs[i], $(this).data(attrs[i]));
+                }
+            }
+            frm.submit();
 
         });
 
-
-        $(document).on('submit', '*[data-crud_role=form_container] form', function (e) {
+        $(crud.doc).on('submit', 'form[data-crud_form=ajax]', function(e)
+        {
             e.preventDefault();
             var $form = $(this);
-            CRUD.toggle_editors_content($form);
-            CRUD.toggle_form_progress($form);
-            CRUD.init_form_progress($form);
-
-            $(this).ajaxSubmit(
-                {
-                    type:'POST',
-                    //url: '/admin/crud/'+CRUD.crudObj['class_name']+'/update/'+$(this).parent().data('crud_id'),
-                    url: $form.attr('action'),
-                    dataType: 'json',
-                    success: function (res) {
-                        CRUD.toggle_form_progress($form)
-
-                        if (close>0) {
-                            $(document).trigger('crud.update', res);
-
-                        } else
+            crud.toggle_editors_content($form);
+            crud.toggle_form_progress($form);
+            crud.init_form_progress($form);
+            $form.ajaxSubmit({
+                type: $form.attr('method'),
+                url: $form.attr('action'),
+                dataType: 'json',
+                success: function(res){
+                    crud.toggle_form_progress($form);
+                    if (res.success)
+                    {
+                        if ($form.data('crud_model'))
                         {
-                            var id = res.crud_id
-                            $(document).trigger('crud.reload', res);
-                            CRUD.init_modal(id, $form.parent().data('crud_model'));
+                            if ($form.data('close'))
+                            {
+                                crud.trigger('crud.update', res);
+                            }
+                            else
+                            {
+                                crud.trigger("crud.reload", res);
+                                crud.init_modal(res.crud_id, $form.data("crud_model"));
+                            }
+                            $('#crud_form form').trigger('reset');
+                            crud.reset_selects();
                         }
-
+                        else
+                        {
+                            if (res.message)
+                            {
+                                alert(res.message);
+                            }
+                            if ($form.data('callback_event'))
+                            {
+                                crud.trigger($form.data('callback_event'));
+                            }
+                            crud.trigger('crud.submitted', {form_id: $form.attr('id'), res: res, frm: $form});
+                        }
+                        if ($form.data("close"))
+                        {
+                            $form.parents(".modal:first").modal('hide');
+                        }
+                        if ($form.data("reload"))
+                        {
+                            crud.loc.reload();
+                        }
                     }
-
+                    else
+                    {
+                        alert(format_error(res.error));
+                    }
+                },
+                error: function(res){
+                    crud.toggle_form_progress($form);
+                    alert(format_error(res.responseJSON.error.message))
                 }
-            );
-
+            });
         });
 
-
-        $(document).on('submit', 'form.ajax_form', function (e) {
-            e.preventDefault();
-            var $form = $(this);
-            CRUD.toggle_editors_content($form);
-            CRUD.toggle_form_progress($form);
-            CRUD.init_form_progress($form);
-
-            $(this).ajaxSubmit(
-                {
-                    type:$form.attr('method'),
-                    url: $form.attr('action'),
-                    dataType: 'json',
-                    success: function (res) {
-
-                        CRUD.toggle_form_progress($form)
-                        $(document).trigger('ajax_form.return',{form_id:$form.attr('id'), res:res, frm: $form});
-
-                    }
-
-                }
-            );
-
-        });
-
-        $(document).on('click', '*[data-clone_fragment]', function (e) {
+        $(crud.doc).on('click', '*[data-clone_fragment]', function (e) {
             e.preventDefault();
             clone_fragment($(this).data('clone_fragment'),$(this).data('clone_container'));
 
@@ -181,7 +171,7 @@
 
         function clone_fragment(tpl_id, container_id)
         {
-            $tpl = $('#'+tpl_id).clone(true).attr('id','');
+            var $tpl = $('#'+tpl_id).clone(true).attr('id','');
             var qtyAdded = $('#'+container_id).find('*[data-added]').length;
 
             $tpl.find('*[name]').each(function ()
@@ -204,9 +194,22 @@
 
         }
 
+        function format_error(error)
+        {
+            if (error.indexOf("SQLSTATE[23000]")>=0)
+            {
+                return 'Невозможно сохранить: ДУБЛИКАТ';
+            }
+            else
+            {
+                return 'Произошла ошибка: ' + error;
+            }
+
+        }
+
 
 
 
     }
 
-})(jQuery, window, CRUD)
+})(jQuery, CRUD)

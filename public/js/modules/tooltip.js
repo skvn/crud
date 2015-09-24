@@ -1,10 +1,12 @@
-;(function($, CRUD){
+;(function($, crud){
     var _tips = {};
     var _admin = false;
-    $(document).bind('crud.content_loaded', function(e, data){
+
+    crud.bind('crud.content_loaded', function(data){
         init_tooltips(data['cont']);
     });
-    $(document).bind('ajax_form.return', function(e, data){
+
+    crud.bind('crud.submitted', function(data){
         var frm = $('#tooltip_edit');
         var idx = $('input[name=tt_index]', frm).val();
         var txt = $('textarea[name=tt_text]', frm).val();
@@ -12,9 +14,10 @@
         _tips[idx] = txt;
     });
 
-    $(function(){
+    crud.bind('page.start', function(){
         init_tooltips();
     });
+
 
     function bind_admin(c)
     {
@@ -29,7 +32,7 @@
 
     function init_tooltips(p)
     {
-        p = p || $(document);
+        p = p || $(crud.doc);
         var remote = [];
         $("*[data-crud_tooltip]", p).each(function(){
             var e = $(this);

@@ -204,7 +204,7 @@ class CrudController extends Controller {
             $command = camel_case($command);
             $ret = $obj->$command(\Input::all());
 
-            return ['success'=>true, 'ret'=>$ret];
+            return ['success'=>true, 'ret'=>$ret, 'message' => isset($ret['message']) ? $ret['message'] : null];
 
         } catch(\Exception $e)
         {

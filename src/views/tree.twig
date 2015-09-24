@@ -81,10 +81,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        var crud_object_conf = {{  crudObj.config|json_encode()|raw }};
-    </script>
-
     <script type="text/javascript" src="{{ 'js/plugins/treegrid/jquery.treegrid.js'|asset }}"></script>
     <script type="text/javascript" src="{{ 'js/plugins/treegrid/jquery.treegrid.bootstrap3.js'|asset }}"></script>
     <script type="text/javascript" src="{{ 'js/plugins/sortable/jquery.sortable.js'|asset }}"></script>

@@ -1,26 +1,25 @@
-;(function($, window, CRUD){
+;(function($, crud){
 
+    var crud_actions = {
+        refresh_table: function (elem)
+        {
+            $('.crud_table').DataTable().ajax.reload();
+        }
 
-    var crud_obj = null
-    $(document).ready(function ()
+    };
+
+    crud.bind('page.start', function()
     {
-        init();
+        crud.add_actions(crud_actions);
+        init_table();
         init_events();
     });
 
-
-
-
-
-    function init()
+    function init_table()
     {
-        if (window.crud_object_conf) {
-            crud_obj = window.crud_object_conf;
-        }
-
-        if (crud_obj)
+        if (crud.crudObj)
         {
-            var crud_cols = crud_obj.list.columns;
+            var crud_cols = crud.crudObj.list.columns;
             if (crud_cols[0]['ctype'] && crud_cols[0]['ctype'] == 'checkbox')
             {
                 crud_cols[0]["fnCreatedCell"] = function (td, cellData, rowData, row, col) {
@@ -30,11 +29,20 @@
             } else
             {
                 crud_cols[0]["fnCreatedCell"] = function (td, cellData, rowData, row, col) {
+
                     $(td).data('id',cellData);
                 };
             }
+
             for (var i=0; i<crud_cols.length; i++)
             {
+                if (i>0) {
+                    crud_cols[i]["fnCreatedCell"] = function (td, cellData, rowData, row, col)
+                    {
+                       $(td).attr('id',crud_cols[col]['data']+'_'+rowData.id);
+                    };
+                }
+
                 if (crud_cols[i].hint)
                 {
                     if (!crud_cols[i].ctype)
@@ -45,18 +53,19 @@
             }
             //console.log(cols);
             if ($('.crud_table').length) {
-                var list_name = crud_obj.list_name?crud_obj.list_name:'index';
-                var table = $('.crud_table').dataTable(
+                var list_name = crud.crudObj.list_name ? crud.crudObj.list_name : 'index';
+                var rowCallBack = crud.win.crudRowCallback ? crud.win.crudRowCallback : null;
+                $('.crud_table').dataTable(
                     {
-
-                        "searching": false,
-                        "processing": true,
-                        "serverSide": true,
-                        "ajax": "/admin/crud/"+crud_obj.class_name +"/list/"+list_name+"?list_context="+crud_obj.context,
-                        "columns": crud_cols,
-                        "language": {
-                            "url": "/vendor/crud/js/plugins/dataTables/lang/russian.json"
-                        }
+                        searching: false,
+                        processing: true,
+                        serverSide: true,
+                        ajax: crud.format_setting("model_list_url", {model: crud.crudObj.class_name, list_name: list_name, context: crud.crudObj.context}),
+                        columns: crud_cols,
+                        language: {
+                            url: "/vendor/crud/js/plugins/dataTables/lang/russian.json"
+                        },
+                        rowCallback: rowCallBack
 
 
                     }
@@ -69,43 +78,28 @@
 
     function init_events()
     {
-
-        $(document).on('crud.update', function(ev,res)
-        {
-            //alert(11);
-           // console.log(res);
+        crud.bind('crud.update', function(res){
             if (res.success)
             {
-
                 $('.crud_table').DataTable().ajax.reload(null, false);
-
             }
         });
 
-        $(document).on('crud.reload', function(ev,res)
-        {
-
+        crud.bind('crud.reload', function(res){
             if (res.success)
             {
-
                 $('.crud_table').DataTable().ajax.reload(null, false);
-
             }
         });
 
-        $(document).on('crud.filter_set', function(ev,res)
-        {
-            // console.log(res);
+        crud.bind('crud.filter_set', function(res){
             if (res.success)
             {
-
                 $('.crud_table').DataTable().ajax.reload();
             }
         });
 
-        $(document).on('crud.delete', function(ev,res)
-        {
-            // console.log(res);
+        crud.bind('crud.delete', function(res){
             if (res.success)
             {
                 $('.crud_table').DataTable().ajax.reload(null, false);
@@ -118,18 +112,13 @@
             {
                 return;
             }
-            CRUD.init_modal($(this).find('td').first().data('id'));
-
-
+            crud.init_modal($(this).find('td').first().data('id'));
         })
 
         $('.crud_table').on( 'draw.dt', function (e, o) {
             init_checkboxes();
-            $(document).trigger("crud.content_loaded", {cont: $(e.target)});
+            crud.trigger('crud.content_loaded', {cont: $(e.target)});
         } );
-
-
-
 
         $('.crud_delete').on('click', function (){
             if (confirm('Действительно удалить выбранные элементы?'))
@@ -145,8 +134,8 @@
                 if (ids.length)
                 {
 
-                    $.post('/admin/crud/'+CRUD.crudObj['class_name']+'/delete',{'ids':ids}, function (res) {
-                        $(document).trigger('crud.delete',res);
+                    $.post(crud.format_setting('model_delete_url', {model: crud.crudObj['class_name']}),{'ids':ids}, function (res) {
+                        crud.trigger('crud.delete',res);
                     })
                 }
             }
@@ -154,7 +143,6 @@
 
         $('.crud_table_command').on('click', function ()
         {
-
                 var ids =[];
                 $('.crud_table input[data-rel=row]').each(function(){
                     if ($(this).prop('checked'))
@@ -162,23 +150,18 @@
                         ids.push($(this).val());
                     }
                 })
-
                 if (ids.length)
                 {
-
                     $(this).data('args',{ids:ids});
                 }
-
         })
-
-
 
     }
 
     function init_checkboxes()
     {
-        if (crud_obj) {
-            var crud_cols = crud_obj.list.columns;
+        if (crud.crudObj) {
+            var crud_cols = crud.crudObj.list.columns;
             if (crud_cols[0]['ctype'] && crud_cols[0]['ctype'] == 'checkbox') {
 
                 var all_chck = $('<input class="i-checks" type="checkbox">');
@@ -193,8 +176,8 @@
             }
         }
 
-        CRUD.init_ichecks();
+        crud.init_ichecks();
 
     }
 
-})(jQuery, window, CRUD)
+})(jQuery, CRUD)
