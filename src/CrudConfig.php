@@ -109,6 +109,13 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
         }
     }
 
+    public function exists($key)
+    {
+
+         return isset($this->config[$key]);
+
+    }
+
     public function getCrudRelations()
     {
         return $this->crudRelations;

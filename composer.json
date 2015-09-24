@@ -15,5 +15,10 @@
     "autoload": {
         "psr-4": {"LaravelCrud\\": "src"}
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+	"require": {
+	        "illuminate/html": "5.0.*@dev",
+		"rcrowe/twigbridge": "0.8.*@dev",
+		"twig/extensions": "1.3.*@dev"
+    }
 }
