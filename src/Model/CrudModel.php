@@ -34,9 +34,10 @@ class CrudModel extends Model {
         $this->classShortName = class_basename($this);
         $this->config = new CrudConfig($this);
 
+
         if (empty($this->table))
         {
-            if ($this->config->exists('table')) {
+            if (!$this->config->exists('table')) {
                 $this->table = snake_case($this->classShortName);
             } else {
                 $this->table = $this->config->get('table');

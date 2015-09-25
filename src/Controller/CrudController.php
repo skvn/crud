@@ -4,6 +4,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Input;
 use League\Flysystem\Exception;
 use Illuminate\Contracts\Auth\Guard;
+use LaravelCrud\Model\CrudNotify as Notify;
 
 class CrudController extends Controller {
 
@@ -257,6 +258,12 @@ class CrudController extends Controller {
         {
             return \Response('Access denied', 403);
         }
+    }
+
+    function crudNotifyFetch()
+    {
+        return Notify :: fetchNext();
+
     }
 
 

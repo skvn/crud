@@ -10,5 +10,8 @@ Route::group(array('namespace' => 'Admin',/*'middleware' => 'auth'*/), function(
     Route::get('admin/crud/{model}/list/{list}',                        array('as' => 'crud_list',                  'uses' => 'AdminController@clist'));
     Route::post('admin/crud/{model}/delete',                            array('as' => 'crud_delete',                'uses' => 'AdminController@delete'));
     Route::post('admin/crud/{model}/{id}/command/{command_name}',       array('as' => 'crud_command',               'uses' => 'AdminController@command'));
-    Route::any('some/url',                                              array('as' => 'crud_table_columns',          'uses' => 'AdminController@crudTableColumns'));
+    Route::get('util/tooltip/fetch',                                    array(                                       'uses' => 'AdminController@crudTooltipFetch'));
+    Route::get('util/notify/fetch',                                     array(                                       'uses' => 'AdminController@crudNotifyFetch'));
+    Route::post('util/tooltip/update',                                  array(                                       'uses' => 'AdminController@crudTooltipUpdate'));
+    Route::any('util/crud/table_columns',                               array('as' => 'crud_table_columns',          'uses' => 'AdminController@crudTableColumns'));
 });
