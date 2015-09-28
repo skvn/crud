@@ -32,12 +32,25 @@ class CrudModel extends Model {
 
 
         $this->classShortName = class_basename($this);
+        $this->config = new CrudConfig($this);
+
+
         if (empty($this->table))
         {
-            $this->table = snake_case($this->classShortName);
+            if (!$this->config->exists('table')) {
+                $this->table = snake_case($this->classShortName);
+            } else {
+                $this->table = $this->config->get('table');
+            }
         }
 
-        $this->config = new CrudConfig($this);
+        if ($this->config->exists('timestamps'))
+        {
+            $this->timestamps = $this->config->get('timestamps');
+        }
+
+
+
         $this->fillable = $this->config->getFillable();
         $this->crudRelations = $this->config->getCrudRelations();
 

@@ -109,6 +109,13 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
         }
     }
 
+    public function exists($key)
+    {
+
+         return isset($this->config[$key]);
+
+    }
+
     public function getCrudRelations()
     {
         return $this->crudRelations;
@@ -285,8 +292,14 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
     function jsonSerialize()
     {
         $this->config['list'] = $this->getList();
+        if (!empty($this->config['list']['multiselect']))
+        {
+            array_unshift($this->config['list']['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
+        }
+
         foreach($this->config['list']['columns'] as $k=>$col)
         {
+
             if (empty($col['title']))
             {
                 $cdesc = $this->getColumn($col['data']);

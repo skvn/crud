@@ -2,6 +2,9 @@
 
 
 return [
+    /* Table name */	
+    'table'=>'dyno_news',	
+
     /* Access level rule name (optional)*/
     'acl' => 'user',
     'ent_name' => 'user',
@@ -15,17 +18,19 @@ return [
     'dialog_width' => 1000,
     /* Breadcrumbs */
     'bc' => [['href'=>'/admin/projects','title'=>'Управление проектами']],
-    /* Don't show mass delete button (optional) */
-    'no_mass_delete' => true,
 
     /* Datatables list description  In case of the only list for the model*/
 
     'list'=> [
         'title'=>'Список пользователей',
         'columns'=>[
-            [ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox'],
             [ "data"=> "id", "orderable"=>true, 'hint' => ['index' => 'tooltip index', 'default' => 'tooltip default text']],
             [ "data"=> "email", "orderable"=>true, 'title'=>'Email'],
+
+	/* MASS SELECT checkboxes */
+	'multiselect'=>true		
+	 /* MASS delete */
+        'mass_delete' => true,
 
         ]
 
