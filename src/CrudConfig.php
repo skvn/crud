@@ -295,6 +295,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
                 }
             }
         }
+        $this->config['filter'] = $this->getFilter();
         if (\Auth :: check())
         {
             $user = \Auth :: user();
