@@ -1,15 +1,15 @@
 <?php
 
 Route::group(array('namespace' => 'Admin',/*'middleware' => 'auth'*/), function() {
-    Route::get('admin/crud/tree/{model}',                               array('as' => 'crud_tree',                  'uses' => 'AdminController@tree'));
-    Route::post('admin/crud/{model}/move_tree',                         array('as' => 'crud_move_tree',             'uses' => 'AdminController@treeMove'));
-    Route::get('admin/crud/{model}',                                    array('as' => 'crud_index',                 'uses' => 'AdminController@index'));
-    Route::get('admin/crud/{model}/edit/{id}',                          array('as' => 'crud_edit',                  'uses' => 'AdminController@edit'));
-    Route::post('admin/crud/{model}/update/{id}',                       array('as' => 'crud_update',                'uses' => 'AdminController@update'));
-    Route::post('admin/crud/{model}/filter/{context}',                  array('as' => 'crud_filter',                'uses' => 'AdminController@filter'));
-    Route::get('admin/crud/{model}/list/{list}',                        array('as' => 'crud_list',                  'uses' => 'AdminController@clist'));
-    Route::post('admin/crud/{model}/delete',                            array('as' => 'crud_delete',                'uses' => 'AdminController@delete'));
-    Route::post('admin/crud/{model}/{id}/command/{command_name}',       array('as' => 'crud_command',               'uses' => 'AdminController@command'));
+    Route::get('admin/crud/tree/{model}',                               array('as' => 'crud_tree',                  'uses' => 'AdminController@crudTree'));
+    Route::post('admin/crud/{model}/move_tree',                         array('as' => 'crud_move_tree',             'uses' => 'AdminController@crudTreeMove'));
+    Route::get('admin/crud/{model}',                                    array('as' => 'crud_index',                 'uses' => 'AdminController@crudIndex'));
+    Route::get('admin/crud/{model}/edit/{id}',                          array('as' => 'crud_edit',                  'uses' => 'AdminController@crudEdit'));
+    Route::post('admin/crud/{model}/update/{id}',                       array('as' => 'crud_update',                'uses' => 'AdminController@crudUpdate'));
+    Route::post('admin/crud/{model}/filter/{context}',                  array('as' => 'crud_filter',                'uses' => 'AdminController@crudFilter'));
+    Route::get('admin/crud/{model}/list/{list}',                        array('as' => 'crud_list',                  'uses' => 'AdminController@crudList'));
+    Route::post('admin/crud/{model}/delete',                            array('as' => 'crud_delete',                'uses' => 'AdminController@crudDelete'));
+    Route::post('admin/crud/{model}/{id}/command/{command_name}',       array('as' => 'crud_command',               'uses' => 'AdminController@crudCommand'));
     Route::get('util/tooltip/fetch',                                    array(                                       'uses' => 'AdminController@crudTooltipFetch'));
     Route::get('util/notify/fetch',                                     array(                                       'uses' => 'AdminController@crudNotifyFetch'));
     Route::post('util/tooltip/update',                                  array(                                       'uses' => 'AdminController@crudTooltipUpdate'));
