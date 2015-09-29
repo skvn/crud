@@ -27,7 +27,7 @@ class CrudController extends Controller {
     }
 
 
-    function index($model)
+    function crudIndex($model)
     {
 
         $obj = \App::make('App\Model\\'.studly_case($model));
@@ -44,7 +44,7 @@ class CrudController extends Controller {
     }//
 
 
-    function tree($model)
+    function crudTree($model)
     {
 
         $obj = \App::make('App\Model\\'.studly_case($model));
@@ -73,7 +73,7 @@ class CrudController extends Controller {
 
 
 
-    function clist($model,$list)
+    function crudList($model,$list)
     {
 
         $obj = \App::make('App\Model\\'.studly_case($model));
@@ -93,7 +93,7 @@ class CrudController extends Controller {
 
     }//
 
-    function edit($model,$id)
+    function crudEdit($model,$id)
     {
         $class = 'App\Model\\'.studly_case($model);
         $obj = $class::firstOrNew(['id'=>(int)$id]);
@@ -107,7 +107,7 @@ class CrudController extends Controller {
 
     }
 
-    function update($model,$id)
+    function crudUpdate($model,$id)
     {
 
         try {
@@ -143,7 +143,7 @@ class CrudController extends Controller {
     }
 
 
-    function filter($model,$context)
+    function crudFilter($model,$context)
     {
 
         try {
@@ -164,7 +164,7 @@ class CrudController extends Controller {
 
     }
 
-    function delete($model)
+    function crudDelete($model)
     {
         try {
             $model = 'App\Model\\' . studly_case($model);
@@ -191,7 +191,7 @@ class CrudController extends Controller {
     }
 
 
-    function command($model, $id, $command)
+    function crudCommand($model, $id, $command)
     {
 
         try {
@@ -213,7 +213,7 @@ class CrudController extends Controller {
         }
     }
 
-    function treeMove($model)
+    function crudTreeMove($model)
     {
         $id = \Input::get('self_id');
         $rel_id = \Input::get('rel_id');
