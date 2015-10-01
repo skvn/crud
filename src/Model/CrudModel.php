@@ -5,6 +5,7 @@ use \Illuminate\Database\Eloquent\Model;
 use LaravelCrud\CrudConfig;
 use LaravelCrud\Form\Form;
 use LaravelCrud\Filter\FilterFactory;
+use Illuminate\Support\Collection ;
 
 
 
@@ -598,7 +599,13 @@ class CrudModel extends Model {
 
     public function getRelationIds($relation)
     {
-        return $this->$relation->lists('id');
+        $data = $this->$relation->lists('id');
+        if (is_object($data) && ($data instanceof Collection))
+        {
+            $data = $data->all();
+        }
+
+        return $data;
     }
 
 //    public function getInputValue($column, $value=null)
