@@ -145,6 +145,7 @@ class CrudController extends Controller {
 
         try {
             $obj = \App::make('App\Model\\'.studly_case($model));
+            $obj->config->setScope($scope);
             $obj->fillFilter($scope,\Input::all());
 
             if (!$obj->checkAcl())
