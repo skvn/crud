@@ -17,7 +17,7 @@
 
     function init_table()
     {
-        if (crud.crudObj)
+        if (crud.crudObj && $('.crud_table').length)
         {
             var crud_cols = crud.crudObj.list.columns;
             if (crud_cols[0]['ctype'] && crud_cols[0]['ctype'] == 'checkbox')
@@ -60,7 +60,7 @@
                         searching: false,
                         processing: true,
                         serverSide: true,
-                        ajax: crud.format_setting("model_list_url", {model: crud.crudObj.class_name, list_name: list_name, context: crud.crudObj.context}),
+                        ajax: crud.format_setting("model_list_url", {model: crud.crudObj.class_name, scope: crud.crudObj.scope}),
                         columns: crud_cols,
                         language: {
                             url: "/vendor/crud/js/plugins/dataTables/lang/russian.json"

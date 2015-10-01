@@ -11,7 +11,7 @@
 
                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                     <input type="hidden" name="model" value="{{ crudObj.model_name }}" />
-                    <input type="hidden" name="context" value="{{ crudObj.config.context }}" />
+                    <input type="hidden" name="scope" value="{{ crudObj.config.scope }}" />
                     <input type="hidden" name="pref_type" value="{{ pref_type }}" />
                     <input type="hidden" name="pref[name]" value="cols" />
 

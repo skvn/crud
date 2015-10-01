@@ -6,8 +6,8 @@ Route::group(array('namespace' => 'Admin',/*'middleware' => 'auth'*/), function(
     Route::get('admin/crud/{model}',                                    array('as' => 'crud_index',                 'uses' => 'AdminController@crudIndex'));
     Route::get('admin/crud/{model}/edit/{id}',                          array('as' => 'crud_edit',                  'uses' => 'AdminController@crudEdit'));
     Route::post('admin/crud/{model}/update/{id}',                       array('as' => 'crud_update',                'uses' => 'AdminController@crudUpdate'));
-    Route::post('admin/crud/{model}/filter/{context}',                  array('as' => 'crud_filter',                'uses' => 'AdminController@crudFilter'));
-    Route::get('admin/crud/{model}/list/{list}',                        array('as' => 'crud_list',                  'uses' => 'AdminController@crudList'));
+    Route::post('admin/crud/{model}/filter/{scope}',                    array('as' => 'crud_filter',                'uses' => 'AdminController@crudFilter'));
+    Route::get('admin/crud/{model}/list/{scope}',                       array('as' => 'crud_list',                  'uses' => 'AdminController@crudList'));
     Route::post('admin/crud/{model}/delete',                            array('as' => 'crud_delete',                'uses' => 'AdminController@crudDelete'));
     Route::post('admin/crud/{model}/{id}/command/{command_name}',       array('as' => 'crud_command',               'uses' => 'AdminController@crudCommand'));
     Route::get('util/tooltip/fetch',                                    array(                                       'uses' => 'AdminController@crudTooltipFetch'));

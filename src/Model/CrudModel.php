@@ -15,6 +15,7 @@ class CrudModel extends Model {
     public $config;
     protected $dirtyRelations = [];
     public $classShortName;
+    public $classViewName;
     protected $filterObj;
     protected $form;
     protected $crudRelations;
@@ -32,6 +33,7 @@ class CrudModel extends Model {
 
 
         $this->classShortName = class_basename($this);
+        $this->classViewName = snake_case($this->classShortName);
         $this->config = new CrudConfig($this);
 
 
@@ -202,17 +204,17 @@ class CrudModel extends Model {
         return parent::fill($attributes);
 
     }
-    function getListData($context=null, $viewType='data_tables')
+    function getListData($scope=null, $viewType='data_tables')
     {
 
         $skip = (int) \Input::get('start',0);
         $take =  (int) \Input::get('length',0);
         $order = \Input::get('order');
 
-        $coll = $this->getListCollection($context, $order);
+        $coll = $this->getListCollection($scope, $order);
         if (!$this->isTree()) {
 
-            $coll = $this->applyCollectionFilters($coll, $context);
+            $coll = $this->applyCollectionFilters($coll, $scope);
             $coll = $this->paginateListCollection($coll, $skip, $take);
         }
         
@@ -220,12 +222,12 @@ class CrudModel extends Model {
     }
 
 
-    function getListCollection($context=null, $order=null)
+    function getListCollection($scope=null, $order=null)
     {
-        $scope = $this->purifyContext($context);
+        //$scope = $this->purifyContext($context);
 
-        if (!empty($context)) {
-
+        if (!empty($scope))
+        {
             $method = camel_case('get_' . $scope . '_list_collection');
         }
 
@@ -248,7 +250,7 @@ class CrudModel extends Model {
 
 
 
-        if (!empty($context) && method_exists($this, $method))
+        if (!empty($scope) && method_exists($this, $method))
         {
 
             return $this->$method($order, $joins);
@@ -302,15 +304,15 @@ class CrudModel extends Model {
         return $coll;
     }
 
-    protected  function applyCollectionFilters($coll, $context)
+    protected  function applyCollectionFilters($coll, $scope)
     {
-        $context = $this->purifyContext($context);
-        $this->initFilter($context);
+        //$context = $this->purifyContext($context);
+        $this->initFilter($scope);
 
-        $scope = $this->purifyContext($context);
+        //$scope = $this->purifyContext($context);
 
 
-        if (!empty($context)) {
+        if (!empty($scope)) {
 
             $methodCond = camel_case('append_' . $scope . '_conditions');
         }
@@ -596,7 +598,6 @@ class CrudModel extends Model {
 
     public function getRelationIds($relation)
     {
-
         return $this->$relation->lists('id');
     }
 
@@ -610,15 +611,15 @@ class CrudModel extends Model {
 //        return $this->getAttribute($column);
 //    }
 
-    public function initFilter($listOrContext=CrudConfig::EMPTY_CONTEXT_LIST)
+    public function initFilter(/*$scope = CrudConfig :: DEFAULT_SCOPE*/)
     {
 
-        $listOrContext = $this->purifyContext($listOrContext);
-        if ($listOrContext != CrudConfig::EMPTY_CONTEXT_LIST) {
-            $this->config->setContext($listOrContext);
-        }
+        //$listOrContext = $this->purifyContext($listOrContext);
+//        if ($scope != CrudConfig :: T_LIST) {
+            //$this->config->setScope($scope);
+//        }
 
-        $filter =  FilterFactory::create([$this->classShortName,$listOrContext]);
+        $filter =  FilterFactory::create($this, $this->config->getScope());
         $this->setFilter($filter);
     }
 
@@ -641,9 +642,9 @@ class CrudModel extends Model {
         return $this->filterObj->filters;
     }
 
-    public function fillFilter($context,$input)
+    public function fillFilter($scope, $input)
     {
-        $this->initFilter($context);
+        $this->initFilter($scope);
 
         return $this->filterObj->fill($input, true);
     }
@@ -670,17 +671,17 @@ class CrudModel extends Model {
 
     }
 
-    protected  function purifyContext($context)
-    {
-
-        if (strpos($context, ':') !== false)
-        {
-
-            $context = str_replace($this->classShortName.':','',$context);
-
-        }
-        return $context;
-    }
+//    protected  function purifyContext($context)
+//    {
+//
+//        if (strpos($context, ':') !== false)
+//        {
+//
+//            $context = str_replace($this->classShortName.':','',$context);
+//
+//        }
+//        return $context;
+//    }
 
     function isTree()
     {

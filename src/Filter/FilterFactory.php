@@ -1,24 +1,23 @@
-<?php
+<?php namespace LaravelCrud\Filter;
 
-namespace LaravelCrud\Filter;
-
+use LaravelCrud\Model\CrudModel;
 
 class FilterFactory
 {
+    static  $instances = [];
 
 
 
-    public static  function create(array $context_params)
+    public static  function create(CrudModel $model, $scope)
     {
-        static  $instances;
-        $context = implode(':',$context_params);
-        if (empty($instances[$context]))
+        $key = $model->classShortName . "_" . $scope;
+        //$context = implode(':',$context_params);
+        if (empty(self :: $instances[$key]))
         {
-
-            $instances[$context] =  new Filter($context_params);
+            $instances[$key] =  new Filter($model, $scope);
         }
 
-        return $instances[$context];
+        return $instances[$key];
     }
 
 } 

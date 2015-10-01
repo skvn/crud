@@ -42,7 +42,7 @@
             $form.ajaxSubmit(
                 {
                     type:'POST',
-                    url: crud.format_setting("model_filter_url", {model: crud.crudObj['class_name'], context: $(this).data('crud_context')}),
+                    url: crud.format_setting("model_filter_url", {model: crud.crudObj['class_name'], scope: $(this).data('crud_scope')}),
                     //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
                     dataType: 'json',
                     success: function (res) {
@@ -72,7 +72,7 @@
             $form.ajaxSubmit(
                 {
                     type:'POST',
-                    url: crud.format_setting('model_filter_url', {model: crud.crudObj['class_name'], context: $(this).data('crud_context')}),
+                    url: crud.format_setting('model_filter_url', {model: crud.crudObj['class_name'], scope: $(this).data('crud_scope')}),
                     //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
                     dataType: 'json',
                     success: function (res) {

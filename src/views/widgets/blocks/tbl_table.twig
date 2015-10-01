@@ -1,0 +1,11 @@
+<table class="table table-striped table-bordered table-hover" data-crud_table="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.config.scope }}">
+    <thead>
+    {% for c in crudObj.config.jsonSerialize().list.columns %}
+        <th data-list_ctype="{{ c.ctype }}" data-list_orderable="{{ c.orderable }}" data-list_data="{{ c.data }}" data-list_name="{{ c.name }}">{{ c.title }} {% if c.hint %}{{ config_get('crud_tooltip.pattern')|replace({'%s': c.hint.index, '%t': c.hint.default})|raw }}{% endif %}</th>
+    {% endfor %}
+    </thead>
+    <tfoot>
+    </tfoot>
+
+
+</table>

@@ -1,10 +1,10 @@
 <?php namespace LaravelCrud\Controller;
 
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Input;
 use League\Flysystem\Exception;
 use Illuminate\Contracts\Auth\Guard;
 use LaravelCrud\Model\CrudNotify as Notify;
+use LaravelCrud\CrudConfig;
 
 class CrudController extends Controller {
 
@@ -27,10 +27,11 @@ class CrudController extends Controller {
     }
 
 
-    function crudIndex($model)
+    function crudIndex($model, $scope = CrudConfig :: DEFAULT_SCOPE)
     {
 
         $obj = \App::make('App\Model\\'.studly_case($model));
+        $obj->config->setScope($scope);
 
         if (!$obj->checkAcl())
         {
@@ -39,7 +40,7 @@ class CrudController extends Controller {
 
         $obj->initFilter();
 
-        return \View::make($this->crudHelper->resolveModelTemplate($model,'index'),['crudObj'=>$obj]);
+        return \View::make($this->crudHelper->resolveModelTemplate($model,'index', $scope),['crudObj'=>$obj]);
 
     }//
 
@@ -73,22 +74,18 @@ class CrudController extends Controller {
 
 
 
-    function crudList($model,$list)
+    function crudList($model,$scope)
     {
 
         $obj = \App::make('App\Model\\'.studly_case($model));
-        $context = \Input::get('list_context');
-        if (!empty($context))
-        {
-            $obj->config->setContext($context);
-        }
+        $obj->config->setScope($scope);
 
         if (!$obj->checkAcl())
         {
             return \Response('Access denied',403);
         }
 
-        return $obj->getListData($list,'data_tables');
+        return $obj->getListData($scope,'data_tables');
 
 
     }//
@@ -143,19 +140,19 @@ class CrudController extends Controller {
     }
 
 
-    function crudFilter($model,$context)
+    function crudFilter($model,$scope)
     {
 
         try {
             $obj = \App::make('App\Model\\'.studly_case($model));
-            $obj->fillFilter($context,\Input::all());
+            $obj->fillFilter($scope,\Input::all());
 
             if (!$obj->checkAcl())
             {
                 return \Response('Access denied',403);
             }
 
-            return ['success'=>true,'crud_model'=>$obj->classShortName,'context'=>$context];
+            return ['success'=>true,'crud_model'=>$obj->classShortName,'scope'=>$scope];
 
         } catch(Exception $e)
         {

@@ -1,5 +1,6 @@
 <?php namespace LaravelCrud\Helper;
 
+use LaravelCrud\CrudConfig;
 
 class CrudHelper {
 
@@ -160,11 +161,27 @@ class CrudHelper {
         return $data;
     }
 
-    function resolveModelTemplate($model, $action)
+    function resolveModelTemplate($model, $action, $scope = CrudConfig :: DEFAULT_SCOPE)
     {
 
         $crud_views_path = \Config::get('view.model_views');
         $views_path = \Config::get('view.paths');
+
+        $view_name = $crud_views_path.'/'.$model.'/'.str_replace('.','/',$scope . "_" . $action);
+
+        if (file_exists($view_name.'.twig'))
+        {
+            foreach ($views_path as $p)
+            {
+
+                if (strpos($view_name, $p) === 0)
+                {
+                    return str_replace($p.'/','',$view_name);
+                }
+            }
+        }
+
+
         $view_name = $crud_views_path.'/'.$model.'/'.str_replace('.','/',$action);
 
         if (file_exists($view_name.'.twig'))

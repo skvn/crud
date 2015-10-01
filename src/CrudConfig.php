@@ -22,7 +22,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
     const RELATION_HAS_MANY = 'hasMany';
     const RELATION_HAS_ONE = 'hasOne';
 
-    const EMPTY_CONTEXT_LIST = 'def';
+    const DEFAULT_SCOPE = 'default';
 
 
 
@@ -33,7 +33,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
     protected $processableRelations = [];
     protected $fillable = [];
     protected $manyRelations = array('hasMany','belongsToMany', 'morphToMany', 'morphedByMany');
-    protected $context;
+    protected $scope = "default";
     protected $model;
     protected $list_prefs = null;
 
@@ -131,39 +131,38 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
         return $this->fillable;
     }
 
-    public function setContext($context)
+    public function setScope($scope = null)
     {
-        if ($context == 'null')
+        if (is_null($scope) || $scope == 'null')
         {
-            return;
+            $this->scope = self :: DEFAULT_SCOPE;
         }
-        $this->context = $context;
+        else
+        {
+            $this->scope = $scope;
+        }
     }
 
-    function getContext()
+    function getScope()
     {
-        return $this->context;
+        return $this->scope;
     }
 
     public  function getListName()
     {
-        if (!empty($this->context))
-        {
-            return $this->context;
-        } else {
-            return self::EMPTY_CONTEXT_LIST;
-        }
+        return $this->scope ? $this->scope : self :: DEFAULT_SCOPE;
     }
 
     public function getList($prop='')
     {
+        $cols = $this->get('list.' . $this->scope);
 
-        if (empty($this->context) || $this->context == self::EMPTY_CONTEXT_LIST) {
-            $cols = $this->get('list');
-        } else
-        {
-            $cols = $this->get('list.'.$this->context);
-        }
+//        if (empty($this->context) || $this->context == self::EMPTY_CONTEXT_LIST) {
+//            $cols = $this->get('list');
+//        } else
+//        {
+//            $cols = $this->get('list.'.$this->context);
+//        }
 
 
         if (empty($prop))
@@ -214,14 +213,16 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
 
     public function getFilter($prop='')
     {
-        if (empty($this->context) || $this->context == self::EMPTY_CONTEXT_LIST) {
-            $form = $this->get('filter');
-        } else
-        {
-            $form = $this->get('filter.'.$this->context);
-        }
+//        $form = $this->get('filter.' . $this->scope);
+//        if (empty($this->context) || $this->context == self::EMPTY_CONTEXT_LIST) {
+//            $form = $this->get('filter');
+//        } else
+//        {
+//            $form = $this->get('filter.'.$this->context);
+//        }
 
         //$form =  $this->get('filter');
+        $form = $this->get('list.' . $this->scope . '.filter');
         if (empty($prop))
         {
             return $form;
@@ -327,7 +328,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
         }
 
         $this->config['list_name'] = $this->getListName();
-        $this->config['context'] = $this->context;
+        $this->config['scope'] = $this->scope;
         return $this->config;
     }
 
@@ -350,11 +351,9 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
 
     function getListDefaultFilter()
     {
-
-
-        if (!empty($this->config['list'][$this->context]['filter']))
+        if (!empty($this->config['list'][$this->scope]['filter_default']))
         {
-            return $this->config['list'][$this->context]['filter'];
+            return $this->config['list'][$this->scope]['filter_default'];
         }
 
         return [];

@@ -3,8 +3,8 @@
     var events = {};
     var settings = {
         model_edit_url: '/admin/crud/{model}/edit/{id}',
-        model_filter_url: '/admin/crud/{model}/filter/{context}',
-        model_list_url: '/admin/crud/{model}/list/{list_name}?list_context={context}',
+        model_filter_url: '/admin/crud/{model}/filter/{scope}',
+        model_list_url: '/admin/crud/{model}/list/{scope}',
         model_delete_url: '/admin/crud/{model}/delete',
         model_move_tree_url: '/admin/crud/{model}/move_tree',
         model_tree_url: '/admin/crud/tree/{model}'
@@ -318,5 +318,6 @@
         crud.init_selects($('form'));
         crud.init_date_pickers();
         crud.trigger("page.start");
+        $("table[data-crud_table]").crud_list();
     });
 })(window, document, location, console, jQuery);

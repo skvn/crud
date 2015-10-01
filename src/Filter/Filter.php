@@ -1,7 +1,6 @@
 <?php namespace LaravelCrud\Filter;
 
 
-use Illuminate\Support\Facades\Session;
 use LaravelCrud\Model\CrudModel;
 use LaravelCrud\Form\Form;
 
@@ -11,15 +10,13 @@ class Filter {
     protected $model;
     protected $crudObj;
     public $filters;
-    protected $context;
+    protected $scope;
     protected $form;
 
-    public function __construct(array $context)
+    public function __construct(CrudModel $model, $scope)
     {
-
-        $this->context = implode(':',$context);
-
-
+        $this->scope = $scope;
+        $this->setModel($model);
     }
 
     public function setModel(CrudModel $crudObj)
@@ -73,9 +70,9 @@ class Filter {
 
     }
 
-    public function getContext()
+    public function getScope()
     {
-        return $this->context;
+        return $this->scope;
     }
 
     public function fill($input, $andStore=false)
@@ -120,7 +117,7 @@ class Filter {
     public function getStorageKey()
     {
 
-        return 'crud_filter_'.$this->getContext();
+        return 'crud_filter_'.$this->getScope();
     }
 
     public function getForm($fillData=null, $renew=false)

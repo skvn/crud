@@ -22,19 +22,18 @@ return [
     /* Datatables list description  In case of the only list for the model*/
 
     'list'=> [
-        'title'=>'Список пользователей',
-        'columns'=>[
-            [ "data"=> "id", "orderable"=>true, 'hint' => ['index' => 'tooltip index', 'default' => 'tooltip default text']],
-            [ "data"=> "email", "orderable"=>true, 'title'=>'Email'],
-
-	/* MASS SELECT checkboxes */
-	'multiselect'=>true		
-	 /* MASS delete */
-        'mass_delete' => true,
-
+        'default' => [
+            'title'=>'Список пользователей',
+            /* MASS SELECT checkboxes */
+            'multiselect'=>true,
+            /* MASS delete */
+            'mass_delete' => true,
+            'columns'=>[
+                [ "data"=> "id", "orderable"=>true, 'hint' => ['index' => 'tooltip index', 'default' => 'tooltip default text']],
+                [ "data"=> "email", "orderable"=>true, 'title'=>'Email'],
+            ],
+            'filters' => []
         ]
-
-
     ],
 
     /* Fields names to include in edit form UI */

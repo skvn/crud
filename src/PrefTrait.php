@@ -40,7 +40,7 @@ trait PrefTrait
         {
             $model = 'App\Model\\' . studly_case(\Request :: get('model'));
             $obj = new $model();
-            $obj->config->setContext(\Request :: get('context'));
+            $obj->config->setScope(\Request :: get('scope'));
             return \View :: make('crud::crud.choose_columns', ['crudObj' => $obj, 'pref_type' => $type]);
         }
     }
@@ -51,7 +51,7 @@ trait PrefTrait
         {
             throw new \Exception("Model for preferences not found");
         }
-        return $data['model'] . "::" . (empty($data['context']) ? \LaravelCrud\CrudConfig :: EMPTY_CONTEXT_LIST : $data['context']);
+        return $data['model'] . "::" . (empty($data['scope']) ? \LaravelCrud\CrudConfig :: DEFAULT_SCOPE : $data['scope']);
     }
 
     protected function crudPrefGet($type, $scope)
@@ -78,7 +78,7 @@ trait PrefTrait
 
     function crudPrefForModel($type, $model)
     {
-        $scope = $this->crudPrefGetScope(['model' => $model->attrModelName(), 'context' => $model->config->getContext()]);
+        $scope = $this->crudPrefGetScope(['model' => $model->attrModelName(), 'scope' => $model->config->getScope()]);
         return $this->crudPrefGetVal($type, $scope);
     }
 
