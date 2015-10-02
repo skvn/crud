@@ -8,7 +8,6 @@ class ServiceProvider extends LServiceProvider {
 
     public function boot()
     {
-        //$this->package('laravel-addons/crud');
         $paths = [];
         foreach (\Config :: get("view.paths") as $path)
         {
@@ -31,7 +30,7 @@ class ServiceProvider extends LServiceProvider {
 
         $this->app->singleton('CrudHelper',function()
         {
-            return new \LaravelCrud\Helper\CrudHelper();
+            return new \LaravelCrud\Helper\CrudHelper($this->app);
         });
 
     }
