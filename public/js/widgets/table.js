@@ -42,6 +42,7 @@
                 var col;
 
                 col = {name: c.data('list_name'), data: c.data('list_data'), ctype: c.data('list_ctype')};
+                col['orderable'] = c.data('list_orderable') == '1';
                 if (columns.length == 0)
                 {
                     if (c.data('list_ctype') === "checkbox")
