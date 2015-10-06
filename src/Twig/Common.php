@@ -34,10 +34,16 @@ class Common extends Twig_Extension
         }
     }
 
+    function modelView($view, $model)
+    {
+        return \App :: make('CrudHelper')->resolveModelView($model, $view);
+    }
+
     public function getFilters()
     {
         return [
             new Twig_SimpleFilter('asset', [$this, 'asset']),
+            new Twig_SimpleFilter('model_view', [$this, 'modelView'])
         ];
     }
 }

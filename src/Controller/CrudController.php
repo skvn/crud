@@ -40,7 +40,8 @@ class CrudController extends Controller {
 
         $obj->initFilter();
 
-        return \View::make($this->crudHelper->resolveModelTemplate($model,'index', $scope),['crudObj'=>$obj]);
+        //return \View::make($this->crudHelper->resolveModelTemplate($model,'index', $scope),['crudObj'=>$obj]);
+        return \View::make($this->crudHelper->resolveModelView($obj, 'index'),['crudObj'=>$obj]);
 
     }//
 
@@ -59,9 +60,11 @@ class CrudController extends Controller {
 
         if (\Request::ajax())
         {
-            $viewTpl = $this->crudHelper->resolveModelTemplate($model,'crud.tree_line');
+            //$viewTpl = $this->crudHelper->resolveModelTemplate($model,'crud.tree_line');
+            $viewTpl = $this->crudHelper->resolveModelView($obj,'crud.tree_line');
         } else {
-            $viewTpl = $this->crudHelper->resolveModelTemplate($model,'tree');
+            //$viewTpl = $this->crudHelper->resolveModelTemplate($model,'tree');
+            $viewTpl = $this->crudHelper->resolveModelView($obj,'tree');
         }
         return \View::make($viewTpl,
                 [
@@ -100,7 +103,8 @@ class CrudController extends Controller {
             return \Response('Access denied',403);
         }
 
-        return \View::make($this->crudHelper->resolveModelTemplate($model,$obj->config->get('tabs') ? 'edit_tabs' : 'edit'),['crudObj'=>$obj,'id'=>$id]);
+        //return \View::make($this->crudHelper->resolveModelTemplate($model,$obj->config->get('tabs') ? 'edit_tabs' : 'edit'),['crudObj'=>$obj,'id'=>$id]);
+        return \View::make($this->crudHelper->resolveModelView($obj,$obj->config->get('tabs') ? 'edit_tabs' : 'edit'),['crudObj'=>$obj,'id'=>$id]);
 
     }
 
@@ -145,6 +149,7 @@ class CrudController extends Controller {
 
         try {
             $obj = \App::make('App\Model\\'.studly_case($model));
+            $obj->config->setScope($scope);
             $obj->fillFilter($scope,\Input::all());
 
             if (!$obj->checkAcl())

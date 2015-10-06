@@ -82,6 +82,7 @@
             if (res.success)
             {
                 $('.crud_table').DataTable().ajax.reload(null, false);
+                $('table[data-crud_table]').DataTable().ajax.reload(null, false);
             }
         });
 
@@ -89,6 +90,7 @@
             if (res.success)
             {
                 $('.crud_table').DataTable().ajax.reload(null, false);
+                $('table[data-crud_table]').DataTable().ajax.reload(null, false);
             }
         });
 
@@ -96,6 +98,7 @@
             if (res.success)
             {
                 $('.crud_table').DataTable().ajax.reload();
+                $('table[data-crud_table]').DataTable().ajax.reload(null, false);
             }
         });
 
@@ -103,6 +106,7 @@
             if (res.success)
             {
                 $('.crud_table').DataTable().ajax.reload(null, false);
+                $('table[data-crud_table]').DataTable().ajax.reload(null, false);
             }
         });
 

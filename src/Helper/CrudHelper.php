@@ -1,8 +1,17 @@
 <?php namespace LaravelCrud\Helper;
 
-use LaravelCrud\CrudConfig;
+//use LaravelCrud\CrudConfig;
+use LaravelCrud\Model\CrudModel;
 
 class CrudHelper {
+
+    protected $app;
+
+
+    function __construct(\Illuminate\Foundation\Application $app)
+    {
+        $this->app = $app;
+    }
 
     public function prepareCollectionForView ($coll, $args, $viewType)
     {
@@ -161,41 +170,86 @@ class CrudHelper {
         return $data;
     }
 
-    function resolveModelTemplate($model, $action, $scope = CrudConfig :: DEFAULT_SCOPE)
+    function resolveModelView(CrudModel $model, $view)
     {
-
-        $crud_views_path = \Config::get('view.model_views');
-        $views_path = \Config::get('view.paths');
-
-        $view_name = $crud_views_path.'/'.$model.'/'.str_replace('.','/',$scope . "_" . $action);
-
-        if (file_exists($view_name.'.twig'))
+        $hints = $this->app['view']->getFinder()->getHints();
+        $key = "crud." . $model->classViewName . "." . $model->config->getScope();
+        $source = isset($hints[$key]) ? $hints[$key] : [];
+        $target = [];
+        $add = [
+            '/crud',
+            '/crud/models',
+            '/crud/models/' . $model->classViewName,
+            '/crud/models/' . $model->classViewName . '/' . $model->config->getScope(),
+        ];
+        foreach ($this->app['config']['view.paths'] as $path)
         {
-            foreach ($views_path as $p)
+            if (isset($hints['crud']))
             {
-
-                if (strpos($view_name, $p) === 0)
+                foreach ($hints['crud'] as $entry)
                 {
-                    return str_replace($p.'/','',$view_name);
+                    if (!in_array($entry, $target))
+                    {
+                        $target[] = $entry;
+                    }
+                }
+            }
+            if (!in_array($path, $target))
+            {
+                $target[] = $path;
+            }
+            foreach ($add as $entry)
+            {
+                $tpath = $path . $entry;
+                if (!in_array($tpath, $source))
+                {
+                    array_unshift($target, $tpath);
                 }
             }
         }
-
-
-        $view_name = $crud_views_path.'/'.$model.'/'.str_replace('.','/',$action);
-
-        if (file_exists($view_name.'.twig'))
+        if (!empty($target))
         {
-            foreach ($views_path as $p)
-            {
-
-                if (strpos($view_name, $p) === 0)
-                {
-                    return str_replace($p.'/','',$view_name);
-                }
-            }
+            $this->app['view']->getFinder()->prependNamespace($key, $target);
         }
-
-        return 'crud::'.$action;
+        return $key . "::" . $view;
     }
+
+//    function resolveModelTemplate($model, $action, $scope = CrudConfig :: DEFAULT_SCOPE)
+//    {
+//
+//        //var_dump(get_class($this->app));
+//        $crud_views_path = \Config::get('view.model_views');
+//        $views_path = \Config::get('view.paths');
+//
+//        $view_name = $crud_views_path.'/'.$model.'/'.str_replace('.','/',$scope . "_" . $action);
+//
+//        if (file_exists($view_name.'.twig'))
+//        {
+//            foreach ($views_path as $p)
+//            {
+//
+//                if (strpos($view_name, $p) === 0)
+//                {
+//                    return str_replace($p.'/','',$view_name);
+//                }
+//            }
+//        }
+//
+//
+//        $view_name = $crud_views_path.'/'.$model.'/'.str_replace('.','/',$action);
+//
+//        if (file_exists($view_name.'.twig'))
+//        {
+//            foreach ($views_path as $p)
+//            {
+//
+//                if (strpos($view_name, $p) === 0)
+//                {
+//                    return str_replace($p.'/','',$view_name);
+//                }
+//            }
+//        }
+//
+//        return 'crud::'.$action;
+//    }
 } 
