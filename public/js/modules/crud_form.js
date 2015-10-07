@@ -16,7 +16,6 @@
 
 
 
-
     function init_events()
     {
         $('#crud_form').modal({backdrop:'static', 'keyboard':false, 'show':false})

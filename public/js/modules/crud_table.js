@@ -15,6 +15,8 @@
         init_events();
     });
 
+
+
     function init_table()
     {
         if (crud.crudObj && $('.crud_table').length)
@@ -78,6 +80,16 @@
 
     function init_events()
     {
+
+        crud.bind('crud.edit_element', function(data){
+           // alert(data.el.data('id'));
+        });
+
+        crud.bind('crud.delete_element', function(data){
+            // alert(data.el.data('id'));
+        });
+
+
         crud.bind('crud.update', function(res){
             if (res.success)
             {

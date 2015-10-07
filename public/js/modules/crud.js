@@ -302,6 +302,10 @@
                         alert('Undefined action '+ $(this).data('action'));
                     }
                     break;
+
+                case 'crud_event':
+                    crud.trigger($(this).data('event'), {el:$(this)});
+                   break;
             }
 
         }

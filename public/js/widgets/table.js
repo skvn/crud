@@ -74,12 +74,12 @@
 
                             if (tbl.data('btn_edit'))
                             {
-                                buttons += "<a class='text-info' style='font-size:24px;'><i class='fa fa-edit'> </i></a>&nbsp;&nbsp;&nbsp;";
+                                buttons += "<a class='text-info' data-id='"+rowData.id+"' data-click='crud_event' data-event='crud.edit_element' style='font-size:24px;'><i class='fa fa-edit'> </i></a>&nbsp;&nbsp;&nbsp;";
                             }
 
                             if (tbl.data('btn_delete'))
                             {
-                                buttons += "<a class='text-danger' style='font-size:24px;'><i class='fa fa-trash-o'> </i></a>";
+                                buttons += "<a class='text-danger' data-confirm='Действительно удалить элемент?' data-id='"+rowData.id+"' data-click='crud_event' data-event='crud.delete_element' data- style='font-size:24px;'><i class='fa fa-trash-o'> </i></a>";
                             }
                             buttons +='</nobr>';
                             $(td).html(buttons);
