@@ -103,6 +103,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
             return (!empty($this->config[$key]) ? $this->config[$key] : false);
         } else
         {
+            
             return \Config::get('crud.crud_'.$this->model->getTable().'.'.$key);
 
         }
@@ -156,6 +157,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
     {
 
         $cols = $this->get('list.' . $this->scope);
+
 
 
 //        if (empty($this->context) || $this->context == self::EMPTY_CONTEXT_LIST) {
@@ -294,9 +296,15 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
     function jsonSerialize()
     {
         $this->config['list'] = $this->getList();
+
         if (!empty($this->config['list']['multiselect']))
         {
             array_unshift($this->config['list']['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
+        }
+
+        if (!empty($this->config['list']['buttons']['single_edit']) || !empty(!empty($this->config['list']['buttons']['single_delete'])))
+        {
+            $this->config['list']['columns'][] = [ "data"=>"actions", "orderable"=>false,'title'=>'  ', 'width'=>50, 'ctype'=>'actions'];
         }
 
         foreach($this->config['list']['columns'] as $k=>$col)

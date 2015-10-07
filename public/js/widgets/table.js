@@ -42,6 +42,7 @@
                 var col;
 
                 col = {name: c.data('list_name'), data: c.data('list_data'), ctype: c.data('list_ctype')};
+
                 col['orderable'] = c.data('list_orderable') == '1';
                 if (columns.length == 0)
                 {
@@ -64,7 +65,31 @@
                     col.fnCreatedCell = function(td, cellData, rowData, row, col){
                         $(td).attr('id', c.data('list_data')+'_'+rowData.id);
                     }
+
+                    if (c.data('list_ctype') === "actions")
+                    {
+
+                        col.fnCreatedCell = function(td, cellData, rowData, row, col){
+                            var buttons = '<nobr>';
+
+                            if (tbl.data('btn_edit'))
+                            {
+                                buttons += "<a class='text-info' style='font-size:24px;'><i class='fa fa-edit'> </i></a>&nbsp;&nbsp;&nbsp;";
+                            }
+
+                            if (tbl.data('btn_delete'))
+                            {
+                                buttons += "<a class='text-danger' style='font-size:24px;'><i class='fa fa-trash-o'> </i></a>";
+                            }
+                            buttons +='</nobr>';
+                            $(td).html(buttons);
+                        }
+
+                    }
                 }
+
+
+
                 columns.push(col);
             });
 

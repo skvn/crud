@@ -1,4 +1,23 @@
-    111
-    {% include "crud::widgets/blocks/tbl_head.twig" %}
-    {% include "crud::widgets/blocks/tbl_table.twig" %}
-    {% include "crud::widgets/blocks/tbl_foot.twig" %}
+    <!-- vendor/skvn/crud/src/views/widgets/datatables.twig -->
+    {%  if  crudObj.config.list.form_tabs %}
+    <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.config.scope }}">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}"> <i class="fa fa-list"></i></a></li>
+
+        </ul>
+        <div class="tab-content">
+            <div id="tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" class="tab-pane active">
+                <div class="panel-body">
+    {% endif  %}
+                                    {% include "crud::widgets/blocks/tbl_head.twig" %}
+                                    {% include "crud::widgets/blocks/tbl_table.twig" %}
+                                    {% include "crud::widgets/blocks/tbl_foot.twig" %}
+
+    {%  if  crudObj.config.list.form_tabs %}
+                 </div>
+            </div>
+
+      </div>
+    </div>
+    {% endif  %}
+

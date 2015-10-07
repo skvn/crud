@@ -2,8 +2,6 @@
 
 
 return [
-    /* Table name */	
-    'table'=>'dyno_news',	
 
     /* Access level rule name (optional)*/
     'acl' => 'user',
@@ -32,7 +30,14 @@ return [
                 [ "data"=> "id", "orderable"=>true, 'hint' => ['index' => 'tooltip index', 'default' => 'tooltip default text']],
                 [ "data"=> "email", "orderable"=>true, 'title'=>'Email'],
             ],
-            'filters' => []
+            'filters' => [],
+            /* 1 for using tabs  instead of popups */
+            'form_tabs'=>1,
+            /* if show Edit button in last column */
+            'action_edit' => true,
+            /* if show Delete button in last column */
+            'action_delete'=> true,
+
         ]
     ],
 
