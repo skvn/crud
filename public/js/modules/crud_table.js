@@ -137,11 +137,21 @@
             crud.trigger('crud.content_loaded', {cont: $(e.target)});
         } );
 
-        $('.crud_delete').on('click', function (){
+        $('.crud_delete').on('click', function (e){
+            e.preventDefault();
             if (confirm('Действительно удалить выбранные элементы?'))
             {
                 var ids =[];
-                $('.crud_table input[data-rel=row]').each(function(){
+                var scope;
+                if ($("table[data-crud_table]").length > 0)
+                {
+                    scope = $("table[data-crud_table]");
+                }
+                else
+                {
+                    scope = $(".crud_table");
+                }
+                $('input[data-rel=row]', scope).each(function(){
                     if ($(this).prop('checked'))
                     {
                         ids.push($(this).val());
