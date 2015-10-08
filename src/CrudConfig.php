@@ -156,27 +156,27 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
     public function getList($prop='')
     {
 
-        $cols = $this->get('list.' . $this->scope);
+        if (strpos($prop,'.') === false) {
 
+            $cols = $this->get('list.' . $this->scope);
 
+            if (empty($prop))
+            {
+                return $cols;
+            } else{
 
-//        if (empty($this->context) || $this->context == self::EMPTY_CONTEXT_LIST) {
-//            $cols = $this->get('list');
-//        } else
-//        {
-//            $cols = $this->get('list.'.$this->context);
-//        }
-
-
-        if (empty($prop))
-        {
-            return $cols;
-        } else{
-
-            if (isset($cols[$prop])) {
-                return $cols[$prop];
+                if (isset($cols[$prop])) {
+                    return $cols[$prop];
+                }
             }
+
+        } else
+        {
+
+            return \Config::get('crud.crud_'.$this->model->getTable().'.list.'.$this->scope.'.'.$prop);
+
         }
+
     }
 
     public function getForm($prop='')
