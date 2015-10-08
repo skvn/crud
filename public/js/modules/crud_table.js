@@ -90,6 +90,7 @@
         });
 
 
+        //
         crud.bind('crud.update', function(res){
             if (res.success)
             {

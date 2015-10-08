@@ -30,7 +30,7 @@ return [
                 [ "data"=> "email", "orderable"=>true, 'title'=>'Email'],
             ],
             'filters' => [],
-            
+
             /* 1 for using tabs  instead of popups */
             'form_tabs'=>1,
 
