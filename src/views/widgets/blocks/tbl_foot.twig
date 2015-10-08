@@ -1,3 +1,3 @@
-{% if not crudObj.config.get('no_mass_delete') or crudObj.config.get('buttons.mass_delete') %}
+{% if crudObj.config.get('buttons.mass_delete') %}
     <a href="#" class="btn btn-danger crud_delete" disabled>Удалить выбранные</a>
 {% endif %}

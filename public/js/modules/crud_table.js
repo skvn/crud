@@ -81,9 +81,6 @@
     function init_events()
     {
 
-        crud.bind('crud.edit_element', function(data){
-           // alert(data.el.data('id'));
-        });
 
         crud.bind('crud.delete_element', function(data){
             // alert(data.el.data('id'));
@@ -129,7 +126,10 @@
             {
                 return;
             }
-            crud.init_modal($(this).find('td').first().data('id'));
+
+            crud.trigger('crud.edit_element', {el:$(this).find('td').first()});
+
+            //crud.init_modal($(this).find('td').first().data('id'));
         })
 
         $('.crud_table').on( 'draw.dt', function (e, o) {

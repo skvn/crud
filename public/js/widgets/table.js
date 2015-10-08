@@ -4,38 +4,7 @@
         options: {},
         _create: function()
         {
-            //var crud_cols = crud.crudObj.list.columns;
-            //if (crud_cols[0]['ctype'] && crud_cols[0]['ctype'] == 'checkbox')
-            //{
-            //    crud_cols[0]["fnCreatedCell"] = function (td, cellData, rowData, row, col) {
-            //        $(td).html('<input class="i-checks" data-rel="row" type="checkbox" value="' + cellData + '">').data('id',cellData)
-            //    };
-            //    $('.crud_table thead tr:first td:first').html('<input class="i-checks" type="checkbox">');
-            //} else
-            //{
-            //    crud_cols[0]["fnCreatedCell"] = function (td, cellData, rowData, row, col) {
-            //
-            //        $(td).data('id',cellData);
-            //    };
-            //}
-            //
-            //for (var i=0; i<crud_cols.length; i++)
-            //{
-            //    if (i>0) {
-            //        crud_cols[i]["fnCreatedCell"] = function (td, cellData, rowData, row, col)
-            //        {
-            //            $(td).attr('id',crud_cols[col]['data']+'_'+rowData.id);
-            //        };
-            //    }
-            //
-            //    if (crud_cols[i].hint)
-            //    {
-            //        if (!crud_cols[i].ctype)
-            //        {
-            //            crud_cols[i].title += ' ' + crud_tooltip_pattern.replace('%s', crud_cols[i].hint['index']).replace('%t', crud_cols[i].hint['default']);
-            //        }
-            //    }
-            //}
+            
             var tbl = this.element;
             $("thead th", this.element).each(function(){
                 var c = $(this);
@@ -79,7 +48,7 @@
 
                             if (tbl.data('btn_delete'))
                             {
-                                buttons += "<a class='text-danger' data-confirm='Äåéñòâèòåëüíî óäàëèòü ýëåìåíò?' data-id='"+rowData.id+"' data-click='crud_event' data-event='crud.delete_element' data- style='font-size:24px;'><i class='fa fa-trash-o'> </i></a>";
+                                buttons += "<a class='text-danger' data-confirm='Ð”ÐµÐ¹ÑÑ‚Ð²Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚?' data-id='"+rowData.id+"' data-click='crud_event' data-event='crud.delete_element' data- style='font-size:24px;'><i class='fa fa-trash-o'> </i></a>";
                             }
                             buttons +='</nobr>';
                             $(td).html(buttons);
@@ -120,7 +89,8 @@
                 {
                     return;
                 }
-                crud.init_modal($(this).find('td').first().data('id'));
+                crud.trigger('crud.edit_element', {el:$(this).find('td').first()});
+                //crud.init_modal($(this).find('td').first().data('id'));
             })
         }
     });

@@ -84,22 +84,27 @@
                     $('#crud_form').modal('hide');
                     return;
                 }
-                self.init_selects($('#crud_form'));
-                self.init_date_pickers();
-                self.init_html_editors();
-                self.init_ichecks($('#crud_form'));
-                $('#crud_form input[type=text]:first').focus();
+
+                $('#crud_form').find('form').first().crud_form({model: model, id: id});
                 self.trigger('crud.content_loaded', {cont: $('#crud_form')});
                 //$(self.doc).trigger("crud.content_loaded", {cont: $('#crud_form')});
             });
+
+
         },
         toggle_form_progress: function($form)
         {
             $form.find('.modal-footer button, .modal-footer .progress').toggleClass('hide');
         },
-        init_date_pickers: function()
+        init_date_pickers: function(container)
         {
-            $('.input-group.date').datepicker({
+            if (container)
+            {
+                var $coll = $('.input-group.date', container);
+            } else {
+                var $coll = $('.input-group.date');
+            }
+            $coll.datepicker({
                 todayBtn: "linked",
                 keyboardNavigation: true,
                 forceParse: true,
@@ -196,9 +201,15 @@
                 $('.crud_table_command').attr('disabled', disabled);
             })
         },
-        init_html_editors: function()
+        init_html_editors: function(container)
         {
-            $('.html_editor').summernote({height: 500, linksArray: this.win.crudAttachOptions});
+            if (container)
+            {
+                $coll = $('.html_editor', container);
+            } else {
+                $coll = $('.html_editor');
+            }
+            $coll.summernote({height: 500, linksArray: this.win.crudAttachOptions});
         },
         toggle_editors_content: function($form)
         {
