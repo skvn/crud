@@ -22,11 +22,12 @@
         crud.bind('crud.edit_element', function(data){
 
             var table = data.el.parents('table[data-crud_table]').first();
-            if (table.data('form_type') == 'popup') {
+            
+            if (table.data('form_type') == 'tab') {
+                //open edit  tab
+            } else {
                 //init edit modal
                 crud.init_modal(data.el.data('id'));
-            } else {
-                //open edit  tab
             }
         });
 
