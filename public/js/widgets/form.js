@@ -14,8 +14,24 @@
             $('input[type=text]:first', $form).focus();
 
             //submit
+            $('input[type=submit],button[type=submit]', $form).on('click', function () {
+
+
+                var frm = $(this).parents("form:first");
+                var attrs = ['close', 'reload'];
+                for (var i =0; i<attrs.length; i++)
+                {
+                    if ($(this).data(attrs[i]) != undefined)
+                    {
+                        frm.data(attrs[i], $(this).data(attrs[i]));
+                    }
+                }
+
+
+            });
             $form.on('submit', function(e)
             {
+
                 e.preventDefault();
                 crud.toggle_editors_content($form);
                 crud.toggle_form_progress($form);
@@ -29,6 +45,8 @@
                         crud.toggle_form_progress($form);
                         if (res.success)
                         {
+                            console.log($form.data('close'));
+                            
                             if ($form.data('crud_model'))
                             {
                                 if ($form.data('close'))
