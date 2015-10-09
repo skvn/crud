@@ -32,7 +32,10 @@ return [
             'filters' => [],
 
             /* 1 for using tabs  instead of popups */
-            'form_tabs'=>1,
+            'edit_tab'=>1,
+
+            /* 1 for using tabbed (complex) form */
+            'form_tabbed'=>1,
 
             'buttons' =>
                 [

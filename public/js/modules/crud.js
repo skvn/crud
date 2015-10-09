@@ -2,7 +2,7 @@
     var listeners = {};
     var events = {};
     var settings = {
-        model_edit_url: '/admin/crud/{model}/edit/{id}',
+        model_edit_url: '/admin/crud/{model}/edit/{id}?scope={scope}',
         model_filter_url: '/admin/crud/{model}/filter/{scope}',
         model_list_url: '/admin/crud/{model}/list/{scope}',
         model_delete_url: '/admin/crud/{model}/delete',
@@ -68,11 +68,47 @@
                 crud_actions[i] = actions[i];
             }
         },
+        init_edit_tab: function($table, id)
+        {
+            var model = $table.data('crud_table');
+            var scope = $table.data('crud_scope');
+            var $tab_cont = $table.parents('div.tabs-container').first();
+            if ( $('a[href=#tab_'+model+'_'+scope+'_'+id+']',$tab_cont).length)
+            {
+                $('a[href=#tab_'+model+'_'+scope+'_'+id+']',$tab_cont).first().click();
+                return;
+            }
+            var self = this;
+            var $tpl_tab =  $tab_cont.find('ul.nav-tabs li[data-edit_tab_tpl=1]').clone(true).removeAttr('data-edit_tab_tpl');
+            $tpl_tab.find('a').html($tpl_tab.find('a').html() + '['+id+']');
+            $tpl_tab.appendTo($tab_cont.find('ul.nav-tabs').first())
+                .show()
+                    .find('a').first()
+                        .attr('href','#tab_'+model+'_'+scope+'_'+id);
+
+            var url = this.format_setting("model_edit_url", {model: model, id: id, scope:scope});
+
+            $tab_cont.addClass('veiled');
+            $.get(url, function (res){
+
+                var $cont = $(res);
+                $cont.appendTo($tab_cont.find('div.tab-content'));
+                $tpl_tab.find('div.sk-spinner').hide();
+                $tpl_tab.find('a').show().first().click();
+                $tab_cont.removeClass('veiled');
+                $cont.find('form').first().crud_form({model: model, id: id, scope:scope});
+                self.trigger('crud.content_loaded', {cont: $cont});
+
+            });
+
+
+
+        },
         init_modal: function(id, class_name)
         {
             var model = class_name || this.crudObj['class_name'];
             //var url = '/admin/crud/'+model+'/edit/'+id;
-            var url = this.format_setting("model_edit_url", {model: model, id: id});
+            var url = this.format_setting("model_edit_url", {model: model, id: id, scope:''});
             $('#crud_form').html('');
             $('#crud_form').modal('show');
             var self = this;

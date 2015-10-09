@@ -1,0 +1,44 @@
+<form action="{{ route('crud_update',{'model':crudObj.config.get('class_name'),'id':id}) }}" method="post" enctype="multipart/form-data" role="form" data-crud_form="ajax">
+    <input type="hidden" id="tree_action" name="tree_action" value=""/>
+    <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+    <ul class="nav nav-tabs">
+        {% set active=0 %}
+        {% for tab_id,tab_info in crudObj.config.get('tabs') %}
+            {% if tab_info.acl|allowed('r') %}
+                <li class="{{ active == 0 ? 'active' }}"><a href="#{{ tab_id }}" data-toggle="tab">{{ tab_info.title }}</a></li>
+                {% set active = 1 %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <div class="tab-content">
+        {% set active = 0 %}
+        {% for tab_id,tab_info in crudObj.config.get('tabs') %}
+            {% if tab_info.acl|allowed('r') %}
+                <div class="tab-pane {{ active == 0 ? 'active' }}" id="{{ tab_id }}">
+                    <fieldset style="padding-bottom: 20px; padding-top: 20px;">
+                        {% for input in  crudObj.getForm().fields %}
+                            {% if input.config.tab == tab_id %}
+                                {% if input.config.type=='checkbox' %}
+                                    {% include 'crud::crud/fields/line_wrap_compact.twig' %}
+                                {% else %}
+                                    {% include 'crud::crud/fields/line_wrap.twig' %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </fieldset>
+                </div>
+                {% set active = 1 %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Отмена</button>
+        {% if crudObj.config.get('acl')|allowed('u') %}
+            <button class="btn btn-success crud_submit" type="submit" data-close="1">Сохранить и закрыть</button>
+            <button class="btn btn-primary crud_submit" type="submit" data-close="0">Сохранить</button>
+        {% endif %}
+        {% include 'crud::blocks/progress_bar.twig' %}
+    </div>
+
+</form>

@@ -97,6 +97,8 @@ class CrudController extends Controller {
     {
         $class = 'App\Model\\'.studly_case($model);
         $obj = $class::firstOrNew(['id'=>(int)$id]);
+        $scope = \Input::get('scope', $scope = CrudConfig :: DEFAULT_SCOPE);
+        $obj->config->setScope($scope);
 
         if (!$obj->checkAcl())
         {
@@ -104,7 +106,8 @@ class CrudController extends Controller {
         }
 
         //return \View::make($this->crudHelper->resolveModelTemplate($model,$obj->config->get('tabs') ? 'edit_tabs' : 'edit'),['crudObj'=>$obj,'id'=>$id]);
-        return \View::make($this->crudHelper->resolveModelView($obj,$obj->config->get('tabs') ? 'edit_tabs' : 'edit'),['crudObj'=>$obj,'id'=>$id]);
+        $edit_view = $obj->config->getList('edit_tab')?'tab':'edit';
+        return \View::make($this->crudHelper->resolveModelView($obj,$edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$scope, 'form_tabbed'=>$obj->config->getList('form_tabbed')]);
 
     }
 

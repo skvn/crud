@@ -1,10 +1,13 @@
     <!-- vendor/skvn/crud/src/views/widgets/datatables.twig -->
-    {%  if  crudObj.config.list.form_tabs %}
+    {%  if  crudObj.config.list.edit_tab %}
     <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.config.scope }}">
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}"> <i class="fa fa-list"></i></a></li>
+            <li style="display: none" data-edit_tab_tpl="1"><div class="sk-spinner sk-spinner-pulse"></div><a style="display: none" data-toggle="tab"  href="#tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}"> <i class="fa fa-edit"></i></a></li>
+
 
         </ul>
+
         <div class="tab-content">
             <div id="tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" class="tab-pane active">
                 <div class="panel-body">
@@ -13,9 +16,10 @@
                                     {% include "crud::widgets/blocks/tbl_table.twig" %}
                                     {% include "crud::widgets/blocks/tbl_foot.twig" %}
 
-    {%  if  crudObj.config.list.form_tabs %}
+    {%  if  crudObj.config.list.edit_tab %}
                  </div>
             </div>
+
 
       </div>
     </div>
