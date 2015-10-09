@@ -1,4 +1,4 @@
-<div id="tab_{{ crudObj.classViewName }}_{{ crudObj.config.scope }}_{{ id }}" class="tab-pane">
+<div id="tab_{{ crudObj.classViewName }}_{{ crudObj.config.scope }}_{{ id }}" class="tab-pane" data-edit_tab="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}_{{ id }}">
 <div class="tab-panel">
 {% if form_tabbed %}
   {% include 'crud::crud/form_tabbed.twig' %}

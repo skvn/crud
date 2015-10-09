@@ -19,6 +19,24 @@
     function init_events()
     {
 
+        crud.bind('crud.cancel_edit', function(data){
+
+            //?? tab ??
+            var id = 'tab_'+data.el.data('rel')
+            if ($('div#'+id+'.tab-pane').length)
+            {
+                var cont = $('div#'+id);
+                cont.parents('div[data-tabs_container]').first().find('.nav-tabs li:first a:first').click();
+                var id = cont.attr('id');
+                cont.remove();
+                $('a[href=#'+id+']').parent().remove();
+
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+
+            }
+
+        });
+
         crud.bind('crud.edit_element', function(data){
 
             var table = data.el.parents('table[data-crud_table]').first();

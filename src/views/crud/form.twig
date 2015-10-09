@@ -12,7 +12,7 @@
     </fieldset>
 
     <div class="modal-footer">
-        <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" data-click="crud_event" data-event="crud.cancel_edit" data-rel="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}_{{ id }}">Отмена</button>
         {% if crudObj.config.get('acl')|allowed('u') %}
             <button class="btn btn-success crud_submit" type="submit" data-close="1">Сохранить и закрыть</button>
             <button class="btn btn-primary crud_submit" type="submit" data-close="0">Сохранить</button>

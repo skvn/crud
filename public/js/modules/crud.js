@@ -80,11 +80,12 @@
             }
             var self = this;
             var $tpl_tab =  $tab_cont.find('ul.nav-tabs li[data-edit_tab_tpl=1]').clone(true).removeAttr('data-edit_tab_tpl');
-            $tpl_tab.find('a').html($tpl_tab.find('a').html() + '['+id+']');
+            var rel = model+'_'+scope+'_'+id;
+            $tpl_tab.find('a').html($tpl_tab.find('a').html().replace('[ID]','['+id+']').replace('[REL]', rel));
             $tpl_tab.appendTo($tab_cont.find('ul.nav-tabs').first())
                 .show()
                     .find('a').first()
-                        .attr('href','#tab_'+model+'_'+scope+'_'+id);
+                        .attr('href','#tab_'+rel);
 
             var url = this.format_setting("model_edit_url", {model: model, id: id, scope:scope});
 
