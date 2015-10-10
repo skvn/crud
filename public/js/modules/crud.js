@@ -17,7 +17,7 @@
         doc: d,
         loc: l,
         con: c,
-        crudObj : w.crud_object_conf,
+        //crudObj : w.crud_object_conf,
         bind: function(event, listener)
         {
             if (typeof(listeners[event]) == "undefined")
@@ -68,9 +68,8 @@
                 crud_actions[i] = actions[i];
             }
         },
-        init_edit_tab: function($table, id)
+        init_edit_tab: function(model, id, $table)
         {
-            var model = $table.data('crud_table');
             var scope = $table.data('crud_scope');
             var $tab_cont = $table.parents('div.tabs-container').first();
             if ( $('a[href=#tab_'+model+'_'+scope+'_'+id+']',$tab_cont).length)
@@ -105,9 +104,9 @@
 
 
         },
-        init_modal: function(id, class_name)
+        init_modal: function(model, id)
         {
-            var model = class_name || this.crudObj['class_name'];
+            //var model = class_name || this.crudObj['class_name'];
             //var url = '/admin/crud/'+model+'/edit/'+id;
             var url = this.format_setting("model_edit_url", {model: model, id: id, scope:''});
             $('#crud_form').html('');
@@ -254,7 +253,42 @@
 
                 $(this).val($(this).code());
             })
+        },
+        clone_fragment: function(tpl_id, container_id)
+        {
+            var $tpl = $('#'+tpl_id).clone(true).attr('id','');
+            var qtyAdded = $('#'+container_id).find('*[data-added]').length;
+
+            $tpl.find('*[name]').each(function ()
+            {
+                $(this).attr('disabled', false);
+                var name = $(this).attr('name');
+                if (name.indexOf('[]')>0)
+                {
+                    var newName = name.replace('[]','')+'[-'+(qtyAdded+1)+']';
+                    $(this).attr('name', newName)
+                }
+            });
+            $tpl.attr('data-added',1);
+            //calc order
+            var ord  = $('#'+container_id).find('*[data-order]:visible').length;
+            $tpl.find('*[data-order]').val((ord+1));
+
+
+            $tpl.appendTo($('#'+container_id)).show();
+        },
+        format_error: function(error)
+        {
+            if (error.indexOf("SQLSTATE[23000]")>=0)
+            {
+                return 'Невозможно сохранить: ДУБЛИКАТ';
+            }
+            else
+            {
+                return 'Произошла ошибка: ' + error;
+            }
         }
+
     };
     w.onerror = function(msg, file, line)
     {

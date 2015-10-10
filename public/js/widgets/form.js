@@ -1,4 +1,5 @@
 ;(function($, crud){
+    bind_events();
     $.widget("crud.crud_form", {
         options: {},
         _create: function()
@@ -86,7 +87,7 @@
                         }
                         else
                         {
-                            alert(format_error(res.error));
+                            alert(crud.format_error(res.error));
                         }
                     },
                     error: function(res){
@@ -113,6 +114,69 @@
 
         }
     });
+
+    function bind_events()
+    {
+        var crud_actions = {
+            open_form: function(elem)
+            {
+                crud.init_modal(elem.data("model"), elem.data("id"));
+            }
+        };
+        crud.add_actions(crud_actions);
+        crud.bind('crud.cancel_edit', function(data){
+
+            //?? tab ??
+            var id = 'tab_'+data.el.data('rel')
+            if ($('div#'+id+'.tab-pane').length)
+            {
+                var cont = $('div#'+id);
+                cont.parents('div[data-tabs_container]').first().find('.nav-tabs li:first a:first').click();
+                var id = cont.attr('id');
+                cont.remove();
+                $('a[href=#'+id+']').parent().remove();
+
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+
+            }
+
+        });
+        crud.bind('crud.edit_element', function(data){
+
+            //var table = data.el.parents('table[data-crud_table]').first();
+
+            if (data.table.data('form_type') == 'tabs') {
+                //open edit  tab
+                crud.init_edit_tab(data.model, data.id, data.table);
+            } else {
+                //init edit modal
+                crud.init_modal(data.model, data.id);
+            }
+        });
+        $(crud.doc).on('click', '.crud_submit', function (e)
+        {
+            e.preventDefault();
+            var frm = $(this).parents("form:first");
+            var attrs = ['close', 'reload'];
+            for (var i =0; i<attrs.length; i++)
+            {
+                if ($(this).data(attrs[i]) != undefined)
+                {
+                    frm.data(attrs[i], $(this).data(attrs[i]));
+                }
+            }
+            frm.submit();
+
+        });
+        $(crud.doc).on('click', '*[data-clone_fragment]', function (e) {
+            e.preventDefault();
+            crud.clone_fragment($(this).data('clone_fragment'),$(this).data('clone_container'));
+
+        });
+
+    }
+
+
 
 
 
