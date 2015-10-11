@@ -124,56 +124,93 @@
         var crud_actions = {
             refresh_table: function (elem)
             {
-                $('.crud_table').DataTable().ajax.reload();
-            }
-        };
-        crud.add_actions(crud_actions);
-
-        $('.crud_table_command').on('click', function ()
-        {
-            var ids =[];
-            $('.crud_table input[data-rel=row]').each(function(){
-                if ($(this).prop('checked'))
+                if (elem.data('ref'))
                 {
-                    ids.push($(this).val());
-                }
-            })
-            if (ids.length)
-            {
-                $(this).data('args',{ids:ids});
-            }
-        })
-
-        $('.crud_delete').on('click', function (e){
-            e.preventDefault();
-            if (confirm('Действительно удалить выбранные элементы?'))
-            {
-                var ids =[];
-                var scope;
-                if ($("table[data-crud_table]").length > 0)
-                {
-                    scope = $("table[data-crud_table]");
+                    $('table[data-list_table_ref='+elem.data('ref')+']').DataTable().ajax.reload();
                 }
                 else
                 {
-                    scope = $(".crud_table");
+                    $('table[data-crud_table]').each(function(){
+                        $(this).DataTable().ajax.reload();
+                    });
                 }
-                $('input[data-rel=row]', scope).each(function(){
+            },
+            table_mass_delete: function(elem)
+            {
+                if (!elem.data('ref'))
+                {
+                    alert('Не указана таблица для удаления элементов');
+                    return;
+                }
+                var tbl = $('table[data-list_table_ref='+elem.data('ref')+']');
+                var ids = [];
+                $('input[data-rel=row]', tbl).each(function(){
                     if ($(this).prop('checked'))
                     {
                         ids.push($(this).val());
                     }
-                })
-
-                if (ids.length)
+                });
+                if (ids.length <= 0)
                 {
-
-                    $.post(crud.format_setting('model_delete_url', {model: crud.crudObj['class_name']}),{'ids':ids}, function (res) {
+                    alert('Не выбрано ни одного элемена');
+                    return;
+                }
+                if (confirm('Действительно удалить выбранные элемены ?'))
+                {
+                    $.post(crud.format_setting('model_delete_url', {model: tbl.data('crud_table')}),{ids:ids}, function (res) {
                         crud.trigger('crud.delete',res);
                     })
                 }
+
             }
-        });
+        };
+        crud.add_actions(crud_actions);
+
+        //$('.crud_table_command').on('click', function ()
+        //{
+        //    var ids =[];
+        //    $('.crud_table input[data-rel=row]').each(function(){
+        //        if ($(this).prop('checked'))
+        //        {
+        //            ids.push($(this).val());
+        //        }
+        //    })
+        //    if (ids.length)
+        //    {
+        //        $(this).data('args',{ids:ids});
+        //    }
+        //})
+
+        //$('.crud_delete').on('click', function (e){
+        //    e.preventDefault();
+        //    if (confirm('Действительно удалить выбранные элементы?'))
+        //    {
+        //        var ids =[];
+        //        var scope;
+        //        if ($("table[data-crud_table]").length > 0)
+        //        {
+        //            scope = $("table[data-crud_table]");
+        //        }
+        //        else
+        //        {
+        //            scope = $(".crud_table");
+        //        }
+        //        $('input[data-rel=row]', scope).each(function(){
+        //            if ($(this).prop('checked'))
+        //            {
+        //                ids.push($(this).val());
+        //            }
+        //        })
+        //
+        //        if (ids.length)
+        //        {
+        //
+        //            $.post(crud.format_setting('model_delete_url', {model: crud.crudObj['class_name']}),{'ids':ids}, function (res) {
+        //                crud.trigger('crud.delete',res);
+        //            })
+        //        }
+        //    }
+        //});
 
         crud.bind('crud.delete_element', function(data){
             // alert(data.el.data('id'));

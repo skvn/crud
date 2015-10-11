@@ -1,10 +1,11 @@
 ;(function($, crud){
 
+    alert('deprecated');
 
     var crud_actions = {
         open_form: function(elem)
         {
-            crud.init_modal(elem.data("id"), elem.data("model"));
+            crud.init_modal(elem.data("model"), elem.data("id"));
         }
     };
 

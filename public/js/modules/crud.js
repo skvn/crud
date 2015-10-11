@@ -330,7 +330,29 @@
         },
         crud_command: function(elem)
         {
-            var args = elem.data('args');
+            var args = elem.data('args') || {};
+            if (elem.data('collect_rows'))
+            {
+                var tbl = $('table[data-list_table_ref='+elem.data('collect_rows')+']');
+                if (tbl.length <= 0)
+                {
+                    alert('Таблица данных не найдена');
+                    return;
+                }
+                var ids = [];
+                $('input[data-rel=row]', tbl).each(function(){
+                    if ($(this).prop('checked'))
+                    {
+                        ids.push($(this).val());
+                    }
+                })
+                if (ids.length <= 0)
+                {
+                    alert('Элементы не выбраны');
+                    return;
+                }
+                args['ids'] = ids;
+            }
             $.post(elem.attr('href'), args, function (res)
             {
                 if (res.success)
@@ -342,7 +364,6 @@
                     if (elem.data('callback_event'))
                     {
                         crud.trigger(elem.data('callback_event'), res);
-                        //$(crud.doc).trigger($self.data('callback_event'), res);
                     }
                     else if (elem.data('callback'))
                     {

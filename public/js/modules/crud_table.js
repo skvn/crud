@@ -1,81 +1,10 @@
 ;(function($, crud){
 
-    var crud_actions = {
-        refresh_table: function (elem)
-        {
-            $('.crud_table').DataTable().ajax.reload();
-        }
-
-    };
-
-    crud.bind('page.start', function()
-    {
-        crud.add_actions(crud_actions);
-        //init_table();
-        init_events();
-    });
+    alert('Deprecated');
 
 
 
-    //function init_table()
-    //{
-    //    if (crud.crudObj && $('.crud_table').length)
-    //    {
-    //        var crud_cols = crud.crudObj.list.columns;
-    //        if (crud_cols[0]['ctype'] && crud_cols[0]['ctype'] == 'checkbox')
-    //        {
-    //            crud_cols[0]["fnCreatedCell"] = function (td, cellData, rowData, row, col) {
-    //                $(td).html('<input class="i-checks" data-rel="row" type="checkbox" value="' + cellData + '">').data('id',cellData)
-    //            };
-    //            $('.crud_table thead tr:first td:first').html('<input class="i-checks" type="checkbox">');
-    //        } else
-    //        {
-    //            crud_cols[0]["fnCreatedCell"] = function (td, cellData, rowData, row, col) {
-    //
-    //                $(td).data('id',cellData);
-    //            };
-    //        }
-    //
-    //        for (var i=0; i<crud_cols.length; i++)
-    //        {
-    //            if (i>0) {
-    //                crud_cols[i]["fnCreatedCell"] = function (td, cellData, rowData, row, col)
-    //                {
-    //                   $(td).attr('id',crud_cols[col]['data']+'_'+rowData.id);
-    //                };
-    //            }
-    //
-    //            if (crud_cols[i].hint)
-    //            {
-    //                if (!crud_cols[i].ctype)
-    //                {
-    //                    crud_cols[i].title += ' ' + crud_tooltip_pattern.replace('%s', crud_cols[i].hint['index']).replace('%t', crud_cols[i].hint['default']);
-    //                }
-    //            }
-    //        }
-    //        //console.log(cols);
-    //        if ($('.crud_table').length) {
-    //            var list_name = crud.crudObj.list_name ? crud.crudObj.list_name : 'index';
-    //            var rowCallBack = crud.win.crudRowCallback ? crud.win.crudRowCallback : null;
-    //            $('.crud_table').dataTable(
-    //                {
-    //                    searching: false,
-    //                    processing: true,
-    //                    serverSide: true,
-    //                    ajax: crud.format_setting("model_list_url", {model: crud.crudObj.class_name, scope: crud.crudObj.scope}),
-    //                    columns: crud_cols,
-    //                    language: {
-    //                        url: "/vendor/crud/js/plugins/dataTables/lang/russian.json"
-    //                    },
-    //                    rowCallback: rowCallBack
-    //
-    //
-    //                }
-    //            );
-    //        }
-    //
-    //    }
-    //}
+
 
 
     function init_events()

@@ -380,6 +380,10 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
         {
             return $this->$method();
         }
+        if (isset($this->config[$offset]))
+        {
+            return $this->config[$offset];
+        }
     }
 
     function offsetSet($offset, $value)
