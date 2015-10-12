@@ -1,12 +1,13 @@
 ;(function($, crud){
     var columns = [];
+    bind_events();
     $.widget("crud.crud_list", {
         options: {},
         _create: function()
         {
             
             var tbl = this.element;
-            $("thead th", this.element).each(function(){
+            $("thead th", tbl).each(function(){
                 var c = $(this);
                 var col;
 
@@ -63,13 +64,13 @@
             });
 
             //console.log(cols);
-            var list_name = crud.crudObj.list_name ? crud.crudObj.list_name : 'index';
+            //var list_name = crud.crudObj.list_name ? crud.crudObj.list_name : 'index';
             var rowCallBack = crud.win.crudRowCallback ? crud.win.crudRowCallback : null;
-            this.element.dataTable({
+            tbl.dataTable({
                     searching: false,
                     processing: true,
                     serverSide: true,
-                    ajax: crud.format_setting("model_list_url", {model: this.element.data('crud_table'), scope: this.element.data('crud_scope')}),
+                    ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope')}),
                     //columns: crud_cols,
                     columns: columns,
                     language: {
@@ -79,17 +80,18 @@
 
 
             });
-            this.element.on( 'draw.dt', function (e, o) {
+            tbl.on( 'draw.dt', function (e, o) {
                 init_checkboxes(columns, this.element);
                 crud.trigger('crud.content_loaded', {cont: $(e.target)});
             } );
-            this.element.on('dblclick', 'tbody>tr', function (){
+            tbl.on('dblclick', 'tbody>tr', function (){
 
-                if ($(this).parents('table').first().data('crud_noedit') == '1')
+                if (tbl.data('crud_noedit') == '1')
                 {
                     return;
                 }
-                crud.trigger('crud.edit_element', {el:$(this).find('td').first()});
+                //crud.trigger('crud.edit_element', {el:$(this).find('td').first()});
+                crud.trigger('crud.edit_element', {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), id: $('td:first', $(this)).data('id'), table: tbl})
                 //crud.init_modal($(this).find('td').first().data('id'));
             })
         }
@@ -113,6 +115,142 @@
         }
 
         crud.init_ichecks();
+
+    }
+
+    function bind_events()
+    {
+
+        var crud_actions = {
+            refresh_table: function (elem)
+            {
+                if (elem.data('ref'))
+                {
+                    $('table[data-list_table_ref='+elem.data('ref')+']').DataTable().ajax.reload();
+                }
+                else
+                {
+                    $('table[data-crud_table]').each(function(){
+                        $(this).DataTable().ajax.reload();
+                    });
+                }
+            },
+            table_mass_delete: function(elem)
+            {
+                if (!elem.data('ref'))
+                {
+                    alert('Не указана таблица для удаления элементов');
+                    return;
+                }
+                var tbl = $('table[data-list_table_ref='+elem.data('ref')+']');
+                var ids = [];
+                $('input[data-rel=row]', tbl).each(function(){
+                    if ($(this).prop('checked'))
+                    {
+                        ids.push($(this).val());
+                    }
+                });
+                if (ids.length <= 0)
+                {
+                    alert('Не выбрано ни одного элемена');
+                    return;
+                }
+                if (confirm('Действительно удалить выбранные элемены ?'))
+                {
+                    $.post(crud.format_setting('model_delete_url', {model: tbl.data('crud_table')}),{ids:ids}, function (res) {
+                        crud.trigger('crud.delete',res);
+                    })
+                }
+
+            }
+        };
+        crud.add_actions(crud_actions);
+
+        //$('.crud_table_command').on('click', function ()
+        //{
+        //    var ids =[];
+        //    $('.crud_table input[data-rel=row]').each(function(){
+        //        if ($(this).prop('checked'))
+        //        {
+        //            ids.push($(this).val());
+        //        }
+        //    })
+        //    if (ids.length)
+        //    {
+        //        $(this).data('args',{ids:ids});
+        //    }
+        //})
+
+        //$('.crud_delete').on('click', function (e){
+        //    e.preventDefault();
+        //    if (confirm('Действительно удалить выбранные элементы?'))
+        //    {
+        //        var ids =[];
+        //        var scope;
+        //        if ($("table[data-crud_table]").length > 0)
+        //        {
+        //            scope = $("table[data-crud_table]");
+        //        }
+        //        else
+        //        {
+        //            scope = $(".crud_table");
+        //        }
+        //        $('input[data-rel=row]', scope).each(function(){
+        //            if ($(this).prop('checked'))
+        //            {
+        //                ids.push($(this).val());
+        //            }
+        //        })
+        //
+        //        if (ids.length)
+        //        {
+        //
+        //            $.post(crud.format_setting('model_delete_url', {model: crud.crudObj['class_name']}),{'ids':ids}, function (res) {
+        //                crud.trigger('crud.delete',res);
+        //            })
+        //        }
+        //    }
+        //});
+
+        crud.bind('crud.delete_element', function(data){
+            // alert(data.el.data('id'));
+        });
+
+
+        //
+        crud.bind('crud.update', function(res){
+            if (res.success)
+            {
+                //$('.crud_table').DataTable().ajax.reload(null, false);
+                $('table[data-crud_table]').DataTable().ajax.reload(null, false);
+            }
+        });
+
+        crud.bind('crud.reload', function(res){
+            if (res.success)
+            {
+                //$('.crud_table').DataTable().ajax.reload(null, false);
+                $('table[data-crud_table]').DataTable().ajax.reload(null, false);
+            }
+        });
+
+        crud.bind('crud.filter_set', function(res){
+            if (res.success)
+            {
+                //$('.crud_table').DataTable().ajax.reload();
+                $('table[data-crud_table]').DataTable().ajax.reload(null, false);
+            }
+        });
+
+        crud.bind('crud.delete', function(res){
+            if (res.success)
+            {
+                //$('.crud_table').DataTable().ajax.reload(null, false);
+                $('table[data-crud_table]').DataTable().ajax.reload(null, false);
+            }
+        });
+
+
 
     }
 

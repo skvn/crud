@@ -44,7 +44,8 @@ return [
                     /* show delete button*/
                     'single_delete'=> true,
                     /* show mass delete  button*/
-                    'mass_delete' => true
+                    'mass_delete' => true,
+                    'customize_columns' => true
                 ],
 
         ]

@@ -1,5 +1,6 @@
-    <!-- vendor/skvn/crud/src/views/widgets/datatables.twig -->
-    {%  if  crudObj.config.list.edit_tab %}
+<span style="color: red; font-weight: bold;">Deprecated!!! Should be replaced with macro</span>
+
+{%  if  crudObj.config.list.edit_tab %}
     <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.config.scope }}">
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}"> <i class="fa fa-list"></i></a></li>
@@ -11,17 +12,19 @@
         <div class="tab-content">
             <div id="tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" class="tab-pane active">
                 <div class="panel-body">
-    {% endif  %}
-                                    {% include "crud::widgets/blocks/tbl_head.twig" %}
-                                    {% include "crud::widgets/blocks/tbl_table.twig" %}
-                                    {% include "crud::widgets/blocks/tbl_foot.twig" %}
+                                    {% include "widgets/blocks/tbl_head.twig"|model_view(crudObj) %}
+                                    {% include "widgets/blocks/tbl_table.twig"|model_view(crudObj) %}
+                                    {% include "widgets/blocks/tbl_foot.twig"|model_view(crudObj) %}
 
-    {%  if  crudObj.config.list.edit_tab %}
                  </div>
             </div>
 
 
       </div>
     </div>
-    {% endif  %}
+{% else %}
+    {% include "widgets/blocks/tbl_head.twig"|model_view(crudObj) %}
+    {% include "widgets/blocks/tbl_table.twig"|model_view(crudObj) %}
+    {% include "widgets/blocks/tbl_foot.twig"|model_view(crudObj) %}
+{% endif  %}
 
