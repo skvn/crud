@@ -45,8 +45,7 @@
                         crud.toggle_form_progress($form);
                         if (res.success)
                         {
-                            console.log($form.data('close'));
-                            
+
                             if ($form.data('crud_model'))
                             {
                                 if ($form.data('close'))
@@ -57,8 +56,6 @@
                                 {
                                     crud.trigger("crud.reload", res);
 
-                                    //crud.trigger('crud.edit_element',res.crud_id)
-                                    //crud.init_modal(res.crud_id, $form.data("crud_model"));
                                 }
                                 $form.trigger('reset');
                                 crud.reset_selects();
