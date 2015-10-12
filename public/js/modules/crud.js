@@ -68,8 +68,9 @@
                 crud_actions[i] = actions[i];
             }
         },
-        init_edit_tab: function(model, id, $table)
+        init_edit_tab: function(id, $table)
         {
+            var model = $table.data('crud_table');
             var scope = $table.data('crud_scope');
             var $tab_cont = $table.parents('div.tabs-container').first();
             if ( $('a[href=#tab_'+model+'_'+scope+'_'+id+']',$tab_cont).length)
@@ -80,7 +81,8 @@
             var self = this;
             var $tpl_tab =  $tab_cont.find('ul.nav-tabs li[data-edit_tab_tpl=1]').clone(true).removeAttr('data-edit_tab_tpl');
             var rel = model+'_'+scope+'_'+id;
-            $tpl_tab.find('a').html($tpl_tab.find('a').html().replace('[ID]','['+id+']').replace('[REL]', rel));
+            var id_label = (parseInt(id)<0)? 'Новая запись': id;
+            $tpl_tab.find('a').html($tpl_tab.find('a').html().replace('[ID]','['+id_label+']').replace('[REL]', rel));
             $tpl_tab.appendTo($tab_cont.find('ul.nav-tabs').first())
                 .show()
                     .find('a').first()
@@ -407,7 +409,18 @@
                     break;
 
                 case 'crud_event':
-                    crud.trigger($(this).data('event'), {el:$(this)});
+                    //try to find table
+                    var params = {};
+                    var $table = $(this).parents('table[data-crud_table]').first();
+                    if ($table)
+                    {
+                        params = $.extend({}, $table.data());
+                        params.table = $table;
+
+                    }
+
+                    params = $.extend(params, $(this).data());
+                    crud.trigger($(this).data('event'), params );
                    break;
             }
 

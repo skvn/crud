@@ -52,10 +52,15 @@
                                 if ($form.data('close'))
                                 {
                                     crud.trigger('crud.update', res);
+                                    crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
+
                                 }
                                 else
                                 {
                                     crud.trigger("crud.reload", res);
+                                    crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
+                                    alert($form.data('crud_model')+'_'+$form.data('crud_scope'));
+                                    crud.trigger('crud.edit_element', { id: res.crud_id, list_table_ref: $form.data('crud_model')+'_'+$form.data('crud_scope')});
 
                                 }
                                 $form.trigger('reset');
@@ -120,11 +125,12 @@
                 crud.init_modal(elem.data("model"), elem.data("id"));
             }
         };
+
         crud.add_actions(crud_actions);
         crud.bind('crud.cancel_edit', function(data){
 
             //?? tab ??
-            var id = 'tab_'+data.el.data('rel')
+            var id = 'tab_'+data.rel;
             if ($('div#'+id+'.tab-pane').length)
             {
                 var cont = $('div#'+id);
@@ -135,16 +141,23 @@
 
                 $("html, body").animate({ scrollTop: 0 }, "slow");
 
+            } else {
+                $('form[data-rel='+data.rel+']').parents(".modal:first").modal('hide');
             }
 
         });
+
+
+
         crud.bind('crud.edit_element', function(data){
 
-            //var table = data.el.parents('table[data-crud_table]').first();
-
-            if (data.table.data('form_type') == 'tabs') {
+            if (data.list_table_ref)
+            {
+                data.table = $('table[data-list_table_ref='+data.list_table_ref+']');
+            }
+            if (data.table && data.table.data('form_type') == 'tabs') {
                 //open edit  tab
-                crud.init_edit_tab(data.model, data.id, data.table);
+                crud.init_edit_tab(data.id, data.table);
             } else {
                 //init edit modal
                 crud.init_modal(data.model, data.id);

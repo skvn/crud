@@ -1,4 +1,4 @@
-<form action="{{ route('crud_update',{'model':crudObj.config.get('class_name'),'id':id}) }}" method="post" enctype="multipart/form-data" role="form" data-crud_form="ajax">
+<form action="{{ route('crud_update',{'model':crudObj.config.get('class_name'),'id':id}) }}" method="post" enctype="multipart/form-data" role="form"  data_crud_scope="{{ crudObj.config.scope }}" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}" data-rel="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}_{{ id }}">
     <input type="hidden" id="tree_action" name="tree_action" value=""/>
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
     <ul class="nav nav-tabs">

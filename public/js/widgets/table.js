@@ -7,6 +7,11 @@
         {
             
             var tbl = this.element;
+            var def_sort_col;
+            var def_sort_order;
+            //$('#example').dataTable( {
+            //    "order": []
+            //} );
             $("thead th", tbl).each(function(){
                 var c = $(this);
                 var col;
@@ -91,7 +96,7 @@
                     return;
                 }
                 //crud.trigger('crud.edit_element', {el:$(this).find('td').first()});
-                crud.trigger('crud.edit_element', {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), id: $('td:first', $(this)).data('id'), table: tbl})
+                crud.trigger('crud.edit_element', { id: $('td:first', $(this)).data('id'), table: tbl})
                 //crud.init_modal($(this).find('td').first().data('id'));
             })
         }

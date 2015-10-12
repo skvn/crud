@@ -26,7 +26,7 @@ return [
             'multiselect'=>true,
 
             'columns'=>[
-                [ "data"=> "id", "orderable"=>true, 'hint' => ['index' => 'tooltip index', 'default' => 'tooltip default text']],
+                [ "data"=> "id", "orderable"=>true, 'hint' => ['index' => 'tooltip index', 'default' => 'tooltip default text'], 'default_order'=>'desc'],
                 [ "data"=> "email", "orderable"=>true, 'title'=>'Email'],
             ],
             'filters' => [],
