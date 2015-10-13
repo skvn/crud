@@ -17,6 +17,12 @@ return [
     /* Breadcrumbs */
     'bc' => [['href'=>'/admin/projects','title'=>'Управление проектами']],
 
+    /* track timestamp*/
+    'timestamps' => true,
+
+    /* track author*/
+    'authors' => true,
+
     /* Datatables list description  In case of the only list for the model*/
 
     'list'=> [
@@ -67,6 +73,23 @@ return [
                 'disable_autocomplete' => false
             ],
 
+
+        //date field
+        'date' =>
+            [
+                'type'=>\LaravelCrud\CrudConfig::FIELD_DATE,
+                'required'=>1,
+                'format' => 'd.m.Y',
+                'jsformat' => 'dd.mm.yyyy',
+                'title' => 'Дата'
+            ],
+
+        //checkbox
+        'active' =>
+            [
+                'type'=>\LaravelCrud\CrudConfig::FIELD_CHECKBOX,
+                'title' => 'Активна'
+            ],
 
         //number field
         'sfc_num_links' =>

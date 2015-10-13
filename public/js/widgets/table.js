@@ -7,11 +7,9 @@
         {
             
             var tbl = this.element;
-            var def_sort_col;
-            var def_sort_order;
-            //$('#example').dataTable( {
-            //    "order": []
-            //} );
+            var order = [];
+
+            var idx = 0;
             $("thead th", tbl).each(function(){
                 var c = $(this);
                 var col;
@@ -64,7 +62,12 @@
                 }
 
 
+                if (c.data('default_order'))
+                {
+                    order.push([idx,c.data('default_order')]);
+                }
 
+                idx ++;
                 columns.push(col);
             });
 
@@ -77,6 +80,7 @@
                     serverSide: true,
                     ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope')}),
                     //columns: crud_cols,
+                    order: order,
                     columns: columns,
                     language: {
                         url: "/vendor/crud/js/plugins/dataTables/lang/russian.json"
@@ -218,7 +222,19 @@
         //});
 
         crud.bind('crud.delete_element', function(data){
-            // alert(data.el.data('id'));
+
+
+            if (data['id'])
+            {
+                var ids = [data['id']];
+                if (data.table)
+                {
+                    data.table.find('td#id_'+data['id']).parent().remove();
+                }
+                $.post(crud.format_setting('model_delete_url', {model: data.crud_table}),{'ids':ids}, function (res) {
+                    crud.trigger('crud.delete',res);
+                })
+            }
         });
 
 
