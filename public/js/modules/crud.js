@@ -247,7 +247,18 @@
             } else {
                 $coll = $('.html_editor');
             }
-            $coll.summernote({height: 500, linksArray: this.win.crudAttachOptions});
+            $coll.summernote({
+                toolbar: [
+
+                    ['style', ['style','bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['picture', 'link', 'video','table']]
+                    
+                ],
+                height: 500, linksArray: this.win.crudAttachOptions});
         },
         toggle_editors_content: function($form)
         {
