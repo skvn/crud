@@ -256,7 +256,7 @@
                     ['color', ['color']],
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['insert', ['picture', 'link', 'video','table']]
-                    
+
                 ],
                 height: 500, linksArray: this.win.crudAttachOptions});
         },
