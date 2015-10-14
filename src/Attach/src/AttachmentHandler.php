@@ -142,7 +142,7 @@ class AttachmentHandler {
 
         if ($this->multi)
         {
-            $ids = $this->parentInstance->$prop->lists('id');
+            $ids = $this->parentInstance->$prop->lists('id')->all();
         }
 
         foreach ($files as $k=> $file)
