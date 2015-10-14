@@ -59,7 +59,6 @@
                                 {
                                     crud.trigger("crud.reload", res);
                                     crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
-                                    alert($form.data('crud_model')+'_'+$form.data('crud_scope'));
                                     crud.trigger('crud.edit_element', { id: res.crud_id, list_table_ref: $form.data('crud_model')+'_'+$form.data('crud_scope')});
 
                                 }
@@ -113,6 +112,15 @@
                 }
             });
 
+            $('input[type=file]', $form).on('change', function (e) {
+
+                var spl = $(this).val().split("\\");
+                var name = spl[(spl.length-1)];
+                var expl_name = name.split(".");
+                name = expl_name[0];
+                $("input[data-title_for='"+$(this).attr('name')+"']", $form).val(name);
+            });
+
 
         }
     });
@@ -123,7 +131,35 @@
             open_form: function(elem)
             {
                 crud.init_modal(elem.data("model"), elem.data("id"));
-            }
+            },
+
+            clone_fragment: function (elem)
+            {
+
+                var tpl_id = elem.data('fragment');
+                var container_id = elem.data('container');
+
+                var $tpl = $('#'+tpl_id).clone(true).attr('id','');
+                var qtyAdded = $('#'+container_id).find('*[data-added]').length;
+
+                $tpl.find('*[name]').each(function ()
+                {
+                    $(this).attr('disabled', false);
+                    var name = $(this).attr('name');
+                    if (name.indexOf('[]')>0)
+                    {
+                        var newName = name.replace('[]','')+'[-'+(qtyAdded+1)+']';
+                        $(this).attr('name', newName)
+                    }
+                });
+                $tpl.attr('data-added',1);
+                //calc order
+                var ord  = $('#'+container_id).find('*[data-order]:visible').length;
+                $tpl.find('*[data-order]').val((ord+1));
+
+                $tpl.appendTo($('#'+container_id)).show();
+
+            },
         };
 
         crud.add_actions(crud_actions);
@@ -178,11 +214,13 @@
             frm.submit();
 
         });
-        $(crud.doc).on('click', '*[data-clone_fragment]', function (e) {
-            e.preventDefault();
-            crud.clone_fragment($(this).data('clone_fragment'),$(this).data('clone_container'));
 
-        });
+
+        //$(crud.doc).on('click', '*[data-clone_fragment]', function (e) {
+        //    e.preventDefault();
+        //    crud.clone_fragment($(this).data('clone_fragment'),$(this).data('clone_container'));
+        //
+        //});
 
     }
 

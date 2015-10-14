@@ -141,6 +141,7 @@ class CrudController extends Controller {
 
         } catch( \Exception $e)
         {
+            var_dump($e);
             return ['success'=>false, 'error'=>$e->getMessage()];
         }
 

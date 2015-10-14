@@ -267,29 +267,7 @@
                 $(this).val($(this).code());
             })
         },
-        clone_fragment: function(tpl_id, container_id)
-        {
-            var $tpl = $('#'+tpl_id).clone(true).attr('id','');
-            var qtyAdded = $('#'+container_id).find('*[data-added]').length;
 
-            $tpl.find('*[name]').each(function ()
-            {
-                $(this).attr('disabled', false);
-                var name = $(this).attr('name');
-                if (name.indexOf('[]')>0)
-                {
-                    var newName = name.replace('[]','')+'[-'+(qtyAdded+1)+']';
-                    $(this).attr('name', newName)
-                }
-            });
-            $tpl.attr('data-added',1);
-            //calc order
-            var ord  = $('#'+container_id).find('*[data-order]:visible').length;
-            $tpl.find('*[data-order]').val((ord+1));
-
-
-            $tpl.appendTo($('#'+container_id)).show();
-        },
         format_error: function(error)
         {
             if (error.indexOf("SQLSTATE[23000]")>=0)

@@ -34,6 +34,27 @@ class Common extends Twig_Extension
         }
     }
 
+    public function readableFilesize($size)
+    {
+        if( $size <= 0 ) {
+            return '0 KB';
+        }
+
+        if( $size === 1 ) {
+            return '1 byte';
+        }
+
+        $mod = 1024;
+        $units = array('bytes', 'KB', 'MB', 'GB', 'TB', 'PB');
+
+        for( $i = 0; $size > $mod && $i < count($units) - 1; ++$i ) {
+            $size /= $mod;
+        }
+
+        return round($size, 2) . ' ' . $units[$i];
+    }
+
+
     function modelView($view, $model)
     {
         return \App :: make('CrudHelper')->resolveModelView($model, $view);
@@ -43,6 +64,7 @@ class Common extends Twig_Extension
     {
         return [
             new Twig_SimpleFilter('asset', [$this, 'asset']),
+            new Twig_SimpleFilter('readable_filesize', [$this, 'readableFilesize']),
             new Twig_SimpleFilter('model_view', [$this, 'modelView'])
         ];
     }

@@ -1,35 +1,91 @@
-<div class="col-md-12" id="file_container_{{ input.name }}" style="padding-left: 20px">
+<div class="row">
+<div class="col-lg-12">
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#tab-1-{{ input.name }}"> {{ input.config.title|raw }}</a></li>
+            <li class=""><a data-toggle="tab" href="#tab-2-{{ input.name }}"> Добавить файлы</a></li>
+
+        </ul>
+        <div class="tab-content">
+            <div id="tab-1-{{ input.name }}" class="tab-pane active">
+                <div class="panel-body">
+                {% if input.getExisting()|length %}
+                    <table class="table table-bordered table-stripped">
+                        <thead>
+                        <tr>
+                            <th width="20%">Файл</th>
+                            <th width="30%">Изменить</th>
+                            <th>Название</th>
+                            <th width="50">Удалить</th>
+                        </thead>
+                        <tbody>
+                        {%  for fileObj in  input.getExisting() %}
+                            <tr >
+                                <td>
+                                    <a class="badge badge-primary" href="{{ fileObj.getAttribute('download_link') }}"><i class="fa fa-paperclip"></i> {{ fileObj.getAttribute('file_name') }} ({{ fileObj.getAttribute('file_size')|readable_filesize}})</a>
+                                </td>
+                                <td>
+                                    <input class="form-control"  name="{{ input.name }}[{{ fileObj.id }}]" type="file">
+                                </td>
+                                <td>
+                                    <input class="form-control"  data-title_for="{{ input.name }}[{{ fileObj.id }}]" name="{{ input.name }}_title[{{ fileObj.id }}]" value="{{ fileObj.title }}"  type="text">
+                                </td>
+                                <td>
+                                    <a class="badge badge-danger" href="/admin/crud/{{ crudObj.config.get('class_name') }}/{{ crudObj.id }}/command/delete_single_attach" data-confirm="Действительно удалить файл?" data-args='{"field":"{{ input.name }}","id":"{{ fileObj.id }}" }'  data-click="crud_action" data-action="crud_command" data-callback="$self.parent().parent().remove();"><i class="fa fa-times-circle"></i> Удалить</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+
+                {%  else  %}
+                    Нет загруженных файлов.
+                {% endif %}
+            </div>
+          </div>
 
 
-    {% for fileObj in input.getExisting() %}
+            <div id="tab-2-{{ input.name }}" class="tab-pane">
+                <div class="panel-body">
+                    <table class="table table-bordered table-stripped">
+                        <thead>
+                        <tr>
+                            <th width="30%">Файл</th>
+                            <th>Название</th>
+                        </thead>
+                        <tbody  id="file_container_{{ input.name }}">
+                        {% for i in 1..5 %}
+                        <tr data-added="1">
+                            <td>
+                                <input class="form-control new_file"   name="{{ input.name }}[-{{ i }}]"  type="file">
+                            </td>
+                            <td>
+                                <input class="form-control" data-title_for="{{ input.name }}[-{{ i }}]"  name="{{ input.name }}_title[-{{ i }}]"  type="text">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr style="display: none" id="add_row_tpl_{{ input.name }}">
+                            <td>
+                                <input class="form-control new_file" disabled   name="{{ input.name }}[]"  type="file">
+                            </td>
+                            <td>
+                                <input class="form-control" disabled  name="{{ input.name }}_title[]"  type="text">
+                            </td>
+                        </tr>
+                        <tfoot>
+                        <tr>
+                            <td colspan="2" class="text-right">
+                                <a href="#" class="btn btn-primary" data-click="crud_action" data-action="clone_fragment" data-fragment="add_row_tpl_{{ input.name }}" data-container="file_container_{{ input.name }}"><i class="fa fa-plus"></i> Добавить файл</a></td>
+                        </tr>
+                        </tfoot>
 
-   <div class="row">
-   <div class="col-md-6">
-       <div class="col-md-4">Файл:
-                        <input class="form-control"  name="{{ input.name }}[{{ fileObj.id }}]" type="file">
-       </div>
-       <div class="col-md-4">
-                   Название:<input class="form-control"   name="{{ input.name }}_title[{{ fileObj.id }}]" value="{{ fileObj.title }}"  type="text">
-       </div>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-   </div>
-        <div class="col-md-6" style="text-align: right; height: 52px;">
-            <a class="badge badge-primary" href="{{ fileObj.getAttribute('download_link') }}"><i class="fa fa-paperclip"></i> {{ fileObj.getAttribute('file_name') }} ({{ fileObj.getAttribute('file_size')|readable_filesize}})</a><br />
-            <a class="badge badge-danger" href="/admin/crud/{{ crudObj.config.get('class_name') }}/{{ crudObj.id }}/command/delete_single_attach" data-confirm="Действительно удалить файл?" data-args='{"field":"{{ input.name }}","id":"{{ fileObj.id }}" }'  data-click="crud_action" data-action="crud_command" data-callback="$self.parent().parent().remove();"><i class="fa fa-times-circle"></i> Удалить</a>
-        </div>
+     </div>
     </div>
-    {% endfor %}
-
 </div>
-<div class="col-md-12">
-    <div style="padding-left: 30px; padding-top: 20px;">
-        <a href="#" data-clone_fragment="add_row_tpl_{{ input.name }}" data-clone_container="file_container_{{ input.name }}"><i class="fa fa-plus"></i> Добавить файл</a>
-    </div>
 </div>
-<div class="row show-grid"  id="add_row_tpl_{{ input.name }}" style="display: none">
-    <div class="col-md-6">
-        <div class="col-md-4">Файл:<input class="form-control new_file" disabled   name="{{ input.name }}[]"  type="file">
-        </div>
-        <div class="col-md-4">Название:<input class="form-control" disabled  name="{{ input.name }}_title[]"  type="text">
-        </div>
-    </div>

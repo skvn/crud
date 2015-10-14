@@ -1,7 +1,7 @@
 <table class="table table-striped table-bordered table-hover" data-list_table_ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-crud_table="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.config.scope }}" data-btn_edit="{{ crudObj.config.list.buttons.single_edit }}" data-btn_delete="{{ crudObj.config.list.buttons.single_delete }}" data-form_type="{{ crudObj.config.list.edit_tab?'tabs':'popup' }}" >
     <thead>
     {% for c in crudObj.config.jsonSerialize().list.columns %}
-        <th data-list_ctype="{{ c.ctype }}" data-list_orderable="{{ c.orderable }}" data-list_data="{{ c.data }}" data-list_name="{{ c.name }}" {%  if  c.default_order %} data-default_order="{{ c.default_order}}"{% endif %} >{{ c.title }} {% if c.hint %}{{ config_get('crud_tooltip.pattern')|replace({'%s': c.hint.index, '%t': c.hint.default})|raw }}{% endif %}</th>
+        <th {% if c.width %} width="{{ c.width }}" {% endif %} data-list_ctype="{{ c.ctype }}" data-list_orderable="{{ c.orderable }}" data-list_data="{{ c.data }}" data-list_name="{{ c.name }}" {%  if  c.default_order %} data-default_order="{{ c.default_order}}"{% endif %} >{{ c.title }} {% if c.hint %}{{ config_get('crud_tooltip.pattern')|replace({'%s': c.hint.index, '%t': c.hint.default})|raw }}{% endif %}</th>
     {% endfor %}
     </thead>
     <tfoot>
