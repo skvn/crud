@@ -74,9 +74,10 @@ class CrudHelper {
 
         $columns = $args['columns'];
         //var_dump($columns);
-        $order = $args['order'];
-        if (!empty($order))
+
+        if (!empty($args['order']))
         {
+            $order = $args['order'];
             if (is_array($order)) {
                 foreach ($order as $oc) {
                     $coll->orderBy(!empty($columns[$oc['column']]['name']) ? $columns[$oc['column']]['name'] : $columns[$oc['column']]['data'], $oc['dir']);
