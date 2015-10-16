@@ -2,24 +2,24 @@
 <html>
 {% set PACKAGE= 'crud' %}
 <head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-   <link rel="icon" href="/favicon.ico">
-    <title>{{ PAGE_TITLE }}</title>
-    <link href="{{ 'css/bootstrap.min.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'font-awesome/css/font-awesome.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'css/plugins/iCheck/custom.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'css/plugins/select2/select2.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'css/plugins/select2/select2-bootstrap.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'css/plugins/summernote/summernote.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'css/plugins/summernote/summernote-bs3.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'css/plugins/datapicker/datepicker3.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'css/animate.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'css/style.css'|asset }}" rel="stylesheet">
-    {% block head %}{% endblock %}
-
+{% import "crud::widgets/macro.twig" as widgets%}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<link rel="icon" href="/favicon.ico">
+<title>{{ PAGE_TITLE }}</title>
+<link href="{{ 'css/bootstrap.min.css'|asset }}" rel="stylesheet">
+<link href="{{ 'font-awesome/css/font-awesome.css'|asset }}" rel="stylesheet">
+<link href="{{ 'css/plugins/iCheck/custom.css'|asset }}" rel="stylesheet">
+<link href="{{ 'css/plugins/select2/select2.css'|asset }}" rel="stylesheet">
+<link href="{{ 'css/plugins/select2/select2-bootstrap.css'|asset }}" rel="stylesheet">
+<link href="{{ 'css/plugins/summernote/summernote.css'|asset }}" rel="stylesheet">
+<link href="{{ 'css/plugins/summernote/summernote-bs3.css'|asset }}" rel="stylesheet">
+<link href="{{ 'css/plugins/datapicker/datepicker3.css'|asset }}" rel="stylesheet">
+<link href="{{ 'css/animate.css'|asset }}" rel="stylesheet">
+<link href="{{ 'css/style.css'|asset }}" rel="stylesheet">
+<link href="{{ 'css/crud.css'|asset }}" rel="stylesheet">
+{% block head %}{% endblock %}
 
 </head>
 
@@ -67,18 +67,16 @@
 <script src="{{ 'js/plugins/datapicker/bootstrap-datepicker.js'|asset }}" ></script>
 <script src="{{ 'js/plugins/datapicker/ru.js'|asset }}"  charset="UTF-8"></script>
 
-<script>
+<!--script>
     var crud_object_conf = {{  crudObj.config|json_encode()|raw }};
     var crud_tooltip_pattern = '{{ config_get('crud_tooltip.pattern')|raw }}';
-</script>
+</script -->
 <script src="{{ 'js/plugins/dataTables/jquery.dataTables.js'|asset }}"></script>
 <script src="{{ 'js/plugins/dataTables/dataTables.bootstrap.js'|asset }}"></script>
 
 <script src="{{ 'js/modules/crud.js'|asset }}"></script>
-<script src="{{ 'js/modules/crud_table.js'|asset }}"></script>
 <script src="{{ 'js/widgets/table.js'|asset }}"></script>
 <script src="{{ 'js/widgets/form.js'|asset }}"></script>
-<script src="{{ 'js/modules/crud_form.js'|asset }}"></script>
 <script src="{{ 'js/modules/crud_filter.js'|asset }}"></script>
 <script src="{{ 'js/plugins/ajaxform/jquery.form.js'|asset }}"></script>
 <script src="{{ 'js/modules/tooltip.js'|asset }}"></script>

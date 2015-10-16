@@ -1,4 +1,4 @@
-﻿;(function($){
+unction($){
 /**
  * jqGrid Serbian Translation
  * Александар Миловац(Aleksandar Milovac) aleksandar.milovac@gmail.com

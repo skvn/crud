@@ -13,7 +13,10 @@
         }
     ],
     "autoload": {
-        "psr-4": {"LaravelCrud\\": "src"}
+        "psr-4": {
+            "LaravelCrud\\": "src",
+            "LaravelAttach\\": "src/Attach/src"
+		}
     },
     "minimum-stability": "dev",
 	"require": {

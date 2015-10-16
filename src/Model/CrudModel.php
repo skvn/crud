@@ -28,6 +28,9 @@ class CrudModel extends Model {
     protected $validator;
     protected $form_fields_collection;
 
+    /* Flag for tracking created_by  and updated_by */
+    protected $track_authors = false;
+
 
 
     public function __construct(array $attributes = array(), \Validator $validator = null) {
@@ -36,6 +39,8 @@ class CrudModel extends Model {
         $this->classShortName = class_basename($this);
         $this->classViewName = snake_case($this->classShortName);
         $this->config = new CrudConfig($this);
+
+
 
 
         if (empty($this->table))
@@ -50,6 +55,11 @@ class CrudModel extends Model {
         if ($this->config->exists('timestamps'))
         {
             $this->timestamps = $this->config->get('timestamps');
+        }
+
+        if ($this->config->exists('authors'))
+        {
+            $this->track_authors = $this->config->get('authors');
         }
 
 
@@ -121,7 +131,10 @@ class CrudModel extends Model {
 
     protected  function onBeforeCreate()
     {
-
+        if ($this->track_authors && \Auth::check())
+        {
+            $this->created_by = \Auth::user()->id;
+        }
     }
 
 
@@ -167,6 +180,11 @@ class CrudModel extends Model {
                     }
                 }
 
+            }
+
+            if ($this->track_authors && \Auth::check())
+            {
+                $this->updated_by = \Auth::user()->id;
             }
 
             return true;

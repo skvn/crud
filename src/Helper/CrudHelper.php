@@ -176,81 +176,46 @@ class CrudHelper {
         $hints = $this->app['view']->getFinder()->getHints();
         $key = "crud." . $model->classViewName . "." . $model->config->getScope();
         $source = isset($hints[$key]) ? $hints[$key] : [];
-        $target = [];
-        $add = [
-            '/crud',
-            '/crud/models',
-            '/crud/models/' . $model->classViewName,
-            '/crud/models/' . $model->classViewName . '/' . $model->config->getScope(),
-        ];
-        foreach ($this->app['config']['view.paths'] as $path)
+        if (empty($source))
         {
-            if (isset($hints['crud']))
+            $target = [];
+            $add = [
+                '/crud',
+                '/crud/models',
+                '/crud/models/' . $model->classViewName,
+                '/crud/models/' . $model->classViewName . '/' . $model->config->getScope(),
+            ];
+            foreach ($this->app['config']['view.paths'] as $path)
             {
-                foreach ($hints['crud'] as $entry)
+                if (isset($hints['crud']))
                 {
-                    if (!in_array($entry, $target))
+                    foreach ($hints['crud'] as $entry)
                     {
-                        $target[] = $entry;
+                        if (!in_array($entry, $target))
+                        {
+                            $target[] = $entry;
+                        }
+                    }
+                }
+                if (!in_array($path, $target))
+                {
+                    $target[] = $path;
+                }
+                foreach ($add as $entry)
+                {
+                    $tpath = $path . $entry;
+                    if (!in_array($tpath, $source))
+                    {
+                        array_unshift($target, $tpath);
                     }
                 }
             }
-            if (!in_array($path, $target))
+            if (!empty($target))
             {
-                $target[] = $path;
+                $this->app['view']->getFinder()->prependNamespace($key, $target);
             }
-            foreach ($add as $entry)
-            {
-                $tpath = $path . $entry;
-                if (!in_array($tpath, $source))
-                {
-                    array_unshift($target, $tpath);
-                }
-            }
-        }
-        if (!empty($target))
-        {
-            $this->app['view']->getFinder()->prependNamespace($key, $target);
         }
         return $key . "::" . $view;
     }
 
-//    function resolveModelTemplate($model, $action, $scope = CrudConfig :: DEFAULT_SCOPE)
-//    {
-//
-//        //var_dump(get_class($this->app));
-//        $crud_views_path = \Config::get('view.model_views');
-//        $views_path = \Config::get('view.paths');
-//
-//        $view_name = $crud_views_path.'/'.$model.'/'.str_replace('.','/',$scope . "_" . $action);
-//
-//        if (file_exists($view_name.'.twig'))
-//        {
-//            foreach ($views_path as $p)
-//            {
-//
-//                if (strpos($view_name, $p) === 0)
-//                {
-//                    return str_replace($p.'/','',$view_name);
-//                }
-//            }
-//        }
-//
-//
-//        $view_name = $crud_views_path.'/'.$model.'/'.str_replace('.','/',$action);
-//
-//        if (file_exists($view_name.'.twig'))
-//        {
-//            foreach ($views_path as $p)
-//            {
-//
-//                if (strpos($view_name, $p) === 0)
-//                {
-//                    return str_replace($p.'/','',$view_name);
-//                }
-//            }
-//        }
-//
-//        return 'crud::'.$action;
-//    }
-} 
+}

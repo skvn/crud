@@ -2,7 +2,7 @@
     var listeners = {};
     var events = {};
     var settings = {
-        model_edit_url: '/admin/crud/{model}/edit/{id}',
+        model_edit_url: '/admin/crud/{model}/edit/{id}?scope={scope}',
         model_filter_url: '/admin/crud/{model}/filter/{scope}',
         model_list_url: '/admin/crud/{model}/list/{scope}',
         model_delete_url: '/admin/crud/{model}/delete',
@@ -17,7 +17,7 @@
         doc: d,
         loc: l,
         con: c,
-        crudObj : w.crud_object_conf,
+        //crudObj : w.crud_object_conf,
         bind: function(event, listener)
         {
             if (typeof(listeners[event]) == "undefined")
@@ -68,11 +68,49 @@
                 crud_actions[i] = actions[i];
             }
         },
-        init_modal: function(id, class_name)
+        init_edit_tab: function(id, $table)
         {
-            var model = class_name || this.crudObj['class_name'];
+            var model = $table.data('crud_table');
+            var scope = $table.data('crud_scope');
+            var $tab_cont = $table.parents('div.tabs-container').first();
+            if ( $('a[href=#tab_'+model+'_'+scope+'_'+id+']',$tab_cont).length)
+            {
+                $('a[href=#tab_'+model+'_'+scope+'_'+id+']',$tab_cont).first().click();
+                return;
+            }
+            var self = this;
+            var $tpl_tab =  $tab_cont.find('ul.nav-tabs li[data-edit_tab_tpl=1]').clone(true).removeAttr('data-edit_tab_tpl');
+            var rel = model+'_'+scope+'_'+id;
+            var id_label = (parseInt(id)<0)? 'Новая запись': id;
+            $tpl_tab.find('a').html($tpl_tab.find('a').html().replace('[ID]','['+id_label+']').replace('[REL]', rel));
+            $tpl_tab.appendTo($tab_cont.find('ul.nav-tabs').first())
+                .show()
+                    .find('a').first()
+                        .attr('href','#tab_'+rel);
+
+            var url = this.format_setting("model_edit_url", {model: model, id: id, scope:scope});
+
+            $tab_cont.addClass('veiled');
+            $.get(url, function (res){
+
+                var $cont = $(res);
+                $cont.appendTo($tab_cont.find('div.tab-content'));
+                $tpl_tab.find('div.sk-spinner').hide();
+                $tpl_tab.find('a').show().first().click();
+                $tab_cont.removeClass('veiled');
+                $cont.find('form').first().crud_form({model: model, id: id, scope:scope});
+                self.trigger('crud.content_loaded', {cont: $cont});
+
+            });
+
+
+
+        },
+        init_modal: function(model, id)
+        {
+            //var model = class_name || this.crudObj['class_name'];
             //var url = '/admin/crud/'+model+'/edit/'+id;
-            var url = this.format_setting("model_edit_url", {model: model, id: id});
+            var url = this.format_setting("model_edit_url", {model: model, id: id, scope:''});
             $('#crud_form').html('');
             $('#crud_form').modal('show');
             var self = this;
@@ -209,7 +247,18 @@
             } else {
                 $coll = $('.html_editor');
             }
-            $coll.summernote({height: 500, linksArray: this.win.crudAttachOptions});
+            $coll.summernote({
+                toolbar: [
+
+                    ['style', ['style','bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['picture', 'link', 'video','table']]
+
+                ],
+                height: 500, linksArray: this.win.crudAttachOptions});
         },
         toggle_editors_content: function($form)
         {
@@ -217,7 +266,20 @@
 
                 $(this).val($(this).code());
             })
+        },
+
+        format_error: function(error)
+        {
+            if (error.indexOf("SQLSTATE[23000]")>=0)
+            {
+                return 'Невозможно сохранить: ДУБЛИКАТ';
+            }
+            else
+            {
+                return 'Произошла ошибка: ' + error;
+            }
         }
+
     };
     w.onerror = function(msg, file, line)
     {
@@ -259,7 +321,29 @@
         },
         crud_command: function(elem)
         {
-            var args = elem.data('args');
+            var args = elem.data('args') || {};
+            if (elem.data('collect_rows'))
+            {
+                var tbl = $('table[data-list_table_ref='+elem.data('collect_rows')+']');
+                if (tbl.length <= 0)
+                {
+                    alert('Таблица данных не найдена');
+                    return;
+                }
+                var ids = [];
+                $('input[data-rel=row]', tbl).each(function(){
+                    if ($(this).prop('checked'))
+                    {
+                        ids.push($(this).val());
+                    }
+                })
+                if (ids.length <= 0)
+                {
+                    alert('Элементы не выбраны');
+                    return;
+                }
+                args['ids'] = ids;
+            }
             $.post(elem.attr('href'), args, function (res)
             {
                 if (res.success)
@@ -271,7 +355,6 @@
                     if (elem.data('callback_event'))
                     {
                         crud.trigger(elem.data('callback_event'), res);
-                        //$(crud.doc).trigger($self.data('callback_event'), res);
                     }
                     else if (elem.data('callback'))
                     {
@@ -315,7 +398,18 @@
                     break;
 
                 case 'crud_event':
-                    crud.trigger($(this).data('event'), {el:$(this)});
+                    //try to find table
+                    var params = {};
+                    var $table = $(this).parents('table[data-crud_table]').first();
+                    if ($table)
+                    {
+                        params = $.extend({}, $table.data());
+                        params.table = $table;
+
+                    }
+
+                    params = $.extend(params, $(this).data());
+                    crud.trigger($(this).data('event'), params );
                    break;
             }
 
@@ -334,5 +428,6 @@
         crud.init_date_pickers();
         crud.trigger("page.start");
         $("table[data-crud_table]").crud_list();
+        $("form[data-crud_form=ajax]").crud_form();
     });
 })(window, document, location, console, jQuery);

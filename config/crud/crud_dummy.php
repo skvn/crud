@@ -17,6 +17,12 @@ return [
     /* Breadcrumbs */
     'bc' => [['href'=>'/admin/projects','title'=>'Управление проектами']],
 
+    /* track timestamp*/
+    'timestamps' => true,
+
+    /* track author*/
+    'authors' => true,
+
     /* Datatables list description  In case of the only list for the model*/
 
     'list'=> [
@@ -26,13 +32,16 @@ return [
             'multiselect'=>true,
 
             'columns'=>[
-                [ "data"=> "id", "orderable"=>true, 'hint' => ['index' => 'tooltip index', 'default' => 'tooltip default text']],
+                [ "data"=> "id", "orderable"=>true, 'hint' => ['index' => 'tooltip index', 'default' => 'tooltip default text'], 'default_order'=>'desc'],
                 [ "data"=> "email", "orderable"=>true, 'title'=>'Email'],
             ],
             'filters' => [],
 
             /* 1 for using tabs  instead of popups */
-            'form_tabs'=>1,
+            'edit_tab'=>1,
+
+            /* 1 for using tabbed (complex) form */
+            'form_tabbed'=>1,
 
             'buttons' =>
                 [
@@ -41,7 +50,8 @@ return [
                     /* show delete button*/
                     'single_delete'=> true,
                     /* show mass delete  button*/
-                    'mass_delete' => true
+                    'mass_delete' => true,
+                    'customize_columns' => true
                 ],
 
         ]
@@ -63,6 +73,23 @@ return [
                 'disable_autocomplete' => false
             ],
 
+
+        //date field
+        'date' =>
+            [
+                'type'=>\LaravelCrud\CrudConfig::FIELD_DATE,
+                'required'=>1,
+                'format' => 'd.m.Y',
+                'jsformat' => 'dd.mm.yyyy',
+                'title' => 'Дата'
+            ],
+
+        //checkbox
+        'active' =>
+            [
+                'type'=>\LaravelCrud\CrudConfig::FIELD_CHECKBOX,
+                'title' => 'Активна'
+            ],
 
         //number field
         'sfc_num_links' =>
