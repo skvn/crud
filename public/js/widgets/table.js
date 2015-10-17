@@ -175,51 +175,6 @@
         };
         crud.add_actions(crud_actions);
 
-        //$('.crud_table_command').on('click', function ()
-        //{
-        //    var ids =[];
-        //    $('.crud_table input[data-rel=row]').each(function(){
-        //        if ($(this).prop('checked'))
-        //        {
-        //            ids.push($(this).val());
-        //        }
-        //    })
-        //    if (ids.length)
-        //    {
-        //        $(this).data('args',{ids:ids});
-        //    }
-        //})
-
-        //$('.crud_delete').on('click', function (e){
-        //    e.preventDefault();
-        //    if (confirm('Действительно удалить выбранные элементы?'))
-        //    {
-        //        var ids =[];
-        //        var scope;
-        //        if ($("table[data-crud_table]").length > 0)
-        //        {
-        //            scope = $("table[data-crud_table]");
-        //        }
-        //        else
-        //        {
-        //            scope = $(".crud_table");
-        //        }
-        //        $('input[data-rel=row]', scope).each(function(){
-        //            if ($(this).prop('checked'))
-        //            {
-        //                ids.push($(this).val());
-        //            }
-        //        })
-        //
-        //        if (ids.length)
-        //        {
-        //
-        //            $.post(crud.format_setting('model_delete_url', {model: crud.crudObj['class_name']}),{'ids':ids}, function (res) {
-        //                crud.trigger('crud.delete',res);
-        //            })
-        //        }
-        //    }
-        //});
 
         crud.bind('crud.delete_element', function(data){
 
@@ -271,6 +226,56 @@
             }
         });
 
+        $(crud.doc).on('submit', '#crud_filter_form', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            crud.toggle_form_progress($form);
+            crud.init_form_progress($form);
+            $form.ajaxSubmit(
+                {
+                    type:'POST',
+                    url: crud.format_setting("model_filter_url", {model: $form.data('crud_model'), scope: $form.data('crud_scope')}),
+                    //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
+                    dataType: 'json',
+                    success: function (res) {
+                        crud.toggle_form_progress($form)
+                        crud.trigger('crud.filter_set', res);
+
+                    }
+
+                }
+            );
+
+        });
+
+        $(crud.doc).on('reset', '#crud_filter_form', function (e) {
+            //e.preventDefault();
+            var $form = $(this);
+            $('select', $form).each(function (){
+                $(this).select2("val", null);
+            });
+
+            $('input', $form).each(function (){
+                $(this).val('');
+            });
+
+            crud.toggle_form_progress($form);
+            crud.init_form_progress($form);
+            $form.ajaxSubmit(
+                {
+                    type:'POST',
+                    url: crud.format_setting('model_filter_url', {model: $form.data('crud_model'), scope: $form.data('crud_scope')}),
+                    //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
+                    dataType: 'json',
+                    success: function (res) {
+                        crud.toggle_form_progress($form)
+                        crud.trigger('crud.filter_set',res);
+                    }
+
+                }
+            );
+
+        });
 
 
     }

@@ -68,11 +68,11 @@
                 crud_actions[i] = actions[i];
             }
         },
-        init_edit_tab: function(id, $table)
+        init_edit_tab: function(model, id, args)
         {
-            var model = $table.data('crud_table');
-            var scope = $table.data('crud_scope');
-            var $tab_cont = $table.parents('div.tabs-container').first();
+            args = args || {};
+            var scope = args.scope || "";
+            var $tab_cont = args.table.parents('div.tabs-container').first();
             if ( $('a[href=#tab_'+model+'_'+scope+'_'+id+']',$tab_cont).length)
             {
                 $('a[href=#tab_'+model+'_'+scope+'_'+id+']',$tab_cont).first().click();
@@ -106,11 +106,12 @@
 
 
         },
-        init_modal: function(model, id)
+        init_modal: function(model, id, args)
         {
             //var model = class_name || this.crudObj['class_name'];
             //var url = '/admin/crud/'+model+'/edit/'+id;
-            var url = this.format_setting("model_edit_url", {model: model, id: id, scope:''});
+            var scope = args['scope'] || '';
+            var url = this.format_setting("model_edit_url", {model: model, id: id, scope:scope});
             $('#crud_form').html('');
             $('#crud_form').modal('show');
             var self = this;
@@ -169,7 +170,7 @@
 
                 $('select',$(this)).select2(
                     {
-                        'allowClear': true,
+                        allowClear: true,
                         formatSelection: format
                     });
 

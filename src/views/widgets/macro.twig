@@ -32,3 +32,35 @@
     {% endif  %}
 {% endmacro %}
 
+{% macro filters(crudObj, scope) %}
+    {% if crudObj.getFilterColumns() %}
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5 class="collapse-link"><i class="icon fa fa-filter"></i> Фильтрация списка</h5>
+
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-down"></i>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="ibox-content" style="display: none;">
+                        <form id="crud_filter_form"  data-crud_model="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.config.scope }}">
+                            {% include "widgets/blocks/tbl_filter.twig"|model_view(crudObj) %}
+                            <div class="modal-footer">
+                                <button type="reset"  class="btn btn-default crud_reset_filter">Сбросить фильтр</button>
+                                <button type="submit" class="btn btn-primary">Применить фильтр</button>
+                                {% include 'crud::blocks/progress_bar.twig' %}
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

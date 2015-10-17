@@ -59,7 +59,7 @@
                                 {
                                     crud.trigger("crud.reload", res);
                                     crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
-                                    crud.trigger('crud.edit_element', { id: res.crud_id, list_table_ref: $form.data('crud_model')+'_'+$form.data('crud_scope')});
+                                    crud.trigger('crud.edit_element', { id: res.crud_id, ref: $form.data('crud_model')+'_'+$form.data('crud_scope')});
 
                                 }
                                 $form.trigger('reset');
@@ -187,16 +187,16 @@
 
         crud.bind('crud.edit_element', function(data){
 
-            if (data.list_table_ref)
+            if (data.ref)
             {
-                data.table = $('table[data-list_table_ref='+data.list_table_ref+']');
+                data.table = $('table[data-list_table_ref='+data.ref+']');
             }
             if (data.table && data.table.data('form_type') == 'tabs') {
                 //open edit  tab
-                crud.init_edit_tab(data.id, data.table);
+                crud.init_edit_tab(data.table.data('crud_table'), data.id, {table: data.table, scope: data.table.data('crud_scope')});
             } else {
                 //init edit modal
-                crud.init_modal(data.model, data.id);
+                crud.init_modal(data.table.data('crud_table'), data.id, {scope: data.table.data('crud_scope')});
             }
         });
         $(crud.doc).on('click', '.crud_submit', function (e)
