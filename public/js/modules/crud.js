@@ -98,7 +98,7 @@
                 $tpl_tab.find('div.sk-spinner').hide();
                 $tpl_tab.find('a').show().first().click();
                 $tab_cont.removeClass('veiled');
-                $cont.find('form').first().crud_form({model: model, id: id, scope:scope});
+                $cont.find('form').first().crud_form();
                 self.trigger('crud.content_loaded', {cont: $cont});
 
             });
@@ -108,8 +108,7 @@
         },
         init_modal: function(model, id, args)
         {
-            //var model = class_name || this.crudObj['class_name'];
-            //var url = '/admin/crud/'+model+'/edit/'+id;
+            args = args || {};
             var scope = args['scope'] || '';
             var url = this.format_setting("model_edit_url", {model: model, id: id, scope:scope});
             $('#crud_form').html('');
@@ -124,7 +123,7 @@
                     return;
                 }
 
-                $('#crud_form').find('form').first().crud_form({model: model, id: id});
+                $('#crud_form').find('form').first().crud_form();
                 self.trigger('crud.content_loaded', {cont: $('#crud_form')});
                 //$(self.doc).trigger("crud.content_loaded", {cont: $('#crud_form')});
             });
@@ -308,10 +307,36 @@
             }
             $.get(elem.data('uri'), $.extend({}, elem.data()), function(res){
                 $('#'+popup).replaceWith(res);
-                crud.trigger('crud.content_loaded', {cont: $('#'+popup)});
-                //$(document).trigger("crud.content_loaded", {cont: $('#'+popup)});
-                $('#'+popup).modal('show');
-                crud.init_ichecks($('#'+popup));
+                var w = $('#'+popup);
+                crud.trigger('crud.content_loaded', {cont: w});
+                w.modal('show');
+                if (elem.data('title'))
+                {
+                    $("h4", w).html(elem.data("title"));
+                }
+                if (elem.data('report'))
+                {
+                    $("input[name=type]", w).val(elem.data('report'))
+                }
+                if (elem.data("onshow"))
+                {
+                    switch (elem.data("onshow"))
+                    {
+                        case 'pass_row_ids':
+                            var ids = [];
+                            $('table input[data-rel=row]').each(function ()
+                            {
+                                if ($(this).prop('checked'))
+                                {
+                                    ids.push($(this).attr('value'));
+                                }
+                            });
+                            $('input[name=row_ids]', w).val(ids.join(','));
+                            break;
+                    }
+                }
+                crud.init_ichecks(w);
+                $("form", w).crud_form();
             });
         },
         call_uri: function(elem)
@@ -416,13 +441,6 @@
 
         }
     );
-    //crud.bind('crud.update', function(res)
-    //{
-    //    if (res.success == false)
-    //    {
-    //        alert(res.error);
-    //    }
-    //});
 
     $(function(){
         crud.init_selects($('form'));

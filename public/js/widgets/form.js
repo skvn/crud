@@ -159,7 +159,7 @@
 
                 $tpl.appendTo($('#'+container_id)).show();
 
-            },
+            }
         };
 
         crud.add_actions(crud_actions);
@@ -214,14 +214,6 @@
             frm.submit();
 
         });
-
-
-        //$(crud.doc).on('click', '*[data-clone_fragment]', function (e) {
-        //    e.preventDefault();
-        //    crud.clone_fragment($(this).data('clone_fragment'),$(this).data('clone_container'));
-        //
-        //});
-
     }
 
 

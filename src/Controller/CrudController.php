@@ -27,7 +27,7 @@ class CrudController extends Controller {
     }
 
 
-    function crudIndex($model, $scope = CrudConfig :: DEFAULT_SCOPE)
+    function crudIndex($model, $scope = CrudConfig :: DEFAULT_SCOPE, $args = [])
     {
 
         $obj = \App::make('App\Model\\'.studly_case($model));
@@ -40,8 +40,8 @@ class CrudController extends Controller {
 
         $obj->initFilter();
 
-        //return \View::make($this->crudHelper->resolveModelTemplate($model,'index', $scope),['crudObj'=>$obj]);
-        return \View::make($this->crudHelper->resolveModelView($obj, 'index'),['crudObj'=>$obj]);
+        $view = !empty($args['view']) ? $args['view'] : $this->crudHelper->resolveModelView($obj, 'index');
+        return \View::make($view, ['crudObj'=>$obj]);
 
     }//
 
