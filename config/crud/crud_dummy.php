@@ -3,6 +3,11 @@
 
 return [
 
+    /* if is tree */
+    'tree' => 1,
+    'tree_level_column' => 'tree_depth',
+    'tree_path_column' => 'tree_path',
+
     /* Access level rule name (optional)*/
     'acl' => 'user',
     'ent_name' => 'user',

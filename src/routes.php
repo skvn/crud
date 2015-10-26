@@ -15,3 +15,7 @@ Route::group(array('namespace' => 'Admin',/*'middleware' => 'auth'*/), function(
     Route::post('util/tooltip/update',                                  array(                                       'uses' => 'AdminController@crudTooltipUpdate'));
     Route::any('util/crud/table_columns',                               array('as' => 'crud_table_columns',          'uses' => 'AdminController@crudTableColumns'));
 });
+
+Route::group(array('namespace' => '\LaravelAttach\Controller'), function() {
+    Route::get('download/{id}', array('as' => 'download_attach', 'uses' => 'AttachController@download'));
+});

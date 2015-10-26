@@ -1,0 +1,48 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class MakeTree{{model}} extends Migration {
+
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        //
+        Schema::table('{{table}}', function(Blueprint $table)
+        {
+
+            $table->string('tree_path');
+            $table->integer('tree_order')->unsigned()->default(0);
+            $table->integer('tree_pid')->unsigned()->default(0);
+            $table->integer('tree_depth')->unsigned()->default(0);
+
+            $table->index('tree_path');
+        });
+
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        //
+        //
+        Schema::table('{{table}}', function(Blueprint $table)
+        {
+
+            $table->dropIndex('tree_path');
+            $table->dropColumn(array('tree_path', 'tree_order', 'tree_pid','tree_depth'));
+
+
+        });
+    }
+
+}

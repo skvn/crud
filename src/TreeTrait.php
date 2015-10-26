@@ -34,7 +34,9 @@ trait TreeTrait  {
 
     public function makeRoot()
     {
+        $title_f = ($this->config->get('title_field')?$this->config->get('title_field'):'title');
         $this->fill(array(
+            $title_f => 'Верхний уровень',
             $this->columnTreePath => '.0.',
             $this->columnTreePid => 0,
             $this->columnTreeDepth => 0,
@@ -320,6 +322,12 @@ trait TreeTrait  {
 
     public  function getAllTree($where=null)
     {
+        //check if root exists
+        $root = self::where($this->getColumnTreePid(),0)->first();
+        if (!$root)
+        {
+            $this->makeRoot();
+        }
         if (!$where) {
 
             $coll = self::all();

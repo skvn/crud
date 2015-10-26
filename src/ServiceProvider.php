@@ -3,6 +3,7 @@ namespace LaravelCrud;
 
 use Illuminate\Support\ServiceProvider as LServiceProvider;
 
+
 class ServiceProvider extends LServiceProvider {
 
 
@@ -33,7 +34,22 @@ class ServiceProvider extends LServiceProvider {
             return new \LaravelCrud\Helper\CrudHelper($this->app);
         });
 
+        $this->registerMakeTreeGenerator();
+
     }
+
+    /**
+     * Register the crud:make_tree generator.
+     */
+    private function registerMakeTreeGenerator()
+    {
+        $this->app->singleton('command.skvn.crud.tree', function ($app) {
+            return $app['LaravelCrud\Commands\CrudTreeCommand'];
+        });
+
+        $this->commands('command.skvn.crud.tree');
+    }
+
 
 
     public function provides()
