@@ -11,7 +11,7 @@
             $.getJSON( crud.format_setting("model_tree_url", {model: $cont.data('crud_tree'), scope: $cont.data('crud_scope')}), function (data) {
 
                     $cont.jstree({
-                            'core': data,
+                            'core': {"data":data, "check_callback" : true},
                             "state": {"key": "tree_" + $cont.data('crud_tree') + "_" + $cont.data('crud_scope')},
                             "plugins": ["dnd", "contextmenu", "search", "state", "wholerow"],
                             "contextmenu":{
@@ -72,7 +72,7 @@
         reload: function () {
             var $cont = this.element;
             $.getJSON( crud.format_setting("model_tree_url", {model: $cont.data('crud_tree'), scope: $cont.data('crud_scope')}), function (data) {
-                $cont.jstree(true).settings.core = data;
+                $cont.jstree(true).settings.core.data = data;
                 $cont.jstree(true).refresh();
             });
 

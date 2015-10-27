@@ -50,7 +50,7 @@
                             if ($form.data('crud_model'))
                             {
                                 var ref_scope = $form.data('crud_model')+'_'+$form.data('crud_scope');
-                                
+
                                 if ($form.data('close'))
                                 {
                                     crud.trigger('crud.update', res);
