@@ -88,10 +88,11 @@
                     .find('a').first()
                         .attr('href','#tab_'+rel);
 
+            var rargs = args.rargs?args.rargs:{};
             var url = this.format_setting("model_edit_url", {model: model, id: id, scope:scope});
 
             $tab_cont.addClass('veiled');
-            $.get(url, function (res){
+            $.get(url, rargs, function (res){
 
                 var $cont = $(res);
                 $cont.appendTo($tab_cont.find('div.tab-content'));

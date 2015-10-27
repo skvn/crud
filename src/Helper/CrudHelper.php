@@ -57,13 +57,14 @@ class CrudHelper {
     public   function prepareCollectionForTreeFlat($coll, $args)
     {
 
-        $ret = [];
-        foreach ($coll as $root)
-        {
-           $this->flattenKids($ret,$root);
-        }
-
-        return $ret;
+        return $coll->get();
+//        $ret = [];
+//        foreach ($coll as $root)
+//        {
+//           $this->flattenKids($ret,$root);
+//        }
+//
+//        return $ret;
 
     }
 

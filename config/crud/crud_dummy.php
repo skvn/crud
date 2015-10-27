@@ -68,6 +68,19 @@ return [
 
     'fields'=>[
 
+        //tree parent
+        'tree_pid' =>
+            [
+                'type' => \LaravelCrud\CrudConfig::FIELD_SELECT,
+                'title' => 'Родительская страница',
+                'model' => 'Page',
+                'required' =>1,
+                'relation' => \LaravelCrud\CrudConfig::RELATION_BELONGS_TO,
+                'relation_name' => 'parent'
+
+
+            ],
+
         'email' =>
             [
                 'type'=>'text',

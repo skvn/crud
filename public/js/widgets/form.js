@@ -49,6 +49,8 @@
 
                             if ($form.data('crud_model'))
                             {
+                                var ref_scope = $form.data('crud_model')+'_'+$form.data('crud_scope');
+                                
                                 if ($form.data('close'))
                                 {
                                     crud.trigger('crud.update', res);
@@ -59,7 +61,7 @@
                                 {
                                     crud.trigger("crud.reload", res);
                                     crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
-                                    crud.trigger('crud.edit_element', { id: res.crud_id, ref: $form.data('crud_model')+'_'+$form.data('crud_scope')});
+                                    crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
 
                                 }
                                 $form.trigger('reset');
@@ -189,14 +191,16 @@
 
             if (data.ref)
             {
-                data.table = $('table[data-list_table_ref='+data.ref+']');
+
+                data.table = $('*[data-list_table_ref='+data.ref+']').first();
             }
+            var model = data.table.data('crud_table')?data.table.data('crud_table'):data.table.data('crud_tree');
             if (data.table && data.table.data('form_type') == 'tabs') {
                 //open edit  tab
-                crud.init_edit_tab(data.table.data('crud_table'), data.id, {table: data.table, scope: data.table.data('crud_scope')});
+                crud.init_edit_tab(model, data.id, {table: data.table, scope: data.table.data('crud_scope'), rargs:data.rargs?data.rargs:{}});
             } else {
                 //init edit modal
-                crud.init_modal(data.table.data('crud_table'), data.id, {scope: data.table.data('crud_scope')});
+                crud.init_modal(model, data.id, {scope: data.table.data('crud_scope'), rargs:data.rargs?data.rargs:{}});
             }
         });
         $(crud.doc).on('click', '.crud_submit', function (e)

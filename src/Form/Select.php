@@ -216,8 +216,10 @@ class Select extends Field {
 
                 $pref = str_pad('', ($o->$levelCol + 1), '-') . ' ';
             }
-            $pref .= $o->internal_code.'. ';
-            $options[] = ['value' => $o->id, 'text' => $pref . $o->title, 'selected' => $selected];
+            if ($o->$levelCol>1) {
+                $pref .= $o->internal_code . '. ';
+            }
+            $options[] = ['value' => $o->id, 'text' => $pref . $o->getTitle(), 'selected' => $selected];
         }
         return $options;
     }

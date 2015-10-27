@@ -93,6 +93,7 @@ class CrudController extends Controller {
 
     function crudEdit($model,$id)
     {
+
         $class = 'App\Model\\'.studly_case($model);
         $obj = $class::firstOrNew(['id'=>(int)$id]);
         $scope = \Input::get('scope', $scope = CrudConfig :: DEFAULT_SCOPE);
@@ -103,6 +104,16 @@ class CrudController extends Controller {
             return \Response('Access denied',403);
         }
 
+        $req = \Input::all();
+
+        foreach ($req as $k=>$v)
+        {
+
+            if ($obj->isFillable($k))
+            {
+                $obj->setAttribute($k,$v);
+            }
+        }
         //return \View::make($this->crudHelper->resolveModelTemplate($model,$obj->config->get('tabs') ? 'edit_tabs' : 'edit'),['crudObj'=>$obj,'id'=>$id]);
         $edit_view = $obj->config->getList('edit_tab')?'tab':'edit';
         return \View::make($this->crudHelper->resolveModelView($obj,$edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$scope, 'form_tabbed'=>$obj->config->getList('form_tabbed')]);
@@ -135,7 +146,7 @@ class CrudController extends Controller {
 
 
             }
-            return ['success'=>true,'crud_id'=>$obj->id,'crud_model'=>$obj->classShortName];
+            return ['success'=>true,'crud_id'=>$obj->id,'crud_model'=>$obj->classShortName, 'crud_table'=> $obj->classViewName ];
 
         } catch( \Exception $e)
         {
