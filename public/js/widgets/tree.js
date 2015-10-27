@@ -90,7 +90,7 @@
                                                     return false;
                                                 }
 
-                                                alert($cont.data('crud_tree'));
+                                                
                                                 crud.trigger('crud.delete_element', { id: $node.id, crud_table: $cont.data('crud_tree')})
                                                 tree.delete_node($node);
 
