@@ -26,6 +26,7 @@ class CrudHelper {
                 break;
 
             case 'tree_flattened':
+
                 return $this->prepareCollectionForTreeFlat($coll, $args);
                 break;
             default:
@@ -36,15 +37,26 @@ class CrudHelper {
 
     public  function prepareCollectionForTree($coll, $args)
     {
-        //$coll->orderBy('full_path', 'asc');
-        //$coll->orderBy('tree_path', 'asc');
+        $data = $coll->get();
+        $ret = [];
+        foreach ($data as $row)
+        {
 
-        //return $coll->get();
-        return $coll;
+            $node = [
+                'id'=>$row->id,
+                'text'=>$row->getTitle(),
+                'parent'=>($row->getAttribute($row->getColumnTreePid())==0?'#':$row->getAttribute($row->getColumnTreePid()))
+            ];
+
+            $ret[] = $node;
+        }
+
+        return $ret;
     }
 
     public   function prepareCollectionForTreeFlat($coll, $args)
     {
+
         $ret = [];
         foreach ($coll as $root)
         {

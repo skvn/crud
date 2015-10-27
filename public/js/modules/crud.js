@@ -447,6 +447,7 @@
         crud.init_date_pickers();
         crud.trigger("page.start");
         $("table[data-crud_table]").crud_list();
+        $("div[data-crud_tree]").crud_tree();
         $("form[data-crud_form=ajax]").crud_form();
     });
 })(window, document, location, console, jQuery);

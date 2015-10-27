@@ -277,16 +277,16 @@ class CrudModel extends Model {
         } else {
 
 
-            if (!$this->isTree())
-            {
+//            if (!$this->isTree())
+//            {
 
                 $basic = self::query();
-
-            } else {
-                //return \DB::table($this->table)->select(\DB::raw($this->table.'.*,  CONCAT(tree_path,id) as full_path'))->orderBy('full_path', 'asc');;
-                return $this->getAllTree();
-
-            }
+//
+//            } else {
+//                //return \DB::table($this->table)->select(\DB::raw($this->table.'.*,  CONCAT(tree_path,id) as full_path'))->orderBy('full_path', 'asc');;
+//                return $this->getAllTree();
+//
+//            }
 
 
             if (count($joins))
@@ -296,13 +296,18 @@ class CrudModel extends Model {
             }
 
 
-            if (!empty($sort))
+            if ($this->isTree())
             {
-                foreach ($sort as $o=> $v) {
-                    $basic->orderBy($o, $v);
+                $basic->orderBy($this->columnTreePath, 'asc');
+
+            } else {
+
+                if (!empty($sort)) {
+                    foreach ($sort as $o => $v) {
+                        $basic->orderBy($o, $v);
+                    }
+
                 }
-
-
             }
 
             return $basic;

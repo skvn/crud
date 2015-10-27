@@ -60,16 +60,14 @@ class CrudController extends Controller {
 
         if (\Request::ajax())
         {
-            //$viewTpl = $this->crudHelper->resolveModelTemplate($model,'crud.tree_line');
-            $viewTpl = $this->crudHelper->resolveModelView($obj,'crud.tree_line');
+             return ['data'=>$obj->getListData(\Input::get('scope'),'tree')];
+
         } else {
-            //$viewTpl = $this->crudHelper->resolveModelTemplate($model,'tree');
-            $viewTpl = $this->crudHelper->resolveModelView($obj,'tree');
+
         }
-        return \View::make($viewTpl,
+        return \View::make($this->crudHelper->resolveModelView($obj,'tree'),
                 [
-                    'crudObj'=>$obj,
-                    'collection'=>$obj->getListData(null,'tree')
+                    'crudObj'=>$obj
                 ]);
 
     }//
