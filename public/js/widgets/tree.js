@@ -6,7 +6,17 @@
         _create: function() {
 
             var $cont = this.element;
-
+            var $s_input = $('#search_'+$cont.data('list_table_ref'));
+            var to = false;
+            $s_input.keyup(function () {
+                if (to) {
+                    clearTimeout(to);
+                }
+                to = setTimeout(function () {
+                    var v = $s_input.val();
+                    $cont.jstree(true).search(v);
+                }, 250);
+            });
 
             $.getJSON( crud.format_setting("model_tree_url", {model: $cont.data('crud_tree'), scope: $cont.data('crud_scope')}), function (data) {
 
