@@ -122,7 +122,7 @@
 
     function bind_events()
     {
-        crud.bind('crud.update', function(res){
+        crud.bind('crud.reload', function(res){
             if (res.success)
             {
                 $('div[data-crud_tree='+res.crud_table+']').crud_tree('reload')

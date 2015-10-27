@@ -30,75 +30,77 @@
 
 
             });
-            $form.on('submit', function(e)
-            {
+            $form.bootstrapValidator()
+                .on('success.form.bv', function(e)
+                {
 
-                e.preventDefault();
-                crud.toggle_editors_content($form);
-                crud.toggle_form_progress($form);
-                crud.init_form_progress($form);
+                    e.preventDefault();
+                    crud.toggle_editors_content($form);
+                    crud.toggle_form_progress($form);
+                    crud.init_form_progress($form);
 
-                $form.ajaxSubmit({
-                    type: $form.attr('method'),
-                    url: $form.attr('action'),
-                    dataType: 'json',
-                    success: function(res){
-                        crud.toggle_form_progress($form);
-                        if (res.success)
-                        {
-
-                            if ($form.data('crud_model'))
+                    $form.ajaxSubmit({
+                        type: $form.attr('method'),
+                        url: $form.attr('action'),
+                        dataType: 'json',
+                        success: function(res){
+                            crud.toggle_form_progress($form);
+                            if (res.success)
                             {
-                                var ref_scope = $form.data('crud_model')+'_'+$form.data('crud_scope');
 
-                                if ($form.data('close'))
+                                if ($form.data('crud_model'))
                                 {
-                                    crud.trigger('crud.update', res);
-                                    crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
+                                    var ref_scope = $form.data('crud_model')+'_'+$form.data('crud_scope');
 
+                                    if ($form.data('close'))
+                                    {
+                                        crud.trigger("crud.reload", res);
+                                        crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
+
+                                    }
+                                    else
+                                    {
+                                        crud.trigger("crud.reload", res);
+                                        crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
+                                        crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
+
+                                    }
+                                    $form.trigger('reset');
+                                    crud.reset_selects();
                                 }
                                 else
                                 {
-                                    crud.trigger("crud.reload", res);
-                                    crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
-                                    crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
-
+                                    if (res.message)
+                                    {
+                                        alert(res.message);
+                                    }
+                                    if ($form.data('callback_event'))
+                                    {
+                                        crud.trigger($form.data('callback_event'));
+                                    }
+                                    crud.trigger('crud.submitted', {form_id: $form.attr('id'), res: res, frm: $form});
                                 }
-                                $form.trigger('reset');
-                                crud.reset_selects();
+                                if ($form.data("close"))
+                                {
+                                    $form.parents(".modal:first").modal('hide');
+                                }
+                                if ($form.data("reload"))
+                                {
+                                    crud.loc.reload();
+                                }
                             }
                             else
                             {
-                                if (res.message)
-                                {
-                                    alert(res.message);
-                                }
-                                if ($form.data('callback_event'))
-                                {
-                                    crud.trigger($form.data('callback_event'));
-                                }
-                                crud.trigger('crud.submitted', {form_id: $form.attr('id'), res: res, frm: $form});
+                                alert(crud.format_error(res.error));
                             }
-                            if ($form.data("close"))
-                            {
-                                $form.parents(".modal:first").modal('hide');
-                            }
-                            if ($form.data("reload"))
-                            {
-                                crud.loc.reload();
-                            }
+                        },
+                        error: function(res){
+                            crud.toggle_form_progress($form);
+                            alert(res.responseJSON.error.message)
                         }
-                        else
-                        {
-                            alert(crud.format_error(res.error));
-                        }
-                    },
-                    error: function(res){
-                        crud.toggle_form_progress($form);
-                        alert(res.responseJSON.error.message)
-                    }
+                    });
                 });
-            });
+
 
             //events
             $('.crud_checkbox', $form).on('change', function () {
