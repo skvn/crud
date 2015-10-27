@@ -11,7 +11,13 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox-content">
-                {{ widgets.table(crudObj) }}
+                {%  if crudObj.isTree() %}
+                    {{ widgets.tree(crudObj) }}
+                {%  else  %}
+                    {{ widgets.table(crudObj) }}
+
+                {% endif %}
+
             </div>
         </div>
     </div>
