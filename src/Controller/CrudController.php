@@ -60,7 +60,7 @@ class CrudController extends Controller {
 
         if (\Request::ajax())
         {
-             return ['data'=>$obj->getListData(\Input::get('scope'),'tree')];
+             return $obj->getListData(\Input::get('scope'),'tree');
 
         } else {
 
@@ -230,9 +230,9 @@ class CrudController extends Controller {
 
     function crudTreeMove($model)
     {
-        $id = \Input::get('self_id');
-        $rel_id = \Input::get('rel_id');
-        $command = \Input::get('command');
+        $id = \Input::get('id');
+        $parent_id = \Input::get('parent_id');
+        $position = \Input::get('position');
 
         $model = 'App\Model\\'.studly_case($model);
         $obj = $model::findOrFail((int)$id);
@@ -243,10 +243,10 @@ class CrudController extends Controller {
             return \Response('Access denied',403);
         }
 
-        $res = $obj->moveTreeAction($command, $rel_id);
+        $res = $obj->moveTreeAction($parent_id,$position);
         if ($res === true)
         {
-            return ['success'=>true];
+            return ['success'=>true, 'crud_model'=>$obj->classViewName];
         } else {
            return ['success'=> false,'message'=>$res];
         }

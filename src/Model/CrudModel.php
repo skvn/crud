@@ -298,7 +298,8 @@ class CrudModel extends Model {
 
             if ($this->isTree())
             {
-                $basic->orderBy($this->columnTreePath, 'asc');
+                $basic->orderBy($this->getColumnTreePath() , 'asc');
+                $basic->orderBy($this->getColumnTreeOrder(), 'asc');
 
             } else {
 

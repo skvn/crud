@@ -85,6 +85,44 @@ trait TreeTrait  {
         return $this;
     }
 
+
+    public function makeChildOf($parent, $position)
+    {
+        if ($this->exists and $this->isAncestor($parent)) throw new \Exception('Cant move Ancestor to Descendant');
+        if (!$parent->exists) throw new \Exception('Parent doesnt exist');
+
+        $this_ = $this;
+
+        \DB::transaction(function() use (&$this_, &$parent, $position)
+        {
+            $parent->children(1)->where($this_->getColumnTreeOrder(),'>',$position)->increment($this_->getColumnTreeOrder());
+
+            if ($this_->exists)
+            {
+                $children = $this_->children()->get();
+
+                foreach($children as $child)
+                {
+                    $child->update(array(
+                        $child->getColumnTreePath() => str_replace($this_->getTreePath(), $parent->getTreePath().$parent->getKey().'.', $child->getTreePath()),
+                        $child->getColumnTreeDepth() => ( $parent->getTreeDepth() + 1 + ($child->getTreeDepth() - $this_->getTreeDepth()) ),
+                    ));
+                }
+            }
+
+            $this_->fill(array(
+                $this_->getColumnTreePath() => $parent->getTreePath().$parent->getKey().'.',
+                $this_->getColumnTreePid() => $parent->getKey(),
+                $this_->getColumnTreeOrder() => $position,
+                $this_->getColumnTreeDepth() => ($parent->getTreeDepth() + 1)
+            ));
+
+            $this_->save();
+        });
+
+        return $this;
+    }
+
     public function makeLastChildOf($parent)
     {
         if ($this->exists and $this->isAncestor($parent)) throw new \Exception('Cant move Ancestor to Descendant');
@@ -398,7 +436,7 @@ trait TreeTrait  {
         if (!$this->exists)
         {
             $this->fillFromRequest($input);
-            $this->moveTreeAction($treeAction, $parent);
+            $this->moveTreeAction($parent,-1);
         } else {
 
             $this->fillFromRequest($input);
@@ -407,41 +445,25 @@ trait TreeTrait  {
                 $this->save();
             } else {
 
-                $this->moveTreeAction($treeAction, $parent);
+                $this->moveTreeAction($parent, -1);
             }
         }
     }//
 
 
-    function moveTreeAction($treeAction, $parent)
+    function moveTreeAction($parent, $position)
     {
 
-
-        $parent = self::find($parent);
-        switch ($treeAction) {
-            case 'makeFirstChild':
-                if ($this->tree_depth == 1 && empty($parent))
-                {
-                    $parent = self :: find($this->rootId());
-                }
-                if ($this->exists and $this->isAncestor($parent))
-                {
-                    return 'Невозможно передвинуть родительский элемент в дочерний';
-                }
-                $this->makeFirstChildOf($parent);
-                break;
-
-            case 'makeNextSibling':
-                if ($this->exists and $this->isAncestor($parent))
-                {
-                    return 'Невозможно передвинуть родительский элемент в дочерний';
-                }
-                $this->makeNextSiblingOf($parent);
-                break;
-
-            default:
-                $this->makeLastChildOf($parent);
-                break;
+        $parentObj = self::find($parent);
+        if ($position == 0)
+        {
+            $this->makeFirstChildOf($parentObj);
+        }  else if ($position == -1)
+        {
+            $this->makeLastChildOf($parentObj);
+        }
+        else {
+            $this->makeChildOf($parentObj, $position);
         }
 
         return true;
