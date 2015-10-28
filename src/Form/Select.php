@@ -215,9 +215,9 @@ class Select extends Field {
             if ($isTree) {
 
                 $pref = str_pad('', ($o->$levelCol + 1), '-') . ' ';
-            }
-            if ($o->$levelCol>1) {
-                $pref .= $o->internal_code . '. ';
+                if ($o->$levelCol>1) {
+                    $pref .= $o->internal_code . '. ';
+                }
             }
             $options[] = ['value' => $o->id, 'text' => $pref . $o->getTitle(), 'selected' => $selected];
         }
