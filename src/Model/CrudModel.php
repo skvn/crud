@@ -230,6 +230,12 @@ class CrudModel extends Model {
         $take =  (int) \Input::get('length',0);
         $order = \Input::get('order');
 
+        if (!empty($scope))
+        {
+            $this->config->setScope($scope);
+
+        }
+        $config_cols = $this->config->getList('columns');
         $coll = $this->getListCollection($scope, $order);
         if (!$this->isTree()) {
 
@@ -237,7 +243,7 @@ class CrudModel extends Model {
             $coll = $this->paginateListCollection($coll, $skip, $take);
         }
         
-        return \App::make('CrudHelper')->prepareCollectionForView($coll, \Input::all(), $viewType);
+        return \App::make('CrudHelper')->prepareCollectionForView($coll, \Input::all(), $viewType, $config_cols);
     }
 
 

@@ -13,7 +13,7 @@ class CrudHelper {
         $this->app = $app;
     }
 
-    public function prepareCollectionForView ($coll, $args, $viewType)
+    public function prepareCollectionForView ($coll, $args, $viewType, $config_cols)
     {
         switch ($viewType) {
 
@@ -22,7 +22,7 @@ class CrudHelper {
                 break;
 
             case 'tree':
-                return $this->prepareCollectionForTree($coll, $args);
+                return $this->prepareCollectionForTree($coll, $args, $config_cols);
                 break;
 
             case 'tree_flattened':
@@ -35,17 +35,33 @@ class CrudHelper {
         }
     }
 
-    public  function prepareCollectionForTree($coll, $args)
+    public  function prepareCollectionForTree($coll, $args, $columns)
     {
+
         $data = $coll->get();
         $ret = [];
         foreach ($data as $row)
         {
 
+            $text = $row->getTitle();
+
+
+            if (!empty($columns))
+            {
+                foreach ($columns as $col)
+                {
+
+                    $text .= " <span class=\"badge\">".$row->getDescribedColumnValue($col['data'])."</span>";
+
+                }
+            }
+
             $node = [
                 'id'=>$row->id,
-                'text'=>$row->getTitle(),
-                'parent'=>($row->getAttribute($row->getColumnTreePid())==0?'#':$row->getAttribute($row->getColumnTreePid()))
+                'text'=>$text,
+                'parent'=>($row->getAttribute($row->getColumnTreePid())==0?'#':$row->getAttribute($row->getColumnTreePid())),
+
+
             ];
 
             $ret[] = $node;
