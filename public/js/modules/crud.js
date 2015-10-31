@@ -7,7 +7,7 @@
         model_list_url: '/admin/crud/{model}/list/{scope}',
         model_delete_url: '/admin/crud/{model}/delete',
         model_move_tree_url: '/admin/crud/{model}/move_tree',
-        model_tree_url: '/admin/crud/tree/{model}'
+        model_tree_url: '/admin/crud/{model}/tree/{scope}'
     };
     var crud_actions = {};
 
