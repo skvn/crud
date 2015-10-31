@@ -1,5 +1,4 @@
-<?php
-namespace LaravelCrud;
+<?php namespace LaravelCrud;
 
 use Illuminate\Support\ServiceProvider as LServiceProvider;
 
@@ -15,6 +14,7 @@ class ServiceProvider extends LServiceProvider {
             $paths[] = $path . "/crud";
         }
         $this->app['view']->getFinder()->prependNamespace("crud", $paths);
+        $this->app['config']['aliases']['Crud'] = \LaravelCrud\Facades\Crud :: class;
     }
 
     public function register()
@@ -33,6 +33,7 @@ class ServiceProvider extends LServiceProvider {
         {
             return new \LaravelCrud\Helper\CrudHelper($this->app);
         });
+        //$this->app->bind('Crud', \LaravelCrud\Facades\Crud :: class);
 
         $this->registerMakeTreeGenerator();
 

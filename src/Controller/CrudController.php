@@ -40,13 +40,14 @@ class CrudController extends Controller {
 
         $obj->initFilter();
 
-        $view = !empty($args['view']) ? $args['view'] : $this->crudHelper->resolveModelView($obj, 'index');
+        //$view = !empty($args['view']) ? $args['view'] : $this->crudHelper->resolveModelView($obj, 'index');
+        $view = !empty($args['view']) ? $args['view'] : \Crud :: resolveModelView($obj, 'index');
         return \View::make($view, ['crudObj'=>$obj]);
 
     }//
 
 
-    function crudTree($model)
+    function crudTree($model, $scope = CrudConfig :: DEFAULT_SCOPE)
     {
 
         $obj = \App::make('App\Model\\'.studly_case($model));
@@ -60,15 +61,10 @@ class CrudController extends Controller {
 
         if (\Request::ajax())
         {
-             return $obj->getListData(\Input::get('scope'),'tree');
-
-        } else {
+             return $obj->getListData($scope,'tree');
 
         }
-        return \View::make($this->crudHelper->resolveModelView($obj,'tree'),
-                [
-                    'crudObj'=>$obj
-                ]);
+        return \View::make(\Crud :: resolveModelView($obj,'tree'),['crudObj'=>$obj]);
 
     }//
 
