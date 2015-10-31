@@ -13,7 +13,7 @@ class CrudHelper {
         $this->app = $app;
     }
 
-    public function prepareCollectionForView ($coll, $args, $viewType, $config_cols)
+    public function prepareCollectionForView ($coll, $args, $viewType, $config_cols=null)
     {
         switch ($viewType) {
 
