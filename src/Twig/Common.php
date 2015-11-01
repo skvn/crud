@@ -2,9 +2,17 @@
 
 use Twig_Extension;
 use Twig_SimpleFilter;
+use Illuminate\Foundation\Application as LaravelApplication;
 
 class Common extends Twig_Extension
 {
+    protected $app;
+
+    function __construct(LaravelApplication $app)
+    {
+        $this->app = $app;
+    }
+
     public function getName()
     {
         return 'LaravelCrud_Twig_Common';
@@ -57,7 +65,7 @@ class Common extends Twig_Extension
 
     function modelView($view, $model)
     {
-        return \App :: make('CrudHelper')->resolveModelView($model, $view);
+        return $this->app->make('skvn.crud')->resolveModelView($model, $view);
     }
 
     public function getFilters()

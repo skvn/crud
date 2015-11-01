@@ -81,7 +81,8 @@ class Select extends Field {
     {
 
         $options = [];
-        $class = '\App\Model\\'.$this->config['model'];
+        //$class = '\App\Model\\'.$this->config['model'];
+        $class = app()['skvn.crud']->getModelClass($this->config['model']);
 
 
         $modelObj = new $class();
@@ -96,7 +97,7 @@ class Select extends Field {
 //            $levelCol = $modelObj->config->get('tree_level_column');
 //            $pathCol = $modelObj->config->get('tree_path_column');
                 $coll = $modelObj->getListCollection();
-                $collection = \App::make('CrudHelper')->prepareCollectionForView($coll, null, 'tree_flattened');
+                $collection = app()->make('skvn.crud')->prepareCollectionForView($coll, null, 'tree_flattened');
 
             } else {
                 $collection = $class::all();

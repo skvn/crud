@@ -73,7 +73,7 @@ return [
             [
                 'type' => \LaravelCrud\CrudConfig::FIELD_SELECT,
                 'title' => 'Родительская страница',
-                'model' => 'Page',
+                'model' => 'page', //underscores
                 'required' =>1,
                 'relation' => \LaravelCrud\CrudConfig::RELATION_BELONGS_TO,
                 'relation_name' => 'parent'

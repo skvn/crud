@@ -55,7 +55,7 @@ trait TreeTrait  {
 
         $this_ = $this;
 
-        \DB::transaction(function() use (&$this_, &$parent)
+        $this->app['db']->transaction(function() use (&$this_, &$parent)
         {
             $parent->children(1)->increment($this_->getColumnTreeOrder());
 
@@ -93,7 +93,7 @@ trait TreeTrait  {
 
         $this_ = $this;
 
-        \DB::transaction(function() use (&$this_, &$parent, $position)
+        $this->app['db']->transaction(function() use (&$this_, &$parent, $position)
         {
             $parent->children(1)->where($this_->getColumnTreeOrder(),'>',$position)->increment($this_->getColumnTreeOrder());
 
@@ -130,7 +130,7 @@ trait TreeTrait  {
 
         $this_ = $this;
 
-        \DB::transaction(function() use (&$this_, &$parent)
+        $this->app['db']->transaction(function() use (&$this_, &$parent)
         {
             if ($this_->exists)
             {
@@ -326,7 +326,7 @@ trait TreeTrait  {
 
         $this_ = &$this;
 
-        \DB::transaction(function() use (&$this_, &$sibling, $op)
+        $this->app['db']->transaction(function() use (&$this_, &$sibling, $op)
         {
             $sibling->sibling()->where($this_->getColumnTreeOrder(), $op, $sibling->getTreeOrder())->increment($this_->getColumnTreeOrder());
 
@@ -395,7 +395,7 @@ trait TreeTrait  {
             if ($element->getTreePid() == $parent_id)
             {
                 $children = $this->processKids($tree, $collection, $element->id);
-                $children = \App::make('CrudHelper')->sortArrayObjects($children,'tree_order');
+                $children = $this->app['skvn.crud']->sortArrayObjects($children,'tree_order');
                 if ($children)
                 {
                     $element->kids = $children;

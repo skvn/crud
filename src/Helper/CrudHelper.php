@@ -1,6 +1,6 @@
 <?php namespace LaravelCrud\Helper;
 
-//use LaravelCrud\CrudConfig;
+use LaravelCrud\CrudConfig;
 use LaravelCrud\Model\CrudModel;
 
 class CrudHelper {
@@ -124,7 +124,7 @@ class CrudHelper {
             $total = 0;
         }
         $q = $coll->getQuery();
-        \Session :: set("current_query_info", ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
+        $this->app['session']->set("current_query_info", ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
         $coll = $coll->get();
 
         foreach ($coll as $obj)
@@ -245,6 +245,26 @@ class CrudHelper {
             }
         }
         return $key . "::" . $view;
+    }
+
+    function getModelClass($model)
+    {
+        return $this->app['config']['crud.common.model_namespace'] . '\\' . studly_case($model);
+    }
+
+    function getModelInstance($model, $scope = CrudConfig :: DEFAULT_SCOPE, $id = null)
+    {
+        $class = $this->getModelClass($model);
+        if (!empty($id))
+        {
+            $obj = $class::firstOrNew(['id'=>(int)$id]);
+        }
+        else
+        {
+            $obj = $this->app->make($class);
+        }
+        $obj->config->setScope($scope);
+        return $obj;
     }
 
 }

@@ -4,5 +4,5 @@ use Illuminate\Support\Facades\Facade;
 
 class Crud extends Facade
 {
-    protected static function getFacadeAccessor() { return 'CrudHelper'; }
+    protected static function getFacadeAccessor() { return 'skvn.crud'; }
 }

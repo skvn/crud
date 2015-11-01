@@ -20,9 +20,9 @@ class CrudNotify extends CrudModel{
         }
         if (empty($args['created_by']))
         {
-            if (\Auth :: check())
+            if (app()['auth']->check())
             {
-                $args['created_by'] = \Auth :: user()->id;
+                $args['created_by'] = app()['auth']->user()->id;
             }
         }
         return static :: create($args);
@@ -46,22 +46,22 @@ class CrudNotify extends CrudModel{
     static function fetchNext($validator = null)
     {
         $uid = 0;
-        if (\Auth :: check())
+        if (app()['auth']->check())
         {
-            $uid = \Auth :: user()->id;
+            $uid = app()['auth']->user()->id;
         }
-        $received = \Session :: get('crud_notify');
+        $received = app()['session']->get('crud_notify');
         if (empty($received))
         {
             $received = [];
         }
-        $list = \DB :: table('crud_notify')->where('delivered', '=', 0)->orderBy('id', 'asc')->get();
+        $list = app()['db']->table('crud_notify')->where('delivered', '=', 0)->orderBy('id', 'asc')->get();
         $notify = null;
         foreach ($list as $entry)
         {
             if ($entry->broadcast && time() > ($entry->created_at + $entry->ttl * 3600))
             {
-                \DB :: table('crud_notify')->where('id', '=', $entry->id)->update(['delivered' => 1]);
+                app()['db']->table('crud_notify')->where('id', '=', $entry->id)->update(['delivered' => 1]);
                 continue;
             }
             if ($entry->target_user_id > 0)
@@ -94,16 +94,16 @@ class CrudNotify extends CrudModel{
         {
             if ($notify->target_user_id || !$notify->broadcast)
             {
-                \DB :: table('crud_notify')->where('id', '=', $notify->id)->update(['delivered' => 1, 'delivered_at' => time()]);
+                app()['db']->table('crud_notify')->where('id', '=', $notify->id)->update(['delivered' => 1, 'delivered_at' => time()]);
             }
             else
             {
-                \DB :: table('crud_notify')->where('id', '=', $notify->id)->update(['delivered_at' => time()]);
+                app()['db']->table('crud_notify')->where('id', '=', $notify->id)->update(['delivered_at' => time()]);
                 $received[] = $entry->id;
             }
             $notify->title = "Уведомление";
         }
-        \Session :: set('crud_notify', $received);
+        app()['session']->set('crud_notify', $received);
         return $notify;
     }
 

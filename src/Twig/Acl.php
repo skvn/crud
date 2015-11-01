@@ -2,9 +2,17 @@
 
 use Twig_Extension;
 use Twig_SimpleFilter;
+use Illuminate\Foundation\Application as LaravelApplication;
 
 class Acl extends Twig_Extension
 {
+    protected $app;
+
+    function __construct(LaravelApplication $app)
+    {
+        $this->app = $app;
+    }
+
     public function getName()
     {
         return 'LaravelCrud_Twig_Acl';
@@ -12,7 +20,7 @@ class Acl extends Twig_Extension
 
     public function checkAcl($acl, $access = "")
     {
-        $helper = \App :: make("CmsHelper");
+        $helper = $this->app->make("skvn.cms");
         return $helper->checkAcl($acl, $access);
     }
 

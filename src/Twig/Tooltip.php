@@ -2,9 +2,17 @@
 
 use Twig_Extension;
 use Twig_SimpleFilter;
+use Illuminate\Foundation\Application as LaravelApplication;
 
 class Tooltip extends Twig_Extension
 {
+    protected $app;
+
+    function __construct(LaravelApplication $app)
+    {
+        $this->app = $app;
+    }
+
     public function getName()
     {
         return 'LaravelCrud_Twig_Tooltip';
@@ -12,7 +20,7 @@ class Tooltip extends Twig_Extension
 
     public function tooltip($t, $text = "")
     {
-        return str_replace("%t", $text, str_replace('%s', $t, \Config :: get('crud_tooltip.pattern')));
+        return str_replace("%t", $text, str_replace('%s', $t, $this->app['config']->get('crud_tooltip.pattern')));
     }
 
 

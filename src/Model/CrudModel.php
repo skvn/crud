@@ -1,17 +1,19 @@
 <?php namespace LaravelCrud\Model;
 
 use \Illuminate\Database\Eloquent\Model;
-//use \Illuminate\Database\Eloquent\SoftDeletingTrait;
 use LaravelCrud\CrudConfig;
 use LaravelCrud\Form\Form;
 use LaravelCrud\Filter\FilterFactory;
 use Illuminate\Support\Collection ;
+use Illuminate\Foundation\Application as LaravelApplication;
 
 
 
 class CrudModel extends Model {
 
     //use SoftDeletingTrait;
+
+    protected $app;
 
     public $config;
     protected $dirtyRelations = [];
@@ -33,15 +35,13 @@ class CrudModel extends Model {
 
 
 
-    public function __construct(array $attributes = array(), \Validator $validator = null) {
-
+    public function __construct(array $attributes = array(), $validator = null)
+    {
+        $this->app = app();
 
         $this->classShortName = class_basename($this);
         $this->classViewName = snake_case($this->classShortName);
         $this->config = new CrudConfig($this);
-
-
-
 
         if (empty($this->table))
         {
@@ -62,8 +62,6 @@ class CrudModel extends Model {
             $this->track_authors = $this->config->get('authors');
         }
 
-
-
         $this->fillable = $this->config->getFillable();
         $this->crudRelations = $this->config->getCrudRelations();
 
@@ -73,17 +71,13 @@ class CrudModel extends Model {
             $this->fillable[] = $this->columnTreeOrder;
             $this->fillable[] = $this->columnTreePath ;
             $this->fillable[] = $this->columnTreeDepth;
-
         }
 
         parent::__construct($attributes);
 
-        $this->validator = $validator ?: \App::make('validator');
+        $this->validator = $validator ?: $this->app['validator'];
 
     }
-
-    
-
 
     public static function boot()
     {
@@ -125,15 +119,13 @@ class CrudModel extends Model {
             return $instance->onAfterDelete();
 
         });
-
-
     }
 
     protected  function onBeforeCreate()
     {
-        if ($this->track_authors && \Auth::check())
+        if ($this->track_authors && $this->app['auth']->check())
         {
-            $this->created_by = \Auth::user()->id;
+            $this->created_by = $this->app['auth']->user()->id;
         }
     }
 
@@ -156,14 +148,10 @@ class CrudModel extends Model {
 
     protected  function onBeforeSave()
     {
-
-
         if ($this->validate()) {
-
             $dirty = $this->getDirty();
 
             if (count($dirty)) {
-
                 $this->getForm($dirty, true);
                 if (!empty($this->form->fields) && is_array($this->form->fields)) {
                     foreach ($dirty as $k => $v) {
@@ -182,9 +170,9 @@ class CrudModel extends Model {
 
             }
 
-            if ($this->track_authors && \Auth::check())
+            if ($this->track_authors && $this->app['auth']->check())
             {
-                $this->updated_by = \Auth::user()->id;
+                $this->updated_by = $this->app['auth']->user()->id;
             }
 
             return true;
@@ -223,12 +211,12 @@ class CrudModel extends Model {
         return parent::fill($attributes);
 
     }
+
     function getListData($scope=null, $viewType='data_tables')
     {
-
-        $skip = (int) \Input::get('start',0);
-        $take =  (int) \Input::get('length',0);
-        $order = \Input::get('order');
+        $skip = (int) $this->app['request']->get('start',0);
+        $take =  (int) $this->app['request']->get('length',0);
+        $order = $this->app['request']->get('order');
 
         if (!empty($scope))
         {
@@ -243,7 +231,7 @@ class CrudModel extends Model {
             $coll = $this->paginateListCollection($coll, $skip, $take);
         }
         
-        return \App::make('CrudHelper')->prepareCollectionForView($coll, \Input::all(), $viewType, $config_cols);
+        return $this->app['skvn.crud']->prepareCollectionForView($coll, $this->app['request']->all(), $viewType, $config_cols);
     }
 
 
@@ -272,15 +260,12 @@ class CrudModel extends Model {
             }
         }
 
-
-
-
         if (!empty($scope) && method_exists($this, $method))
         {
-
             return $this->$method($order, $joins);
-
-        } else {
+        }
+        else
+        {
 
 
 //            if (!$this->isTree())
@@ -484,6 +469,7 @@ class CrudModel extends Model {
         }
         $this->attributes['created_at'] = $value;
     }
+
     public function setUpdatedAtAttribute($value)
     {
 
@@ -518,7 +504,8 @@ class CrudModel extends Model {
 
                 switch ($this->config->getCrudRelations()[$k]) {
                     case 'hasMany':
-                        $class = '\App\Model\\' . $formConf[$k]['model'];
+                        $class = $this->app['skvn.crud']->getModelClass($formConf[$k]['model']);
+                        //$class = '\App\Model\\' . $formConf[$k]['model'];
                         if (is_array($v)) {
                             $oldIds = $this->$k()->lists('id');
                             foreach ($v as $id) {
@@ -589,15 +576,17 @@ class CrudModel extends Model {
         switch ($relType)
         {
             case 'belongsTo':
-                return $this->$relType('\App\Model\\'.$relAttributes['model'],$relAttributes['column_index'], null, $method);
+                //return $this->$relType('\App\Model\\'.$relAttributes['model'],$relAttributes['column_index'], null, $method);
+                return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $relAttributes['column_index'], null, $method);
             break;
 
             case 'belongsToMany':
-                return $this->$relType('\App\Model\\'.$relAttributes['model'],null, null, null, $method);
+                //return $this->$relType('\App\Model\\'.$relAttributes['model'],null, null, null, $method);
+                return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), null, null, null, $method);
                 break;
 
             default:
-                return $this->$relType('\App\Model\\'.$relAttributes['model']);
+                return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']));
                 break;
 
 
@@ -762,16 +751,13 @@ class CrudModel extends Model {
     }
 
     function checkAcl($access = "")
-    //function checkAcl()
     {
 
-        $helper = \App::make('CmsHelper');
         if (!$this->config->get('acl'))
         {
             return true;
         }
-        return $helper->checkAcl($this->config->get('acl'), $access);
-        //return $helper->checkAcl($this->config->get('acl'));
+        return $this->app['skvn.cms']->checkAcl($this->config->get('acl'), $access);
     }
 
     function getInternalCodeAttribute()

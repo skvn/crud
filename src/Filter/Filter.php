@@ -12,9 +12,11 @@ class Filter {
     public $filters;
     protected $scope;
     protected $form;
+    protected $session;
 
     public function __construct(CrudModel $model, $scope)
     {
+        $this->session = app()['session'];
         $this->scope = $scope;
         $this->setModel($model);
     }
@@ -30,10 +32,10 @@ class Filter {
     public function fillFromStorage()
     {
 
-        if (\Session::has($this->getStorageKey()))
+        if ($this->session->has($this->getStorageKey()))
         {
 
-            $this->fill(\Session::get($this->getStorageKey()));
+            $this->fill($this->session->get($this->getStorageKey()));
 
         } else
         {
@@ -111,7 +113,7 @@ class Filter {
     {
 
 
-        \Session::put($this->getStorageKey(),$data);
+        $this->session->put($this->getStorageKey(),$data);
     }
 
     public function getStorageKey()

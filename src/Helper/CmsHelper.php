@@ -8,12 +8,14 @@ class CmsHelper
     protected $acls = [];
     public  $user;
     protected $menus = [];
+    protected $app;
 
 
 
     public function __construct($user=null)
     {
 
+        $this->app = app();
         if ($user) {
             $this->user = $user;
             $this->acls = $user->getAcls();
@@ -25,7 +27,7 @@ class CmsHelper
     function getAdminMenu()
     {
 
-        $conf = \Config::get('admin_menu');
+        $conf = $this->app['config']->get('admin_menu');
         $menu = [];
         foreach ($conf as $index=>$parent)
         {
@@ -35,7 +37,7 @@ class CmsHelper
                 $item['kids'] = null;
 
                 if (!empty($parent['route'])) {
-                    if (\Request::url() == route($parent['route']['name'], $parent['route']['args'])) {
+                    if ($this->app['request']->url() == route($parent['route']['name'], $parent['route']['args'])) {
 
                         $item['active'] = true;
 
@@ -56,7 +58,7 @@ class CmsHelper
                         if (!isset($kid['route']['args'])) {
                             $kid['route']['args'] = null;
                         }
-                        if (\Request::url() == rtrim(route($kid['route']['name'], $kid['route']['args']),'?')) {
+                        if ($this->app['request']->url() == rtrim(route($kid['route']['name'], $kid['route']['args']),'?')) {
                             $item['active'] = true;
                             $item['kids'][$kindex]['active'] = true;
 

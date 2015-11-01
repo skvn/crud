@@ -36,14 +36,16 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
     protected $scope = "default";
     protected $model;
     protected $list_prefs = null;
+    protected $app;
 
 
     public function __construct($model)
     {
+        $this->app = app();
 
         $this->model = $model;
 
-        $this->config =   \Config::get('crud.crud_'.$model->getTable());
+        $this->config =   $this->app['config']->get('crud.crud_'.$model->getTable());
         $this->config['class_name'] = snake_case(class_basename($model));
 
 
@@ -104,7 +106,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
         } else
         {
             
-            return \Config::get('crud.crud_'.$this->model->getTable().'.'.$key);
+            return $this->app['config']->get('crud.crud_'.$this->model->getTable().'.'.$key);
 
         }
     }
@@ -173,7 +175,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
         } else
         {
 
-            return \Config::get('crud.crud_'.$this->model->getTable().'.list.'.$this->scope.'.'.$prop);
+            return $this->app['config']->get('crud.crud_'.$this->model->getTable().'.list.'.$this->scope.'.'.$prop);
 
         }
 
@@ -256,9 +258,9 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
         if (is_null($this->list_prefs))
         {
             $this->list_prefs = false;
-            if (\Auth :: check())
+            if ($this->app['auth']->check())
             {
-                $user = \Auth :: user();
+                $user = $this->app['auth']->user();
                 if ($user instanceof \LaravelCrud\Contracts\PrefSubject)
                 {
                     $this->list_prefs = $user->crudPrefForModel(constant(get_class($user) . "::PREF_TYPE_COLUMN_LIST"), $this->model);
@@ -319,9 +321,9 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
             }
         }
         $this->config['filter'] = $this->getFilter();
-        if (\Auth :: check())
+        if ($this->app['auth']->check())
         {
-            $user = \Auth :: user();
+            $user = $this->app['auth']->user();
             if ($user instanceof Contracts\PrefSubject)
             {
                 $cols = $user->crudPrefFilterTableColumns($this->config['list']['columns'], $this);

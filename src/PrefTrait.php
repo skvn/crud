@@ -24,9 +24,9 @@ trait PrefTrait
 
     function crudPrefUI($type)
     {
-        if (\Request :: isMethod('post'))
+        if ($this->app['request']->isMethod('post'))
         {
-            $data = \Request :: all();
+            $data = $this->app['request']->all();
             $scope = $this->crudPrefGetScope($data);
             $pref = $this->crudPrefGet($data['pref_type'], $scope);
             $pref['user_id'] = $this->id;
@@ -38,10 +38,11 @@ trait PrefTrait
         }
         else
         {
-            $model = 'App\Model\\' . studly_case(\Request :: get('model'));
-            $obj = new $model();
-            $obj->config->setScope(\Request :: get('scope'));
-            return \View :: make('crud::crud.choose_columns', ['crudObj' => $obj, 'pref_type' => $type]);
+            $obj = $this->app['skvn.crud']->getModelInstance($this->app['request']->get('model'), $this->app['request']->get('scope'));
+//            $model = 'App\Model\\' . studly_case(\Request :: get('model'));
+//            $obj = new $model();
+//            $obj->config->setScope(\Request :: get('scope'));
+            return $this->app['view']->make('crud::crud.choose_columns', ['crudObj' => $obj, 'pref_type' => $type]);
         }
     }
 
@@ -86,7 +87,7 @@ trait PrefTrait
     {
         if (is_null($this->__prefs))
         {
-            $this->__prefs = \DB :: table('crud_user_pref')->where('user_id', $this->id)->get();
+            $this->__prefs = $this->app['db']->table('crud_user_pref')->where('user_id', $this->id)->get();
         }
         return $this->__prefs;
     }
@@ -97,11 +98,11 @@ trait PrefTrait
         {
             $id = $pref['id'];
             unset($pref['id']);
-            \DB :: table('crud_user_pref')->where('id', $id)->update($pref);
+            $this->app['db']->table('crud_user_pref')->where('id', $id)->update($pref);
         }
         else
         {
-            \DB :: table('crud_user_pref')->insert($pref);
+            $this->app['db']->table('crud_user_pref')->insert($pref);
         }
     }
 }

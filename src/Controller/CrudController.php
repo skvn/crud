@@ -3,35 +3,34 @@
 use Illuminate\Routing\Controller;
 use League\Flysystem\Exception;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Foundation\Application as LaravelApplication;
 use LaravelCrud\Model\CrudNotify as Notify;
 use LaravelCrud\CrudConfig;
 
-class CrudController extends Controller {
-
-
-
+class CrudController extends Controller
+{
+    protected $app;
     protected $auth;
-    protected  $crudHelper;
+    protected  $helper;
 
 
-    public function __construct(Guard $auth)
+    public function __construct(LaravelApplication $app, Guard $auth)
     {
+        $this->app = $app;
         $this->auth = $auth;
-        $this->crudHelper = \App::make('CrudHelper');
+        $this->helper = $this->app->make('skvn.crud');
 
     }
 
     function welcome()
     {
-        return \View :: make("crud::welcome");
+        return $this->app['view']->make("crud::welcome");
     }
 
 
     function crudIndex($model, $scope = CrudConfig :: DEFAULT_SCOPE, $args = [])
     {
-
-        $obj = \App::make('App\Model\\'.studly_case($model));
-        $obj->config->setScope($scope);
+        $obj = $this->helper->getModelInstance($model, $scope);
 
         if (!$obj->checkAcl())
         {
@@ -40,17 +39,15 @@ class CrudController extends Controller {
 
         $obj->initFilter();
 
-        //$view = !empty($args['view']) ? $args['view'] : $this->crudHelper->resolveModelView($obj, 'index');
-        $view = !empty($args['view']) ? $args['view'] : \Crud :: resolveModelView($obj, 'index');
-        return \View::make($view, ['crudObj'=>$obj]);
+        $view = !empty($args['view']) ? $args['view'] : $this->helper->resolveModelView($obj, 'index');
+        return $this->app['view']->make($view, ['crudObj'=>$obj]);
 
     }//
 
 
     function crudTree($model, $scope = CrudConfig :: DEFAULT_SCOPE)
     {
-
-        $obj = \App::make('App\Model\\'.studly_case($model));
+        $obj = $this->helper->getModelInstance($model, $scope);
 
         if (!$obj->checkAcl())
         {
@@ -59,12 +56,12 @@ class CrudController extends Controller {
 
         $obj->initFilter();
 
-        if (\Request::ajax())
+        if ($this->app['request']->ajax())
         {
              return $obj->getListData($scope,'tree');
 
         }
-        return \View::make(\Crud :: resolveModelView($obj,'tree'),['crudObj'=>$obj]);
+        return $this->app['view']->make($this->helper->resolveModelView($obj,'tree'),['crudObj'=>$obj]);
 
     }//
 
@@ -73,9 +70,7 @@ class CrudController extends Controller {
 
     function crudList($model,$scope)
     {
-
-        $obj = \App::make('App\Model\\'.studly_case($model));
-        $obj->config->setScope($scope);
+        $obj = $this->helper->getModelInstance($model, $scope);
 
         if (!$obj->checkAcl())
         {
@@ -90,17 +85,19 @@ class CrudController extends Controller {
     function crudEdit($model,$id)
     {
 
-        $class = 'App\Model\\'.studly_case($model);
-        $obj = $class::firstOrNew(['id'=>(int)$id]);
-        $scope = \Input::get('scope', $scope = CrudConfig :: DEFAULT_SCOPE);
-        $obj->config->setScope($scope);
+        $obj = $this->helper->getModelInstance($model, $this->app['request']->get('scope', CrudConfig :: DEFAULT_SCOPE), $id);
+        //$class = 'App\Model\\'.studly_case($model);
+        //$obj = $class::firstOrNew(['id'=>(int)$id]);
+        //$scope = \Input::get('scope', CrudConfig :: DEFAULT_SCOPE);
+        //$obj->config->setScope($scope);
+
 
         if (!$obj->checkAcl())
         {
             return \Response('Access denied',403);
         }
 
-        $req = \Input::all();
+        $req = $this->app['request']->all();
 
         foreach ($req as $k=>$v)
         {
@@ -112,7 +109,7 @@ class CrudController extends Controller {
         }
         //return \View::make($this->crudHelper->resolveModelTemplate($model,$obj->config->get('tabs') ? 'edit_tabs' : 'edit'),['crudObj'=>$obj,'id'=>$id]);
         $edit_view = $obj->config->getList('edit_tab')?'tab':'edit';
-        return \View::make($this->crudHelper->resolveModelView($obj,$edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$scope, 'form_tabbed'=>$obj->config->getList('form_tabbed')]);
+        return $this->app['view']->make($this->helper->resolveModelView($obj,$edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$obj->config->getScope(), 'form_tabbed'=>$obj->config->getList('form_tabbed')]);
 
     }
 
@@ -120,8 +117,9 @@ class CrudController extends Controller {
     {
 
         try {
-            $class = 'App\Model\\' .studly_case($model);
-            $obj = $class::firstOrNew(['id'=>(int)$id]);
+            $obj = $this->helper->getModelInstance($model, CrudConfig :: DEFAULT_SCOPE, $id);
+//            $class = 'App\Model\\' .studly_case($model);
+//            $obj = $class::firstOrNew(['id'=>(int)$id]);
 
             if (!$obj->checkAcl('u'))
             {
@@ -131,9 +129,9 @@ class CrudController extends Controller {
 
             if ($obj->isTree())
             {
-                $obj->saveTree(\Input::all());
+                $obj->saveTree($this->app['request']->all());
             } else {
-                $obj->fillFromRequest(\Input::all());
+                $obj->fillFromRequest($this->app['request']->all());
 
                 if (!$obj->save())
                 {
@@ -157,9 +155,10 @@ class CrudController extends Controller {
     {
 
         try {
-            $obj = \App::make('App\Model\\'.studly_case($model));
-            $obj->config->setScope($scope);
-            $obj->fillFilter($scope,\Input::all());
+            $obj = $this->helper->getModelInstance($model, $scope);
+//            $obj = \App::make('App\Model\\'.studly_case($model));
+//            $obj->config->setScope($scope);
+            $obj->fillFilter($scope,$this->app['request']->all());
 
             if (!$obj->checkAcl())
             {
@@ -178,18 +177,20 @@ class CrudController extends Controller {
     function crudDelete($model)
     {
         try {
-            $model = 'App\Model\\' . studly_case($model);
-            $obj = \App::make($model);
+            $class = $this->helper->getModelClass($model);
+            $obj = $this->helper->getModelInstance($model);
+//            $model = 'App\Model\\' . studly_case($model);
+//            $obj = \App::make($model);
 
             if (!$obj->checkAcl())
             {
                 return \Response('Access denied',403);
             }
 
-            $ids = \Request::get('ids');
+            $ids = $this->app['request']->get('ids');
             if (is_array($ids))
             {
-                $model::destroy($ids);
+                $class::destroy($ids);
             }
 
             return ['success'=>true];
@@ -206,15 +207,16 @@ class CrudController extends Controller {
     {
 
         try {
-            $model = 'App\Model\\' . studly_case($model);
-            $obj = $model::findOrNew((int)$id);
+            $obj = $this->helper->getModelInstance($model, CrudConfig :: DefaultScope, $id);
+            //$model = 'App\Model\\' . studly_case($model);
+            //$obj = $model::findOrNew((int)$id);
 
             if (!$obj->checkAcl())
             {
                 return \Response('Access denied',403);
             }
             $command = camel_case($command);
-            $ret = $obj->$command(\Input::all());
+            $ret = $obj->$command($this->app['request']->all());
 
             return ['success'=>true, 'ret'=>$ret, 'message' => isset($ret['message']) ? $ret['message'] : null];
 
@@ -226,12 +228,13 @@ class CrudController extends Controller {
 
     function crudTreeMove($model)
     {
-        $id = \Input::get('id');
-        $parent_id = \Input::get('parent_id');
-        $position = \Input::get('position');
+        $id = $this->app['request']->get('id');
+        $parent_id = $this->app['request']->get('parent_id');
+        $position = $this->app['request']->get('position');
 
-        $model = 'App\Model\\'.studly_case($model);
-        $obj = $model::findOrFail((int)$id);
+//        $model = 'App\Model\\'.studly_case($model);
+//        $obj = $model::findOrFail((int)$id);
+        $obj = $this->helper->getModelInstance($model, CrudConfig :: DEFAULT_SCOPE, $id);
 
 
         if (!$obj->checkAcl())
@@ -253,9 +256,9 @@ class CrudController extends Controller {
 
     function crudTableColumns()
     {
-        if (\Auth :: check())
+        if ($this->app['auth']->check())
         {
-            $user = \Auth :: user();
+            $user = $this->app['auth']->user();
             if ($user instanceof \LaravelCrud\Contracts\PrefSubject)
             {
                 return $user->crudPrefUI(constant(get_class($user) . '::PREF_TYPE_COLUMN_LIST'));

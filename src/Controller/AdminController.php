@@ -4,7 +4,8 @@ use LaravelCrud\Controller\CrudController;
 use LaravelCrud\TooltipTrait;
 
 
-class AdminController extends CrudController{
+class AdminController extends CrudController
+{
 
     use TooltipTrait;
 
