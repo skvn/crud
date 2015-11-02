@@ -207,7 +207,7 @@ class CrudController extends Controller
     {
 
         try {
-            $obj = $this->helper->getModelInstance($model, CrudConfig :: DefaultScope, $id);
+            $obj = $this->helper->getModelInstance($model, CrudConfig :: DEFAULT_SCOPE, $id);
             //$model = 'App\Model\\' . studly_case($model);
             //$obj = $model::findOrNew((int)$id);
 
