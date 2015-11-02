@@ -88,8 +88,7 @@ class CrudModel extends Model {
     public static function bootCrud()
     {
         static::saved(function($instance) {
-
-            debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+            
             return $instance->onAfterSave();
         });
         static::saving(function($instance)
