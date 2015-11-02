@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelCrud;
+namespace LaravelCrud\Traits;
 
 
 trait InlineImgTrait {

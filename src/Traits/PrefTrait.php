@@ -1,4 +1,5 @@
-<?php namespace LaravelCrud;
+<?php
+namespace LaravelCrud\Traits;
 
 trait PrefTrait
 {

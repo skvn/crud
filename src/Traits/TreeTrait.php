@@ -1,6 +1,5 @@
 <?php
-
-namespace LaravelCrud;
+namespace LaravelCrud\Traits;
 
 
 /*
