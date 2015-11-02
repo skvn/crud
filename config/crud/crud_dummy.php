@@ -76,7 +76,9 @@ return [
                 'model' => 'page', //underscores
                 'required' =>1,
                 'relation' => \LaravelCrud\CrudConfig::RELATION_BELONGS_TO,
-                'relation_name' => 'parent'
+                'relation_name' => 'parent',
+                //FOR TRACKABLE models
+                'track' =>1,
 
 
             ],

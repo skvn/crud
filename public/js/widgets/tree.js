@@ -90,7 +90,7 @@
                                                     return false;
                                                 }
 
-                                                
+
                                                 crud.trigger('crud.delete_element', { id: $node.id, crud_table: $cont.data('crud_tree')})
                                                 tree.delete_node($node);
 
@@ -102,6 +102,13 @@
 
                         }
                     );
+
+                    $cont.on('dblclick', '.jstree-anchor', function () {
+                        var instance = $.jstree.reference(this),
+                            $node = instance.get_node(this);
+
+                        crud.trigger('crud.edit_element', { id: $node.id, table: $cont})
+                    });
 
                 }
             );

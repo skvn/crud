@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers\Admin;
 
 use LaravelCrud\Controller\CrudController;
-use LaravelCrud\TooltipTrait;
+use LaravelCrud\Traits\TooltipTrait;
 
 
 class AdminController extends CrudController

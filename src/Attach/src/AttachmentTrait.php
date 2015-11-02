@@ -31,7 +31,7 @@ trait AttachmentTrait {
 
     public static function boot()
     {
-        parent::boot();
+        //parent::boot();
         static::bootAttach();
     }
 
