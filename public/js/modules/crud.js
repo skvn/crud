@@ -319,6 +319,10 @@
                 {
                     $("input[name=type]", w).val(elem.data('report'))
                 }
+                if (elem.data('source'))
+                {
+                    $("input[name=source]", w).val(elem.data('source'))
+                }
                 if (elem.data("onshow"))
                 {
                     switch (elem.data("onshow"))
