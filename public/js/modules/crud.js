@@ -14,6 +14,7 @@
     var crud_actions = {};
 
 
+
     w.CRUD = w.CRUD || {
         win: w,
         doc: d,
