@@ -1,4 +1,6 @@
 ;(function(w, d, l, c, $){
+
+
     var listeners = {};
     var events = {};
     var settings = {
@@ -10,6 +12,7 @@
         model_tree_url: '/admin/crud/{model}/tree/{scope}'
     };
     var crud_actions = {};
+
 
 
     w.CRUD = w.CRUD || {
@@ -319,6 +322,10 @@
                 {
                     $("input[name=type]", w).val(elem.data('report'))
                 }
+                if (elem.data('source'))
+                {
+                    $("input[name=source]", w).val(elem.data('source'))
+                }
                 if (elem.data("onshow"))
                 {
                     switch (elem.data("onshow"))
@@ -403,45 +410,57 @@
     });
     $(crud.doc).on('click','*[data-click]', function (e){
             e.preventDefault();
-            if ($(this).data('confirm'))
-            {
-                if (!confirm($(this).data('confirm')))
-                {
-                    return;
-                }
-            }
-
-            switch ($(this).data('click'))
-            {
-                case 'crud_action':
-                    if (crud_actions[$(this).data('action')])
-                    {
-                        crud_actions[$(this).data('action')]($(this));
-                    }
-                    else
-                    {
-                        alert('Undefined action '+ $(this).data('action'));
-                    }
-                    break;
-
-                case 'crud_event':
-                    //try to find table
-                    var params = {};
-                    var $table = $(this).parents('table[data-crud_table]').first();
-                    if ($table)
-                    {
-                        params = $.extend({}, $table.data());
-                        params.table = $table;
-
-                    }
-
-                    params = $.extend(params, $(this).data());
-                    crud.trigger($(this).data('event'), params );
-                   break;
-            }
+            handle_action($(this),$(this).data('click') )
 
         }
     );
+    $(crud.doc).on('change','*[data-change]', function (e){
+            e.preventDefault();
+            handle_action($(this),$(this).data('change') )
+
+        }
+    );
+    
+    function handle_action(el, action)
+    {
+
+        if (el.data('confirm'))
+        {
+            if (!confirm(el.data('confirm')))
+            {
+                return;
+            }
+        }
+
+        switch (action)
+        {
+            case 'crud_action':
+                if (crud_actions[el.data('action')])
+                {
+                    crud_actions[el.data('action')](el);
+                }
+                else
+                {
+                    alert('Undefined action '+ el.data('action'));
+                }
+                break;
+
+            case 'crud_event':
+                //try to find table
+                var params = {};
+                var $table = el.parents('table[data-crud_table]').first();
+                if ($table)
+                {
+                    params = $.extend({}, $table.data());
+                    params.table = $table;
+
+                }
+
+                params = $.extend(params, el.data());
+                crud.trigger(el.data('event'), params );
+                break;
+        }
+    }
 
     $(function(){
         crud.init_selects($('form'));
