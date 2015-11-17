@@ -1,4 +1,6 @@
 ;(function(w, d, l, c, $){
+
+
     var listeners = {};
     var events = {};
     var settings = {
@@ -10,6 +12,7 @@
         model_tree_url: '/admin/crud/{model}/tree/{scope}'
     };
     var crud_actions = {};
+
 
 
     w.CRUD = w.CRUD || {
