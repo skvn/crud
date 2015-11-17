@@ -78,8 +78,11 @@ trait AttachmentTrait {
         if (array_key_exists($key, $this->attachedFiles) )
         {
 
-            //var_dump($value);
-            //var_dump($key);
+            //don't delete  when file is not altered
+            if ($value === '')
+            {
+                return;
+            }
             //Numeric value means we are back from handler and file ID is assigned
             //ObjectCollection means the model is filled with default values
             if ($value &&
@@ -110,6 +113,8 @@ trait AttachmentTrait {
         if (!empty($args['field']) && empty($args['id']))
         {
             //$attrValue = $this->getAttribute($args['field']);
+            $this->setAttribute($args['field'],0);
+            $this->save();
             return $this->getAttach($args['field'])->delete();
 
         }

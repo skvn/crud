@@ -4,7 +4,7 @@
 
 {% if input.getValue() %}
 <div class="col-md-4">
-    <a class="badge badge-primary" href="{{ input.getValue().getAttribute('download_link') }}"><i class="fa fa-paperclip"></i> {{ input.getValue().getAttribute('file_name') }} ({{ input.getValue().getAttribute('file_size')|readable_filesize}})</a><br />
-    <a class="badge badge-danger" href="/admin/crud/{{ crudObj.conf.class_name }}/{{ crudObj.id }}/command/delete_single_attach" data-confirm="Действительно удалить файл?" data-args='{"field":"{{ input.name }}" }' data-callback="$self.parent().remove();" data-click="crud_action" data-action="crud_command"><i class="fa fa-times-circle"></i> Удалить</a>
+    <a class="badge badge-primary" href="{{ input.getValue().getAttribute('download_link') }}" target="_blank"><i class="fa fa-paperclip"></i> {{ input.getValue().getAttribute('file_name') }} ({{ input.getValue().getAttribute('file_size')|readable_filesize}})</a><br />
+    <a class="badge badge-danger" href="/admin/crud/{{ crudObj.classViewName }}/{{ crudObj.id }}/command/delete_single_attach" data-confirm="Действительно удалить файл?" data-args='{"field":"{{ input.name }}" }' data-callback="elem.parent().remove();" data-click="crud_action" data-action="crud_command"><i class="fa fa-times-circle"></i> Удалить</a>
 </div>
 {% endif %}

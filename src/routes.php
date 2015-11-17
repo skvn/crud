@@ -16,6 +16,4 @@ Route::group(array('namespace' => 'Admin',/*'middleware' => 'auth'*/), function(
     Route::any('util/crud/table_columns',                               array('as' => 'crud_table_columns',          'uses' => 'AdminController@crudTableColumns'));
 });
 
-Route::group(array('namespace' => '\LaravelAttach\Controller'), function() {
-    Route::get('download/{id}', array('as' => 'download_attach', 'uses' => 'AttachController@download'));
-});
+Route::get('attach/{id}/{filename}', array('as' => 'download_attach', 'uses' => 'AttachController@download'));

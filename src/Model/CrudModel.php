@@ -88,7 +88,7 @@ class CrudModel extends Model {
     public static function bootCrud()
     {
         static::saved(function($instance) {
-            
+
             return $instance->onAfterSave();
         });
         static::saving(function($instance)

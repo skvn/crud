@@ -1,4 +1,4 @@
-<?php namespace LaravelAttach\Controller;
+<?php namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use LaravelAttach\Attach;

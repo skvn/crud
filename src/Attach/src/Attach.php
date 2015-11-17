@@ -35,8 +35,10 @@ class Attach extends Model
 
     public function getDownloadLinkAttribute()
     {
-        return \URL::route('download_attach',array('id' => $this->id));
+        return \URL::route('download_attach',array('id' => $this->id, 'filename'=>basename($this->path)));
     }
+
+
 
     public function getTitleAttribute()
     {
