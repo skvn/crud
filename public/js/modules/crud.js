@@ -1,6 +1,4 @@
 ;(function(w, d, l, c, $){
-
-
     var listeners = {};
     var events = {};
     var settings = {
@@ -12,7 +10,6 @@
         model_tree_url: '/admin/crud/{model}/tree/{scope}'
     };
     var crud_actions = {};
-
 
 
     w.CRUD = w.CRUD || {
@@ -313,7 +310,7 @@
                 $('#'+popup).replaceWith(res);
                 var w = $('#'+popup);
                 crud.trigger('crud.content_loaded', {cont: w});
-                w.modal('show');
+                w.modal({keyboard:false, show:true,backdrop:'static'});
                 if (elem.data('title'))
                 {
                     $("h4", w).html(elem.data("title"));
@@ -325,6 +322,10 @@
                 if (elem.data('source'))
                 {
                     $("input[name=source]", w).val(elem.data('source'))
+                }
+                if (crud_actions['onShow_'+popup])
+                {
+                    crud_actions['onShow_'+popup]($('#'+popup));
                 }
                 if (elem.data("onshow"))
                 {
