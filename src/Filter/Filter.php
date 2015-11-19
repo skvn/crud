@@ -7,12 +7,9 @@ use LaravelCrud\Form\Form;
 class Filter {
 
 
-    protected $model;
-    protected $crudObj;
+
     public $filters;
-    protected $scope;
-    protected $form;
-    protected $session;
+    protected $model, $crudObj,$scope, $form, $session, $defaults;
 
     public function __construct(CrudModel $model, $scope)
     {
@@ -46,6 +43,8 @@ class Filter {
     public function initFilterColumns()
     {
         $filters = $this->crudObj->config->getFilter();
+        $this->defaults = $this->crudObj->config->getListDefaultFilter();
+
 
         if ($filters)
         {
@@ -67,6 +66,12 @@ class Filter {
             {
                 $fieldDescription['multiple'] = 1;
             }
+
+            if (!empty($this->defaults[$columnName]))
+            {
+                $fieldDescription['default'] = (is_array($this->defaults[$columnName])?implode(',',$this->defaults[$columnName]):$this->defaults[$columnName]);
+            }
+
             $this->filters[$columnName] = $fieldDescription;
         }
 
@@ -80,7 +85,6 @@ class Filter {
     public function fill($input, $andStore=false)
     {
 
-
         $storeData = [];
         if ($this->filters  && is_array($this->filters ))
         {
@@ -93,9 +97,11 @@ class Filter {
 
 //                if (array_key_exists($k, $input)) {
 
-                    $value = $form->fields[$k]->getValue();
-                    $storeData[$k] = $value;
-                    $this->filters[$k]['value'] = $value;
+                $value = $form->fields[$k]->getValue();
+                $storeData[$k] = $value;
+                $this->filters[$k]['value'] = $value;
+
+
 //                } else {
 //                    $this->filters[$k]['value'] = null;
 //                }

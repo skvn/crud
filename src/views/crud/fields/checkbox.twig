@@ -1,6 +1,6 @@
 <label for="{{ input.name }}_chk">
     <input class=" crud_checkbox i-checks" id="{{ input.name }}_chk" data-name="{{ input.name }}"    type="checkbox"  {{ input.getValue()>0?'checked':''}} />
-    <input type="hidden" name="{{ input.name }}" id="_{{  crudObj.id }}"  value="{{ input.getValue() }}" />
+    <input type="hidden" name="{{ input.name }}" id="_{{  crudObj.id }}"  value="{{ input.getValue() }}"  data-default="{{ input.config.default }}" />
     {{ input.config.title }}
 </label>
 

@@ -3,5 +3,5 @@
        name="{{ input.name }}"
        type="text"
        value="{{ input.getValue() }}"
-       {{ input.config.disable_autocomplete ? 'autocomplete="off"' }}
+       {{ input.config.disable_autocomplete ? 'autocomplete="off"' }} data-default="{{ input.config.default }}"
         />

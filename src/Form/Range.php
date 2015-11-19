@@ -13,6 +13,7 @@ class Range extends Field {
         }
     }
 
+
     function getValueTo()
     {
 
@@ -26,6 +27,28 @@ class Range extends Field {
             }
         }
     }
+
+    function getDefaultFrom()
+    {
+        if (!empty($this->config['default'])) {
+            return explode('~',$this->config['default'])[0];
+        }
+    }
+
+    function getDefaultTo()
+    {
+
+        if (!empty($this->config['default']))
+        {
+            $spl = explode('~',$this->config['default']);
+            if (isset($spl[1]))
+            {
+
+                return $spl[1];
+            }
+        }
+    }
+
     function getFilterCondition()
     {
         if (!empty($this->value))
