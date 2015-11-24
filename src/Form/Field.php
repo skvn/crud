@@ -22,6 +22,8 @@ class Field
         {
             throw new \Exception('Column '.$this->name.' is not well described');
         }
+
+
     }
 
     function getValue()

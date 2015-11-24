@@ -252,11 +252,24 @@
             //e.preventDefault();
             var $form = $(this);
             $('select', $form).each(function (){
-                $(this).select2("val", null);
+                var val = null;
+                if ($(this).data('default'))
+                {
+                    if ($(this).attr('multiple')) {
+                        val = $(this).data('default').toString();
+                        if (val) {
+
+                            val = val.split(',');
+                        }
+                    } else {
+                        val = $(this).data('default')
+                    }
+                }
+                $(this).select2("val", val);
             });
 
             $('input', $form).each(function (){
-                $(this).val('');
+                $(this).val($(this).data('default'));
             });
 
             crud.toggle_form_progress($form);

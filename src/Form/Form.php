@@ -21,10 +21,7 @@ class Form {
 
             foreach ($config as $col => $colConfig)
             {
-                if (!empty($colConfig['column']))
-                {
-                    $colConfig['column'] = $colConfig['column'];
-                } else
+                if (empty($colConfig['column']))
                 {
                     $colConfig['column'] = $col;
                 }
@@ -36,10 +33,13 @@ class Form {
 //                    $this->visibleFields[$col] = $this->fields[$col];
 //                }
 
+                //set default
+
 
                 if ($data) {
 
                     switch ($colConfig['type']) {
+
                         case \LaravelCrud\CrudConfig::FIELD_RANGE:
 
                             if (!empty($data[$col]) && strpos($data[$col],'~') !== false)
