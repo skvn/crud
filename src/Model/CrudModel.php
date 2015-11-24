@@ -577,14 +577,19 @@ class CrudModel extends Model {
 
         switch ($relType)
         {
-            case 'belongsTo':
+            case \LaravelCrud\CrudConfig::RELATION_BELONGS_TO:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],$relAttributes['column_index'], null, $method);
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $relAttributes['column_index'], null, $method);
             break;
 
-            case 'belongsToMany':
+            case \LaravelCrud\CrudConfig::RELATION_BELONGS_TO_MANY:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],null, null, null, $method);
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), null, null, null, $method);
+                break;
+
+            case \LaravelCrud\CrudConfig::RELATION_HAS_MANY:
+                $ref_col = (!empty($relAttributes['ref_column'])?$relAttributes['ref_column']:null);
+                return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $ref_col );
                 break;
 
             default:
