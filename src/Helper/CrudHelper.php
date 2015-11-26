@@ -163,6 +163,7 @@ class CrudHelper {
             {
 
                 $row[$col['data']] = '';
+                $row[$col['data']] = preg_replace('#\<sup.+</sup>#U', '', $col['data']);
                 $row[$col['data']] = strip_tags($obj->getDescribedColumnValue($col['data']));
 
             }
