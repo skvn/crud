@@ -161,10 +161,8 @@ class CrudHelper {
 
             foreach ($columns as $col)
             {
-
                 $row[$col['data']] = '';
-                $row[$col['data']] = preg_replace('#\<sup.+</sup>#U', '', $col['data']);
-                $row[$col['data']] = strip_tags($obj->getDescribedColumnValue($col['data']));
+                $row[$col['data']] = strip_tags(preg_replace('#\<sup.+</sup>#Us', '', $obj->getDescribedColumnValue($col['data'])));
 
             }
             $data[] = $row;
