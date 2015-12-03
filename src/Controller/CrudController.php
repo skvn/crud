@@ -12,6 +12,7 @@ class CrudController extends Controller
     protected $app;
     protected $auth;
     protected  $helper;
+    protected $cmsHelper;
 
 
     public function __construct(LaravelApplication $app, Guard $auth)
@@ -19,6 +20,8 @@ class CrudController extends Controller
         $this->app = $app;
         $this->auth = $auth;
         $this->helper = $this->app->make('skvn.crud');
+        $this->cmsHelper = $this->app->make('skvn.cms');
+        \View::share('cmsHelper', $this->cmsHelper);
 
     }
 

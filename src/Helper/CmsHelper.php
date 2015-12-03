@@ -19,6 +19,7 @@ class CmsHelper
         if ($user) {
             $this->user = $user;
             $this->acls = $user->getAcls();
+            var_dump($this->acls);
         }
 
     }
