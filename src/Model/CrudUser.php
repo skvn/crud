@@ -39,7 +39,6 @@ class CrudUser extends CrudModel implements AuthenticatableContract, CanResetPas
     public function getAcls()
     {
         $acl = \Config :: get("acl");
-        var_dump($this->acl_role);
         return isset($acl['roles'][$this->acl_role]) ? $acl['roles'][$this->acl_role]['acls'] : array();
         //return $this->role->acls->lists('alias');
 
