@@ -62,6 +62,23 @@ class CrudUser extends CrudModel implements AuthenticatableContract, CanResetPas
 
 
 
+    public function getAclRoleTitleAttribute()
+    {
+        $acl = \Config :: get("acl");
+        return isset($acl['roles'][$this->acl_role]) ? $acl['roles'][$this->acl_role]['title'] : null;
+    }
+
+    function getAclRoleOptions()
+    {
+        $acl = \Config :: get("acl");
+        $opts = [];
+        foreach ($acl['roles'] as $id => $role)
+        {
+            $opts[$id] = $role['title'];
+        }
+        return $opts;
+    }
+
 
 
 

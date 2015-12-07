@@ -15,6 +15,8 @@ class CreateUsersTable extends Migration
         Schema::table('user', function (Blueprint $table) {
             $table->string('acl_role');
             $table->string('acl_abilities');
+            $table->string('first_name');
+            $table->string('last_name');
 
         });
 
