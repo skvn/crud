@@ -329,7 +329,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
                 $cols = $user->crudPrefFilterTableColumns($this->config['list']['columns'], $this);
                 foreach($this->config['list']['columns'] as $col)
                 {
-                    if (isset($col['visible']) && !$col['visible'])
+                    if (!empty($col['invisible']))
                     {
                         $cols[] = $col;
                     }

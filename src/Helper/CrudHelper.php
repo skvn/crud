@@ -18,7 +18,7 @@ class CrudHelper {
         switch ($viewType) {
 
             case 'data_tables':
-                return $this->prepareCollectionForDT($coll, $args);
+                return $this->prepareCollectionForDT($coll, $args, $config_cols);
                 break;
 
             case 'tree':
@@ -27,7 +27,7 @@ class CrudHelper {
 
             case 'tree_flattened':
 
-                return $this->prepareCollectionForTreeFlat($coll, $args);
+                return $this->prepareCollectionForTreeFlat($coll, $args, $config_cols);
                 break;
             default:
                 return $coll->get();
@@ -97,12 +97,11 @@ class CrudHelper {
 
     }
 
-    public  function prepareCollectionForDT($coll, $args)
+    public  function prepareCollectionForDT($coll, $args, $config_cols)
     {
 
 
         $columns = $args['columns'];
-        //var_dump($columns);
 
         if (!empty($args['order']))
         {
@@ -139,6 +138,13 @@ class CrudHelper {
 
 
             }
+            foreach ($config_cols as $col)
+            {
+                if (!empty($col['invisible']))
+                {
+                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
+                }
+            }
             $data[] = $row;
         }
 
@@ -161,9 +167,8 @@ class CrudHelper {
 
             foreach ($columns as $col)
             {
-
                 $row[$col['data']] = '';
-                $row[$col['data']] = strip_tags($obj->getDescribedColumnValue($col['data']));
+                $row[$col['data']] = strip_tags(preg_replace('#\<sup.+</sup>#Us', '', $obj->getDescribedColumnValue($col['data'])));
 
             }
             $data[] = $row;
