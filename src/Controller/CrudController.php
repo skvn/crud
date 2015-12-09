@@ -6,13 +6,11 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Application as LaravelApplication;
 use LaravelCrud\Model\CrudNotify as Notify;
 use LaravelCrud\CrudConfig;
+use LaravelCrud\Wizard\CrudWizard;
 
 class CrudController extends Controller
 {
-    protected $app;
-    protected $auth;
-    protected  $helper;
-    protected $cmsHelper;
+    protected $app,$auth, $helper, $cmsHelper,  $request;
 
 
     public function __construct(LaravelApplication $app, Guard $auth)
@@ -21,6 +19,7 @@ class CrudController extends Controller
         $this->auth = $auth;
         $this->helper = $this->app->make('skvn.crud');
         $this->cmsHelper = $this->app->make('skvn.cms');
+        $this->request = $this->app['request'];
         \View::share('cmsHelper', $this->cmsHelper);
 
     }
@@ -147,7 +146,7 @@ class CrudController extends Controller
 
         } catch( \Exception $e)
         {
-            var_dump($e);
+            //var_dump($e);
             return ['success'=>false, 'error'=>$e->getMessage()];
         }
 
@@ -281,6 +280,22 @@ class CrudController extends Controller
     {
         return Notify :: fetchNext();
 
+    }
+
+    function crudWizard()
+    {
+
+    }
+
+    function crudWizardModel()
+    {
+
+        if ($this->request->isMethod('post'))
+        {
+            CrudWizard::saveModel($this->app);
+        }
+
+        return $this->app['view']->make('crud::wizard.model', ['available_field_types'=>CrudConfig::getAvailableFieldTypes()]);
     }
 
 

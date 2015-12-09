@@ -66,7 +66,7 @@ trait InlineImgTrait {
                 {
                     if (preg_match("#width:(.*);#siU",$m[0], $wm))
                     {
-                        
+
                         $width = trim($wm[1]);
                     }
                     $src = $m[2];

@@ -53,6 +53,7 @@ class CrudUser extends CrudModel implements AuthenticatableContract, CanResetPas
 
     public function getFullNameAttribute()
     {
+
         if (!$this->fullname)
         {
             $this->fullname = $this->first_name.' '.$this->middle_name.' '.$this->last_name;

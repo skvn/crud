@@ -1,0 +1,244 @@
+{% extends "crud::page.twig" %}
+
+{% block head %}
+
+{% endblock %}
+{% block content %}
+
+
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox-content">
+            <form method="post" class="form">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+                <h2>Model attributes</h2>
+
+                <div class="form-group">
+                    <label for="name">Model name *</label>
+                    <input type="text" class="form-control" id="name" name="name" required />
+                </div>
+
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                    <input type="checkbox"  id="is_tree" name="is_tree"  />
+                    <b>Model is tree</b>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="acl">Model acl</label>
+                    <input type="text" class="form-control" id="acl"  name="acl" />
+                </div>
+
+                <div class="form-group">
+                    <label for="ent_name">Model entity name (in backend UI languauge) * </label>
+                    <input type="text" class="form-control" id="ent_name" name="ent_name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="ent_name_r">(Russian only) Model entity name (Родительный падеж)</label>
+                    <input type="text" class="form-control" id="ent_name_r" name="ent_name_r" />
+                </div>
+
+                <div class="form-group">
+                    <label for="ent_name_v">(Russian only) Model entity name (Винительный падеж)</label>
+                    <input type="text" class="form-control" id="ent_name_v" name="ent_name_v" />
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="dialog_width">Modal dialog width (optional)</label>
+                    <input type="text" class="form-control" id="dialog_width" name="dialog_width"  />
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="timestamps" name="timestamps"  />
+                        <b>Track timestamps (created_at, updated_at attributes)</b>
+                    </label>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="authors" name="authors"  />
+                        <b>Track user id (created_by, updated_by attributes)</b>
+                    </label>
+                </div>
+                <div class="hr-line-dashed"></div><div class="hr-line-dashed"></div>
+                <h2>Admin UI lists</h2>
+                <div id="lists_container"></div>
+                <label>
+                    <a href="#"  data-click="crud_action" data-action="wizard_add_list" ><i class="fa fa-plus"></i> Add list</a>
+                    <input type="text" class="form-control" id="list_alias" style="display:inline; width:150px;" placeholder="Enter alias" />
+                </label>
+
+                <div class="hr-line-dashed"></div>
+                <div class="hr-line-dashed"></div>
+
+                <h2>Model attributes(fields)</h2>
+                <div id="f_container"></div>
+                <label>
+                    <a href="#"  data-click="crud_action" data-action="wizard_add_field" ><i class="fa fa-plus"></i> Add field</a>
+                    <select class="form-control default_select" id="ftype" style="display:inline; width:250px;"  >
+                        <option value="">Choose field type</option>
+                        {% for k,v in available_field_types %}
+                            <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <div class="hr-line-dashed"></div>
+                <div class="hr-line-dashed"></div>
+                <button type="submit" class="btn btn-primary">Save</button>
+
+            </form>
+
+            </div>
+        </div>
+    </div>
+
+    {# TEMPLATES#}
+
+    {# LIST #}
+
+    <div id="list_tpl" style="display: none">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><div class="label label-primary pull-right">[_ALIAS_]</div>
+
+                    <input type="text" class="form-control" id="lists[_ALIAS_][title]" name="lists[_ALIAS_][title]" placeholder="List title" /></h3>
+            </div>
+            <div class="panel-body">
+                <div class="col col-lg-12">
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][multi_select]" name="lists[_ALIAS_][multi_select]"  />
+                        <b>Allow multi select</b>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][use_tabs]" name="lists[_ALIAS_][use_tabs]"  />
+                        <b>Use tabs for edit interface (otherwise a popup would be used)</b>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][edit_btn]" name="lists[_ALIAS_][edit_btn]"  />
+                        <b>Show "edit" button for each row</b>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][delete_btn]" name="lists[_ALIAS_][delete_btn]"  />
+                        <b>Show "delete" button for each row</b>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][mass_delete_btn]" name="lists[_ALIAS_][mass_delete_btn]"  />
+                        <b>Show "Bulk delete" button</b>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][customize_cols]" name="lists[_ALIAS_][customize_cols]"  />
+                        <b>Allow show/hide columns</b>
+                    </label>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <h3>Columns</h3>
+                <div class="row">
+
+                    <div id="list_cols__ALIAS_"></div>
+                    <div class="help-block">To reference relations use "relation::attribute" syntax</div>
+                    <a href="#"  data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="col_tpl__ALIAS_" data-container="list_cols__ALIAS_"><i class="fa fa-plus"></i> Add column</a>
+                </div>
+               </div>
+            </div>
+            {# COlUMN#}
+            <div class="form-inline" style="display: none" id="col_tpl__ALIAS_" data-colidx="col_[NUM]">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][data]" placeholder="Attribute name *" >
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][title]" placeholder="Title *" >
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][width]" placeholder="Width">
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="lists[_ALIAS_][columns][[NUM]][orderable]" data-toggle="collapse"  data-target="#def_order_[NUM]" aria-expanded="false" aria-controls="def_order"> Orderable
+                    </label>
+                </div>
+                <div class="form-group">
+                    <div class="collapse"  id="def_order_[NUM]">
+                        <select class="form-control default_select" name="lists[_ALIAS_][columns][[NUM]][default_order]" >
+                            <option value="">Default order</option>
+                            <option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="lists[_ALIAS_][columns][[NUM]][invisible]" > Invisible
+                    </label>
+                </div>
+                <div class="hr-line-dashed"></div>
+            </div>
+            {# END COlUMN#}
+
+        </div>
+
+
+
+
+    </div>    
+
+    {# END LIST #}
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block modals %}
+    <script src="{{ 'js/modules/wizard.js'|asset }}"></script>
+{% endblock %}
+
+{% block bc %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>{{ crudObj.config.getList('title') }}</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/admin">В начало</a>
+                </li>
+                <li class="active">
+                    <strong>Управление моделью</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2" style="margin-top:20px;">
+
+        </div>
+    </div>
+
+{% endblock %}
+

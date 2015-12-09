@@ -129,23 +129,25 @@ class CrudModel extends Model {
         {
             $this->created_by = $this->app['auth']->user()->id;
         }
+
+        return true;
     }
 
 
     protected  function onAfterCreate()
     {
-
+        return true;
     }
 
     protected  function onBeforeDelete()
     {
-
+        return true;
     }
 
 
     protected  function onAfterDelete()
     {
-
+        return true;
     }
 
     protected  function onBeforeSave()
