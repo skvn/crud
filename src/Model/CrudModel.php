@@ -584,6 +584,11 @@ class CrudModel extends Model {
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $relAttributes['column_index'], null, $method);
             break;
 
+            case \LaravelCrud\CrudConfig::RELATION_HAS_ONE:
+                $ref_col = (!empty($relAttributes['ref_column'])?$relAttributes['ref_column']:null);
+                return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $relAttributes['column_index'], $ref_col);
+                break;
+
             case \LaravelCrud\CrudConfig::RELATION_BELONGS_TO_MANY:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],null, null, null, $method);
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), null, null, null, $method);
