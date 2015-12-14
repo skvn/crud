@@ -142,18 +142,22 @@
 
                 var tpl_id = elem.data('fragment');
                 var container_id = elem.data('container');
+                var skip_arr = elem.data('skip_arr');
+                
 
                 var $tpl = $('#'+tpl_id).clone(true).attr('id','');
                 var qtyAdded = $('#'+container_id).find('*[data-added]').length;
+                $tpl.html($tpl.html().replace('NUM',qtyAdded+1));
 
                 $tpl.find('*[name]').each(function ()
                 {
                     $(this).attr('disabled', false);
                     var name = $(this).attr('name');
-                    if (name.indexOf('[]')>0)
-                    {
-                        var newName = name.replace('[]','')+'[-'+(qtyAdded+1)+']';
-                        $(this).attr('name', newName)
+                    if (!skip_arr) {
+                        if (name.indexOf('[]') > 0) {
+                            var newName = name.replace('[]', '') + '[-' + (qtyAdded + 1) + ']';
+                            $(this).attr('name', newName)
+                        }
                     }
                 });
                 $tpl.attr('data-added',1);

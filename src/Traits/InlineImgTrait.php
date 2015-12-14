@@ -17,6 +17,7 @@ trait InlineImgTrait {
     public function setInlineImgCols($cols)
     {
 
+
         if (!is_array($cols))
         {
             $cols = [$cols];
@@ -29,9 +30,9 @@ trait InlineImgTrait {
     public static function boot()
     {
 
-        parent::boot();
 
         static::saving(function($instance) {
+
 
             foreach ($instance->processCols as $attr)
             {
@@ -51,8 +52,10 @@ trait InlineImgTrait {
     {
 
 
-        if (preg_match_all('#(<img\s(?>(?!src=)[^>])*?src=")(data:image/(gif|png|jpeg);base64,([\w=+/]++))("[^>].*style="width:(.*);".*>)#siUm', $text, $matches, PREG_SET_ORDER))
+
+        if (preg_match_all('#(<img\s(?>(?!src=)[^>])*?src=")(data:image/(gif|png|jpeg);base64,([\w=+/]++))("[^>].*>)#siUm', $text, $matches, PREG_SET_ORDER))
         {
+
             \Log::info($matches);
             \Log::info($text);
 
@@ -61,9 +64,13 @@ trait InlineImgTrait {
             {
                 if (!empty($m[4]))
                 {
+                    if (preg_match("#width:(.*);#siU",$m[0], $wm))
+                    {
+
+                        $width = trim($wm[1]);
+                    }
                     $src = $m[2];
                     $base_64 = $m[4];
-                    $width = $m[6];
                     $img = \Image::make(base64_decode($base_64));
                     $originalWidth = $img->width();
                     if (strpos($width,'%') !== false)

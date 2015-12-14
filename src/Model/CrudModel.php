@@ -129,23 +129,25 @@ class CrudModel extends Model {
         {
             $this->created_by = $this->app['auth']->user()->id;
         }
+
+        return true;
     }
 
 
     protected  function onAfterCreate()
     {
-
+        return true;
     }
 
     protected  function onBeforeDelete()
     {
-
+        return true;
     }
 
 
     protected  function onAfterDelete()
     {
-
+        return true;
     }
 
     protected  function onBeforeSave()
@@ -581,6 +583,11 @@ class CrudModel extends Model {
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],$relAttributes['column_index'], null, $method);
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $relAttributes['column_index'], null, $method);
             break;
+
+            case \LaravelCrud\CrudConfig::RELATION_HAS_ONE:
+                $ref_col = (!empty($relAttributes['ref_column'])?$relAttributes['ref_column']:null);
+                return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']),  $ref_col);
+                break;
 
             case \LaravelCrud\CrudConfig::RELATION_BELONGS_TO_MANY:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],null, null, null, $method);

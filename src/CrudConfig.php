@@ -62,6 +62,10 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
 //                    continue;
 //                }
 
+                if (!empty($col['hint_default']) && $col['hint'] == 1)
+                {
+                    $col['hint'] = $this->model->classShortName.'_fields_'.$name;
+                }
                 //fill relations
                 if (isset($col['relation']))
                 {
@@ -319,6 +323,10 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
                     $this->config['list']['columns'][$k]['title'] = $cdesc['title'];
                 }
             }
+            if (!empty($col['hint']) && empty($col['hint']['index']))
+            {
+                $this->config['list']['columns'][$k]['hint']['index'] = $this->model->classViewName.'_'.$this->scope.'_'.$col['data'];
+            }
         }
         $this->config['filter'] = $this->getFilter();
         if ($this->app['auth']->check())
@@ -396,5 +404,21 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
     function offsetUnset($offset)
     {
 
+    }
+
+    static  function getAvailableFieldTypes()
+    {
+        return [
+            self::FIELD_TEXT => 'Text input',
+            self::FIELD_NUMBER => 'Number input',
+            self::FIELD_TEXTAREA => 'Textarea',
+            self::FIELD_DATE => 'Date',
+            self::FIELD_SELECT => 'Select',
+            self::FIELD_CHECKBOX => 'Checkbox',
+            self::FIELD_FILE => 'Single file',
+            self::FIELD_MULTI_FILE => 'Multiple files',
+
+
+        ];
     }
 }

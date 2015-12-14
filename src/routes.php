@@ -15,6 +15,8 @@ Route::group(array('namespace' => 'Admin',/*'middleware' => 'auth'*/), function(
     Route::get('util/notify/fetch',                                     array(                                       'uses' => 'AdminController@crudNotifyFetch'));
     Route::post('util/tooltip/update',                                  array(                                       'uses' => 'AdminController@crudTooltipUpdate'));
     Route::any('util/crud/table_columns',                               array('as' => 'crud_table_columns',          'uses' => 'AdminController@crudTableColumns'));
+    Route::any('admin/wizard',                                          array('as' => 'crud_wizard',                 'uses' => 'AdminController@crudWizard'));
+    Route::any('admin/wizard_model',                                    array('as' => 'crud_wizard_model',           'uses' => 'AdminController@crudWizardModel'));
 });
 
 Route::get('attach/{id}/{filename}', array('as' => 'download_attach', 'uses' => 'AttachController@download'));
