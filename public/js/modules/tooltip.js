@@ -24,8 +24,8 @@
         c.off("dblclick").on("dblclick", function(e){
             e.preventDefault();
             var w = $('#tooltip_edit');
-            $('input[name=tt_index]', w).val($(this).data('crud_tooltip_id'));
-            $('textarea[name=tt_text]', w).val($(this).data('original-title'));
+            $('input[name=tt_index]', w).val($(this).parent().data('crud_tooltip_id'));
+            $('textarea[name=tt_text]', w).val($(this).parent().data('original-title'));
             w.modal('show');
         });
     }
@@ -36,6 +36,7 @@
         var remote = [];
         $("*[data-crud_tooltip]", p).each(function(){
             var e = $(this);
+            var prev = $(this).prev();
             var c = e.parent();
             c.data('placement', e.data('crud_tooltip_placement') || 'top').attr('data-placement', e.data('crud_tooltip_placement') || 'top');
             c.data('crud_tooltip_id', e.data('crud_tooltip')).attr('data-crud_tooltip_id', e.data('crud_tooltip'));
@@ -54,7 +55,8 @@
             }
             if (e.data('crud_tooltip') != "dummy" && _admin)
             {
-                bind_admin(c);
+                bind_admin(prev);
+                bind_admin(e);
             }
         });
         if (remote.length)
@@ -65,6 +67,7 @@
                     return;
                 }
                 var elm;
+
                 for (idx in res['tips'])
                 {
                     if (res['tips'][idx])
@@ -77,11 +80,13 @@
                         if (res['tips'][idx])
                         {
                             elm.parent().data('original-title', res['tips'][idx]).attr('data-original-title', res['tips'][idx]);
+
                         }
                         if (res['allow_edit'])
                         {
                             _admin = true;
-                            bind_admin(elm.parent());
+                            bind_admin(elm.prev());
+                            bind_admin(elm);
                         }
                     }
                 }
