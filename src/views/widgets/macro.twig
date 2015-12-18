@@ -26,6 +26,7 @@
             </div>
         </div>
     {% else %}
+
         {% include "widgets/blocks/tbl_head.twig"|model_view(crudObj) %}
         {% include "widgets/blocks/tbl_table.twig"|model_view(crudObj) %}
         {% include "widgets/blocks/tbl_foot.twig"|model_view(crudObj) %}

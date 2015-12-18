@@ -136,12 +136,14 @@ class AttachmentHandler {
 
     function save($files)
     {
+
         $this->initSelfInstance();
 
         $prop = $this->parentPropName;
 
         if ($this->multi)
         {
+
             $ids = $this->parentInstance->$prop->lists('id')->all();
         }
 
