@@ -324,7 +324,7 @@ class CrudModel extends Model {
         return $coll;
     }
 
-    protected  function applyCollectionFilters($coll, $scope)
+    public  function applyCollectionFilters($coll, $scope)
     {
         //$context = $this->purifyContext($context);
         $this->initFilter($scope);
