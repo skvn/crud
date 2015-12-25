@@ -1,135 +1,155 @@
 {% extends "crud::page.twig" %}
 
 {% block head %}
-
+    <link href="{{ 'css/plugins/steps/jquery.steps.css'|asset }}" rel="stylesheet">
+    <style>
+        .wizard-big.wizard > .content {
+            min-height: 700px;
+        }
+    </style>
 {% endblock %}
+
 {% block content %}
 
 
+<div class="row">
+    <div class="col-lg-12">
+
+    <form id="form" action="#" class="wizard-big">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+        <h1>General</h1>
+        <fieldset>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="name">Model name *</label>
+                        <input type="text" class="form-control" id="name" name="name" required />
+                    </div>
 
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox-content">
-            <form method="post" class="form">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-                <h2>Model attributes</h2>
+                    <div class="form-group">
+                        <label class="checkbox-inline">
+                            <input type="checkbox"  id="is_tree" name="is_tree"  />
+                            <b>Model is tree</b>
+                        </label>
+                    </div>
 
-                <div class="form-group">
-                    <label for="name">Model name *</label>
-                    <input type="text" class="form-control" id="name" name="name" required />
-                </div>
+                    <div class="form-group">
+                        <label for="acl">Model acl</label>
+                        <input type="text" class="form-control" id="acl"  name="acl" />
+                    </div>
 
+                    <div class="form-group">
+                        <label for="ent_name">Model entity name (in backend UI languauge) * </label>
+                        <input type="text" class="form-control" id="ent_name" name="ent_name" required />
+                    </div>
 
-                <div class="form-group">
-                    <label class="checkbox-inline">
-                    <input type="checkbox"  id="is_tree" name="is_tree"  />
-                    <b>Model is tree</b>
-                    </label>
-                </div>
+                    <div class="form-group">
+                        <label for="ent_name_r">(Russian only) Model entity name (Родительный падеж)</label>
+                        <input type="text" class="form-control" id="ent_name_r" name="ent_name_r" />
+                    </div>
 
-                <div class="form-group">
-                    <label for="acl">Model acl</label>
-                    <input type="text" class="form-control" id="acl"  name="acl" />
-                </div>
-
-                <div class="form-group">
-                    <label for="ent_name">Model entity name (in backend UI languauge) * </label>
-                    <input type="text" class="form-control" id="ent_name" name="ent_name" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="ent_name_r">(Russian only) Model entity name (Родительный падеж)</label>
-                    <input type="text" class="form-control" id="ent_name_r" name="ent_name_r" />
-                </div>
-
-                <div class="form-group">
-                    <label for="ent_name_v">(Russian only) Model entity name (Винительный падеж)</label>
-                    <input type="text" class="form-control" id="ent_name_v" name="ent_name_v" />
-                </div>
+                    <div class="form-group">
+                        <label for="ent_name_v">(Russian only) Model entity name (Винительный падеж)</label>
+                        <input type="text" class="form-control" id="ent_name_v" name="ent_name_v" />
+                    </div>
 
 
 
-                <div class="form-group">
-                    <label for="dialog_width">Modal dialog width (optional)</label>
-                    <input type="text" class="form-control" id="dialog_width" name="dialog_width"  />
-                </div>
+                    <div class="form-group">
+                        <label for="dialog_width">Modal dialog width (optional)</label>
+                        <input type="text" class="form-control" id="dialog_width" name="dialog_width"  />
+                    </div>
 
-                <div class="form-group">
-                    <label class="checkbox-inline">
-                        <input type="checkbox"  id="timestamps" name="timestamps"  />
-                        <b>Track timestamps (created_at, updated_at attributes)</b>
-                    </label>
-                </div>
+                    <div class="form-group">
+                        <label class="checkbox-inline">
+                            <input type="checkbox"  id="timestamps" name="timestamps"  />
+                            <b>Track timestamps (created_at, updated_at attributes)</b>
+                        </label>
+                    </div>
 
 
-                <div class="form-group">
-                    <label class="checkbox-inline">
-                        <input type="checkbox"  id="authors" name="authors"  />
-                        <b>Track user id (created_by, updated_by attributes)</b>
-                    </label>
-                </div>
-                <div class="hr-line-dashed"></div><div class="hr-line-dashed"></div>
-                <h2>Admin UI lists</h2>
-                <div id="lists_container"></div>
-                <label>
-                    <input type="text" class="form-control" id="list_alias" style="display:inline; width:150px;" placeholder="Enter alias" />
-                    <a href="#"  data-click="crud_action" data-action="wizard_add_list" > Add list <i class="fa fa-plus"></i></a>
-
-                </label>
-
-                <div class="hr-line-dashed"></div>
-
-                <h2>Relations</h2>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div id="r_container"></div>
-                        <div class="hr-line-dashed"></div>
-                        <label>
-
-                                <select class="form-control default_select" id="rtype" style="display:inline; width:250px;"  >
-                                <option value="">Choose relation type</option>
-                                <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_MANY') }}">Has many</option>
-                                <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_ONE') }}">Has one</option>
-                                <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO') }}">Belongs to</option>
-                                <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}">Belongs to many</option>
-                            </select>
-                            <a href="#" class="btn btn-success"  data-click="crud_action" data-action="wizard_add_relation" ><i class="fa fa-plus"></i> Add</a>
+                    <div class="form-group">
+                        <label class="checkbox-inline">
+                            <input type="checkbox"  id="authors" name="authors"  />
+                            <b>Track user id (created_by, updated_by attributes)</b>
                         </label>
                     </div>
                 </div>
-
-                <div class="hr-line-dashed"></div>
-
-
-                <h2>Form fields</h2>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div id="f_container"></div>
-                        <div class="hr-line-dashed"></div>
-                        <label>
-
-                            <select class="form-control default_select" id="ftype" style="display:inline; width:250px;"  >
-                                <option value="">Choose field type</option>
-                                {% for k,v in available_field_types %}
-                                    <option value="{{ k }}">{{ v }}</option>
-                                {% endfor %}
-                            </select>
-                            <a href="#" class="btn btn-success"  data-click="crud_action" data-action="wizard_add_field" ><i class="fa fa-plus"></i> Add</a>
-                        </label>
-                    </div>
-                </div>
-
-
-                <div class="hr-line-dashed"></div>
-                <div class="hr-line-dashed"></div>
-                <button type="submit" class="btn btn-primary">Save</button>
-
-            </form>
 
             </div>
+
+        </fieldset>
+        <h1>Relations</h1>
+        <fieldset>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div id="r_container"></div>
+                            <div class="hr-line-dashed"></div>
+                            <label>
+
+                                <select class="form-control default_select" id="rtype" style="display:inline; width:250px;"  >
+                                    <option value="">Choose relation type</option>
+                                    <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_MANY') }}">Has many</option>
+                                    <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_ONE') }}">Has one</option>
+                                    <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO') }}">Belongs to</option>
+                                    <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}">Belongs to many</option>
+                                </select>
+                                <a href="#" class="btn btn-success"  data-click="crud_action" data-action="wizard_add_relation" ><i class="fa fa-plus"></i> Add</a>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
+
+        <h1>Form fields</h1>
+        <fieldset>
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div id="f_container"></div>
+                <div class="hr-line-dashed"></div>
+                <label>
+
+                    <select class="form-control default_select" id="ftype" style="display:inline; width:250px;"  >
+                        <option value="">Choose field type</option>
+                        {% for k,v in available_field_types %}
+                            <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                    <a href="#" class="btn btn-success"  data-click="crud_action" data-action="wizard_add_field" ><i class="fa fa-plus"></i> Add</a>
+                </label>
+            </div>
         </div>
-    </div>
+        </fieldset>
+
+        <h1>Admin UI lists</h1>
+        <fieldset>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="lists_container"></div>
+                    <label>
+                        <input type="text" class="form-control" id="list_alias" style="display:inline; width:150px;" placeholder="Enter alias" />
+                        <a href="#"  data-click="crud_action" data-action="wizard_add_list" > Add list <i class="fa fa-plus"></i></a>
+
+                    </label>
+                </div>
+
+            </div>
+        </fieldset>
+
+
+    </form>
+</div>
+</div>
+
 
     {# TEMPLATES#}
 
@@ -241,76 +261,77 @@
 
     {# RELATIONS#}
 
-    <div class="form-inline" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_MANY') }}" style="display: none" >
+    <div class="form-inline" data-relation="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_MANY') }}" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_MANY') }}" style="display: none" >
+        <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_MANY') }}" />
         <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][title]" placeholder="Title *" >
+            <input type="text" class="form-control" data-attr="title" name="relations[[NUM]][title]" placeholder="Title *" >
         </div>
 
         <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][name]" placeholder="Attribute name *" >
+            <input type="text" class="form-control" data-attr="name" name="relations[[NUM]][name]" placeholder="Attribute name (underscore_case)*" >
         </div>
 
         <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][model]" placeholder="Relation model *" >
+            <input type="text" class="form-control" data-attr="model" name="relations[[NUM]][model]" placeholder="Relation model (StudlyCaps)*" >
         </div>
-        <div class="label label-success">Has many</div>
+        <div class="label label-default">Has many</div>
     </div>
 
 
 
-    <div class="form-inline" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_ONE') }}" style="display: none" >
-
+    <div class="form-inline" data-relation="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_ONE') }}" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_ONE') }}" style="display: none" >
+        <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_ONE') }}" />
         <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][title]" placeholder="Title *" >
+            <input type="text" class="form-control" data-attr="title" name="relations[[NUM]][title]" placeholder="Title *" >
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][name]" placeholder="Attribute name *" >
-        </div>
-
-        <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][model]" placeholder="Relation model *" >
+            <input type="text" class="form-control" data-attr="name" name="relations[[NUM]][name]" placeholder="Attribute name (underscore_case) *" >
         </div>
 
         <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][ref_column]" placeholder="Foreign key" >
+            <input type="text" class="form-control" data-attr="model" name="relations[[NUM]][model]" placeholder="Relation model (StudlyCaps) *" >
         </div>
-        <div class="label label-primary">Has one</div>
+
+        <div class="form-group">
+            <input type="text" class="form-control" data-attr="ref_column" name="relations[[NUM]][ref_column]" placeholder="Foreign key (underscore_case)" >
+        </div>
+        <div class="label label-default">Has one</div>
 
     </div>
 
-    <div class="form-inline" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO') }}" style="display: none" >
-
+    <div class="form-inline" data-relation="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO') }}" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO') }}" style="display: none" >
+        <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO') }}" />
         <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][title]" placeholder="Title *" >
+            <input type="text" class="form-control" data-attr="title" name="relations[[NUM]][title]" placeholder="Title *" >
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][name]" placeholder="Attribute name *" >
-        </div>
-
-        <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][model]" placeholder="Relation model *" >
+            <input type="text" class="form-control" data-attr="name" name="relations[[NUM]][name]" placeholder="Attribute name (underscore_case) *" >
         </div>
 
         <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][name]" placeholder="Local key *" >
+            <input type="text" class="form-control" data-attr="model" name="relations[[NUM]][model]" placeholder="Relation model (StudlyCaps) *" >
         </div>
-        <div class="label label-warning">Belongs to</div>
+
+        <div class="form-group">
+            <input type="text" class="form-control" data-attr="name" name="relations[[NUM]][local_key]" placeholder="Local key (underscore_case) *" >
+        </div>
+        <div class="label  label-default">Belongs to</div>
 
     </div>
 
-    <div class="form-inline" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" style="display: none" >
+    <div class="form-inline" data-relation="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" style="display: none" >
+        <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" />
+        <div class="form-group">
+            <input type="text" class="form-control" data-attr="title" name="relations[[NUM]][title]" placeholder="Title *" >
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" data-attr="name" name="relations[[NUM]][name]" placeholder="Attribute name (underscore_case) *" >
+        </div>
 
         <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][title]" placeholder="Title *" >
+            <input type="text" class="form-control" data-attr="model" name="relations[[NUM]][model]" placeholder="Relation model (StudlyCaps) *" >
         </div>
-        <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][name]" placeholder="Attribute name *" >
-        </div>
-
-        <div class="form-group">
-            <input type="text" class="form-control" name="relations[[NUM]][model]" placeholder="Relation model *" >
-        </div>
-        <div class="label label-info">Belongs to many</div>
+        <div class="label label-default">Belongs to many</div>
 
     </div>
     {# END RELATIONS#}
@@ -470,7 +491,10 @@
 
 {% endblock %}
 
+
 {% block modals %}
+    <script src="{{ 'js/plugins/staps/jquery.steps.min.js'|asset }}"></script>
+    <script src="{{ 'js/plugins/validate/jquery.validate.min.js'|asset }}"></script>
     <script src="{{ 'js/modules/wizard.js'|asset }}"></script>
 {% endblock %}
 
