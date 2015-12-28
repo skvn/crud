@@ -62,7 +62,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
 //                    continue;
 //                }
 
-                if (!empty($col['hint_default']) && $col['hint'] == 1)
+                if (!empty($col['hint_default']) && !empty($col['hint']) &&  $col['hint'] === 'auto')
                 {
                     $col['hint'] = $this->model->classShortName.'_fields_'.$name;
                 }
