@@ -58,10 +58,7 @@ class ServiceProvider extends LServiceProvider {
 //    }
     protected function registerCommands()
     {
-        $this->app->bindIf('command.skvn.crud.tree', function($app){
-            return $app->make(Commands\CrudTreeCommand :: class);
-        });
-        $this->commands('command.skvn.crud.tree');
+       
     }
 
     protected function registerHelpers()
