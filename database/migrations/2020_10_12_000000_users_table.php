@@ -21,13 +21,14 @@ class ModUsersTable extends Migration
         });
 
 
-        \App\Model\User::create(
+/*        \App\Model\User::create(
             [
                 'email'=>'admin@domain.ru',
                 'password'=>'12345',
                 'acl_role' => 'root',
             ]
         );
+*/
     }
 
     /**
