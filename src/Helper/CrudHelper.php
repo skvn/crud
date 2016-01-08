@@ -254,7 +254,7 @@ class CrudHelper {
 
     function getModelClass($model)
     {
-        return $this->app['config']['crud.common.model_namespace'] . '\\' . studly_case($model);
+        return $this->app['config']['crud_common.model_namespace'] . '\\' . studly_case($model);
     }
 
     function getModelInstance($model, $scope = CrudConfig :: DEFAULT_SCOPE, $id = null)

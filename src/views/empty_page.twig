@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+{% set PACKAGE= 'crud' %}
+<head>
+    {% import "crud::widgets/macro.twig" as widgets%}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="/favicon.ico">
+    <title>{{ PAGE_TITLE }}</title>
+    <link href="{{ 'css/bootstrap.min.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'font-awesome/css/font-awesome.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/plugins/iCheck/custom.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/plugins/select2/select2.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/plugins/select2/select2-bootstrap.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/plugins/summernote/summernote.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/plugins/summernote/summernote-bs3.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/plugins/datapicker/datepicker3.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/plugins/jsTree/style.min.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/plugins/bvalidation/bootstrapValidator.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/animate.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/style.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/crud.css'|asset }}" rel="stylesheet">
+    {% block head %}{% endblock %}
+
+</head>
+
+<body>
+
+<div id="wrapper" class="gray-bg">
+
+ {%block content%}{%endblock%}
+
+</div>
+
+
+<!-- Mainly scripts -->
+<script src="{{ 'js/jquery-2.1.1.js'|asset }}" ></script>
+<script src="{{ 'js/jquery-ui-1.10.4.min.js'|asset }}" ></script>
+<script src="{{ 'js/bootstrap.min.js'|asset }}" ></script>
+<script src="{{ 'js/plugins/metisMenu/jquery.metisMenu.js'|asset }}" ></script>
+<script src="{{ 'js/plugins/slimscroll/jquery.slimscroll.min.js'|asset }}" ></script>
+
+
+<!-- Custom and plugin javascript -->
+<script src="{{ 'js/inspinia.js'|asset }}" ></script>
+<script src="{{ 'js/plugins/pace/pace.min.js'|asset }}" ></script>
+
+<!-- iCheck -->
+<script src="{{ 'js/plugins/iCheck/icheck.min.js'|asset }}" ></script>
+<!-- SELECT 2 -->
+<script src="{{ 'js/plugins/select2/select2.js'|asset }}" ></script>
+<script src="{{ 'js/plugins/select2/select2_locale_ru.js'|asset }}" ></script>
+<script src="{{ 'js/plugins/summernote/summernote.js'|asset }}" ></script>
+<script src="{{ 'js/plugins/datapicker/bootstrap-datepicker.js'|asset }}" ></script>
+<script src="{{ 'js/plugins/datapicker/ru.js'|asset }}"  charset="UTF-8"></script>
+
+<script src="{{ 'js/plugins/bvalidation/bootstrapValidator.js'|asset }}"></script>
+<script src="{{ 'js/plugins/bvalidation/language/ru_RU.js'|asset }}"></script>
+
+<script src="{{ 'js/plugins/dataTables/jquery.dataTables.js'|asset }}"></script>
+<script src="{{ 'js/plugins/dataTables/dataTables.bootstrap.js'|asset }}"></script>
+
+<script src="{{ 'js/plugins/jsTree/jstree.js'|asset }}"></script>
+
+<script src="{{ 'js/modules/crud.js'|asset }}"></script>
+<script src="{{ 'js/widgets/table.js'|asset }}"></script>
+<script src="{{ 'js/widgets/form.js'|asset }}"></script>
+<script src="{{ 'js/widgets/tree.js'|asset }}"></script>
+<script src="{{ 'js/plugins/ajaxform/jquery.form.js'|asset }}"></script>
+
+{% block modals %}
+{% endblock %}
+</body>
+
+</html>

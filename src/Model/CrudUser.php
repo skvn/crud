@@ -19,7 +19,7 @@ class CrudUser extends CrudModel implements AuthenticatableContract, CanResetPas
 	 *
 	 * @var string
 	 */
-	protected $table = 'user';
+	protected $table = 'users';
 
 	/**
 	 * The attributes excluded from the model's JSON form.
