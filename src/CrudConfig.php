@@ -416,9 +416,17 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
             self::FIELD_DATE => 'Date',
             self::FIELD_SELECT => 'Select',
             self::FIELD_CHECKBOX => 'Checkbox',
-            self::FIELD_FILE => 'Single file',
-            self::FIELD_MULTI_FILE => 'Multiple files',
+            self::FIELD_FILE => 'File',
+            //self::FIELD_MULTI_FILE => 'Multiple files',
 
+
+        ];
+    }//
+
+    static  function getAvailableRelationFieldTypes()
+    {
+        return [
+            self::FIELD_SELECT => 'Select',
 
         ];
     }
