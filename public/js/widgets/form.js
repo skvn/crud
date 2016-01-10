@@ -143,11 +143,13 @@
                 var tpl_id = elem.data('fragment');
                 var container_id = elem.data('container');
                 var skip_arr = elem.data('skip_arr');
-                
+
 
                 var $tpl = $('#'+tpl_id).clone(true).attr('id','');
                 var qtyAdded = $('#'+container_id).find('*[data-added]').length;
-                $tpl.html($tpl.html().replace('NUM',qtyAdded+1));
+                $tpl =  $($('<div>').append($tpl).html().replace(new RegExp("(\\[NUM\\])", 'g'),qtyAdded+1));
+
+
 
                 $tpl.find('*[name]').each(function ()
                 {
