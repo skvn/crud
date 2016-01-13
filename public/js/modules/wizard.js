@@ -181,10 +181,7 @@
             onFinished: function (event, currentIndex)
             {
                 var form = $(this);
-
-                //// Submit form input
-                alert('submit');
-                //form.submit();
+                form.submit();
             }
         }).validate({
             errorPlacement: function (error, element)

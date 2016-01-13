@@ -29,8 +29,9 @@
 <div class="row">
     <div class="col-lg-12">
 
-    <form id="form" action="#" class="wizard-big">
+    <form id="form"  class="wizard-big" method="post">
         <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="table" value="{{ table }}" />
         <h1>General</h1>
         <fieldset>
 
@@ -135,7 +136,7 @@
                     <tr data-rel="{{ f }}">
                         <td style="width: 200px;"><b>{{ f }}</b></td>
                         <td style="width: 250px;"><label>
-                                <select name="fields[{{ f }}][name]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-action="wizard_add_field"  style="display:inline; width:250px;"  >
+                                <select name="fields[{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-action="wizard_add_field"  style="display:inline; width:250px;"  >
                                     <option value="">Choose field type</option>
                                     {% for k,v in wizard.getAvailableFieldTypes() %}
                                         <option value="{{ k }}">{{ v }}</option>

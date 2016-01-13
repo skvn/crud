@@ -20,7 +20,7 @@ Route::group(array('namespace' => 'Skvn\Crud\Controllers',/*'middleware' => 'aut
 
 
     Route::get('admin/crud_setup',   array('as' => 'wizard_index', 'uses' => 'WizardController@index'));
-    Route::get('admin/crud_setup/{table}',   array('as' => 'wizard_model', 'uses' => 'WizardController@model'));
+    Route::any('admin/crud_setup/{table}',   array('as' => 'wizard_model', 'uses' => 'WizardController@model'));
     Route::post('admin/crud_setup/create_models',   array('as' => 'wizard_create_models', 'uses' => 'WizardController@createModels'));
 
 });

@@ -23,6 +23,15 @@ class WizardController extends Controller {
 
     function model($table)
     {
+        if ($this->request->isMethod('post'))
+        {
+
+            $proto = new CrudModelPrototype($this->request->all());
+            $proto->record();
+
+            return redirect(route('wizard_index'));
+
+        }
         $wizard = new Wizard();
         $model = $wizard->getModelConfig($table);
         return view('crud::wizard/model', ['wizard'=>$wizard,'table'=>$table,'model'=>$model]);

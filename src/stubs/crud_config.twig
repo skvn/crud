@@ -104,26 +104,28 @@ return [
 
     /* Fields names to include in edit form UI */
 
-    //'form' => ['email', /*'first_name', 'last_name',*/ /*'role_id',*//*'acl_role'*/],
+    'form' => {{ model.form_fields|json_encode|raw }},
 
     'fields'=>[
 
-        {% for f in model.fields %}
-        '{{ f.index }}' =>
+        {% for index, f in model.fields %}
+        {%  if f.type %}
+        '{{ index }}' =>
             [
-
-                'type' => {{ f.type }}
-                {% if f.required %}
+            {% if f.required %}
                 'required'=>1,
-                {% endif %}
-                'title' => '{{ f.title }}',
-                {%  if f.hint %}
+            {% endif %}
+            'title' => '{{ f.title }}',
+            {%  if f.hint %}
                 'hint_default' => '{{ f.hint }}',
-                {% endif %}
-                {%  if f.disable_autocomplete %}
+            {% endif %}
+            {%  if f.disable_autocomplete %}
                 'disable_autocomplete' => true
-                {% endif %}
+            {% endif %}
+
+                {% include 'crud_wizard::blocks/field_'~f.type %}
             ],
+        {% endif %}
         {% endfor %}
 
 
