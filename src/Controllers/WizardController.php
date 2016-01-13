@@ -18,6 +18,10 @@ class WizardController extends Controller {
     function index()
     {
 
+        if ($this->request->isMethod('post'))
+        {
+             return $this->createModels();
+        }
         return view('crud::wizard/index', ['wizard'=>new Wizard()]);
     }
 

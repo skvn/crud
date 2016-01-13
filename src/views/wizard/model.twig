@@ -46,7 +46,8 @@
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox"  id="is_tree" name="is_tree"  />
-                            <b>Model is tree</b>
+                            <b>Model is tree <span class="text-danger">If the table doesn't contain `tree_path`, `tree_order`,
+                                    `tree_pid`, `tree_depth` - a migration will be created</span></b>
                         </label>
                     </div>
 
@@ -78,20 +79,6 @@
                         <input type="text" class="form-control" id="dialog_width" name="dialog_width"  />
                     </div>
 
-                    <div class="form-group">
-                        <label class="checkbox-inline">
-                            <input type="checkbox"  id="timestamps" name="timestamps"  />
-                            <b>Track timestamps (created_at, updated_at attributes)</b>
-                        </label>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label class="checkbox-inline">
-                            <input type="checkbox"  id="authors" name="authors"  />
-                            <b>Track user id (created_by, updated_by attributes)</b>
-                        </label>
-                    </div>
                 </div>
 
             </div>

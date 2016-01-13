@@ -181,6 +181,12 @@
             onFinished: function (event, currentIndex)
             {
                 var form = $(this);
+                form.find('input[type=checkbox]').each(function () {
+                   if (!$(this).prop('checked'))
+                   {
+                       $('<input type="hidden" name="'+$(this).attr('name')+'" value="0" />').appendTo(form);
+                   }
+                });
                 form.submit();
             }
         }).validate({

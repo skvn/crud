@@ -38,9 +38,10 @@ return [
     {%  if  model.timestamps  %}
     /* track timestamp*/
     'timestamps' => true,
+    'timestamps_type' => '{{ model.timestamps }}',
     {% endif %}
 
-    {%  if  model.author  %}
+    {%  if  model.track_author  %}
     /* track author*/
     'authors' => true,
     {% endif %}

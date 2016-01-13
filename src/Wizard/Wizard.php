@@ -10,7 +10,7 @@ class Wizard
 
 
     private $is_models_defined = null;
-    private $app, $model_configs, $available_models, $table_columns, $crud_configs;
+    private $app, $model_configs, $available_models, $table_columns, $crud_configs,$table_column_types;
 
     function __construct()
     {
@@ -26,7 +26,11 @@ class Wizard
         foreach ($tables as $table)
         {
 
-            $arr[] = $table->table_name;
+            if (strpos($table->table_name,'crud_') !==0 && strpos($table->table_name,'crud_file') === false)
+            {
+                $arr[] = $table->table_name;
+            }
+
         }
 
         return $arr;
@@ -38,6 +42,21 @@ class Wizard
         if (!isset($this->table_columns[$table]))
         {
             $this->table_columns[$table] = $this->app['db']->connection()->getSchemaBuilder()->getColumnListing($table);
+        }
+        return $this->table_columns[$table];
+    }
+
+    function getTableColumnTypes($table)
+    {
+        if (!isset($this->table_column_types[$table]))
+        {
+
+            $cols = $tables = $this->app['db']->select('SELECT  COLUMN_NAME, DATA_TYPE FROM   information_schema.COLUMNS WHERE   TABLE_SCHEMA = ? AND TABLE_NAME=?', [env('DB_DATABASE'),$table]);
+            foreach ($cols as $col)
+            {
+                $this->table_columns[$table][$col->COLUMN_NAME] = $col->DATA_TYPE;
+            }
+
         }
         return $this->table_columns[$table];
     }

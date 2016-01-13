@@ -464,25 +464,29 @@ class CrudModel extends Model {
     public function setCreatedAtAttribute($value)
     {
 
-        if (is_object($value))
-        {
-            $value = $value->timestamp;
-        } else
-        {
-            $value = strtotime($value);
+        $type = $this->config->get('timestamps_type');
+        if (!$type || $type == 'int') {
+            if (is_object($value)) {
+                $value = $value->timestamp;
+            } else {
+                $value = strtotime($value);
+            }
+
         }
+
         $this->attributes['created_at'] = $value;
     }
 
     public function setUpdatedAtAttribute($value)
     {
 
-        if (is_object($value))
-        {
-            $value = $value->timestamp;
-        } else
-        {
-            $value = strtotime($value);
+        $type = $this->config->get('timestamps_type');
+        if (!$type || $type == 'int') {
+            if (is_object($value)) {
+                $value = $value->timestamp;
+            } else {
+                $value = strtotime($value);
+            }
         }
 
         $this->attributes['updated_at'] = $value;

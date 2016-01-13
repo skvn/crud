@@ -8,7 +8,7 @@ class Attach extends Model
 {
 
 
-    protected $table = 'attach';
+    protected $table = 'crud_file';
     protected $guarded = ['id'];
 
     public function setCreatedAtAttribute($value)

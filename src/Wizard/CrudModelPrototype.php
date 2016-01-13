@@ -9,7 +9,7 @@ use Skvn\Crud\CrudWizardException;
 class CrudModelPrototype
 {
 
-    protected $config_data, $app, $namespace, $path, $config_path;
+    protected $config_data, $app, $namespace, $path, $config_path, $wizard, $table;
 
     /**
      * CrudModelPrototype constructor.
@@ -23,14 +23,17 @@ class CrudModelPrototype
             throw new CrudWizardException('Table  for model prototype is not defined');
         }
 
+
         $this->config_data = $config_data;
+        $this->table = $this->config_data['table'];
+        $this->wizard = new Wizard();
         $this->app = app();
         $this->namespace = $this->app['config']['crud_common.model_namespace'];
         $this->config_data['namespace'] = $this->namespace;
         $folderExpl = explode('\\',$this->namespace);
         $folder = $folderExpl[(count($folderExpl)-1)];
         $this->path = app_path($folder);
-        $this->config_path = config_path('crud').'/crud_'.$this->config_data['table'].'.php';
+        $this->config_path = config_path('crud').'/crud_'.$this->table.'.php';
         @mkdir(dirname($this->config_path));
         if (file_exists($this->config_path))
         {
@@ -59,6 +62,27 @@ class CrudModelPrototype
 
             $this->config_data['form_fields'] = $form_fields;
         }
+
+        //track timestamps?
+        $cols = $this->wizard->getTableColumnTypes($this->table);
+        if (isset($cols['created_at']) && isset($cols['updated_at']))
+        {
+            if ($cols['created_at'] == 'int' && $cols['updated_at']=='int')
+            {
+                $this->config_data['timestamps'] = 'int';
+            } else {
+                $this->config_data['timestamps'] = $cols['created_at'];
+            }
+        }
+
+        //track author?
+        if (isset($cols['created_by']) && isset($cols['updated_by']))
+        {
+
+             $this->config_data['track_author'] = 1;
+
+        }
+
 
     }//
 

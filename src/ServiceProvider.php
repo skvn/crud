@@ -42,8 +42,10 @@ class ServiceProvider extends LServiceProvider {
 
 
         // Register dependancy aliases
-        // $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-        // $loader->alias('HTML', 'Collective\Html\HtmlFacade');
+        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+        $loader->alias('Crud', Skvn\Crud\Facades\Crud :: class);
+        $loader->alias('Cms', Skvn\Crud\Facades\Cms :: class);
+
 
 
 //        $this->app->singleton('CmsHelper',function()
