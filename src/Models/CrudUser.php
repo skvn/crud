@@ -4,7 +4,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Skvn\Crud\Model\CrudModel;
+use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Contracts\AclSubject;
 use Skvn\Crud\Traits\PrefTrait;
 
