@@ -4,7 +4,7 @@ use Illuminate\Routing\Controller;
 use League\Flysystem\Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Application as LaravelApplication;
-use Skvn\Crud\Model\CrudNotify as Notify;
+use Skvn\Crud\Models\CrudNotify as Notify;
 use Skvn\Crud\CrudConfig;
 
 class CrudController extends Controller

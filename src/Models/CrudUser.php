@@ -1,4 +1,4 @@
-<?php namespace Skvn\Crud\Model;
+<?php namespace Skvn\Crud\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;

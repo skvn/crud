@@ -1,4 +1,4 @@
-<?php namespace Skvn\Crud\Model;
+<?php namespace Skvn\Crud\Models;
 
 
 class CrudTooltip extends CrudModel{

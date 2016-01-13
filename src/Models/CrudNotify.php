@@ -1,4 +1,4 @@
-<?php namespace Skvn\Crud\Model;
+<?php namespace Skvn\Crud\Models;
 
 
 class CrudNotify extends CrudModel{

@@ -1,7 +1,7 @@
 <?php namespace Skvn\Crud\Helper;
 
 use Skvn\Crud\CrudConfig;
-use Skvn\Crud\Model\CrudModel;
+use Skvn\Crud\Models\CrudModel;
 
 class CrudHelper {
 

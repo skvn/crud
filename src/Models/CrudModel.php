@@ -1,4 +1,4 @@
-<?php namespace Skvn\Crud\Model;
+<?php namespace Skvn\Crud\Models;
 
 use \Illuminate\Database\Eloquent\Model;
 use Skvn\Crud\CrudConfig;

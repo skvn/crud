@@ -1,6 +1,6 @@
 <?php namespace Skvn\Crud\Filter;
 
-use Skvn\Crud\Model\CrudModel;
+use Skvn\Crud\Models\CrudModel;
 
 class FilterFactory
 {

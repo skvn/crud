@@ -1,7 +1,7 @@
 <?php namespace Skvn\Crud\Filter;
 
 
-use Skvn\Crud\Model\CrudModel;
+use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Form\Form;
 
 class Filter {
