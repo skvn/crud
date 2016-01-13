@@ -1,12 +1,11 @@
-<?php namespace LaravelCrud\Controller;
+<?php namespace Skvn\Crud\Controller;
 
 use Illuminate\Routing\Controller;
 use League\Flysystem\Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Application as LaravelApplication;
-use LaravelCrud\Model\CrudNotify as Notify;
-use LaravelCrud\CrudConfig;
-use LaravelCrud\Wizard\CrudWizard;
+use Skvn\Crud\Model\CrudNotify as Notify;
+use Skvn\Crud\CrudConfig;
 
 class CrudController extends Controller
 {
@@ -261,7 +260,7 @@ class CrudController extends Controller
         if ($this->app['auth']->check())
         {
             $user = $this->app['auth']->user();
-            if ($user instanceof \LaravelCrud\Contracts\PrefSubject)
+            if ($user instanceof \Skvn\Crud\Contracts\PrefSubject)
             {
                 return $user->crudPrefUI(constant(get_class($user) . '::PREF_TYPE_COLUMN_LIST'));
             }
@@ -280,22 +279,6 @@ class CrudController extends Controller
     {
         return Notify :: fetchNext();
 
-    }
-
-    function crudWizard()
-    {
-
-    }
-
-    function crudWizardModel()
-    {
-
-        if ($this->request->isMethod('post'))
-        {
-            CrudWizard::saveModel($this->app);
-        }
-
-        return $this->app['view']->make('crud::wizard.model', ['available_field_types'=>CrudConfig::getAvailableFieldTypes()]);
     }
 
 

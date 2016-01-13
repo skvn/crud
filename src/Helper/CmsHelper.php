@@ -1,6 +1,6 @@
-<?php namespace LaravelCrud\Helper;
+<?php namespace Skvn\Crud\Helper;
 
-use LaravelCrud\Contracts\AclSubject;
+use Skvn\Crud\Contracts\AclSubject;
 
 class CmsHelper
 {

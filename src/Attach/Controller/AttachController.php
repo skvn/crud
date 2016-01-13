@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use LaravelAttach\Attach;
+use Skvn\Attach\Attach;
 use Symfony\Component\HttpFoundation\File\File;
 
 class AttachController extends Controller {

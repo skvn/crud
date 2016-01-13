@@ -1,4 +1,4 @@
-<?php namespace LaravelCrud\Twig;
+<?php namespace Skvn\Crud\Twig;
 
 use Twig_Extension;
 use Twig_SimpleFilter;
@@ -15,7 +15,7 @@ class Acl extends Twig_Extension
 
     public function getName()
     {
-        return 'LaravelCrud_Twig_Acl';
+        return 'Skvn\Crud_Twig_Acl';
     }
 
     public function checkAcl($acl, $access = "")

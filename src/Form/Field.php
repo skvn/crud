@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelCrud\Form;
+namespace Skvn\Crud\Form;
 
 
 class Field
@@ -12,7 +12,7 @@ class Field
     protected $form;
     public $name;
 
-    function __construct(\LaravelCrud\Form\Form $form,$config )
+    function __construct(\Skvn\Crud\Form\Form $form,$config )
     {
         $this->config = $config;
         $this->form = $form;

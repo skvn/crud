@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelCrud\Form;
+namespace Skvn\Crud\Form;
 
 
 class Select extends Field {

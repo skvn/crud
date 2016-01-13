@@ -1,4 +1,4 @@
-<?php namespace LaravelCrud\Twig;
+<?php namespace Skvn\Crud\Twig;
 
 use Twig_Extension;
 use Twig_SimpleFilter;
@@ -15,7 +15,7 @@ class Common extends Twig_Extension
 
     public function getName()
     {
-        return 'LaravelCrud_Twig_Common';
+        return 'Skvn\Crud_Twig_Common';
     }
 
     function asset($asset, $use_skin=0, $package = 'crud')

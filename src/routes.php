@@ -1,6 +1,7 @@
 <?php
 
-Route::group(array('namespace' => 'Admin',/*'middleware' => 'auth'*/), function() {
+Route::group(array('namespace' => 'Skvn\Crud\Controller','middleware' => 'auth'), function() {
+
     Route::get('admin',                                                 array('as' => 'crud_welcome',               'uses' => 'AdminController@welcome'));
     Route::get('admin/crud/{model}/tree/{scope}',                       array('as' => 'crud_tree',                  'uses' => 'AdminController@crudTree'));
     Route::post('admin/crud/{model}/move_tree',                         array('as' => 'crud_move_tree',             'uses' => 'AdminController@crudTreeMove'));
@@ -15,6 +16,19 @@ Route::group(array('namespace' => 'Admin',/*'middleware' => 'auth'*/), function(
     Route::get('util/notify/fetch',                                     array(                                       'uses' => 'AdminController@crudNotifyFetch'));
     Route::post('util/tooltip/update',                                  array(                                       'uses' => 'AdminController@crudTooltipUpdate'));
     Route::any('util/crud/table_columns',                               array('as' => 'crud_table_columns',          'uses' => 'AdminController@crudTableColumns'));
+
+
+
+    Route::get('admin/crud_setup',   array('as' => 'wizard_index', 'uses' => 'WizardController@index'));
+    Route::get('admin/crud_setup/{table}',   array('as' => 'wizard_model', 'uses' => 'WizardController@model'));
+    Route::post('admin/crud_setup/create_models',   array('as' => 'wizard_create_models', 'uses' => 'WizardController@createModels'));
+
 });
 
-Route::get('attach/{id}/{filename}', array('as' => 'download_attach', 'uses' => 'AttachController@download'));
+Route::group(array('namespace' => 'Skvn\Attach\Controller','middleware' => 'auth'), function() {
+    Route::get('attach/{id}/{filename}', array('as' => 'download_attach', 'uses' => 'AttachController@download'));
+});
+
+
+
+

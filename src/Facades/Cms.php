@@ -1,4 +1,4 @@
-<?php namespace LaravelCrud\Facades;
+<?php namespace Skvn\Crud\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

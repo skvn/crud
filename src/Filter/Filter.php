@@ -1,8 +1,8 @@
-<?php namespace LaravelCrud\Filter;
+<?php namespace Skvn\Crud\Filter;
 
 
-use LaravelCrud\Model\CrudModel;
-use LaravelCrud\Form\Form;
+use Skvn\Crud\Model\CrudModel;
+use Skvn\Crud\Form\Form;
 
 class Filter {
 
@@ -62,7 +62,7 @@ class Filter {
         if ($fieldDescription = $this->crudObj->config->getColumn($columnName))
         {
             $fieldDescription['required'] = 0;
-            if ($fieldDescription['type'] == \LaravelCrud\CrudConfig::FIELD_SELECT)
+            if ($fieldDescription['type'] == \Skvn\Crud\CrudConfig::FIELD_SELECT)
             {
                 $fieldDescription['multiple'] = 1;
             }

@@ -1,4 +1,4 @@
-<?php namespace LaravelCrud\Contracts;
+<?php namespace Skvn\Crud\Contracts;
 
 interface PrefSubject
 {

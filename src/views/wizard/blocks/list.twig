@@ -1,0 +1,102 @@
+
+<div id="list_tpl" style="display: none">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><div class="label label-primary pull-right">[_ALIAS_]</div>
+
+                <input type="text" class="form-control" id="lists[_ALIAS_][title]" name="lists[_ALIAS_][title]" placeholder="List title" /></h3>
+        </div>
+        <div class="panel-body">
+            <div class="col col-lg-12">
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][multi_select]" name="lists[_ALIAS_][multi_select]"  />
+                        <b>Allow multi select</b>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][use_tabs]" name="lists[_ALIAS_][use_tabs]"  />
+                        <b>Use tabs for edit interface (otherwise a popup would be used)</b>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][edit_btn]" name="lists[_ALIAS_][edit_btn]"  />
+                        <b>Show "edit" button for each row</b>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][delete_btn]" name="lists[_ALIAS_][delete_btn]"  />
+                        <b>Show "delete" button for each row</b>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][mass_delete_btn]" name="lists[_ALIAS_][mass_delete_btn]"  />
+                        <b>Show "Bulk delete" button</b>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox"  id="lists[_ALIAS_][customize_cols]" name="lists[_ALIAS_][customize_cols]"  />
+                        <b>Allow show/hide columns</b>
+                    </label>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <h3>Columns</h3>
+                <div class="row">
+
+                    <div id="list_cols__ALIAS_"></div>
+                    <div class="help-block">To reference relations use "relation::attribute" syntax</div>
+                    <a href="#"  data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="col_tpl__ALIAS_" data-container="list_cols__ALIAS_"><i class="fa fa-plus"></i> Add column</a>
+                </div>
+            </div>
+        </div>
+        {# COlUMN#}
+        <div class="form-inline" style="display: none" id="col_tpl__ALIAS_" data-colidx="col_[NUM]">
+            <div class="form-group">
+                <input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][data]" placeholder="Attribute name *" >
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][title]" placeholder="Title *" >
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][width]" placeholder="Width">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="lists[_ALIAS_][columns][[NUM]][orderable]" data-toggle="collapse"  data-target="#def_order_[NUM]"> Orderable
+                </label>
+            </div>
+            <div class="form-group">
+                <div class="collapse"  id="def_order_[NUM]">
+                    <select class="form-control default_select" name="lists[_ALIAS_][columns][[NUM]][default_order]" >
+                        <option value="">Default order</option>
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="lists[_ALIAS_][columns][[NUM]][invisible]" > Invisible
+                </label>
+            </div>
+            <div class="hr-line-dashed"></div>
+        </div>
+        {# END COlUMN#}
+
+    </div>
+
+
+
+
+</div>

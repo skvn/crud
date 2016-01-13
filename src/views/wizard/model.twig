@@ -1,0 +1,208 @@
+{% extends "crud::empty_page" %}
+
+{% block head %}
+    <link href="{{ 'css/plugins/steps/jquery.steps.css'|asset }}" rel="stylesheet">
+    <style>
+        .wizard-big.wizard > .content {
+            min-height: 700px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div style="padding: 20px;">
+    <div class="row wrapper border-bottom white-bg page-heading" style="margin-bottom: 20px">
+        <div class="col-lg-10">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="">Index</a>
+                </li>
+                <li class="active">
+                    <strong>Configure model</strong>
+                </li>
+            </ol>
+        </div>
+
+    </div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+
+    <form id="form" action="#" class="wizard-big">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+        <h1>General</h1>
+        <fieldset>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="name">Model name *</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ model.name }}" disabled />
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="checkbox-inline">
+                            <input type="checkbox"  id="is_tree" name="is_tree"  />
+                            <b>Model is tree</b>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="acl">Model acl</label>
+                        <input type="text" class="form-control" id="acl"  name="acl" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ent_name">Model entity name</label>
+                        <input type="text" class="form-control" id="ent_name" name="ent_name" required />
+                    </div>
+
+                    {#
+                    <div class="form-group">
+                        <label for="ent_name_r">(Russian only) Model entity name (Родительный падеж)</label>
+                        <input type="text" class="form-control" id="ent_name_r" name="ent_name_r" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ent_name_v">(Russian only) Model entity name (Винительный падеж)</label>
+                        <input type="text" class="form-control" id="ent_name_v" name="ent_name_v" />
+                    </div>
+                    #}
+
+
+                    <div class="form-group">
+                        <label for="dialog_width">Modal dialog width (optional)</label>
+                        <input type="text" class="form-control" id="dialog_width" name="dialog_width"  />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-inline">
+                            <input type="checkbox"  id="timestamps" name="timestamps"  />
+                            <b>Track timestamps (created_at, updated_at attributes)</b>
+                        </label>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="checkbox-inline">
+                            <input type="checkbox"  id="authors" name="authors"  />
+                            <b>Track user id (created_by, updated_by attributes)</b>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+        </fieldset>
+        <h1>Relations</h1>
+        <fieldset>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+                            <div id="r_container"></div>
+                            <div class="hr-line-dashed"></div>
+                            <label>
+
+                                <select class="form-control default_select" id="rtype" style="display:inline; width:250px;"  >
+                                    <option value="">Choose relation type</option>
+                                    <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_MANY') }}">Has many</option>
+                                    <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_ONE') }}">Has one</option>
+                                    <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO') }}">Belongs to</option>
+                                    <option value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}">Belongs to many</option>
+                                </select>
+                                <a href="#" class="btn btn-success"  data-click="crud_action" data-action="wizard_add_relation" ><i class="fa fa-plus"></i> Add</a>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
+
+        <h1>Form fields</h1>
+        <fieldset>
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <table class="table table-bordered table-striped"  id="f_container">
+                    {% for f in wizard.getTableColumns(table) %}
+                    {% if f != 'id' %}
+                    <tr data-rel="{{ f }}">
+                        <td style="width: 200px;"><b>{{ f }}</b></td>
+                        <td style="width: 250px;"><label>
+                                <select name="fields[{{ f }}][name]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-action="wizard_add_field"  style="display:inline; width:250px;"  >
+                                    <option value="">Choose field type</option>
+                                    {% for k,v in wizard.getAvailableFieldTypes() %}
+                                        <option value="{{ k }}">{{ v }}</option>
+                                    {% endfor %}
+                                </select>
+                                {#<a href="#" class="btn btn-success" data-rel="{{ f }}"  data-click="crud_action" data-action="wizard_add_field" ><i class="fa fa-plus"></i> Apply</a>
+                                #}
+                            </label></td>
+                        <td id="f_container_{{ f }}"></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </table>
+
+            </div>
+        </div>
+        </fieldset>
+
+        <h1>Admin UI lists</h1>
+        <fieldset>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="lists_container"></div>
+                    <label>
+                        <input type="text" class="form-control" id="list_alias" style="display:inline; width:150px;" placeholder="Enter alias" />
+                        <a href="#"  data-click="crud_action" data-action="wizard_add_list" > Add list <i class="fa fa-plus"></i></a>
+
+                    </label>
+                </div>
+
+            </div>
+        </fieldset>
+
+
+    </form>
+</div>
+</div>
+
+
+    {# TEMPLATES#}
+
+    {# LIST #}
+    {% include 'crud::wizard/blocks/list' %}
+    {# RELATIONS#}
+    {% include 'crud::wizard/blocks/relations' %}
+    {# FIELDS#}
+    {% include 'crud::wizard/blocks/fields' %}
+
+    {# END TEMPLATES#}
+
+
+
+
+
+</div>
+
+{% endblock %}
+
+
+{% block modals %}
+    <script src="{{ 'js/plugins/staps/jquery.steps.min.js'|asset }}"></script>
+    <script src="{{ 'js/plugins/validate/jquery.validate.min.js'|asset }}"></script>
+    <script src="{{ 'js/modules/wizard.js'|asset }}"></script>
+    <script>
+        var models = {{ wizard.getAllModelColumns()|json_encode|raw }};
+    </script>
+{% endblock %}
+
+

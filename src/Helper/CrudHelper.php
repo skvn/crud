@@ -1,7 +1,7 @@
-<?php namespace LaravelCrud\Helper;
+<?php namespace Skvn\Crud\Helper;
 
-use LaravelCrud\CrudConfig;
-use LaravelCrud\Model\CrudModel;
+use Skvn\Crud\CrudConfig;
+use Skvn\Crud\Model\CrudModel;
 
 class CrudHelper {
 

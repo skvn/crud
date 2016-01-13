@@ -1,0 +1,131 @@
+<?php
+
+
+return [
+
+    'name' => '{{ model.name }}',
+    {% if model.is_tree %}
+    'tree' => 1,
+    'tree_level_column' => 'tree_level',
+    'tree_path_column' => 'tree_path',
+    'tree_pid_column' => 'tree_pid',
+    'tree_order_column' => 'tree_order',
+    {% endif%}
+
+    {% if model.acl  %}
+    /* Access level rule name (optional)*/
+    'acl' => '{{ model.acl }}',
+    {% endif %}
+    'ent_name' => '{{ model.ent_name }}',
+    {%  if  model.ent_name_r  %}
+    /* Russian Родительный падеж (optional) */
+    'ent_name_r' => 'user',
+    {% endif %}
+
+    {%  if  model.ent_name_v  %}
+    /* Russian Винительный падеж (optional) */
+    'ent_name_v' => 'user',
+    {%  endif %}
+
+    {#/* Breadcrumbs */#}
+    {#'bc' => [['href'=>'/admin/users','title'=>'Управление пользователями']],#}
+
+    {%  if  model.dialog_width  %}
+    /* Modal dialog width (optional) */
+    'dialog_width' => 1000,
+    {% endif %}
+
+    {%  if  model.timestamps  %}
+    /* track timestamp*/
+    'timestamps' => true,
+    {% endif %}
+
+    {%  if  model.author  %}
+    /* track author*/
+    'authors' => true,
+    {% endif %}
+
+
+
+    {%  if model.lists %}
+    'list'=> [
+        {%  for alias, list in model.lists %}
+        '{{ alias }}' => [
+
+            'title'=>'{{ list.title }}',
+            {% if list.multi_select %}
+            /* MASS SELECT checkboxes */
+            'multiselect'=>true,
+            {% endif %}
+
+            'columns'=>[
+
+            {% for col in list.columns %}
+
+              {%  if col.data %}
+            ["data" => "{{ col.data }}", "title" => "{{ col.title }}", "orderable"=>{{ col.orderable?'true':'false' }}, {% if col.hint %}'hint' => ['default' => '{{ col.hint }}'],{% endif %} {% if col.orderable and col.default_order %}'default_order'=>'{{ col.default_order }}',{% endif %} {% if col.invisible %}'invisible' => 1,{% endif %}{% if col.width %}'width' => '{{ col.width }}'{% endif %}],
+            {% endif %}
+            {% endfor %}
+            ],
+            'filters' => [],
+            {%  if list.use_tabs %}
+            /* 1 for using tabs  instead of popups */
+            'edit_tab'=>1,
+            {% endif %}
+
+            {%  if list.use_tabbed_form %}
+            /* 1 for using tabbed (complex) form */
+            'form_tabbed'=>1,
+            {% endif %}
+
+            'buttons' =>
+            [
+            {%  if list.edit_btn %}
+            /* show edit button*/
+            'single_edit' => true,
+            {% endif %}
+            {%  if list.delete_btn %}
+            /* show delete button*/
+            'single_delete'=> true,
+            {% endif %}
+            {%  if list.mass_delete_btn %}
+            /* show mass delete  button*/
+            'mass_delete' => true,
+            {% endif %}
+            {%  if list.customize_cols %}
+            'customize_columns' => true
+            {% endif %}
+        ],
+        {% endfor %}
+
+    ]
+    ],
+{% endif %}
+
+    /* Fields names to include in edit form UI */
+
+    //'form' => ['email', /*'first_name', 'last_name',*/ /*'role_id',*//*'acl_role'*/],
+
+    'fields'=>[
+
+        {% for f in model.fields %}
+        '{{ f.index }}' =>
+            [
+
+                'type' => {{ f.type }}
+                {% if f.required %}
+                'required'=>1,
+                {% endif %}
+                'title' => '{{ f.title }}',
+                {%  if f.hint %}
+                'hint_default' => '{{ f.hint }}',
+                {% endif %}
+                {%  if f.disable_autocomplete %}
+                'disable_autocomplete' => true
+                {% endif %}
+            ],
+        {% endfor %}
+
+
+    ],
+];

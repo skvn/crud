@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelAttach;
+namespace Skvn\Attach;
 
 
 use Illuminate\Database\Eloquent\Model;

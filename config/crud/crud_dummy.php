@@ -71,11 +71,11 @@ return [
         //tree parent
         'tree_pid' =>
             [
-                'type' => \LaravelCrud\CrudConfig::FIELD_SELECT,
+                'type' => \Skvn\Crud\CrudConfig::FIELD_SELECT,
                 'title' => 'Родительская страница',
                 'model' => 'page', //underscores
                 'required' =>1,
-                'relation' => \LaravelCrud\CrudConfig::RELATION_BELONGS_TO,
+                'relation' => \Skvn\Crud\CrudConfig::RELATION_BELONGS_TO,
                 'relation_name' => 'parent',
                 //FOR TRACKABLE models
                 'track' =>1,
@@ -97,7 +97,7 @@ return [
         //date field
         'date' =>
             [
-                'type'=>\LaravelCrud\CrudConfig::FIELD_DATE,
+                'type'=>\Skvn\Crud\CrudConfig::FIELD_DATE,
                 'required'=>1,
                 'format' => 'd.m.Y',
                 'jsformat' => 'dd.mm.yyyy',
@@ -107,14 +107,14 @@ return [
         //checkbox
         'active' =>
             [
-                'type'=>\LaravelCrud\CrudConfig::FIELD_CHECKBOX,
+                'type'=>\Skvn\Crud\CrudConfig::FIELD_CHECKBOX,
                 'title' => 'Активна'
             ],
 
         //number field
         'sfc_num_links' =>
             [
-                'type'=>\LaravelCrud\CrudConfig::FIELD_NUMBER,
+                'type'=>\Skvn\Crud\CrudConfig::FIELD_NUMBER,
                 'required'=>0,
                 'title' => 'caption',
                 'hint' => '',
@@ -129,7 +129,7 @@ return [
 //            [
 //                'type'=>'text',
 //                'required'=>1,
-//                'title' => 'Имя'
+//                'title' => '�?мя'
 //            ],
 //
 //        'last_name' =>
@@ -140,7 +140,7 @@ return [
 //            ],
 //        'acl_role' =>
 //            [
-//                'type' => \LaravelCrud\CrudConfig::FIELD_SELECT,
+//                'type' => \Skvn\Crud\CrudConfig::FIELD_SELECT,
 //                'required' => 1,
 //                'method_options' => "getAclRoleOptions",
 //                'title' => "Роль"

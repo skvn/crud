@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelCrud\Form;
+namespace Skvn\Crud\Form;
 
 
 class FieldFactory
@@ -11,7 +11,7 @@ class FieldFactory
     public static  function create($form, $config)
     {
 
-        $type = 'LaravelCrud\Form\\'.studly_case($config['type']);
+        $type = 'Skvn\Crud\Form\\'.studly_case($config['type']);
         return new $type($form, $config);
     }
 

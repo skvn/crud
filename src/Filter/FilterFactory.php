@@ -1,6 +1,6 @@
-<?php namespace LaravelCrud\Filter;
+<?php namespace Skvn\Crud\Filter;
 
-use LaravelCrud\Model\CrudModel;
+use Skvn\Crud\Model\CrudModel;
 
 class FilterFactory
 {

@@ -1,4 +1,4 @@
-<?php namespace LaravelCrud;
+<?php namespace Skvn\Crud;
 
 use Illuminate\Support\ServiceProvider as LServiceProvider;
 
@@ -8,6 +8,9 @@ class ServiceProvider extends LServiceProvider {
 
     public function boot()
     {
+
+
+        //Assets
         if (!$this->isLumen())
         {
             $this->publishes([__DIR__ . '/../config/' => config_path() . "/"], 'config');
@@ -15,6 +18,7 @@ class ServiceProvider extends LServiceProvider {
             $this->publishes([__DIR__ . '/../database/' => base_path("database")], 'database');
         }
 
+        //Views
         $paths = [];
         foreach (\Config :: get("view.paths") as $path)
         {
@@ -22,6 +26,10 @@ class ServiceProvider extends LServiceProvider {
         }
         $this->app['view']->getFinder()->prependNamespace("crud", $paths);
         $this->loadViewsFrom(__DIR__.'/views', 'crud');
+
+        // Routing
+        include __DIR__ . DIRECTORY_SEPARATOR . 'routes.php';
+
     }
 
     public function register()
@@ -29,17 +37,25 @@ class ServiceProvider extends LServiceProvider {
         $this->registerCommands();
         $this->registerHelpers();
 
+        // Register dependency packages
+        //$this->app->register('Collective\Html\HtmlServiceProvider');
+
+
+        // Register dependancy aliases
+        // $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+        // $loader->alias('HTML', 'Collective\Html\HtmlFacade');
+
 
 //        $this->app->singleton('CmsHelper',function()
 //        {
-//            return new \LaravelCrud\Helper\CmsHelper(\Auth::user());
+//            return new \Skvn\Crud\Helper\CmsHelper(\Auth::user());
 //        });
 //
 //        $this->app->singleton('CrudHelper',function()
 //        {
-//            return new \LaravelCrud\Helper\CrudHelper($this->app);
+//            return new \Skvn\Crud\Helper\CrudHelper($this->app);
 //        });
-        //$this->app->bind('Crud', \LaravelCrud\Facades\Crud :: class);
+        //$this->app->bind('Crud', \Skvn\Crud\Facades\Crud :: class);
 
         //$this->registerMakeTreeGenerator();
 
@@ -51,7 +67,7 @@ class ServiceProvider extends LServiceProvider {
 //    private function registerMakeTreeGenerator()
 //    {
 //        $this->app->singleton('command.skvn.crud.tree', function ($app) {
-//            return $app['LaravelCrud\Commands\CrudTreeCommand'];
+//            return $app['Skvn\Crud\Commands\CrudTreeCommand'];
 //        });
 //
 //        $this->commands('command.skvn.crud.tree');

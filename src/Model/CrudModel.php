@@ -1,9 +1,9 @@
-<?php namespace LaravelCrud\Model;
+<?php namespace Skvn\Crud\Model;
 
 use \Illuminate\Database\Eloquent\Model;
-use LaravelCrud\CrudConfig;
-use LaravelCrud\Form\Form;
-use LaravelCrud\Filter\FilterFactory;
+use Skvn\Crud\CrudConfig;
+use Skvn\Crud\Form\Form;
+use Skvn\Crud\Filter\FilterFactory;
 use Illuminate\Support\Collection ;
 use Illuminate\Foundation\Application as LaravelApplication;
 
@@ -579,22 +579,22 @@ class CrudModel extends Model {
 
         switch ($relType)
         {
-            case \LaravelCrud\CrudConfig::RELATION_BELONGS_TO:
+            case \Skvn\Crud\CrudConfig::RELATION_BELONGS_TO:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],$relAttributes['column_index'], null, $method);
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $relAttributes['column_index'], null, $method);
             break;
 
-            case \LaravelCrud\CrudConfig::RELATION_HAS_ONE:
+            case \Skvn\Crud\CrudConfig::RELATION_HAS_ONE:
                 $ref_col = (!empty($relAttributes['ref_column'])?$relAttributes['ref_column']:null);
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']),  $ref_col);
                 break;
 
-            case \LaravelCrud\CrudConfig::RELATION_BELONGS_TO_MANY:
+            case \Skvn\Crud\CrudConfig::RELATION_BELONGS_TO_MANY:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],null, null, null, $method);
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), null, null, null, $method);
                 break;
 
-            case \LaravelCrud\CrudConfig::RELATION_HAS_MANY:
+            case \Skvn\Crud\CrudConfig::RELATION_HAS_MANY:
                 $ref_col = (!empty($relAttributes['ref_column'])?$relAttributes['ref_column']:null);
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $ref_col );
                 break;
@@ -663,7 +663,7 @@ class CrudModel extends Model {
         $this->setFilter($filter);
     }
 
-    public function setFilter(\LaravelCrud\Filter\Filter $filterObj)
+    public function setFilter(\Skvn\Crud\Filter\Filter $filterObj)
     {
         $this->filterObj = $filterObj;
         $this->filterObj->setModel($this);

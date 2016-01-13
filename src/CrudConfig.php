@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelCrud;
+namespace Skvn\Crud;
 
 use JsonSerializable, ArrayAccess;
 
@@ -266,7 +266,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
             if ($this->app['auth']->check())
             {
                 $user = $this->app['auth']->user();
-                if ($user instanceof \LaravelCrud\Contracts\PrefSubject)
+                if ($user instanceof \Skvn\Crud\Contracts\PrefSubject)
                 {
                     $this->list_prefs = $user->crudPrefForModel(constant(get_class($user) . "::PREF_TYPE_COLUMN_LIST"), $this->model);
                 }

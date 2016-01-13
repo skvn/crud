@@ -1,0 +1,10 @@
+<td style="width:220px;">
+<select class="form-control" data-attr="model" data-change="crud_action" data-action="wizard_change_relation_model" name="relations[[NUM]][model]" required  >
+    <option value="">Choose relation model</option>
+    {% for m in wizard.getAvailableModels() %}
+        {% if m != model.name %}
+            <option value="{{ m }}">{{ m }}</option>
+        {% endif %}
+    {% endfor %}
+</select>
+</td>

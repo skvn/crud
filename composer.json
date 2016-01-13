@@ -14,8 +14,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "LaravelCrud\\": "src",
-            "LaravelAttach\\": "src/Attach/src"
+            "Skvn\\Crud\\": "src",
+            "Skvn\\Attach\\": "src/Attach"
 		}
     }
 }

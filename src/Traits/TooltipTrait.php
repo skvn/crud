@@ -1,4 +1,4 @@
-<?php namespace LaravelCrud\Traits;
+<?php namespace Skvn\Crud\Traits;
 
 trait TooltipTrait
 {

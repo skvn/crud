@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelCrud;
+namespace Skvn\Crud;
 
 
 class CrudException extends \Exception {

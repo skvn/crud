@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelCrud\Form;
+namespace Skvn\Crud\Form;
 
 
 class Form {
@@ -40,7 +40,7 @@ class Form {
 
                     switch ($colConfig['type']) {
 
-                        case \LaravelCrud\CrudConfig::FIELD_RANGE:
+                        case \Skvn\Crud\CrudConfig::FIELD_RANGE:
 
                             if (!empty($data[$col]) && strpos($data[$col],'~') !== false)
                             {
@@ -69,7 +69,7 @@ class Form {
 
                             break;
 
-                        case \LaravelCrud\CrudConfig::FIELD_DATE_RANGE:
+                        case \Skvn\Crud\CrudConfig::FIELD_DATE_RANGE:
 
                             if (!empty($data[$col]) && strpos($data[$col],'~') !== false)
                             {

@@ -143,9 +143,17 @@
                 var tpl_id = elem.data('fragment');
                 var container_id = elem.data('container');
                 var skip_arr = elem.data('skip_arr');
+                var only_children = elem.data('only_children');
 
+                if (only_children)
+                {
+                    var $tpl = $($('#'+tpl_id).html());
+                } else {
+                    var $tpl = $('#'+tpl_id).clone(true).attr('id','');
+                }
 
-                var $tpl = $('#'+tpl_id).clone(true).attr('id','');
+                console.log($tpl);
+
                 var qtyAdded = $('#'+container_id).find('*[data-added]').length;
                 $tpl =  $($('<div>').append($tpl).html().replace(new RegExp("(\\[NUM\\])", 'g'),qtyAdded+1));
 

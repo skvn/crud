@@ -1,12 +1,12 @@
-<?php namespace LaravelCrud\Model;
+<?php namespace Skvn\Crud\Model;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use LaravelCrud\Model\CrudModel;
-use LaravelCrud\Contracts\AclSubject;
-use LaravelCrud\Traits\PrefTrait;
+use Skvn\Crud\Model\CrudModel;
+use Skvn\Crud\Contracts\AclSubject;
+use Skvn\Crud\Traits\PrefTrait;
 
 class CrudUser extends CrudModel implements AuthenticatableContract, CanResetPasswordContract, AclSubject {
 

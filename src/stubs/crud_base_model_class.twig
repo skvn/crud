@@ -1,0 +1,15 @@
+<?php namespace {{ model.namespace }}\Crud;
+
+use LaravelCrud\Model\CrudModel;
+
+class {{ model.name }}Base extends CrudModel{
+
+
+
+	protected $table = '{{ model.table }}';
+	{%  if not  model.timestamps  %}
+	public $timestamps = false;
+	{% endif %}
+
+
+}
