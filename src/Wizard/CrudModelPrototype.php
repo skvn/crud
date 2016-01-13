@@ -32,7 +32,7 @@ class CrudModelPrototype
     public  function record()
     {
 
-        $this->app['view']->addNamespace('crud_wizard', __DIR__ . '/stubs');
+        $this->app['view']->addNamespace('crud_wizard', __DIR__ . '/../stubs');
 
         $this->recordConfig();
         $this->recordModels();

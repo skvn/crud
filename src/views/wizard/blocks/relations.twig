@@ -3,14 +3,14 @@
 
 
 
-<div data-relation="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_MANY') }}" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_MANY') }}" style="display: none">
-    <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_MANY') }}" />
+<div data-relation="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_MANY') }}" id="tpl_rel_{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_MANY') }}" style="display: none">
+    <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_MANY') }}" />
     <table class="table table-condensed table-striped">
         <tr>
-            {% include 'crud-installer::blocks/choose_relation_title' %}
-            {% include 'crud-installer::blocks/choose_relation_name' %}
-            {% include 'crud-installer::blocks/choose_relation_model' %}
-            {% include 'crud-installer::blocks/choose_relation_editable' %}
+            {% include 'crud::wizard/blocks/choose_relation_title' %}
+            {% include 'crud::wizard/blocks/choose_relation_name' %}
+            {% include 'crud::wizard/blocks/choose_relation_model' %}
+            {% include 'crud::wizard/blocks/choose_relation_editable' %}
             <td></td>
             <div class="label label-default">Has many</div>
         </tr>
@@ -20,15 +20,15 @@
 
 
 
-<div class="form-inline" data-relation="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_ONE') }}" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_ONE') }}" style="display: none" >
-    <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_HAS_ONE') }}" />
+<div class="form-inline" data-relation="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_ONE') }}" id="tpl_rel_{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_ONE') }}" style="display: none" >
+    <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_ONE') }}" />
     <table class="table table-condensed table-striped">
         <tr>
-            {% include 'crud-installer::blocks/choose_relation_title' %}
-            {% include 'crud-installer::blocks/choose_relation_name' %}
-            {% include 'crud-installer::blocks/choose_relation_model' %}
-            {% include 'crud-installer::blocks/choose_relation_model_ref_col' %}
-            {% include 'crud-installer::blocks/choose_relation_editable' %}
+            {% include 'crud::wizard/blocks/choose_relation_title' %}
+            {% include 'crud::wizard/blocks/choose_relation_name' %}
+            {% include 'crud::wizard/blocks/choose_relation_model' %}
+            {% include 'crud::wizard/blocks/choose_relation_model_ref_col' %}
+            {% include 'crud::wizard/blocks/choose_relation_editable' %}
             <td></td>
             <div class="label label-default">Has one</div>
         </tr>
@@ -36,13 +36,13 @@
 
 </div>
 
-<div class="form-inline" data-relation="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO') }}" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO') }}" style="display: none" >
-    <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO') }}" />
+<div class="form-inline" data-relation="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO') }}" id="tpl_rel_{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO') }}" style="display: none" >
+    <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO') }}" />
     <table class="table table-condensed table-striped">
         <tr>
-            {% include 'crud-installer::blocks/choose_relation_title' %}
-            {% include 'crud-installer::blocks/choose_relation_name' %}
-            {% include 'crud-installer::blocks/choose_relation_model' %}
+            {% include 'crud::wizard/blocks/choose_relation_title' %}
+            {% include 'crud::wizard/blocks/choose_relation_name' %}
+            {% include 'crud::wizard/blocks/choose_relation_model' %}
             <td style="width: 200px;">
                 <select class="form-control" data-attr="local_key" name="relations[[NUM]][local_key]" >
                     <option value="">Choose Local key</option>
@@ -53,7 +53,7 @@
                 {% endfor %}
                 </select>
             </td>
-            {% include 'crud-installer::blocks/choose_relation_editable' %}
+            {% include 'crud::wizard/blocks/choose_relation_editable' %}
             <td></td>
             <div class="label  label-default">Belongs to</div>
         </tr>
@@ -63,14 +63,14 @@
 
 </div>
 
-<div class="form-inline" data-relation="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" id="tpl_rel_{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" style="display: none" >
-    <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\LaravelCrud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" />
+<div class="form-inline" data-relation="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" id="tpl_rel_{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" style="display: none" >
+    <input type="hidden" name="relations[[NUM]][type]" data-attr="type" value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" />
     <table class="table table-condensed table-striped">
         <tr>
-            {% include 'crud-installer::blocks/choose_relation_title' %}
-            {% include 'crud-installer::blocks/choose_relation_name' %}
-            {% include 'crud-installer::blocks/choose_relation_model' %}
-            {% include 'crud-installer::blocks/choose_relation_editable' %}
+            {% include 'crud::wizard/blocks/choose_relation_title' %}
+            {% include 'crud::wizard/blocks/choose_relation_name' %}
+            {% include 'crud::wizard/blocks/choose_relation_model' %}
+            {% include 'crud::wizard/blocks/choose_relation_editable' %}
             <td></td>
         </tr>
     <div class="label label-default">Belongs to many</div>
