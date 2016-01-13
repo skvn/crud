@@ -1,4 +1,4 @@
-<?php namespace Skvn\Crud\Controller;
+<?php namespace Skvn\Crud\Controllers;
 
 use Illuminate\Routing\Controller;
 use League\Flysystem\Exception;

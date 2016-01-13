@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="34897cd5-c603-4856-ac2c-b835080673e0" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Controller/AdminController.php" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/js/widgets/form.js" afterPath="$PROJECT_DIR$/public/js/widgets/form.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ServiceProvider.php" afterPath="$PROJECT_DIR$/src/ServiceProvider.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/routes.php" afterPath="$PROJECT_DIR$/src/routes.php" />
-    </list>
+    <list default="true" id="34897cd5-c603-4856-ac2c-b835080673e0" name="Default" comment="" />
     <ignored path="crud.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -52,25 +47,27 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="256" column="31" selection-start-line="256" selection-start-column="27" selection-end-line="256" selection-end-column="31" />
-              <folding />
+              <folding>
+                <marker date="1452667556383" expanded="false" signature="70:91" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServiceProvider.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ServiceProvider.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ServiceProvider.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.57579184">
+            <state vertical-scroll-proportion="-33.088234">
               <caret line="45" column="10" selection-start-line="45" selection-start-column="10" selection-end-line="45" selection-end-column="10" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CrudConfig.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CrudConfig.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CrudConfig.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="0.6040724">
               <caret line="424" column="0" selection-start-line="424" selection-start-column="0" selection-end-line="424" selection-end-column="0" />
               <folding />
             </state>
@@ -113,8 +110,11 @@
         <entry file="file://$PROJECT_DIR$/src/Controller/CrudController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-0.0">
-              <caret line="0" column="38" selection-start-line="0" selection-start-column="16" selection-end-line="0" selection-end-column="38" />
-              <folding />
+              <caret line="0" column="37" selection-start-line="0" selection-start-column="37" selection-end-line="0" selection-end-column="37" />
+              <folding>
+                <marker date="1452667596581" expanded="true" signature="7748:7754" placeholder="{...}" />
+                <marker date="1452667596581" expanded="true" signature="7748:7759" placeholder="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -130,10 +130,10 @@
         <option value="$PROJECT_DIR$/src/views/page.twig" />
         <option value="$PROJECT_DIR$/src/views/empty_page.twig" />
         <option value="$PROJECT_DIR$/src/Helper/CrudHelper.php" />
-        <option value="$PROJECT_DIR$/src/CrudConfig.php" />
         <option value="$PROJECT_DIR$/public/js/widgets/form.js" />
         <option value="$PROJECT_DIR$/src/routes.php" />
         <option value="$PROJECT_DIR$/src/ServiceProvider.php" />
+        <option value="$PROJECT_DIR$/src/CrudConfig.php" />
       </list>
     </option>
   </component>
@@ -411,7 +411,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="256" column="31" selection-start-line="256" selection-start-column="27" selection-end-line="256" selection-end-column="31" />
-          <folding />
+          <folding>
+            <marker date="1452667556383" expanded="false" signature="70:91" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -493,7 +495,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="256" column="31" selection-start-line="256" selection-start-column="27" selection-end-line="256" selection-end-column="31" />
-          <folding />
+          <folding>
+            <marker date="1452667556383" expanded="false" signature="70:91" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -575,7 +579,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="256" column="31" selection-start-line="256" selection-start-column="27" selection-end-line="256" selection-end-column="31" />
-          <folding />
+          <folding>
+            <marker date="1452667556383" expanded="false" signature="70:91" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -664,7 +670,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="5" column="16" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="16" />
-          <folding />
+          <folding>
+            <marker date="1452667556383" expanded="false" signature="70:91" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -734,15 +742,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="256" column="31" selection-start-line="256" selection-start-column="27" selection-end-line="256" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CrudConfig.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="424" column="0" selection-start-line="424" selection-start-column="0" selection-end-line="424" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1452667556383" expanded="false" signature="70:91" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -783,15 +785,26 @@
     <entry file="file://$PROJECT_DIR$/src/Controller/CrudController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.0">
-          <caret line="0" column="38" selection-start-line="0" selection-start-column="16" selection-end-line="0" selection-end-column="38" />
-          <folding />
+          <caret line="0" column="37" selection-start-line="0" selection-start-column="37" selection-end-line="0" selection-end-column="37" />
+          <folding>
+            <marker date="1452667596581" expanded="true" signature="7748:7754" placeholder="{...}" />
+            <marker date="1452667596581" expanded="true" signature="7748:7759" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ServiceProvider.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.57579184">
+        <state vertical-scroll-proportion="-33.088234">
           <caret line="45" column="10" selection-start-line="45" selection-start-column="10" selection-end-line="45" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CrudConfig.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6040724">
+          <caret line="424" column="0" selection-start-line="424" selection-start-column="0" selection-end-line="424" selection-end-column="0" />
           <folding />
         </state>
       </provider>

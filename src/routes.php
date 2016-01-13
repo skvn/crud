@@ -1,6 +1,6 @@
 <?php
 
-Route::group(array('namespace' => 'Skvn\Crud\Controller','middleware' => 'auth'), function() {
+Route::group(array('namespace' => 'Skvn\Crud\Controllers','middleware' => 'auth'), function() {
 
     Route::get('admin',                                                 array('as' => 'crud_welcome',               'uses' => 'AdminController@welcome'));
     Route::get('admin/crud/{model}/tree/{scope}',                       array('as' => 'crud_tree',                  'uses' => 'AdminController@crudTree'));
@@ -25,7 +25,7 @@ Route::group(array('namespace' => 'Skvn\Crud\Controller','middleware' => 'auth')
 
 });
 
-Route::group(array('namespace' => 'Skvn\Attach\Controller','middleware' => 'auth'), function() {
+Route::group(array('namespace' => 'Skvn\Attach\Controllers'), function() {
     Route::get('attach/{id}/{filename}', array('as' => 'download_attach', 'uses' => 'AttachController@download'));
 });
 

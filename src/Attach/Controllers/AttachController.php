@@ -1,4 +1,4 @@
-<?php namespace App\Http\Controllers;
+<?php namespace Skvn\Attach\Controllers;
 
 use Illuminate\Routing\Controller;
 use Skvn\Attach\Attach;
