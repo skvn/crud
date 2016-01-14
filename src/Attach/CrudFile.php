@@ -4,7 +4,7 @@ namespace Skvn\Attach;
 
 use \Illuminate\Database\Eloquent\Model;
 
-class Attach extends Model
+class CrudFile extends Model
 {
 
 

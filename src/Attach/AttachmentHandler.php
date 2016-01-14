@@ -153,7 +153,7 @@ class AttachmentHandler {
             {
                 $instance = $this->selfInstance;
             } else {
-                $instance = Attach::findOrNew($k);
+                $instance = CrudFile::findOrNew($k);
             }
             if (!empty($file['originalPath'])) {
 
@@ -255,11 +255,11 @@ class AttachmentHandler {
             if (!$this->selfInstance)
             {
 
-                $this->selfInstance = Attach::findOrNew($this->parentInstance->$prop);
+                $this->selfInstance = CrudFile::findOrNew($this->parentInstance->$prop);
             }
         } else {
 
-            $this->selfInstance = Attach::findOrNew($this->currentInstanceId);
+            $this->selfInstance = CrudFile::findOrNew($this->currentInstanceId);
 
         }
 
@@ -299,7 +299,7 @@ class AttachmentHandler {
                 if ($k>0 && !in_array($k,$this->processedIds))
                 {
 
-                    $obj = Attach::find($k);
+                    $obj = CrudFile::find($k);
 
                     $obj->update(['title'=>$v]);
                 }
