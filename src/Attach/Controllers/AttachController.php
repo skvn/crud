@@ -2,6 +2,7 @@
 
 use Illuminate\Routing\Controller;
 use Skvn\Attach\Attach;
+use Skvn\Attach\CrudFile;
 use Symfony\Component\HttpFoundation\File\File;
 
 class AttachController extends Controller {
@@ -10,7 +11,7 @@ class AttachController extends Controller {
     public function download($id)
     {
 
-        $attachObj = Attach::findOrFail($id);
+        $attachObj = CrudFile::findOrFail($id);
         if (file_exists($attachObj->path))
         {
             $f = new File($attachObj->path);
