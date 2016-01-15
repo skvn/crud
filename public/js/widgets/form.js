@@ -12,7 +12,7 @@
             crud.init_date_pickers($form);
             crud.init_html_editors($form);
             crud.init_ichecks($form);
-            $('input[type=text]:first', $form).focus();
+            //$('input[type=text]:first', $form).focus();
 
             //submit
             $('input[type=submit],button[type=submit]', $form).on('click', function () {
@@ -30,7 +30,10 @@
 
 
             });
-            $form.bootstrapValidator()
+            $form.bootstrapValidator({
+                live: 'enabled',
+                trigger: null
+            })
                 .on('success.form.bv', function(e)
                 {
 
@@ -99,7 +102,9 @@
                             alert(res.responseJSON.error.message)
                         }
                     });
-                });
+                }
+                );
+
 
 
             //events

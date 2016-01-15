@@ -169,14 +169,19 @@
                 } else {
                     var $coll = $('.input-group.date');
                 }
-                $coll.datepicker({
-                    todayBtn: "linked",
-                    keyboardNavigation: true,
-                    forceParse: true,
-                    calendarWeeks: true,
-                    autoclose: true,
-                    weekStart:1,
-                    language: 'ru'
+                $coll.datepicker(
+                    {
+                        todayBtn: "linked",
+                        keyboardNavigation: true,
+                        forceParse: true,
+                        calendarWeeks: true,
+                        autoclose: true,
+                        weekStart:1,
+                        language: 'ru'
+                }).on('changeDate', function(e) {
+                    // Revalidate the date field
+
+                    $(this).parents('form').first().bootstrapValidator('revalidateField',$(this).find('input'));
                 });
             },
             init_selects: function($form)
@@ -323,20 +328,7 @@
             }
 
         };
-    w.onerror = function(msg, file, line)
-    {
-        if (msg == 'Script error.' && !file)
-        {
-            return false;
-        }
-        new Image().src = "/util/log_js?msg=" + encodeURIComponent(msg) + "&file=" + encodeURIComponent(file) + "&line=" + encodeURIComponent(line) + "&uri=" + encodeURIComponent(l.href) + "&ref=" + encodeURIComponent(d.referrer);
-        if (!msg)
-        {
-            msg = "";
-        }
-        w.onerror = null;
-        return false;
-    }
+
     var crud = w.CRUD;
     crud_actions = {
 
