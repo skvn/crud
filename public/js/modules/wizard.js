@@ -222,7 +222,7 @@
 
                 // Disable validation on fields that are disabled.
                 // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
-                form.validate().settings.ignore = ":disabled";
+                form.validate().settings.ignore = ":disabled,:hidden";
 
                 // Start validation; Prevent form submission if false
                 return form.valid();

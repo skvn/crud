@@ -595,7 +595,10 @@ class CrudModel extends Model {
 
             case \Skvn\Crud\CrudConfig::RELATION_BELONGS_TO_MANY:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],null, null, null, $method);
-                return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), null, null, null, $method);
+                $pivot_table = (!empty($relAttributes['pivot_table'])?$relAttributes['pivot_table']:null);
+                $pivot_self_column = (!empty($relAttributes['pivot_self_key'])?$relAttributes['pivot_self_key']:null);
+                $pivot_foreign_column = (!empty($relAttributes['pivot_foreign_key'])?$relAttributes['pivot_foreign_key']:null);
+                return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $pivot_table, $pivot_self_column, $pivot_foreign_column, $method);
                 break;
 
             case \Skvn\Crud\CrudConfig::RELATION_HAS_MANY:

@@ -45,6 +45,16 @@ class CrudModelPrototype
     protected $table;
 
     /**
+     * @var array  data for migations
+     */
+    protected $migrations_data = [];
+
+    /**
+     * @var bool Indicator if any migations were created during model recording
+     */
+    public $migrations_created = false;
+
+    /**
      * CrudModelPrototype constructor.
      * @param $config_data
      */
@@ -90,6 +100,9 @@ class CrudModelPrototype
         {
 
 
+            //need to record pivot?
+
+
             $rel_arr = [
                 'relation' => $rel['type'],
                 'title' => $rel['title'],
@@ -97,6 +110,33 @@ class CrudModelPrototype
                 'relation_name' => trim($rel['name']),
 
             ];
+
+            if ($rel['type'] == \Skvn\Crud\CrudConfig::RELATION_BELONGS_TO_MANY && $rel['pivot'] == '0')
+            {
+
+                $pdata = [];
+
+                $tables = [
+                    snake_case($this->config_data['name']),
+                    snake_case($rel['model'])
+                ];
+
+                sort($tables);
+                $pdata['table_name'] = implode('_', $tables);
+                $pdata['self_key'] = snake_case($this->config_data['name']).'_id';
+                $pdata['foreign_key'] = snake_case($rel['model']).'_id';
+                $this->migrations_data['pivot'][] = $pdata;
+                $rel_arr['pivot_table'] = $pdata['table_name'];
+                $rel_arr['pivot_self_key'] = $pdata['self_key'];
+                $rel_arr['pivot_foreign_key'] = $pdata['foreign_key'];
+
+            } else if ($rel['type'] == \Skvn\Crud\CrudConfig::RELATION_BELONGS_TO_MANY && $rel['pivot'] == '1')
+            {
+                $rel_arr['pivot_table'] = $rel['pivot_table'];
+                $rel_arr['pivot_self_key'] = $rel['pivot_self_key'];
+                $rel_arr['pivot_foreign_key'] = $rel['pivot_foreign_key'];
+            }
+
 
             if (!empty($rel['ref_column']))
             {
@@ -182,6 +222,7 @@ class CrudModelPrototype
 
         $this->recordConfig();
         $this->recordModels();
+        $this->recordMigrations();
 
 
     }
@@ -221,6 +262,40 @@ class CrudModelPrototype
 
 
     }//
+
+    /**
+     * Record migrations
+     */
+    protected function recordMigrations()
+    {
+
+
+        $this->recordPivotMigrations();
+
+
+
+    }//
+
+    private function recordPivotMigrations()
+    {
+        if (!empty($this->migrations_data['pivot']) && is_array($this->migrations_data['pivot']))
+        {
+            foreach ($this->migrations_data['pivot'] as $p)
+            {
+
+                $this->migrations_created = true;
+                $p['class']  =   "Create".studly_case($p['table_name'])."PivotTable";
+                $path = base_path() . '/database/migrations/' . date('Y_m_d_His') .
+                '_create_' . $p['table_name'] . '_pivot_table.php';
+
+                file_put_contents($path,
+                    $this->app['view']->make('crud_wizard::migrations/pivot', ['pivot'=>$p])->render()
+                );
+
+            }
+        }
+
+    }
 
 
 }
