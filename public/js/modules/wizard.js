@@ -87,7 +87,55 @@
                         }
                     }
                 }
-            }
+            },
+
+            wizard_toggle_rel_pivot: function (elem) {
+
+                if (elem.prop('checked'))
+                {
+                    if (elem.val() == '1')
+                    {
+                        $('#'+elem.data('pivot')).show();
+                    } else {
+                        $('#'+elem.data('pivot')).hide();
+                    }
+                }
+            },
+
+
+            wizard_change_pivot_table: function (elem)
+                {
+
+                    if (elem.val()) {
+
+                        $.get('/admin/crud_setup/table_cols/'+elem.val(), function(res) {
+
+                            var fields = res;
+                            var $target = elem.parent().find('select[data-attr=pivot_column]');
+                            if ($target.length) {
+                                $target.each (function () {
+
+                                    var options = "<option value=''>Choose pivot "+$(this).data('rel')+" key</option>";
+                                    for (var i in fields)
+                                    {
+                                        if (fields[i] != 'id') {
+                                            options += "<option value='" + fields[i] + "'>" + fields[i] + "</option>";
+                                        }
+                                    }
+
+                                    $(this).html(options);
+
+                                });
+
+
+                            }
+                        }, 'json');
+
+
+                    }
+                },
+
+
 
 
         };
@@ -104,7 +152,6 @@
                 $('#r_container').off('change', 'input');
                 $('#r_container').on('change', 'input', function () {
 
-
                     $('#r_container').find('*[data-relation]').each(function () {
 
                         relations = [];
@@ -116,8 +163,10 @@
 
                     });
 
-                    console.log(relations);
+                    //console.log(relations);
                 });
+
+
                 break;
 
             case 2:

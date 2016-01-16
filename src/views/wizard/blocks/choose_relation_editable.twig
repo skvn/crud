@@ -1,15 +1,24 @@
-<td style="width:100px">
+<td style="width: 100px;" >
     <div class="checkbox">
         <label>
-            <input type="checkbox" name="relations[[NUM]][editable]"  data-toggle="collapse"  data-target="#editable_[NUM]" > Editable
+            <input type="checkbox"  value="1" name="relations[[NUM]][editable]"  data-toggle="collapse"  data-target="#editable_[NUM]" > Editable
         </label>
     </div>
 </td>
-<td class="col collapse" id="editable_[NUM]" style="width: 190px;">
+<td class="col collapse" id="editable_[NUM]">
+    <div class="col col-xs-6">
     <select name="relations[[NUM]][form_field]" class="form-control">
         <option value="">Choose field type</option>
         {% for k,v in wizard.getAvailableRelationFieldTypes() %}
             <option value="{{ k }}">{{ v }}</option>
         {% endfor %}
     </select>
+    </div>
+    <div class="col col-xs-6">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" value="1" name="relations[[NUM]][required]" > Required
+        </label>
+    </div>
+    </div>
 </td>

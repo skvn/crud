@@ -15,7 +15,7 @@ class Wizard
 
 
     /**
-     * @var null
+     * @var null bool|null
      */
     private $is_models_defined = null;
     /**

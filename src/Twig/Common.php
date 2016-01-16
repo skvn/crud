@@ -42,6 +42,22 @@ class Common extends Twig_Extension
         }
     }
 
+    function isNumeric($val)
+    {
+        return is_numeric($val);
+    }
+
+    function arrayValue($val)
+    {
+        if (is_numeric($val) || is_bool($val))
+        {
+            return $val;
+        } else {
+
+            return '"'.$val.'"';
+        }
+    }
+
     public function readableFilesize($size)
     {
         if( $size <= 0 ) {
@@ -73,7 +89,10 @@ class Common extends Twig_Extension
         return [
             new Twig_SimpleFilter('asset', [$this, 'asset']),
             new Twig_SimpleFilter('readable_filesize', [$this, 'readableFilesize']),
-            new Twig_SimpleFilter('model_view', [$this, 'modelView'])
+            new Twig_SimpleFilter('model_view', [$this, 'modelView']),
+            new Twig_SimpleFilter('is_numeric', [$this, 'isNumeric']),
+            new Twig_SimpleFilter('array_value', [$this, 'arrayValue']),
         ];
     }
 }
+

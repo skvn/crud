@@ -25,6 +25,7 @@
 
     <div class="col col-lg-6">
     <form  method="post">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
     <table class="table table-striped">
         <tr>
             <th >Table</th>

@@ -85,6 +85,46 @@ class CrudModelPrototype
     private function processRelations()
     {
 
+        if (!empty($this->config_data['relations']))
+        foreach ($this->config_data['relations'] as $rel)
+        {
+
+
+            $rel_arr = [
+                'relation' => $rel['type'],
+                'title' => $rel['title'],
+                'model' => snake_case($rel['model']),
+                'relation_name' => trim($rel['name']),
+
+            ];
+
+            if (!empty($rel['ref_column']))
+            {
+                $rel_arr['ref_column'] = $rel['ref_column'];
+            }
+
+
+            if (!empty($rel['editable']))
+            {
+                $rel_arr['editable'] = 1;
+                $rel_arr['type'] = $rel['form_field'];
+                if (!empty($rel['required']))
+                {
+                    $rel_arr['required'] = 1;
+                }
+            }
+
+            if (!empty($rel_arr['local_column']))
+            {
+                $key = $rel_arr['local_column'];
+
+            } else {
+                $key = $rel_arr['relation_name'];
+            }
+            $this->config_data['fields'][$key] = $rel_arr;
+        }
+
+
     }//
 
     /**
@@ -98,6 +138,7 @@ class CrudModelPrototype
             $form_fields = [];
             foreach ($this->config_data['fields'] as $key=>$f)
             {
+
                 if (!empty($f['type']) && (!isset($f['editable']) || $f['editable'] ))
                 {
                     $form_fields[] = $key;

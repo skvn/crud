@@ -1,6 +1,6 @@
 <?php
 
-Route::group(array('namespace' => 'Skvn\Crud\Controllers','middleware' => 'auth'), function() {
+Route::group(array('namespace' => 'Skvn\Crud\Controllers','middleware' => ['web', 'auth']), function() {
 
     Route::get('admin',                                                 array('as' => 'crud_welcome',               'uses' => 'CrudController@welcome'));
     Route::get('admin/crud/{model}/tree/{scope}',                       array('as' => 'crud_tree',                  'uses' => 'CrudController@crudTree'));
@@ -19,8 +19,11 @@ Route::group(array('namespace' => 'Skvn\Crud\Controllers','middleware' => 'auth'
 
 
 
+    Route::any('admin/crud_setup/table_cols/{table}',   array('uses' => 'WizardController@getTableColumns'));
+
     Route::any('admin/crud_setup',   array('as' => 'wizard_index', 'uses' => 'WizardController@index'));
     Route::any('admin/crud_setup/{table}',   array('as' => 'wizard_model', 'uses' => 'WizardController@model'));
+
 
 });
 

@@ -33,7 +33,8 @@ class WizardController extends Controller {
             $proto = new CrudModelPrototype($this->request->all());
             $proto->record();
 
-            return redirect(route('wizard_index'));
+            exit;
+            //return redirect(route('wizard_index'));
 
         }
         $wizard = new Wizard();
@@ -53,9 +54,16 @@ class WizardController extends Controller {
                 $proto->record();
             }
         }
+
         return redirect()->back();
     }
 
+
+    function getTableColumns($table)
+    {
+        $wizard = new Wizard();
+        return $wizard->getTableColumns($table);
+    }
 
 
 
