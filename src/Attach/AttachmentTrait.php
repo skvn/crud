@@ -121,7 +121,7 @@ trait AttachmentTrait {
 
         else if (!empty($args['field']) && !empty($args['id']))
         {
-             Attach::destroy([$args['id']]);
+             CrudFile::destroy([$args['id']]);
              $meth = $args['field'];
              $this->$meth()->detach($args['id']);
 

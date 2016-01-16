@@ -52,6 +52,7 @@ class CrudHelper {
                 {
 
                     $text .= " <span class=\"badge\">".$row->getDescribedColumnValue($col['data'])."</span>";
+                    $text .= "&nbsp;&nbsp;<a class=\"text-info\" data-id=\"".$row->id."\" data-click=\"crud_event\" data-event=\"crud.edit_element\"><i class=\"fa fa-edit\"> </i></a>";
 
                 }
             }

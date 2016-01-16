@@ -106,6 +106,8 @@
                 }
                 var self = this;
                 var $tpl_tab =  $tab_cont.find('ul.nav-tabs li[data-edit_tab_tpl=1]').clone(true).removeAttr('data-edit_tab_tpl');
+
+
                 var rel = model+'_'+scope+'_'+id;
                 var id_label = (parseInt(id)<0)? 'Новая запись': id;
                 $tpl_tab.find('a').html($tpl_tab.find('a').html().replace('[ID]','['+id_label+']').replace('[REL]', rel));
@@ -121,7 +123,7 @@
                 $.get(url, rargs, function (res){
 
                     var $cont = $(res);
-                    $cont.appendTo($tab_cont.find('div.tab-content'));
+                    $cont.appendTo($tab_cont.find('div.tab-content').first());
                     $tpl_tab.find('div.sk-spinner').hide();
                     $tpl_tab.find('a').show().first().click();
                     $tab_cont.removeClass('veiled');
@@ -482,7 +484,7 @@
             case 'crud_event':
                 //try to find table
                 var params = {};
-                var $table = el.parents('table[data-crud_table]').first();
+                var $table = el.parents('*[data-list_table_ref]').first();
                 if ($table)
                 {
                     params = $.extend({}, $table.data());

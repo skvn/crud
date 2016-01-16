@@ -1,13 +1,13 @@
 <div class="row">
 <div class="col-lg-12">
-    <div class="tabs-container">
-        <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#tab-1-{{ input.name }}"> {{ input.config.title|raw }}</a></li>
-            <li class=""><a data-toggle="tab" href="#tab-2-{{ input.name }}"> Добавить файлы</a></li>
+    <div class="tabs-container" id="tab-cont-{{ input.getUniqueId() }}">
+        <ul class="nav nav-tabs" id="tab-tabs-{{ input.getUniqueId() }}">
+            <li class="active"><a data-toggle="tab" href="#tab-1-{{ input.getUniqueId() }}"> {{ input.config.title|raw }}</a></li>
+            <li class=""><a data-toggle="tab" href="#tab-2-{{ input.getUniqueId() }}"> Добавить файлы</a></li>
 
         </ul>
-        <div class="tab-content">
-            <div id="tab-1-{{ input.name }}" class="tab-pane active">
+        <div class="tab-content" id="tabc-{{ input.getUniqueId() }}">
+            <div id="tab-1-{{ input.getUniqueId() }}" class="tab-pane active">
                 <div class="panel-body">
                 {% if input.getExisting()|length %}
                     <table class="table table-bordered table-stripped">
@@ -46,7 +46,7 @@
           </div>
 
 
-            <div id="tab-2-{{ input.name }}" class="tab-pane">
+            <div id="tab-2-{{ input.getUniqueId() }}" class="tab-pane">
                 <div class="panel-body">
                     <table class="table table-bordered table-stripped">
                         <thead>
@@ -54,7 +54,7 @@
                             <th width="30%">Файл</th>
                             <th>Название</th>
                         </thead>
-                        <tbody  id="file_container_{{ input.name }}">
+                        <tbody  id="file_container_{{ input.getUniqueId() }}">
                         {% for i in 1..5 %}
                         <tr data-added="1">
                             <td>
@@ -65,7 +65,7 @@
                             </td>
                         </tr>
                         {% endfor %}
-                        <tr style="display: none" id="add_row_tpl_{{ input.name }}">
+                        <tr style="display: none" id="add_row_tpl_{{ input.getUniqueId() }}">
                             <td>
                                 <input class="form-control new_file" disabled   name="{{ input.name }}[]"  type="file">
                             </td>
@@ -76,7 +76,8 @@
                         <tfoot>
                         <tr>
                             <td colspan="2" class="text-right">
-                                <a href="#" class="btn btn-primary" data-click="crud_action" data-action="clone_fragment" data-fragment="add_row_tpl_{{ input.name }}" data-container="file_container_{{ input.name }}"><i class="fa fa-plus"></i> Добавить файл</a></td>
+                                <a href="#" class="btn btn-primary" data-click="crud_action" data-action="clone_fragment" data-fragment="add_row_tpl_{{ input.getUniqueId() }}" data-container="file_container_{{ input. getUniqueId() }}"><i class="fa fa-plus"></i> Добавить файл</a>
+                            </td>
                         </tr>
                         </tfoot>
 

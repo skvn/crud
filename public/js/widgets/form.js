@@ -215,6 +215,7 @@
 
                 data.table = $('*[data-list_table_ref='+data.ref+']').first();
             }
+
             var model = data.table.data('crud_table')?data.table.data('crud_table'):data.table.data('crud_tree');
             if (data.table && data.table.data('form_type') == 'tabs') {
                 //open edit  tab

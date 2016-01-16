@@ -11,6 +11,7 @@ class Field
     protected $value;
     protected $form;
     public $name;
+    protected $uniqid;
 
     function __construct(\Skvn\Crud\Form\Form $form,$config )
     {
@@ -26,6 +27,14 @@ class Field
 
     }
 
+    function  getUniqueId()
+    {
+        if (!$this->uniqid)
+        {
+            $this->uniqid = uniqid($this->name);
+        }
+        return $this->uniqid;
+    }
     function getValue()
     {
         return $this->value;
