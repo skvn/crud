@@ -5,18 +5,58 @@ namespace Skvn\Crud\Wizard;
 use Skvn\Crud\CrudConfig;
 
 
+/**
+ * Class Wizard
+ * @package Skvn\Crud\Wizard
+ * @author Vitaly Nikolenko <vit@webstandart.ru>
+ */
 class Wizard
 {
 
 
+    /**
+     * @var null
+     */
     private $is_models_defined = null;
-    private $app, $model_configs, $available_models, $table_columns, $crud_configs,$table_column_types;
+    /**
+     * @var
+     */
+    private $app;
+    /**
+     * @var
+     */
+    private $model_configs;
+    /**
+     * @var
+     */
+    private $available_models;
+    /**
+     * @var
+     */
+    private $table_columns;
+    /**
+     * @var
+     */
 
+    private $crud_configs;
+    /**
+     * @var
+     */
+    private $table_column_types;
+
+
+    /**
+     * Wizard constructor.
+     */
     function __construct()
     {
         $this->app = app();
     }
 
+    /**
+     * Return db tables
+     * @return array
+     */
     function getTables()
     {
 
@@ -37,6 +77,11 @@ class Wizard
 
     }
 
+    /**
+     * Return columns for a specific table
+     * @param $table
+     * @return mixed
+     */
     function getTableColumns($table)
     {
         if (!isset($this->table_columns[$table]))
@@ -46,6 +91,11 @@ class Wizard
         return $this->table_columns[$table];
     }
 
+    /**
+     * Return table column types in  column=>data_type format
+     * @param $table
+     * @return mixed
+     */
     function getTableColumnTypes($table)
     {
         if (!isset($this->table_column_types[$table]))
@@ -61,6 +111,10 @@ class Wizard
         return $this->table_columns[$table];
     }
 
+    /**
+     * Get crud models already defined
+     * @return array
+     */
     function getAvailableModels()
     {
         if (!$this->available_models)
@@ -76,6 +130,11 @@ class Wizard
         return $this->available_models;
     }
 
+    /**
+     * Get crud-model config
+     * @param $table_name
+     * @return mixed
+     */
     function getModelConfig($table_name)
     {
 
@@ -94,7 +153,10 @@ class Wizard
     }
 
 
-
+    /**
+     * Detect if any crud-models are already configured
+     * @return bool|null
+     */
     function modelsDefined()
     {
         if ($this->is_models_defined === null)
@@ -111,6 +173,10 @@ class Wizard
         return $this->is_models_defined;
     }
 
+    /**
+     * Get all crud configs
+     * @return array
+     */
     private function getCrudConfigs()
     {
         if (!$this->crud_configs)
@@ -129,16 +195,28 @@ class Wizard
         return $this->crud_configs;
     }
 
+    /**
+     * Get an array of available form field types
+     * @return array
+     */
     function getAvailableFieldTypes()
     {
         return CrudConfig::getAvailableFieldTypes();
     }
 
+    /**
+     * Get an array of available form field types for  relations
+     * @return array
+     */
     function getAvailableRelationFieldTypes()
     {
         return CrudConfig::getAvailableRelationFieldTypes();
     }
 
+    /**
+     * Get an array of all columns for all crud-models
+     * @return array
+     */
     function getAllModelColumns()
     {
         $ret = [];
@@ -151,14 +229,5 @@ class Wizard
 
     }
 
-    static public  function  saveModel(\Illuminate\Foundation\Application $app)
-    {
-
-//        $app['view']->addNamespace('crud_wizard', __DIR__ . '/../stubs');
-//        $v = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $app['view']->make('crud_wizard::crud_config', ['model'=>$app['request']->all()])->render());
-//        print_r($app['request']->all());
-//        print_r($v);
-//        exit;
-    }
 
 }

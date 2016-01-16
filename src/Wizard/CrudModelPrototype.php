@@ -6,10 +6,43 @@ namespace Skvn\Crud\Wizard;
 
 use Skvn\Crud\CrudWizardException;
 
+/**
+ * Class CrudModelPrototype
+ * @package Skvn\Crud\Wizard
+ * @author Vitaly Nikolenko <vit@webstandart.ru>
+ */
 class CrudModelPrototype
 {
 
-    protected $config_data, $app, $namespace, $path, $config_path, $wizard, $table;
+
+    /**
+     * @var array
+     */
+    protected $config_data;
+    /**
+     * @var
+     */
+    protected $app;
+    /**
+     * @var
+     */
+    protected $namespace;
+    /**
+     * @var
+     */
+    protected $path;
+    /**
+     * @var string
+     */
+    protected $config_path;
+    /**
+     * @var Wizard
+     */
+    protected $wizard;
+    /**
+     * @var
+     */
+    protected $table;
 
     /**
      * CrudModelPrototype constructor.
@@ -41,10 +74,22 @@ class CrudModelPrototype
             $this->config_data = array_merge($old_config,$this->config_data);
         }
 
+        $this->processRelations();
         $this->prepareConfigData();
 
     }//
 
+    /**
+     * Make fields out of relations data
+     */
+    private function processRelations()
+    {
+
+    }//
+
+    /**
+     * Prepare config data for recording
+     */
     private function prepareConfigData()
     {
 
@@ -86,6 +131,9 @@ class CrudModelPrototype
 
     }//
 
+    /**
+     * Record config and model files
+     */
     public  function record()
     {
 
@@ -97,6 +145,9 @@ class CrudModelPrototype
 
     }
 
+    /**
+     * Record configuration file
+     */
     protected  function recordConfig()
     {
 
@@ -107,6 +158,9 @@ class CrudModelPrototype
 
     }//
 
+    /**
+     * Record Model files
+     */
     protected  function  recordModels()
     {
         //record main model (ONLY ONCE)
