@@ -13,6 +13,16 @@ class WizardController extends Controller {
     function __construct(Request $request)
     {
         $this->request = $request;
+        $wizard = new Wizard();
+        if (!$wizard->checkConfigDir())
+        {
+            view()->share('alert', 'Config directory "'.$wizard->config_dir_path.'" is not writable');
+        }
+
+        if (!$wizard->checkModelsDir())
+        {
+            view()->share('alert', 'Models directory "'.$wizard->model_dir_path.'" is not writable');
+        }
     }
 
     function index()

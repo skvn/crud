@@ -11,6 +11,7 @@
 {% endblock %}
 
 {% block content %}
+    {% if not alert  %}
     <div style="padding: 20px;">
     <div class="row wrapper border-bottom white-bg page-heading"  style="margin-bottom: 20px">
         <div class="col-lg-10">
@@ -55,4 +56,9 @@
     </form>
     </div>
 </div>
+    {% else %}
+
+        <div class="alert alert-danger" role="alert">{{ alert }}</div>
+
+    {% endif %}
 {% endblock %}

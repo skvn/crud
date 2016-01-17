@@ -82,7 +82,6 @@ class CrudModelPrototype
         $this->config_data['namespace'] = $this->namespace;
         $folderExpl = explode('\\',$this->namespace);
         $folder = $folderExpl[(count($folderExpl)-1)];
-        var_dump($folder);
         $this->path = app_path($folder);
         $this->config_path = config_path('crud').'/crud_'.$this->table.'.php';
         @mkdir(dirname($this->config_path));

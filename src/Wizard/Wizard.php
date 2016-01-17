@@ -44,6 +44,16 @@ class Wizard
      */
     private $table_column_types;
 
+    /**
+     * @var string Path to crud config storage directory
+     */
+    public $config_dir_path = '';
+
+    /**
+     * @var string Path to model directory
+     */
+    public $model_dir_path = '';
+
 
     /**
      * Wizard constructor.
@@ -51,7 +61,34 @@ class Wizard
     function __construct()
     {
         $this->app = app();
+        $this->config_dir_path =  config_path('crud');
+
+        $folderExpl = explode('\\',$this->app['config']['crud_common.model_namespace']);
+        $folder = $folderExpl[(count($folderExpl)-1)];
+        $this->model_dir_path = app_path($folder);
     }
+
+    /**
+     * @return bool Check if config directory is writable
+     */
+
+    public  function checkConfigDir()
+    {
+
+        return (is_dir($this->config_dir_path) && is_writable($this->config_dir_path));
+
+    }//
+
+    /**
+     * @return bool Check if models directory is writable
+     */
+
+    public  function checkModelsDir()
+    {
+
+        return (is_dir($this->model_dir_path) && is_writable($this->model_dir_path));
+
+    }//
 
     /**
      * Return db tables
