@@ -18,7 +18,12 @@ class Date extends Field {
             $this->value = $this->form->crudObj->getAttribute($this->getName());
             if (!$this->value)
             {
-                $this->value = time();
+                if (empty($this->config['db_type']) ||$this->config['db_type'] == 'int' ) {
+                    $this->value = time();
+                } else {
+                    $this->value = (new \DateTime('now'));
+                }
+
             }
 
         }
@@ -42,7 +47,10 @@ class Date extends Field {
 
     function  getValueForDb()
     {
-
-        return strtotime($this->getValue().' 23:59');
+        if (empty($this->config['db_type']) ||$this->config['db_type'] == 'int' ) {
+            return strtotime($this->getValue() . ' 23:59');
+        } else {
+            return date('Y-m-d',strtotime($this->getValue()));
+        }
     }
 } 

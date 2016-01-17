@@ -227,6 +227,25 @@ class Wizard
         }
         return $ret;
 
+    }//
+
+    /**
+     * @return array List of availabe date formats in php and js forms
+     */
+    function getAvailableDateFormats()
+    {
+
+        return [
+            ['js'=>'dd.mm.yyyy', 'php' => 'd.m.Y' ],
+            ['js'=>'dd/mm/yyyy', 'php' => 'd/m/Y' ],
+            ['js'=>'dd-mm-yyyy', 'php' => 'd-m-Y' ],
+            ['js'=>'mm/dd/yyyy', 'php' => 'm/d/Y' ],
+            ['js'=>'mm/dd/yy', 'php' => 'm/d/y' ],
+            ['js'=>'yyyy-mm-dd', 'php' => 'Y-m-d' ],
+
+
+        ];
+
     }
 
 

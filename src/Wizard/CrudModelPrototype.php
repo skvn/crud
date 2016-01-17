@@ -4,6 +4,7 @@
 namespace Skvn\Crud\Wizard;
 
 
+use Skvn\Crud\CrudConfig;
 use Skvn\Crud\CrudWizardException;
 
 /**
@@ -55,6 +56,11 @@ class CrudModelPrototype
     public $migrations_created = false;
 
     /**
+     * @var array Table column types arrays
+     */
+    private $column_types = [];
+
+    /**
      * CrudModelPrototype constructor.
      * @param $config_data
      */
@@ -70,6 +76,7 @@ class CrudModelPrototype
         $this->config_data = $config_data;
         $this->table = $this->config_data['table'];
         $this->wizard = new Wizard();
+        $this->column_types = $this->wizard->getTableColumnTypes($this->table);
         $this->app = app();
         $this->namespace = $this->app['config']['crud_common.model_namespace'];
         $this->config_data['namespace'] = $this->namespace;
@@ -85,6 +92,7 @@ class CrudModelPrototype
         }
 
         $this->processRelations();
+        $this->processFields();
         $this->prepareConfigData();
 
     }//
@@ -147,6 +155,10 @@ class CrudModelPrototype
             if (!empty($rel['editable']))
             {
                 $rel_arr['editable'] = 1;
+                if (!empty($rel['find']))
+                {
+                    $rel_arr['find'] = $rel['find'];
+                }
                 $rel_arr['type'] = $rel['form_field'];
                 if (!empty($rel['required']))
                 {
@@ -165,6 +177,31 @@ class CrudModelPrototype
         }
 
 
+    }//
+
+    /**
+     * Process fields data
+     */
+    private  function processFields()
+    {
+
+        if (!empty($this->config_data['fields']))
+        {
+            foreach ($this->config_data['fields'] as $k=> $f)
+            {
+                //process date
+                if (!empty($f['type']) && $f['type'] == CrudConfig::FIELD_DATE)
+                {
+                    $formats = $this->wizard->getAvailableDateFormats();
+                    $this->config_data['fields'][$k]['format'] = $formats[$f['format']]['php'];
+                    $this->config_data['fields'][$k]['jsformat'] = $formats[$f['format']]['js'];
+                    $this->config_data['fields'][$k]['db_type'] = $this->column_types[$k];
+
+                }
+                
+                
+            }
+        }
     }//
 
     /**
@@ -190,19 +227,18 @@ class CrudModelPrototype
         }
 
         //track timestamps?
-        $cols = $this->wizard->getTableColumnTypes($this->table);
-        if (isset($cols['created_at']) && isset($cols['updated_at']))
+        if (isset($this->column_types['created_at']) && isset($this->column_types['updated_at']))
         {
-            if ($cols['created_at'] == 'int' && $cols['updated_at']=='int')
+            if ($this->column_types['created_at'] == 'int' && $this->column_types['updated_at']=='int')
             {
                 $this->config_data['timestamps'] = 'int';
             } else {
-                $this->config_data['timestamps'] = $cols['created_at'];
+                $this->config_data['timestamps'] = $this->column_types['created_at'];
             }
         }
 
         //track author?
-        if (isset($cols['created_by']) && isset($cols['updated_by']))
+        if (isset($this->column_types['created_by']) && isset($this->column_types['updated_by']))
         {
 
              $this->config_data['track_author'] = 1;
