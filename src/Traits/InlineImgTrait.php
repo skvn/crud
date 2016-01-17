@@ -3,20 +3,34 @@
 namespace Skvn\Crud\Traits;
 
 
+use Intervention\Image;
+
+
+
+/**
+ * Class InlineImgTrait
+ * Provides process inline images functionality
+ * @package Skvn\Crud\Traits
+ * @author Vitaly Nikolenko <vit@webstandart.ru>
+ */
 trait InlineImgTrait {
 
 
-
+    /**
+     * @var array columns that should be processed
+     */
     protected $processCols = [];
-    protected $maxWidth = 700;
+    /**
+     * @var int Max image width
+     */
+    protected $maxWidth = 2000;
 
 
-
-
-
+    /**
+     * @param $cols Set columns that should be processed
+     */
     public function setInlineImgCols($cols)
     {
-
 
         if (!is_array($cols))
         {
@@ -26,7 +40,9 @@ trait InlineImgTrait {
     }
 
 
-
+    /**
+     * Laravel model boot
+     */
     public static function boot()
     {
 
@@ -48,6 +64,11 @@ trait InlineImgTrait {
     }
 
 
+    /**
+     * Proces text for inline images
+     * @param $text
+     * @return mixed
+     */
     public  function processInlineImgs($text)
     {
 
@@ -71,7 +92,7 @@ trait InlineImgTrait {
                     }
                     $src = $m[2];
                     $base_64 = $m[4];
-                    $img = \Image::make(base64_decode($base_64));
+                    $img = Image::make(base64_decode($base_64));
                     $originalWidth = $img->width();
                     if (strpos($width,'%') !== false)
                     {

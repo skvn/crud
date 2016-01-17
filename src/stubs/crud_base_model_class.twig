@@ -1,9 +1,17 @@
 <?php namespace {{ model.namespace }}\Crud;
 
 use Skvn\Crud\Models\CrudModel;
+{%  if model.attaches %}use Skvn\Attach\AttachmentTrait;{% endif %}
+{% if model.inline_img %}use Skvn\Crud\Traits\InlineImgTrait;{% endif %}
 
 class {{ model.name }}Base extends CrudModel{
 
+{% if model.traits %}
+    use  {{ model.traits|join(', ') }} {
+        {%  if model.attaches %}AttachmentTrait::boot as attachBoot;{% endif %}
+        {% if model.inline_img %}InlineImgTrait::boot as inlineImgBoot;{% endif %}
+    }
+{% endif %}
 
 
 	protected $table = '{{ model.table }}';
@@ -11,5 +19,23 @@ class {{ model.name }}Base extends CrudModel{
 	public $timestamps = false;
 	{% endif %}
 
+	public function __construct(array $attributes = array())
+	{
+	    {% for a in model.attaches %}
+        $this->setAttach('{{ a.column }}',['multi'=>{{ a.multi }}]);
+        {% endfor %}
+        {% if model.inline_img %}
+        $this->setInlineImgCols({{ model.inline_img|json_encode|raw }});
+        {% endif %}
+        parent::__construct($attributes);
+    }//
+
+
+    public static function boot()
+    {
+        {%  if model.attaches %}self::attachBoot();{% endif %}
+        {% if model.inline_img %}self::inlineImgBoot();{% endif %}
+        parent::boot();
+    }
 
 }

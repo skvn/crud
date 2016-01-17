@@ -1,6 +1,6 @@
 <?php
 
-Route::group(array('namespace' => 'Skvn\Crud\Controllers','middleware' => 'auth'), function() {
+Route::group(array('namespace' => 'Skvn\Crud\Controllers','middleware' => ['web','auth']), function() {
 
     Route::get('admin',                                                 array('as' => 'crud_welcome',               'uses' => 'CrudController@welcome'));
     Route::get('admin/crud/{model}/tree/{scope}',                       array('as' => 'crud_tree',                  'uses' => 'CrudController@crudTree'));

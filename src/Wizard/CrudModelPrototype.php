@@ -82,6 +82,7 @@ class CrudModelPrototype
         $this->config_data['namespace'] = $this->namespace;
         $folderExpl = explode('\\',$this->namespace);
         $folder = $folderExpl[(count($folderExpl)-1)];
+        var_dump($folder);
         $this->path = app_path($folder);
         $this->config_path = config_path('crud').'/crud_'.$this->table.'.php';
         @mkdir(dirname($this->config_path));
@@ -198,9 +199,28 @@ class CrudModelPrototype
                     $this->config_data['fields'][$k]['db_type'] = $this->column_types[$k];
 
                 }
+
+                //if any textarea has a html editor, add inline img trait
+                if (!empty($f['type']) && $f['type'] == CrudConfig::FIELD_TEXTAREA && !empty($f['editor']))
+                {
+                    if (!isset($this->config_data['inline_img']))
+                    {
+                        $this->config_data['inline_img'] = [];
+                        if (!isset($this->config_data['traits']))
+                        {
+                            $this->config_data['traits'] = [];
+                        }
+                        $this->config_data['traits'][] = 'InlineImgTrait';
+                    }
+
+                    $this->config_data['inline_img'][] = $k;
+
+                }
                 
                 
             }
+
+
         }
     }//
 
