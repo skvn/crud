@@ -7,7 +7,7 @@ use Skvn\Crud\CrudConfig;
 
 /**
  * Class Wizard
- * @package Skvn\Crud\Wizard
+ * @package Skvn\Crud
  * @author Vitaly Nikolenko <vit@webstandart.ru>
  */
 class Wizard

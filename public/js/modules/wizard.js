@@ -24,11 +24,14 @@
                 {
                     alias = 'default';
                 }
+                var title =  alias;
+                alias = alias.toLowerCase().replace(new RegExp(" ","g"),'_');
                 if (!used_list_aliases[alias])
                 {
                     used_list_aliases[alias] = 1;
                     var list_html  = $('#list_tpl').html();
                     list_html = list_html.replace(new RegExp("_ALIAS_","g"),alias);
+                    list_html = list_html.replace('_TITLE_',title);
                     $(list_html).appendTo('#lists_container');
 
 
@@ -145,6 +148,7 @@
     function init_step_events(stepIndex)
     {
 
+
         switch (stepIndex){
 
             case 1:
@@ -152,18 +156,49 @@
                 $('#r_container').off('change', 'input');
                 $('#r_container').on('change', 'input', function () {
 
+                    relations = [];
+                    var list_rels = [];
+
                     $('#r_container').find('*[data-relation]').each(function () {
 
-                        relations = [];
-                        var rel = {};
-                        $(this).find('input[data-attr]').each(function () {
-                            rel[$(this).data('attr')] = $(this).val();
+                        var cont = $(this);
+
+                        cont.find('input[data-attr=name]').on('focus', function (){
+                            if ($.trim($(this).val()) == '') {
+                                var title_input = cont.find('input[data-attr=title]').first();
+                                $(this).val(title_input .val().toLowerCase().replace(new RegExp(" ","g"),'_')).trigger('change');
+                            }
                         });
-                        relations.push(rel);
+
+
+                        var rel = {};
+
+                        cont.find('input[data-attr=name]').each(function () {
+                            if ($(this).val()) {
+                                var  rel_type = cont.data('relation');
+                                console.log(rel_type);
+                                rel[rel_type] = $(this).val();
+                                if (rel_type == 'hasOne' || rel_type== 'belongsTo') {
+                                    list_rels.push($(this).val());
+                                }
+                                relations.push(rel);
+                            }
+                        });
+
 
                     });
 
-                    //console.log(relations);
+                    if (list_rels.length) {
+                        $('select[data-rel="list_relation"]').each(function () {
+                            $(this).empty();
+                            var html = '<option value="">Choose relation</option>';
+                            for (var i = 0; i < list_rels.length; i++) {
+                                html += '<option value="' + list_rels[i] + '">' + list_rels[i] + '</option>';
+                            }
+                            $(this).html(html);
+                        });
+                    }
+
                 });
 
 

@@ -9,7 +9,7 @@ use Skvn\Crud\CrudWizardException;
 
 /**
  * Class CrudModelPrototype
- * @package Skvn\Crud\Wizard
+ * @package Skvn\Crud
  * @author Vitaly Nikolenko <vit@webstandart.ru>
  */
 class CrudModelPrototype

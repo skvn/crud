@@ -3,8 +3,8 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title"><div class="label label-primary pull-right">[_ALIAS_]</div>
-
-                <input type="text" class="form-control" id="lists[_ALIAS_][title]" name="lists[_ALIAS_][title]" placeholder="List title" /></h3>
+                <input type="text" class="form-control" id="lists[_ALIAS_][title]" name="lists[_ALIAS_][title]" placeholder="List title" value="_TITLE_" />
+            </h3>
         </div>
         <div class="panel-body">
             <div class="col col-lg-12">
@@ -55,42 +55,58 @@
 
                     <div id="list_cols__ALIAS_"></div>
                     <div class="help-block">To reference relations use "relation::attribute" syntax</div>
-                    <a href="#"  data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="col_tpl__ALIAS_" data-container="list_cols__ALIAS_"><i class="fa fa-plus"></i> Add column</a>
+                    <a href="#" class="btn btn-success"  data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="col_tpl__ALIAS_" data-container="list_cols__ALIAS_"><i class="fa fa-plus"></i> Add column</a>
                 </div>
             </div>
         </div>
         {# COlUMN#}
         <div class="form-inline" style="display: none" id="col_tpl__ALIAS_" data-colidx="col_[NUM]">
-            <div class="form-group">
-                <input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][data]" placeholder="Attribute name *" >
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][title]" placeholder="Title *" >
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][width]" placeholder="Width">
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value="1" name="lists[_ALIAS_][columns][[NUM]][orderable]" data-toggle="collapse"  data-target="#def_order_[NUM]"> Orderable
-                </label>
-            </div>
-            <div class="form-group">
-                <div class="collapse"  id="def_order_[NUM]">
-                    <select class="form-control default_select" name="lists[_ALIAS_][columns][[NUM]][default_order]" >
-                        <option value="">Default order</option>
-                        <option value="asc">Ascending</option>
-                        <option value="desc">Descending</option>
-                    </select>
-                </div>
-            </div>
+            <table class="table table-striped table-condensed" style="width: 50%">
+                <tr>
+                    <td style="width:350px;" nowrap="nowrap">
+                    <select class="form-control" name="lists[_ALIAS_][columns][[NUM]][data_col]">
+                        <option value="">Choose table column</option>
+                    {% for f in wizard.getTableColumns(table) %}
+                        <option value="{{ f }}">{{ f }}</option>
+                    {% endfor %}
+                    </select><br>
+                    <b>Or</b><br>
+                    <input type="text" style="width:300px;" class="form-control" name="lists[_ALIAS_][columns][[NUM]][data]" placeholder="Enter model attribute name *" >
+                    <b>Or</b><br>
+                      <select class="form-control" data-rel="list_relation" name="lists[_ALIAS_][columns][[NUM]][data_rel]" style="width: 200px; display: inline">
+                         <option value="">Choose relation</option>
+                      </select>
+                        <input type="text" style="width:130px; display: inline" class="form-control" name="lists[_ALIAS_][columns][[NUM]][data_rel_attr]" placeholder="Attribute name" ><br>
+                    </td>
+                    <td valign="top" style="width:150px;">
+                        <input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][title]" placeholder="Title *" >
+                    </td>
+                    <td valign="top"  style="width:80px;"><input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][width]" placeholder="Width"></td>
+                    <td  style="width:70px;">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="1" name="lists[_ALIAS_][columns][[NUM]][orderable]" data-toggle="collapse"  data-target="#def_order_[NUM]"> Orderable
+                            </label>
+                        </div>
+                    </td>
+                    <td style="width:150px;!important;" class="collapse"  id="def_order_[NUM]">
+                            <select class="form-control default_select" name="lists[_ALIAS_][columns][[NUM]][default_order]" >
+                                <option value="">Default order</option>
+                                <option value="asc">Ascending</option>
+                                <option value="desc">Descending</option>
+                            </select>
+                    </td>
+                    <td  style="width:80px;"><div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="1" name="lists[_ALIAS_][columns][[NUM]][invisible]" > Invisible
+                            </label>
+                        </div>
+                    </td>
+                    <td></td>
 
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value="1" name="lists[_ALIAS_][columns][[NUM]][invisible]" > Invisible
-                </label>
-            </div>
-            <div class="hr-line-dashed"></div>
+
+        </tr>
+        </table>
         </div>
         {# END COlUMN#}
 

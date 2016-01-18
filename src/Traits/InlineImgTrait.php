@@ -10,7 +10,7 @@ use Intervention\Image;
 /**
  * Class InlineImgTrait
  * Provides process inline images functionality
- * @package Skvn\Crud\Traits
+ * @package Skvn\Crud
  * @author Vitaly Nikolenko <vit@webstandart.ru>
  */
 trait InlineImgTrait {
