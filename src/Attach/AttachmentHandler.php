@@ -1,6 +1,4 @@
-<?php
-
-namespace Skvn\Attach;
+<?php namespace Skvn\Attach;
 
 use \Symfony\Component\HttpFoundation\File\UploadedFile;
 use \Symfony\Component\HttpFoundation\File\File;

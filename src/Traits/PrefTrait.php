@@ -1,5 +1,4 @@
-<?php
-namespace Skvn\Crud\Traits;
+<?php namespace Skvn\Crud\Traits;
 
 trait PrefTrait
 {

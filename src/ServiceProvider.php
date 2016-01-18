@@ -93,7 +93,6 @@ class ServiceProvider extends LServiceProvider {
     public function provides()
     {
         return array([
-            'command.skvn.crud.tree',
             'skvn.cms',
             'skvn.crud'
         ]);
