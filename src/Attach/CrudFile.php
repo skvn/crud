@@ -1,6 +1,4 @@
-<?php
-
-namespace Skvn\Attach;
+<?php namespace Skvn\Attach;
 
 use \Illuminate\Database\Eloquent\Model;
 

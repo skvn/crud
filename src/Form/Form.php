@@ -1,7 +1,4 @@
-<?php
-
-
-namespace Skvn\Crud\Form;
+<?php namespace Skvn\Crud\Form;
 
 
 class Form {

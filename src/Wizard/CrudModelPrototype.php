@@ -1,7 +1,4 @@
-<?php
-
-
-namespace Skvn\Crud\Wizard;
+<?php namespace Skvn\Crud\Wizard;
 
 
 use Skvn\Crud\CrudConfig;

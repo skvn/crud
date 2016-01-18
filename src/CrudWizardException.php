@@ -1,7 +1,4 @@
-<?php
-
-
-namespace Skvn\Crud;
+<?php namespace Skvn\Crud;
 
 
 class CrudWizardException extends \Exception {

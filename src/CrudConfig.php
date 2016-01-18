@@ -1,6 +1,4 @@
-<?php
-
-namespace Skvn\Crud;
+<?php namespace Skvn\Crud;
 
 use JsonSerializable, ArrayAccess;
 
