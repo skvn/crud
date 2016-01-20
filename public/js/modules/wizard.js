@@ -20,11 +20,13 @@
 
             wizard_add_list: function (elem) {
                 var alias = $.trim($('#list_alias').val());
+                var title =  alias;
                 if (alias == '')
                 {
                     alias = 'default';
+                    title = $('input[data-model_name=1]').val() +' list';
                 }
-                var title =  alias;
+
                 alias = alias.toLowerCase().replace(new RegExp(" ","g"),'_');
                 if (!used_list_aliases[alias])
                 {
@@ -92,6 +94,10 @@
                 }
             },
 
+            wizard_remove_relation: function (elem) {
+
+                elem.parents('div[data-relation]').first().remove();
+            },
             wizard_toggle_rel_pivot: function (elem) {
 
                 if (elem.prop('checked'))
@@ -213,11 +219,33 @@
                     $('#f_container').find('tr[data-rel='+$(this).val()+']').hide();
                 });
                 break;
+
+            case 3:
+
+                $('#lists_container').off('change', '*[data-list_col]');
+
+                $('#lists_container').on('change', '*[data-list_col]', function (){
+
+                    var $parent = $(this).parents('td').first();
+                    if ($(this).val() != '')
+                    {
+                        $parent.find('*[data-list_col]').prop('disabled', true);
+                        $(this).prop('disabled', false);
+                    } else {
+                        $parent.find('*[data-list_col]').prop('disabled', false);
+                    }
+
+                });
+
+                break;
+
+
         }
 
     }
     function init_steps()
     {
+
         $("#form").steps({
             bodyTag: "fieldset",
             transitionEffect: "slideLeft",

@@ -90,6 +90,7 @@ class CrudModelPrototype
 
         $this->processRelations();
         $this->processFields();
+        $this->processLists();
         $this->prepareConfigData();
 
     }//
@@ -106,8 +107,6 @@ class CrudModelPrototype
 
 
             //need to record pivot?
-
-
             $rel_arr = [
                 'relation' => $rel['type'],
                 'title' => $rel['title'],
@@ -217,6 +216,34 @@ class CrudModelPrototype
             }
 
 
+        }
+    }//
+
+    /**
+     * Prepare lists config
+     *
+     */
+    private function processLists()
+    {
+        if (!empty($this->config_data['lists']))
+        {
+            foreach ($this->config_data['lists'] as $alias=>$list)
+            {
+                if (!empty($list['columns']))
+                {
+                    foreach ($list['columns'] as $k=>$column)
+                    {
+                        if (!empty($column['data_col']))
+                        {
+                            $this->config_data['lists'][$alias]['columns'][$k]['data'] = $column['data_col'];
+
+                        } else if (!empty($column['data_rel']))
+                        {
+                            $this->config_data['lists'][$alias]['columns'][$k]['data'] = $column['data_rel'].'::'.$column['data_rel_attr'];
+                        }
+                    }
+                }
+            }
         }
     }//
 
