@@ -51,6 +51,7 @@
 
                     <div class="ibox-content" style="display: none;">
                         <form id="crud_filter_form"  data-crud_model="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.config.scope }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
                             {% include "widgets/blocks/tbl_filter.twig"|model_view(crudObj) %}
                             <div class="modal-footer">
                                 <button type="reset"  class="btn btn-default crud_reset_filter">Сбросить фильтр</button>
