@@ -1,6 +1,7 @@
 <?php namespace Skvn\Crud\Wizard;
 
 use Skvn\Crud\CrudConfig;
+use Skvn\Crud\Form\Form;
 
 
 /**
@@ -32,6 +33,12 @@ class Wizard
      * @var
      */
     private $table_columns;
+
+    /**
+     * @var
+     */
+    private $table_int_columns;
+
     /**
      * @var
      */
@@ -127,6 +134,31 @@ class Wizard
     }
 
     /**
+     * Return INT columns for a specific table
+     * @param $table
+     * @return mixed
+     */
+    function getIntTableColumns($table)
+    {
+        if (!$this->table_int_columns) {
+
+            $this->table_int_columns = [];
+            $col_types = $this->getTableColumnTypes($table);
+
+            foreach ($col_types as $col_name => $col_type) {
+
+                $col_type = strtolower($col_type);
+
+                if (strpos($col_type, 'int') !== false) {
+                    $this->table_int_columns[] = $col_name;
+                }
+            }
+        }
+
+        return $this->table_int_columns;
+    }
+
+    /**
      * Return table column types in  column=>data_type format
      * @param $table
      * @return mixed
@@ -136,14 +168,14 @@ class Wizard
         if (!isset($this->table_column_types[$table]))
         {
 
-            $cols = $tables = $this->app['db']->select('SELECT  COLUMN_NAME, DATA_TYPE FROM   information_schema.COLUMNS WHERE   TABLE_SCHEMA = ? AND TABLE_NAME=?', [env('DB_DATABASE'),$table]);
+            $cols =  $this->app['db']->select('SELECT  COLUMN_NAME, DATA_TYPE FROM   information_schema.COLUMNS WHERE   TABLE_SCHEMA = ? AND TABLE_NAME=?', [env('DB_DATABASE'),$table]);
             foreach ($cols as $col)
             {
-                $this->table_columns[$table][$col->COLUMN_NAME] = $col->DATA_TYPE;
+                $this->table_column_types[$table][$col->COLUMN_NAME] = $col->DATA_TYPE;
             }
 
         }
-        return $this->table_columns[$table];
+        return $this->table_column_types[$table];
     }
 
     /**
@@ -167,13 +199,14 @@ class Wizard
 
     /**
      * Get crud-model config
-     * @param $table_name
+     * @param $table_name Table name
+     * @param $force If use cached values or force recreate
      * @return mixed
      */
-    function getModelConfig($table_name)
+    function getModelConfig($table_name, $force=false)
     {
 
-        if (!isset($this->model_configs[$table_name]))
+        if (!isset($this->model_configs[$table_name]) || $force)
         {
             if (file_exists(config_path('crud/crud_'.$table_name.'.php')))
             {
@@ -236,7 +269,7 @@ class Wizard
      */
     function getAvailableFieldTypes()
     {
-        return CrudConfig::getAvailableFieldTypes();
+        return Form::getAvailableFieldTypes();
     }
 
     /**

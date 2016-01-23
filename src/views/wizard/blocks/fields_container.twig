@@ -1,0 +1,31 @@
+<fieldset>
+    <div class="panel panel-default">
+        <div class="panel-body" style="max-height: 650px; overflow: auto">
+
+            <h2  style="margin-top: 0px;">Choose editable fields</h2>
+            <table class="table table-bordered table-striped"  id="f_container"  style="max-width: 1200px">
+                {% for f in wizard.getTableColumns(table) %}
+                    {% if f != 'id' %}
+                        <tr data-rel="{{ f }}">
+                            <td style="width: 200px;"><b>{{ f }}</b></td>
+                            <td style="width: 250px;"><label>
+                                    <select name="fields[{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-action="wizard_add_field"  style="display:inline; width:250px;"  >
+                                        <option value="">Choose field type</option>
+                                        {% for k,v in wizard.getAvailableFieldTypes() %}
+                                            <option value="{{ k }}">{{ v }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {#<a href="#" class="btn btn-success" data-rel="{{ f }}"  data-click="crud_action" data-action="wizard_add_field" ><i class="fa fa-plus"></i> Apply</a>
+                                    #}
+                                </label></td>
+                            <td id="f_container_{{ f }}"></td>
+                            <td style="width: 80px;"><div id="f_cancel_{{ f }}" style="display: none"><a href="#" data-click="crud_action" data-field="{{ f }}" data-action="wizard_remove_field" data-confirm="Remove this editable field?" class="label label-danger">
+                                    <i class="fa fa-trash-o"></i> Cancel</a></div></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+</fieldset>

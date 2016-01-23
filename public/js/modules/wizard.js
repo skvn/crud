@@ -14,7 +14,9 @@
     function init()
     {
 
+
         init_steps();
+
 
         var crud_actions = {
 
@@ -59,14 +61,24 @@
                 var type = elem.val();
                 if (type == '')
                 {
-                    alert('Choose field type');
+
+                    $('#f_cancel_'+elem.data('rel')).find('a').click();
                     return;
                 }
                 var f_html  = $('#tpl_f_'+type).html();
                 f_html = f_html.replace(new RegExp("_ALIAS_","g"),elem.data('rel'));
                 $('#f_container_'+elem.data('rel')).html(f_html);
+                $('#f_cancel_'+elem.data('rel')).show();
 
                 //$('<a href="#" style="display:none" data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="tpl_f_'+type+'" data-container="f_container_'+elem.data('rel')+'"></a>').appendTo($('body')).click().remove();
+
+            },
+
+            wizard_remove_field: function (elem)
+            {
+                $('select.ftype[data-rel='+elem.data('field')+']').val('');
+                $('#f_container_'+elem.data('field')).html('');
+                $('#f_cancel_'+elem.data('field')).hide();
 
             },
 
@@ -94,6 +106,10 @@
                 }
             },
 
+            wizard_remove_parent_div: function (elem) {
+
+                elem.parents('div').first().remove();
+            },
             wizard_remove_relation: function (elem) {
 
                 elem.parents('div[data-relation]').first().remove();
@@ -154,6 +170,8 @@
     function init_step_events(stepIndex)
     {
 
+
+        $('[data-toggle="tooltip"]').tooltip();
 
         switch (stepIndex){
 
@@ -220,7 +238,9 @@
                 });
                 break;
 
-            case 3:
+            case 4:
+
+                //switch to lists
 
                 $('#lists_container').off('change', '*[data-list_col]');
 
@@ -252,11 +272,6 @@
             autoFocus: true,
             onStepChanging: function (event, currentIndex, newIndex)
             {
-                // Always allow going backward even if the current step contains invalid fields!
-                //if (currentIndex > newIndex)
-                //{
-                //    return true;
-                //}
 
 
                 var form = $(this);

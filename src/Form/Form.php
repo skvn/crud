@@ -1,14 +1,75 @@
 <?php namespace Skvn\Crud\Form;
 
 
+/**
+ * Class Form
+ * @package Skvn\Crud
+ * @author  Vitaly Nikolenko <vit@webstandart.ru>
+ */
 class Form {
 
+    /**
+     *
+     */
+    const FIELD_SELECT = 'select';
+    /**
+     *
+     */
+    const FIELD_TEXT = 'text';
+    /**
+     *
+     */
+    const FIELD_FILE = 'file';
+    /**
+     *
+     */
+    const FIELD_CHECKBOX = 'checkbox';
+    /**
+     *
+     */
+    const FIELD_MULTI_FILE = 'multi_file';
+    /**
+     *
+     */
+    const FIELD_TEXTAREA = 'textarea';
+    /**
+     *
+     */
+    const FIELD_DATE = 'date';
+    /**
+     *
+     */
+    const FIELD_RANGE = 'range';
+    /**
+     *
+     */
+    const FIELD_DATE_RANGE = 'date_range';
+    /**
+     *
+     */
+    const FIELD_NUMBER = 'number';
+
+    /**
+     * @var
+     */
     public $config;
+    /**
+     * @var
+     */
     public $crudObj;
+    /**
+     * @var
+     */
     public $fields;
     //public $visibleFields;
 
-    public function __construct($crudObj,$config,$data=null)
+    /**
+     * Form constructor.
+     * @param $crudObj
+     * @param $config
+     * @param null $data
+     */
+    public function __construct($crudObj, $config, $data=null)
     {
         $this->crudObj = $crudObj;
         $this->config = $config;
@@ -112,7 +173,27 @@ class Form {
             }
         }
 
-    }
+    }//
+
+    /**
+     * Get array of available edit types
+     * @return array
+     */
+    static  function getAvailableFieldTypes()
+    {
+        return [
+            self::FIELD_TEXT => 'Text input',
+            self::FIELD_NUMBER => 'Number input',
+            self::FIELD_TEXTAREA => 'Textarea',
+            self::FIELD_DATE => 'Date',
+            self::FIELD_SELECT => 'Select',
+            self::FIELD_CHECKBOX => 'Checkbox',
+            //self::FIELD_FILE => 'File',
+            //self::FIELD_MULTI_FILE => 'Multiple files',
+
+
+        ];
+    }//
 
 
 } 

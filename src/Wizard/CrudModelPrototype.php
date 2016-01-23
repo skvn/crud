@@ -1,8 +1,9 @@
 <?php namespace Skvn\Crud\Wizard;
 
 
-use Skvn\Crud\CrudConfig;
+
 use Skvn\Crud\CrudWizardException;
+use Skvn\Crud\Form\Form;
 
 /**
  * Class CrudModelPrototype
@@ -89,6 +90,7 @@ class CrudModelPrototype
         }
 
         $this->processRelations();
+        $this->processFiles();
         $this->processFields();
         $this->processLists();
         $this->prepareConfigData();
@@ -176,6 +178,51 @@ class CrudModelPrototype
     }//
 
     /**
+     * Process editable files
+     */
+    private  function processFiles()
+    {
+        $this->config_data['traits'][] = 'InlineImgTrait';
+        if (!empty($this->config_data['single_files']))
+        {
+            foreach ($this->config_data['single_files'] as $fname =>$fdata)
+            {
+                if (!empty($fdata['use'])) {
+                    $this->addFileField(array_merge(['name' => $fname, 'multi' => 0], $fdata));
+                }
+
+            }
+        }
+
+        if (!empty($this->config_data['multi_files']))
+        {
+
+            foreach ($this->config_data['multi_files'] as $fdata)
+            {
+                if ($fdata && is_array($fdata)) {
+                    $this->addFileField(array_merge(['multi' => 1], $fdata));
+                }
+            }
+        }
+    }
+
+    /**
+     * Add one file field to config data
+     * @param $data
+     */
+    private function addFileField($data)
+    {
+        if (!in_array('AttachmentTrait', $this->config_data['traits']))
+        {
+            $this->config_data['attaches'] = [];
+            $this->config_data['traits'][] = 'AttachmentTrait';
+        }
+
+        $this->config_data['attaches'][] = ['column'=>$data['name'], 'multi'=>$data['multi']];
+        $this->config_data['fields'][$data['name']] = array_merge(['type' => ($data['multi']?Form::FIELD_MULTI_FILE: Form::FIELD_FILE)], $data);
+    }
+
+    /**
      * Process fields data
      */
     private  function processFields()
@@ -186,7 +233,7 @@ class CrudModelPrototype
             foreach ($this->config_data['fields'] as $k=> $f)
             {
                 //process date
-                if (!empty($f['type']) && $f['type'] == CrudConfig::FIELD_DATE)
+                if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE)
                 {
                     $formats = $this->wizard->getAvailableDateFormats();
                     $this->config_data['fields'][$k]['format'] = $formats[$f['format']]['php'];
@@ -196,7 +243,7 @@ class CrudModelPrototype
                 }
 
                 //if any textarea has a html editor, add inline img trait
-                if (!empty($f['type']) && $f['type'] == CrudConfig::FIELD_TEXTAREA && !empty($f['editor']))
+                if (!empty($f['type']) && $f['type'] == Form::FIELD_TEXTAREA && !empty($f['editor']))
                 {
                     if (!isset($this->config_data['inline_img']))
                     {

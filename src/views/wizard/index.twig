@@ -11,51 +11,71 @@
 {% endblock %}
 
 {% block content %}
-    {% if not alert  %}
-    <div style="padding: 20px;">
-    <div class="row wrapper border-bottom white-bg page-heading"  style="margin-bottom: 20px">
-        <div class="col-lg-10">
-            <ol class="breadcrumb">
-                <li class="active">
-                    <strong>Index</strong>
-                </li>
-            </ol>
+    {% if not alert %}
+        <div style="padding: 20px;">
+            <div class="row wrapper border-bottom white-bg page-heading" style="margin-bottom: 20px">
+                <div class="col-lg-10">
+                    <ol class="breadcrumb">
+                        <li class="active">
+                            <strong>Index</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+
+            <div class="col col-lg-6">
+                <h1>Define models</h1>
+                {% if  not wizard.modelsDefined() %}
+                <form method="post">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+                    {% endif %}
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Table</th>
+                            <th>Model name</th>
+                            <th width="100">Actions</th>
+                        </tr>
+                        {% for table in wizard.getTables() %}
+                                <tr>
+
+                                    <td>{{ table }}</td>
+                                    <td>
+                                        <form action="{{ route('wizard_model', table) }}" id="form_{{ table }}" method="get">
+                                        {% if wizard.modelsDefined() %}
+                                            {% if wizard.getModelConfig(table) %}
+                                                <input type="text" class="form-control" name="models[{{ table }}]"
+                                                       value="{{ wizard.getModelConfig(table).name }}" disabled/>
+                                            {% else %}
+                                                <input type="text" class="form-control" name="model"
+                                                       placeholder="Enter model name * " required/>
+                                            {% endif %}
+                                        {% else %}
+                                            <input type="text" class="form-control" name="models[{{ table }}]"/>
+                                        {% endif %}
+                                        </form>
+                                    </td>
+                                    <td>
+                                        {% if wizard.getModelConfig(table) %}
+                                            <a class="btn btn-primary"
+                                               href="{{ route('wizard_model', table) }}">Edit </a>
+                                        {% else %}
+                                            <input type="submit" form="form_{{ table }}" class="btn btn-primary" value="Create model and edit"/>
+                                        {% endif %}
+                                    </td>
+
+                                </tr>
+
+                        {% endfor %}
+                    </table>
+                    {% if not wizard.modelsDefined() %}
+                        <input type="submit" class="btn btn-success" value="Save">
+                    {% endif %}
+                    {% if  not wizard.modelsDefined() %}
+                </form>
+                {% endif %}
+            </div>
         </div>
-    </div>
-
-
-    <div class="col col-lg-6">
-    <form  method="post">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-    <table class="table table-striped">
-        <tr>
-            <th >Table</th>
-            <th >Model name</th>
-            <th width="100">Actions</th>
-        </tr>
-        {% for table in wizard.getTables() %}
-            <tr>
-                <td>{{ table }}</td>
-                <td>
-                    {%  if wizard.modelsDefined() %}
-                    <input type="text" name="models[{{ table }}]" value="{{ wizard.getModelConfig(table).name }}" disabled />
-                    {% else  %}
-                        <input type="text" name="models[{{ table }}]"  />
-                    {% endif %}
-                        </td>
-                <td>{%  if wizard.getModelConfig(table) %}
-                    <a class="btn btn-primary" href="{{ route('wizard_model', table) }}">Edit</a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    {%  if not wizard.modelsDefined() %}
-        <input type="submit" class="btn btn-success" value="Save">
-    {% endif %}
-    </form>
-    </div>
-</div>
     {% else %}
 
         <div class="alert alert-danger" role="alert">{{ alert }}</div>

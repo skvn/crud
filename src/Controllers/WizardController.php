@@ -47,8 +47,20 @@ class WizardController extends Controller {
             //return redirect(route('wizard_index'));
 
         }
+
         $wizard = new Wizard();
         $model = $wizard->getModelConfig($table);
+        if (!$model)
+        {
+            if (!empty($this->request->get('model'))) {
+
+                $mname = studly_case(trim($this->request->get('model')));
+                $proto = new CrudModelPrototype(['name' => $mname, 'table' => $table]);
+                $proto->record();
+                return redirect()->route('wizard_model',[$table]);
+            }
+        }
+
         return view('crud::wizard/model', ['wizard'=>$wizard,'table'=>$table,'model'=>$model]);
     }
 

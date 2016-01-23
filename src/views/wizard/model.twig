@@ -4,7 +4,11 @@
     <link href="{{ 'css/plugins/steps/jquery.steps.css'|asset }}" rel="stylesheet">
     <style>
         .wizard-big.wizard > .content {
-            min-height: 700px;
+            min-height: 680px;
+        }
+        .wizard > .steps > ul > li
+        {
+            width: 20%;
         }
     </style>
 {% endblock %}
@@ -21,7 +25,7 @@
                     <a href="{{ route('wizard_index') }}">Index</a>
                 </li>
                 <li class="active">
-                    <strong>Configure model</strong>
+                    <strong>Configure model "{{ model.name }}"</strong>
                 </li>
             </ol>
         </div>
@@ -38,7 +42,11 @@
         <h1>General</h1>
         <fieldset>
 
+            <h2 style="margin-top: 0px;">General model settings</h2>
+            <div class="panel panel-default">
+                <div class="panel-body">
             <div class="row">
+
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="name">Model name *</label>
@@ -85,65 +93,18 @@
                 </div>
 
             </div>
-
-        </fieldset>
-        <h1>Relations</h1>
-        <fieldset>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-
-                            <div id="r_container"></div>
-                            <div class="hr-line-dashed"></div>
-                            <label>
-
-                                <select class="form-control default_select" id="rtype" style="display:inline; width:250px;"  >
-                                    <option value="">Choose relation type</option>
-                                    <option value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_MANY') }}">Has many</option>
-                                    <option value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_ONE') }}">Has one</option>
-                                    <option value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO') }}">Belongs to</option>
-                                    <option value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}">Belongs to many</option>
-                                </select>
-                                <a href="#" class="btn btn-success"  data-click="crud_action" data-action="wizard_add_relation" ><i class="fa fa-plus"></i> Add</a>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
+            </div>
             </div>
         </fieldset>
+
+        <h1>Relations</h1>
+        {% include 'crud::wizard/blocks/relations_container' %}
 
         <h1>Form fields</h1>
-        <fieldset>
-        <div class="panel panel-default">
-            <div class="panel-body" style="max-height: 650px; overflow: auto">
+        {% include 'crud::wizard/blocks/fields_container' %}
 
-                <table class="table table-bordered table-striped"  id="f_container">
-                    {% for f in wizard.getTableColumns(table) %}
-                    {% if f != 'id' %}
-                    <tr data-rel="{{ f }}">
-                        <td style="width: 200px;"><b>{{ f }}</b></td>
-                        <td style="width: 250px;"><label>
-                                <select name="fields[{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-action="wizard_add_field"  style="display:inline; width:250px;"  >
-                                    <option value="">Choose field type</option>
-                                    {% for k,v in wizard.getAvailableFieldTypes() %}
-                                        <option value="{{ k }}">{{ v }}</option>
-                                    {% endfor %}
-                                </select>
-                                {#<a href="#" class="btn btn-success" data-rel="{{ f }}"  data-click="crud_action" data-action="wizard_add_field" ><i class="fa fa-plus"></i> Apply</a>
-                                #}
-                            </label></td>
-                        <td id="f_container_{{ f }}"></td>
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                </table>
-
-            </div>
-        </div>
-        </fieldset>
+        <h1>Files</h1>
+        {% include 'crud::wizard/blocks/files' %}
 
         <h1>Model lists (scopes)</h1>
         <fieldset>

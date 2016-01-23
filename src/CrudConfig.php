@@ -4,6 +4,7 @@ use JsonSerializable, ArrayAccess;
 
 class CrudConfig implements JsonSerializable, ArrayAccess {
 
+
     const FIELD_SELECT = 'select';
     const FIELD_TEXT = 'text';
     const FIELD_FILE = 'file';
@@ -405,21 +406,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
 
     }
 
-    static  function getAvailableFieldTypes()
-    {
-        return [
-            self::FIELD_TEXT => 'Text input',
-            self::FIELD_NUMBER => 'Number input',
-            self::FIELD_TEXTAREA => 'Textarea',
-            self::FIELD_DATE => 'Date',
-            self::FIELD_SELECT => 'Select',
-            self::FIELD_CHECKBOX => 'Checkbox',
-            self::FIELD_FILE => 'File',
-            //self::FIELD_MULTI_FILE => 'Multiple files',
 
-
-        ];
-    }//
 
     static  function getAvailableRelationFieldTypes()
     {
