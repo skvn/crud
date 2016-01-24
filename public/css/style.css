@@ -668,7 +668,7 @@ body.login-page {
 
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
   border-radius: 0;
-  border-top: 0; }
+}
 
 .tab-content > div {
   padding: 20px; }

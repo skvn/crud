@@ -54,6 +54,7 @@ return [
         "{{ alias }}" => [
 
             "title"=>"{{ list.title }}",
+            "description"=>"{{ list.description }}",
             {% if list.multi_select %}
             /* MASS SELECT checkboxes */
             "multiselect"=>true,

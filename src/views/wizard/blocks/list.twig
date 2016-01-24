@@ -3,7 +3,8 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title"><div class="label label-primary pull-right">[_ALIAS_]</div>
-                <input type="text" class="form-control" id="lists[_ALIAS_][title]" name="lists[_ALIAS_][title]" placeholder="List title" value="_TITLE_" />
+                <input type="text" class="form-control" id="lists[_ALIAS_][title]" name="lists[_ALIAS_][title]" placeholder="List title" value="_TITLE_" required />
+                <input type="text" class="form-control" id="lists[_ALIAS_][description]" name="lists[_ALIAS_][description]" placeholder="List short description" required  />
             </h3>
         </div>
         <div class="panel-body">
@@ -54,7 +55,6 @@
                 <div class="row">
 
                     <div id="list_cols__ALIAS_"></div>
-                    <div class="help-block">To reference relations use "relation::attribute" syntax</div>
                     <a href="#" class="btn btn-success"  data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="col_tpl__ALIAS_" data-container="list_cols__ALIAS_"><i class="fa fa-plus"></i> Add column</a>
                 </div>
             </div>

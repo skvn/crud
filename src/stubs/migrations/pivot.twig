@@ -12,11 +12,15 @@ class {{pivot.class}} extends Migration
      */
     public function up()
     {
-        Schema::create('{{pivot.table_name}}', function (Blueprint $table) {
+        if (!Schema::hasTable('{{pivot.table_name}}')) {
+            Schema::create('{{pivot.table_name}}', function (Blueprint $table) {
             $table->integer('{{pivot.self_key}}')->unsigned()->index();
             $table->integer('{{pivot.foreign_key}}')->unsigned()->index();
             $table->primary(['{{pivot.self_key}}', '{{pivot.foreign_key}}']);
-        });
+            });
+        }
+
+
     }
 
     /**

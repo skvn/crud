@@ -1,5 +1,7 @@
-<?php namespace Skvn\Attach;
+<?php namespace Skvn\Crud\Traits;
 
+
+use Skvn\Crud\Handlers\AttachmentHandler;
 
 use Illuminate\Database\Eloquent\Model;
 

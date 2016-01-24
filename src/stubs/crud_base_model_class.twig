@@ -1,7 +1,9 @@
 <?php namespace {{ model.namespace }}\Crud;
 
 use Skvn\Crud\Models\CrudModel;
-{%  if model.attaches %}use Skvn\Attach\AttachmentTrait;{% endif %}
+{%  if model.attaches %}use Skvn\Crud\Traits\AttachmentTrait;
+use Skvn\Crud\Models\CrudFile;
+{% endif %}
 {% if model.inline_img %}use Skvn\Crud\Traits\InlineImgTrait;{% endif %}
 
 class {{ model.name }}Base extends CrudModel{
@@ -33,9 +35,21 @@ class {{ model.name }}Base extends CrudModel{
 
     public static function boot()
     {
-        {%  if model.attaches %}self::attachBoot();{% endif %}
-        {% if model.inline_img %}self::inlineImgBoot();{% endif %}
+        {%  if model.attaches %}self::attachBoot();
+        {% endif %}
+        {% if model.inline_img %}self::inlineImgBoot();
+        {% endif %}
         parent::boot();
     }
+
+    {% for a in model.attaches %}
+    {% if a.multi == '1' %}
+    public function {{ a.column }}()
+    {
+         return $this->belongsToMany('\Skvn\Crud\Models\CrudFile', '{{ a.pivot_table }}');
+    }
+    {% endif %}
+    {% endfor %}
+
 
 }

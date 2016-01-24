@@ -1,5 +1,8 @@
 {% extends "crud::page.twig" %}
 
+{%  set TITLE =crudObj.config.getList('title')  %}
+{%  set DESCRIPTION =crudObj.config.getList('description')  %}
+
 {% block head %}
     <link href="{{ 'css/plugins/dataTables/jquery.dataTables.min.css'|asset }}" rel="stylesheet">
     <link href="{{ 'css/plugins/dataTables/dataTables.bootstrap.css'|asset }}" rel="stylesheet">
@@ -33,6 +36,7 @@
 {% endblock %}
 
 {% block bc %}
+
     <div class="navbar-header">
         <button type="button" class="navbar-expand-toggle">
             <i class="fa fa-bars icon"></i>
@@ -53,5 +57,5 @@
 
 
 {% block title_right  %}
-    <a  class="btn btn-primary pull-right"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-click='crud_event' data-event='crud.edit_element' >Добавить {{ crudObj.config.get('ent_name_v') }}</a>
+    <a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> Add {{ crudObj.config.get('ent_name') }}</a>
 {% endblock %}

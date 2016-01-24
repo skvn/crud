@@ -1,8 +1,7 @@
-<?php namespace Skvn\Attach\Controllers;
+<?php namespace Skvn\Crud\Controllers;
 
 use Illuminate\Routing\Controller;
-use Skvn\Attach\Attach;
-use Skvn\Attach\CrudFile;
+use Skvn\Crud\CrudFile;
 use Symfony\Component\HttpFoundation\File\File;
 
 class AttachController extends Controller {

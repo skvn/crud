@@ -76,7 +76,7 @@ class CrudModelPrototype
         $this->wizard = new Wizard();
         $this->column_types = $this->wizard->getTableColumnTypes($this->table);
         $this->app = app();
-        $this->namespace = $this->app['config']['crud_common.model_namespace'];
+        $this->namespace = ltrim($this->app['config']['crud_common.model_namespace'],'\\');
         $this->config_data['namespace'] = $this->namespace;
         $folderExpl = explode('\\',$this->namespace);
         $folder = $folderExpl[(count($folderExpl)-1)];
@@ -108,7 +108,7 @@ class CrudModelPrototype
         {
 
 
-            //need to record pivot?
+
             $rel_arr = [
                 'relation' => $rel['type'],
                 'title' => $rel['title'],
@@ -117,6 +117,7 @@ class CrudModelPrototype
 
             ];
 
+            //need to record pivot?
             if ($rel['type'] == \Skvn\Crud\CrudConfig::RELATION_BELONGS_TO_MANY && $rel['pivot'] == '0')
             {
 
@@ -182,9 +183,11 @@ class CrudModelPrototype
      */
     private  function processFiles()
     {
-        $this->config_data['traits'][] = 'InlineImgTrait';
+
+
         if (!empty($this->config_data['single_files']))
         {
+
             foreach ($this->config_data['single_files'] as $fname =>$fdata)
             {
                 if (!empty($fdata['use'])) {
@@ -196,6 +199,7 @@ class CrudModelPrototype
 
         if (!empty($this->config_data['multi_files']))
         {
+
 
             foreach ($this->config_data['multi_files'] as $fdata)
             {
@@ -212,13 +216,38 @@ class CrudModelPrototype
      */
     private function addFileField($data)
     {
+        if (!isset($this->config_data['traits']))
+        {
+            $this->config_data['traits'] = [];
+        }
         if (!in_array('AttachmentTrait', $this->config_data['traits']))
         {
             $this->config_data['attaches'] = [];
             $this->config_data['traits'][] = 'AttachmentTrait';
         }
 
-        $this->config_data['attaches'][] = ['column'=>$data['name'], 'multi'=>$data['multi']];
+        if ($data['multi'])
+        {
+            $tables = [
+                snake_case($this->config_data['name']),
+                'crud_file'
+            ];
+
+            sort($tables);
+            $pivot_table  = implode('_', $tables);
+
+            $this->migrations_data['pivot'][] =
+                [
+                    'table_name' => $pivot_table,
+                    'self_key' => snake_case($this->config_data['name']).'_id',
+                    'foreign_key' => 'crud_file_id'
+                ];
+
+
+        } else {
+            $pivot_table = '';
+        }
+        $this->config_data['attaches'][] = ['column'=>$data['name'], 'multi'=>$data['multi'], 'pivot_table'=>$pivot_table];
         $this->config_data['fields'][$data['name']] = array_merge(['type' => ($data['multi']?Form::FIELD_MULTI_FILE: Form::FIELD_FILE)], $data);
     }
 

@@ -31,8 +31,8 @@ Route::group(array('prefix'=>'admin','namespace' => 'Skvn\Crud\Controllers','mid
 
 });
 
-Route::group(array('namespace' => 'Skvn\Attach\Controllers'), function() {
-    Route::get('attach/{id}/{filename}', array('as' => 'download_attach', 'uses' => 'AttachController@download'));
+Route::group(array('namespace' => 'Skvn\Crud\Controllers'), function() {
+    Route::get('attach/{id}/{filename}', array('as' => 'download_attach', 'uses' => 'CrudAttachController@download'));
 });
 
 
