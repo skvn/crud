@@ -1,6 +1,7 @@
 {% extends "crud::page.twig" %}
 
 {% block head %}
+    <link href="{{ 'css/plugins/dataTables/jquery.dataTables.min.css'|asset }}" rel="stylesheet">
     <link href="{{ 'css/plugins/dataTables/dataTables.bootstrap.css'|asset }}" rel="stylesheet">
 {% endblock %}
 {% block content %}
@@ -32,27 +33,25 @@
 {% endblock %}
 
 {% block bc %}
-    <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-lg-10">
-            <h2>{{ crudObj.config.getList('title') }}</h2>
-            <ol class="breadcrumb">
+    <div class="navbar-header">
+        <button type="button" class="navbar-expand-toggle">
+            <i class="fa fa-bars icon"></i>
+        </button>
+        <ol class="breadcrumb navbar-breadcrumb">
+            {% for bc in crudObj.config.get('bc')%}
                 <li>
-                    <a href="/admin">В начало</a>
+                    <a href="{{ bc.href }}">{{ bc.title }}</a>
                 </li>
-                {% for bc in crudObj.config.get('bc')%}
-                    <li>
-                        <a href="{{ bc.href }}">{{ bc.title }}</a>
-                    </li>
-                {% endfor %}
-                <li class="active">
-                    <strong>{{ crudObj.config.getList('title') }}</strong>
-                </li>
-            </ol>
-        </div>
-        <div class="col-lg-2" style="margin-top:20px;">
-            <a  class="btn btn-primary pull-right"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-click='crud_event' data-event='crud.edit_element' >Добавить {{ crudObj.config.get('ent_name_v') }}</a>
-        </div>
+            {% endfor %}
+            <li class="active">{{ crudObj.config.getList('title') }}</li>
+        </ol>
+        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+            <i class="fa fa-th icon"></i>
+        </button>
     </div>
-
 {% endblock %}
 
+
+{% block title_right  %}
+    <a  class="btn btn-primary pull-right"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-click='crud_event' data-event='crud.edit_element' >Добавить {{ crudObj.config.get('ent_name_v') }}</a>
+{% endblock %}

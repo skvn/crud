@@ -20,11 +20,14 @@ class ServiceProvider extends LServiceProvider {
 
         //Views
         $paths = [];
-        foreach (\Config :: get("view.paths") as $path)
+
+        foreach ($this->app['config']->get("view.paths") as $path)
         {
             $paths[] = $path . "/crud";
         }
+
         $this->app['view']->getFinder()->prependNamespace("crud", $paths);
+
         $this->loadViewsFrom(__DIR__.'/views', 'crud');
 
         // Routing

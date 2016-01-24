@@ -1,39 +1,47 @@
-<nav class="navbar-default navbar-static-side" role="navigation">
-    <div class="sidebar-collapse">
-        <ul class="nav" id="side-menu">
-            <li class="nav-header">
+<div class="side-menu sidebar-inverse">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="side-menu-container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <div class="icon fa fa-paper-plane"></div>
+                    <div class="title">{{ APPLICATION_TITLE }}</div>
+                </a>
+                <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                    <i class="fa fa-times icon"></i>
+                </button>
+            </div>
+            <ul class="nav navbar-nav">
+                {% for m in cmsHelper.getAdminMenu() %}
+                    {%  if not m.kids %}
+                        <li  {{ m.active?"class='active'"}}>
+                            <a href="{{ route(m.route.name,m.route.args) }}">
+                                <span class="icon {{ m.icon_class }}"></span><span class="title">{{ m.title }}</span>
+                            </a>
+                        </li>
+                    {%  else  %}
+                        <li class="{{ m.active?'active'}} panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#dropdown{{ loop.index }}">
+                                <span class="icon  {{ m.icon_class }}"></span><span class="title">{{ m.title }}</span>
+                            </a>
 
-                <div class="dropdown profile-element"> <span>
-                            <!--<img alt="image" class="img-circle" src="/img/profile_small.jpg"> -->
-                             </span>
+                            <div id="dropdown{{ loop.index }}" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        {%  for kid in m.kids %}
+                                            <li  {{ kid.active?"class='active'"}}><a href="{{ route(kid.route.name,kid.route.args) }}"> {% if kid.active %}<i class="fa fa-arrow-circle-o-right"></i> {% endif %}{{ kid.title }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
 
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ cmsHelper.user.full_name }}</strong>
-                             </span> <span class="text-muted text-xs block">{{ cmsHelper.user.acl_role_title }}</span> </span>
+                    {% endif %}
 
-                </div>
-                <div class="logo-element">
+                {% endfor %}
 
-                </div>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+</div>
 
-            </li>
-
-            {% for m in cmsHelper.getAdminMenu() %}
-            <li {{ m.active?"class='active'"}}>
-                <a href="{{ m.href ? m.href : '#' }}" ><i class="{{ m.icon_class }}"></i> <span class="nav-label">{{ m.title }}</span>{% if m.kids %}<span class="fa arrow"></span>{% endif %}</a>
-                {%  if m.kids %}
-                    <ul class="nav nav-second-level">
-                    {%  for kid in m.kids %}
-                        <li  {{ kid.active?"class='active'"}}><a href="{{ route(kid.route.name,kid.route.args) }}"> {% if kid.active %}<i class="fa fa-arrow-circle-o-right"></i>{% endif %}{{ kid.title }}</a></li>
-                    {% endfor %}
-                    </ul>
-                {% endif %}
-           </li>
-            {% endfor %}
-
-
-
-            </li>
-        </ul>
-
-    </div>
-</nav>

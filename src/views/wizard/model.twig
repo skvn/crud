@@ -1,4 +1,4 @@
-{% extends "crud::empty_page" %}
+{% extends "crud::page" %}
 
 {% block head %}
     <link href="{{ 'css/plugins/steps/jquery.steps.css'|asset }}" rel="stylesheet">
@@ -16,22 +16,6 @@
 {% block content %}
 
 {% if not alert  %}
-
-<div style="padding: 20px;">
-    <div class="row wrapper border-bottom white-bg page-heading" style="margin-bottom: 20px">
-        <div class="col-lg-10">
-            <ol class="breadcrumb">
-                <li>
-                    <a href="{{ route('wizard_index') }}">Index</a>
-                </li>
-                <li class="active">
-                    <strong>Configure model "{{ model.name }}"</strong>
-                </li>
-            </ol>
-        </div>
-
-    </div>
-
 
 <div class="row">
     <div class="col-lg-12">
@@ -142,9 +126,6 @@
 
 
 
-
-</div>
-
 {% else %}
 
     <div class="alert alert-danger" role="alert">{{ alert }}</div>
@@ -161,6 +142,21 @@
     <script>
         var models = {{ wizard.getAllModelColumns()|json_encode|raw }};
     </script>
+{% endblock %}
+
+{% block bc %}
+    <div class="navbar-header">
+        <button type="button" class="navbar-expand-toggle">
+            <i class="fa fa-bars icon"></i>
+        </button>
+        <ol class="breadcrumb navbar-breadcrumb">
+            <li><a href="{{ route('wizard_index') }}">Models index</a></li>
+            <li class="active">Configure model "{{ model.name }}"</li>
+        </ol>
+        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+            <i class="fa fa-th icon"></i>
+        </button>
+    </div>
 {% endblock %}
 
 

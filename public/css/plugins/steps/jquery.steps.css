@@ -1,5 +1,5 @@
 /*
-    Common
+    Common 
 */
 
 .wizard,
@@ -66,6 +66,11 @@
     width: 30%;
 }
 
+.wizard > .steps .number
+{
+    font-size: 1.429em;
+}
+
 .wizard > .steps > ul > li
 {
     width: 25%;
@@ -90,7 +95,7 @@
     display: block;
     width: auto;
     margin: 0 0.5em 0.5em;
-    padding: 8px;
+    padding: 1em 1em;
     text-decoration: none;
 
     -webkit-border-radius: 5px;
@@ -111,7 +116,7 @@
 .wizard > .steps .current a:hover,
 .wizard > .steps .current a:active
 {
-    background: #1AB394;
+    background: #2184be;
     color: #fff;
     cursor: default;
 }
@@ -120,7 +125,7 @@
 .wizard > .steps .done a:hover,
 .wizard > .steps .done a:active
 {
-    background: #6fd1bd;
+    background: #9dc8e2;
     color: #fff;
 }
 
@@ -128,7 +133,7 @@
 .wizard > .steps .error a:hover,
 .wizard > .steps .error a:active
 {
-    background: #ED5565 ;
+    background: #ff3111;
     color: #fff;
 }
 
@@ -136,8 +141,8 @@
 {
     background: #eee;
     display: block;
-    margin: 5px 5px 10px 5px;
-    min-height: 120px;
+    margin: 0.5em;
+    min-height: 35em;
     overflow: hidden;
     position: relative;
     width: auto;
@@ -147,9 +152,6 @@
     border-radius: 5px;
 }
 
-.wizard-big.wizard > .content {
-    min-height: 320px;
-}
 .wizard.vertical > .content
 {
     display: inline;
@@ -251,7 +253,7 @@
 .wizard > .actions a:hover,
 .wizard > .actions a:active
 {
-    background: #1AB394;
+    background: #2184be;
     color: #fff;
     display: block;
     padding: 0.5em 1em;

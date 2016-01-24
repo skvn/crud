@@ -1,76 +1,129 @@
 <!DOCTYPE html>
 <html>
 {% set PACKAGE= 'crud' %}
+{% import "crud::widgets/macro.twig" as widgets%}
 <head>
-    {% import "crud::widgets/macro.twig" as widgets%}
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="/favicon.ico">
     <title>{{ PAGE_TITLE }}</title>
-    <link href="{{ 'css/bootstrap.min.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'font-awesome/css/font-awesome.css'|asset }}" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+    <!-- CSS Libs -->
+    <link href="{{ 'css/lib/bootstrap.min.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/lib/animate.min.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/lib/font-awesome.min.css'|asset }}" rel="stylesheet">
+
+
+
+    <!-- CSS PLUGINS -->
     <link href="{{ 'css/plugins/iCheck/custom.css'|asset }}" rel="stylesheet">
     <link href="{{ 'css/plugins/select2/select2.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'css/plugins/select2/select2-bootstrap.css'|asset }}" rel="stylesheet">
     <link href="{{ 'css/plugins/summernote/summernote.css'|asset }}" rel="stylesheet">
     <link href="{{ 'css/plugins/summernote/summernote-bs3.css'|asset }}" rel="stylesheet">
     <link href="{{ 'css/plugins/datapicker/datepicker3.css'|asset }}" rel="stylesheet">
     <link href="{{ 'css/plugins/jsTree/style.min.css'|asset }}" rel="stylesheet">
     <link href="{{ 'css/plugins/bvalidation/bootstrapValidator.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'css/animate.css'|asset }}" rel="stylesheet">
+    {#
+    <!--link href="{{ 'css/plugins/bootstrap-switch.min.css'|asset }}" rel="stylesheet"-->
+    <link rel="stylesheet" type="text/css" href="../lib/css/checkbox3.min.css">
+    #}
+
+    <!-- CSS App -->
     <link href="{{ 'css/style.css'|asset }}" rel="stylesheet">
+    <link href="{{ 'css/themes/flat-blue.css'|asset }}" rel="stylesheet">
     <link href="{{ 'css/crud.css'|asset }}" rel="stylesheet">
     {% block head %}{% endblock %}
 
+
+
 </head>
 
-<body>
+<body class="flat-blue">
+<div class="app-container">
+    <div class="row content-container">
+        <!-- Main Content -->
 
-<div id="wrapper" class="gray-bg">
 
- {%block content%}{%endblock%}
 
+                <div style="margin-left:30px; margin-right: 30px;">
+                {%  if TITLE %}
+                    <div class="page-title">
+                        <div class="pull-left">
+                            <span class="title">{{ TITLE }}</span>
+                            {%  if DESCRIPTION %}
+                                <div class="description">{{ DESCRIPTION }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="pull-right">
+                            {%block title_right%}{%endblock%}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="card">
+                            <div class="card-body">
+                                {%block content%}{%endblock%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+
+    </div>
+    <footer class="app-footer">
+        <div class="wrapper">
+            <span class="pull-right">{# CRUD PACKAGE VERSION HERE #} <a href="#"><i class="fa fa-long-arrow-up"></i></a></span>
+        </div>
+    </footer>
 </div>
+<!-- LIBS -->
+<script src="{{ 'js/lib/jquery.min.js'|asset }}" ></script>
+<script src="{{ 'js/lib/jquery-ui.min.js'|asset }}" ></script>
+<script src="{{ 'js/lib/bootstrap.min.js'|asset }}" ></script>
 
 
-<!-- Mainly scripts -->
-<script src="{{ 'js/jquery-2.1.1.js'|asset }}" ></script>
-<script src="{{ 'js/jquery-ui-1.10.4.min.js'|asset }}" ></script>
-<script src="{{ 'js/bootstrap.min.js'|asset }}" ></script>
-<script src="{{ 'js/plugins/metisMenu/jquery.metisMenu.js'|asset }}" ></script>
+<!-- PLUGINS -->
 <script src="{{ 'js/plugins/slimscroll/jquery.slimscroll.min.js'|asset }}" ></script>
-
-
-<!-- Custom and plugin javascript -->
-<script src="{{ 'js/inspinia.js'|asset }}" ></script>
-<script src="{{ 'js/plugins/pace/pace.min.js'|asset }}" ></script>
-
-<!-- iCheck -->
 <script src="{{ 'js/plugins/iCheck/icheck.min.js'|asset }}" ></script>
-<!-- SELECT 2 -->
-<script src="{{ 'js/plugins/select2/select2.js'|asset }}" ></script>
-<script src="{{ 'js/plugins/select2/select2_locale_ru.js'|asset }}" ></script>
+<script src="{{ 'js/plugins/select2/select2.full.min.js'|asset }}" ></script>
 <script src="{{ 'js/plugins/summernote/summernote.js'|asset }}" ></script>
 <script src="{{ 'js/plugins/datapicker/bootstrap-datepicker.js'|asset }}" ></script>
-<script src="{{ 'js/plugins/datapicker/ru.js'|asset }}"  charset="UTF-8"></script>
-
 <script src="{{ 'js/plugins/bvalidation/bootstrapValidator.js'|asset }}"></script>
-<script src="{{ 'js/plugins/bvalidation/language/ru_RU.js'|asset }}"></script>
-
-<script src="{{ 'js/plugins/dataTables/jquery.dataTables.js'|asset }}"></script>
-<script src="{{ 'js/plugins/dataTables/dataTables.bootstrap.js'|asset }}"></script>
-
+<script src="{{ 'js/plugins/dataTables/jquery.dataTables.min.js'|asset }}"></script>
+<script src="{{ 'js/plugins/dataTables/dataTables.bootstrap.min.js'|asset }}"></script>
 <script src="{{ 'js/plugins/jsTree/jstree.js'|asset }}"></script>
+<script src="{{ 'js/plugins/ajaxform/jquery.form.js'|asset }}"></script>
+<script src="{{ 'js/plugins/jquery-matchheight/jquery.matchHeight-min.js'|asset }}"></script>
 
+
+<!-- LOCALIZATION -->
+<script src="{{ 'js/plugins/datapicker/ru.js'|asset }}"  charset="UTF-8"></script>
+<script src="{{ 'js/plugins/bvalidation/language/ru_RU.js'|asset }}"></script>
+<script src="{{ 'js/plugins/select2/i18n/ru.js'|asset }}" ></script>
+
+<!-- CRUD MODULES AND WIDGETS -->
 <script src="{{ 'js/modules/crud.js'|asset }}"></script>
 <script src="{{ 'js/widgets/table.js'|asset }}"></script>
 <script src="{{ 'js/widgets/form.js'|asset }}"></script>
 <script src="{{ 'js/widgets/tree.js'|asset }}"></script>
-<script src="{{ 'js/plugins/ajaxform/jquery.form.js'|asset }}"></script>
+<script src="{{ 'js/modules/tooltip.js'|asset }}"></script>
+{#<script src="{{ 'js/modules/notify.js'|asset }}"></script>#}
+
+<!-- PAGE UTILITY -->
+<script src="{{ 'js/app.js'|asset }}" ></script>
+
+<div id="crud_form" class="modal fade" aria-hidden="true"> </div>
+
+{% include "crud::popup_dialog.twig" %}
 
 {% block modals %}
 {% endblock %}
+
 </body>
 
 </html>

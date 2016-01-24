@@ -1,21 +1,86 @@
-<div class="row border-bottom">
-    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-
-        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#" title="Свернуть боковое меню"><i class="fa fa-bars"></i> </a>
-        <ul class="nav navbar-top-links navbar-right">
-            <li>
-                <span class="m-r-sm text-muted welcome-message"></span>
+<ul class="nav navbar-nav navbar-right">
+    <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+        <i class="fa fa-times icon"></i>
+    </button>
+    {% if 'root_settings'|allowed %}
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-gears"></i></a>
+        <ul class="dropdown-menu animated fadeInDown">
+            <li  class="title list-group-item">
+                <a href="{{ route('wizard_index') }}"><i class="fa fa-magic"></i> Configure CRUD models</a>
+            </li>
+            <li class="title list-group-item">
+                <a href="{{ route('wizard_menu') }}"><i class="fa fa-list"></i> Configure admin menu</a>
             </li>
 
 
+        </ul>
+    </li>
+    {% endif %}
 
-
-            <li>
-                <a href="/auth/logout">
-                    <i class="fa fa-sign-out"></i> Выйти
-                </a>
+    {#
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-comments-o"></i></a>
+        <ul class="dropdown-menu animated fadeInDown">
+            <li class="title">
+                Notification <span class="badge pull-right">0</span>
+            </li>
+            <li class="message">
+                No new notification
             </li>
         </ul>
-
-    </nav>
-</div>
+    </li>
+    <li class="dropdown danger">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-star-half-o"></i> 4</a>
+        <ul class="dropdown-menu danger  animated fadeInDown">
+            <li class="title">
+                Notification <span class="badge pull-right">4</span>
+            </li>
+            <li>
+                <ul class="list-group notifications">
+                    <a href="#">
+                        <li class="list-group-item">
+                            <span class="badge">1</span> <i class="fa fa-exclamation-circle icon"></i> new registration
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li class="list-group-item">
+                            <span class="badge success">1</span> <i class="fa fa-check icon"></i> new orders
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li class="list-group-item">
+                            <span class="badge danger">2</span> <i class="fa fa-comments icon"></i> customers messages
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li class="list-group-item message">
+                            view all
+                        </li>
+                    </a>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    #}
+    <li class="dropdown profile">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ cmsHelper.user.full_name }} <span class="caret"></span></a>
+        <ul class="dropdown-menu animated fadeInDown">
+            {#
+            <li class="profile-img">
+                <img src="../../img/profile/picjumbo.com_HNCK4153_resize.jpg" class="profile-img">
+            </li>
+            #}
+            <li>
+                <div class="profile-info">
+                    <h4 class="username">{{ cmsHelper.user.full_name }}</h4>
+                    <p>{{ cmsHelper.user.email }}</p>
+                    <p>{{ cmsHelper.user.acl_role_title }}</p>
+                    <div class="btn-group margin-bottom-2x" role="group">
+                        <a class="btn btn-default" href="/auth/logout"><i class="fa fa-sign-out"></i> Logout</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </li>
+</ul>

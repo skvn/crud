@@ -22,9 +22,11 @@ Route::group(array('prefix'=>'admin','namespace' => 'Skvn\Crud\Controllers','mid
 
 
     Route::any('crud_setup/table_cols/{table}',   array('uses' => 'WizardController@getTableColumns'));
-
-    Route::any('crud_setup',   array('as' => 'wizard_index', 'uses' => 'WizardController@index'));
+    Route::any('crud_setup/menu',   array('as' => 'wizard_menu', 'uses' => 'WizardController@menu'));
     Route::any('crud_setup/{table}',   array('as' => 'wizard_model', 'uses' => 'WizardController@model'));
+    Route::any('crud_setup',   array('as' => 'wizard_index', 'uses' => 'WizardController@index'));
+
+
 
 
 });

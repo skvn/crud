@@ -49,23 +49,24 @@ class CmsHelper
                     $item['active'] = false;
                 }
 
-                foreach ($parent['kids'] as $kindex => $kid) {
+                if (!empty($parent['kids'] )) {
+                    foreach ($parent['kids'] as $kindex => $kid) {
 
-                    if ($this->checkAcl($kid['acl']))
-                    {
-                        $item['kids'][$kindex] = $kid;
+                        if ($this->checkAcl($kid['acl'])) {
+                            $item['kids'][$kindex] = $kid;
 
-                        if (!isset($kid['route']['args'])) {
-                            $kid['route']['args'] = null;
+                            if (!isset($kid['route']['args'])) {
+                                $kid['route']['args'] = null;
+                            }
+                            if ($this->app['request']->url() == rtrim(route($kid['route']['name'], $kid['route']['args']), '?')) {
+                                $item['active'] = true;
+                                $item['kids'][$kindex]['active'] = true;
+
+                            } else {
+                                $item['kids'][$kindex]['active'] = false;
+                            }
+
                         }
-                        if ($this->app['request']->url() == rtrim(route($kid['route']['name'], $kid['route']['args']),'?')) {
-                            $item['active'] = true;
-                            $item['kids'][$kindex]['active'] = true;
-
-                        } else {
-                            $item['kids'][$kindex]['active'] = false;
-                        }
-
                     }
                 }
 

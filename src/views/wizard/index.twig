@@ -1,5 +1,4 @@
-{% set NO_MENU=1 %}
-{% extends "crud::empty_page" %}
+{% extends "crud::page" %}
 
 {% block head %}
     <link href="{{ 'css/plugins/steps/jquery.steps.css'|asset }}" rel="stylesheet">
@@ -12,19 +11,7 @@
 
 {% block content %}
     {% if not alert %}
-        <div style="padding: 20px;">
-            <div class="row wrapper border-bottom white-bg page-heading" style="margin-bottom: 20px">
-                <div class="col-lg-10">
-                    <ol class="breadcrumb">
-                        <li class="active">
-                            <strong>Index</strong>
-                        </li>
-                    </ol>
-                </div>
-            </div>
-
-
-            <div class="col col-lg-6">
+          <div class="col col-lg-6">
                 <h1>Define models</h1>
                 {% if  not wizard.modelsDefined() %}
                 <form method="post">
@@ -75,10 +62,24 @@
                 </form>
                 {% endif %}
             </div>
-        </div>
+
     {% else %}
 
         <div class="alert alert-danger" role="alert">{{ alert }}</div>
 
     {% endif %}
+{% endblock %}
+
+{% block bc %}
+    <div class="navbar-header">
+        <button type="button" class="navbar-expand-toggle">
+            <i class="fa fa-bars icon"></i>
+        </button>
+        <ol class="breadcrumb navbar-breadcrumb">
+            <li class="active">Models index</li>
+        </ol>
+        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+            <i class="fa fa-th icon"></i>
+        </button>
+    </div>
 {% endblock %}

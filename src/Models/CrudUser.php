@@ -11,22 +11,22 @@ use Skvn\Crud\Traits\PrefTrait;
 class CrudUser extends CrudModel implements AuthenticatableContract, CanResetPasswordContract, AclSubject {
 
 
-	use Authenticatable, CanResetPassword;
+    use Authenticatable, CanResetPassword;
 
 
-	/**
-	 * The database table used by the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'users';
+    /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
+    protected $table = 'users';
 
-	/**
-	 * The attributes excluded from the model's JSON form.
-	 *
-	 * @var array
-	 */
-	protected $hidden = ['password', 'remember_token'];
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['password', 'remember_token'];
     protected $guarded = array('id','remember_token','password_confirmation');
     protected $fullname;
 
