@@ -48,7 +48,7 @@ class ServiceProvider extends LServiceProvider {
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
         $loader->alias('Crud', Facades\Crud :: class);
         $loader->alias('Cms', Facades\Cms :: class);
-        $loader->alias('Image', Intervention\Image\Facades\Image::class);
+        $loader->alias('Image', \Intervention\Image\Facades\Image::class);
 
 
 
