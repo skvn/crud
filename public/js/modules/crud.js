@@ -314,7 +314,7 @@
             {
                 $form.find('textarea.html_editor').each(function () {
 
-                    $(this).val($(this).code());
+                    $(this).val($(this).summernote('code'));
                 })
             },
 
