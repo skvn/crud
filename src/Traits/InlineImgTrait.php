@@ -1,7 +1,7 @@
 <?php namespace Skvn\Crud\Traits;
 
 
-use Intervention\Image;
+use Intervention\Image\Image;
 
 
 
