@@ -1,7 +1,7 @@
 <?php namespace Skvn\Crud\Traits;
 
 
-use Intervention\Image\Image;
+
 
 
 
@@ -90,7 +90,7 @@ trait InlineImgTrait {
                     }
                     $src = $m[2];
                     $base_64 = $m[4];
-                    $img = Image::make(base64_decode($base_64));
+                    $img = \Image::make(base64_decode($base_64));
                     $originalWidth = $img->width();
                     if (strpos($width,'%') !== false)
                     {
