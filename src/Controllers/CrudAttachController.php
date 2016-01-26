@@ -4,7 +4,7 @@ use Illuminate\Routing\Controller;
 use Skvn\Crud\CrudFile;
 use Symfony\Component\HttpFoundation\File\File;
 
-class AttachController extends Controller {
+class CrudAttachController extends Controller {
 
 
     public function download($id)
