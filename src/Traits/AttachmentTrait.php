@@ -2,7 +2,7 @@
 
 
 use Skvn\Crud\Handlers\AttachmentHandler;
-
+use Skvn\Crud\Models\CrudFile;
 use Illuminate\Database\Eloquent\Model;
 
 
