@@ -41,13 +41,14 @@ class ServiceProvider extends LServiceProvider {
         $this->registerHelpers();
 
         // Register dependency packages
-        //$this->app->register('Collective\Html\HtmlServiceProvider');
+        $this->app->register('Intervention\Image\ImageServiceProvider');
 
 
         // Register dependancy aliases
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
         $loader->alias('Crud', Facades\Crud :: class);
         $loader->alias('Cms', Facades\Cms :: class);
+        $loader->alias('Image', Intervention\Image\Facades\Image::class);
 
 
 
