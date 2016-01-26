@@ -1,7 +1,7 @@
 <?php namespace Skvn\Crud\Controllers;
 
 use Illuminate\Routing\Controller;
-use Skvn\Crud\CrudFile;
+use Skvn\Crud\Models\CrudFile;
 use Symfony\Component\HttpFoundation\File\File;
 
 class CrudAttachController extends Controller {
