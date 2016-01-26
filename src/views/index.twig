@@ -3,10 +3,6 @@
 {%  set TITLE =crudObj.config.getList('title')  %}
 {%  set DESCRIPTION =crudObj.config.getList('description')  %}
 
-{% block head %}
-    <link href="{{ 'css/plugins/dataTables/jquery.dataTables.min.css'|asset }}" rel="stylesheet">
-    <link href="{{ 'css/plugins/dataTables/dataTables.bootstrap.css'|asset }}" rel="stylesheet">
-{% endblock %}
 {% block content %}
 
     {{ widgets.filters(crudObj) }}

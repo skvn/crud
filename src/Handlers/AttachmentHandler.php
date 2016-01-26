@@ -1,7 +1,8 @@
 <?php namespace Skvn\Crud\Handlers;
 
-use \Symfony\Component\HttpFoundation\File\UploadedFile;
-use \Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
+use Skvn\Crud\Models\CrudFile;
 
 
 class AttachmentHandler {
@@ -289,7 +290,7 @@ class AttachmentHandler {
 
     public function processTitles()
     {
-        $titles = \Input::get($this->parentPropName.'_title');
+        $titles = \Request::get($this->parentPropName.'_title');
         if ($titles && is_array($titles))
         {
             foreach ($titles as $k=>$v)

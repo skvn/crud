@@ -282,6 +282,7 @@
                     $coll = $('.html_editor');
                 }
                 $coll.summernote({
+                    lang: 'ru-RU',
                     toolbar: [
 
                         ['style', ['style','bold', 'italic', 'underline', 'clear']],
