@@ -53,10 +53,32 @@
                 <div class="hr-line-dashed"></div>
                 <h3>Columns</h3>
                 <div class="row">
-
                     <div id="list_cols__ALIAS_"></div>
                     <a href="#" class="btn btn-success"  data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="col_tpl__ALIAS_" data-container="list_cols__ALIAS_"><i class="fa fa-plus"></i> Add column</a>
                 </div>
+
+                <h3>Filter fields</h3>
+                <table class="table table-bordered table-striped"  id="_ALIAS_f_container"  style="max-width: 1200px">
+                    {% for f in wizard.getTableColumns(table) %}
+                        {% if f != 'id' %}
+                            <tr data-rel="{{ f }}">
+                                <td style="width: 200px;"><b>{{ f }}</b></td>
+                                <td style="width: 250px;"><label>
+                                        <select name="filters[_ALIAS_][{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-list="_ALIAS_" data-action="wizard_add_filter_field"  style="display:inline; width:250px;"  >
+                                            <option value="">Choose field type</option>
+                                            {% for k,v in wizard.getAvailableFilterTypes(f) %}
+                                                <option value="{{ k }}">{{ v }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </label></td>
+                                <td id="_ALIAS__f_container_{{ f }}"></td>
+                                <td style="width: 80px;"><div id="_ALIAS__f_cancel_{{ f }}" style="display: none"><a href="#" data-click="crud_action" data-field="{{ f }}" data-list="_ALIAS_" data-action="wizard_remove_filter_field" data-confirm="Remove this filter field?" class="label label-danger">
+                                            <i class="fa fa-trash-o"></i> Cancel</a></div></td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+
             </div>
         </div>
         {# COlUMN#}

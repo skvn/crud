@@ -74,11 +74,38 @@
 
             },
 
+            wizard_add_filter_field: function (elem) {
+                var type = elem.val();
+                var list = elem.data('list');
+                if (type == '')
+                {
+
+                    $('#'+list+'_f_cancel_'+elem.data('rel')).find('a').click();
+                    return;
+                }
+                var f_html  = $('#tpl_filter_'+type).html();
+                f_html = f_html.replace(new RegExp("_ALIAS_","g"),list);
+                f_html = f_html.replace(new RegExp("_F_","g"),elem.data('rel'));
+
+                $('#'+list+'_f_container_'+elem.data('rel')).html(f_html);
+                $('#'+list+'_f_cancel_'+elem.data('rel')).show();
+
+            },
+
             wizard_remove_field: function (elem)
             {
                 $('select.ftype[data-rel='+elem.data('field')+']').val('');
                 $('#f_container_'+elem.data('field')).html('');
                 $('#f_cancel_'+elem.data('field')).hide();
+
+            },
+
+            wizard_remove_filter_field: function (elem)
+            {
+                var list = elem.data('list');
+                $('select.ftype[data-rel='+elem.data('field')+'][data-list='+list+']').val('');
+                $('#'+list+'_f_container_'+elem.data('field')).html('');
+                $('#'+list+'_f_cancel_'+elem.data('field')).hide();
 
             },
 

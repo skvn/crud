@@ -93,6 +93,7 @@ class CrudModelPrototype
         $this->processFiles();
         $this->processFields();
         $this->processLists();
+        $this->processFilters();
         $this->prepareConfigData();
 
     }//
@@ -248,7 +249,7 @@ class CrudModelPrototype
             $pivot_table = '';
         }
         $this->config_data['attaches'][] = ['column'=>$data['name'], 'multi'=>$data['multi'], 'pivot_table'=>$pivot_table];
-        $this->config_data['fields'][$data['name']] = array_merge(['type' => ($data['multi']?Form::FIELD_MULTI_FILE: Form::FIELD_FILE)], $data);
+        $this->config_data['fields'][$data['name']] = array_merge(['editable'=>1,'type' => ($data['multi']?Form::FIELD_MULTI_FILE: Form::FIELD_FILE)], $data);
     }
 
     /**
@@ -261,6 +262,10 @@ class CrudModelPrototype
         {
             foreach ($this->config_data['fields'] as $k=> $f)
             {
+                if (!empty($f['type']))
+                {
+                    $this->config_data['fields'][$k]['editable'] = 1;
+                }
                 //process date
                 if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE)
                 {
@@ -287,13 +292,56 @@ class CrudModelPrototype
                     $this->config_data['inline_img'][] = $k;
 
                 }
-                
-                
+
+
             }
+
+
 
 
         }
     }//
+
+    /**
+     * Process filters data
+     */
+    private  function processFilters()
+    {
+
+        if (!empty($this->config_data['filters']))
+        {
+            foreach ($this->config_data['filters'] as $list_alias=> $fields)
+            {
+
+                $filter_keys = [];
+                foreach ($fields as $k=>$f) {
+                    $key = $list_alias.'_filter_'.$k;
+                    $filter_keys[] = $key;
+                    $this->config_data['fields'][$key] = $f;
+                    $this->config_data['fields'][$key]['column'] = $k;
+
+                    //process date
+
+                    if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE_RANGE) {
+                        $formats = $this->wizard->getAvailableDateFormats();
+                        $this->config_data['fields'][$key]['format'] = $formats[$f['format']]['php'];
+                        $this->config_data['fields'][$key]['jsformat'] = $formats[$f['format']]['js'];
+                        $this->config_data['fields'][$key]['db_type'] = $this->column_types[$k];
+
+                    }
+
+                }
+                $this->config_data['lists'][$list_alias]['filter'] = $filter_keys;
+
+            }
+
+        }
+    }//
+
+
+
+
+
 
     /**
      * Prepare lists config
@@ -335,7 +383,7 @@ class CrudModelPrototype
             foreach ($this->config_data['fields'] as $key=>$f)
             {
 
-                if (!empty($f['type']) && (!isset($f['editable']) || $f['editable'] ))
+                if (isset($f['editable']) && $f['editable'] )
                 {
                     $form_fields[] = $key;
                 }
@@ -388,6 +436,7 @@ class CrudModelPrototype
     protected  function recordConfig()
     {
 
+        var_dump($this->config_data['fields']);
         //FIXME need some good formatting
         //$v = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $this->app['view']->make('crud_wizard::crud_config', ['model'=>$this->config_data])->render());
         $val = $this->app['view']->make('crud_wizard::crud_config', ['model'=>$this->config_data])->render();

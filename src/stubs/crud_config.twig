@@ -69,7 +69,7 @@ return [
             {% endif %}
             {% endfor %}
             ],
-            "filters" => [],
+            "filter" => {{ list.filter|json_encode|raw }},
             {%  if list.use_tabs %}
             /* 1 for using tabs  instead of popups */
             "edit_tab"=>1,

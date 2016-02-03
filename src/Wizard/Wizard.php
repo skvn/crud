@@ -273,6 +273,16 @@ class Wizard
     }
 
     /**
+     * Get an array of available filter field types
+     * @return array
+     */
+    function getAvailableFilterTypes()
+    {
+        return Form::getAvailableFilterTypes();
+    }
+
+
+    /**
      * Get an array of available form field types for  relations
      * @return array
      */

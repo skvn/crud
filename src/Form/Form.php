@@ -195,5 +195,27 @@ class Form {
         ];
     }//
 
+    /**
+     * Get array of available filter types
+     * @return array
+     */
+    static  function getAvailableFilterTypes()
+    {
+        return [
+            self::FIELD_TEXT => 'Text input',
+
+            self::FIELD_RANGE => 'Number range',
+
+            self::FIELD_DATE_RANGE => 'Date range',
+
+            self::FIELD_SELECT => 'Select',
+            self::FIELD_CHECKBOX => 'Checkbox',
+            //self::FIELD_FILE => 'File',
+            //self::FIELD_MULTI_FILE => 'Multiple files',
+
+
+        ];
+    }//
+
 
 } 
