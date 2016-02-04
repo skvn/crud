@@ -40,20 +40,20 @@
 
                     <div class="form-group">
                         <label class="checkbox-inline">
-                            <input type="checkbox"  id="is_tree" value="1" name="is_tree"  />
+                            <input type="checkbox"  id="is_tree" value="1" name="is_tree" {{ model.tree ? 'checked' }}  />
                             <b>Model is tree <span class="text-danger">If the table doesn't contain `tree_path`, `tree_order`,
                                     `tree_pid`, `tree_depth` columns - a migration will be created</span></b>
                         </label>
                     </div>
 
-                    <div class="form-group">
-                        <label for="acl">Model acl alias</label>
+                    <!--div class="form-group">
+                        <label for="acl">Acl alias</label>
                         <input type="text" class="form-control" id="acl"  name="acl"  value="{{ model.name }}" />
-                    </div>
+                    </div-->
 
                     <div class="form-group">
-                        <label for="ent_name">Model entity name</label>
-                        <input type="text" class="form-control" id="ent_name" name="ent_name"  />
+                        <label for="ent_name">Entity name</label>
+                        <input type="text" class="form-control" id="ent_name" name="ent_name" value="{{ model.ent_name }}"  />
                     </div>
 
                     {#
@@ -71,7 +71,7 @@
 
                     <div class="form-group">
                         <label for="dialog_width">Modal dialog width (optional)</label>
-                        <input type="text" class="form-control" id="dialog_width" name="dialog_width"  />
+                        <input type="text" class="form-control" id="dialog_width" name="dialog_width" value="{{ model.dialog_width }}"  />
                     </div>
 
                 </div>

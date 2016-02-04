@@ -1,26 +1,28 @@
-<td style="width: 100px;" >
+<td colspan="5" >
+    <div class="col col-xs-1">
     <div class="checkbox">
         <label>
-            <input type="checkbox"  value="1" name="relations[[NUM]][editable]"  data-toggle="collapse"  data-target="#editable_[NUM]" > Editable
+            <input type="checkbox"  value="1" name="relations[{{NUM}}][editable]" {{ rel.editable?'checked' }} onchange="$('#editable_{{NUM}}').toggleClass('hide');"  data-target="#editable_{{NUM}}" > Editable
         </label>
     </div>
-</td>
-<td class="col collapse" id="editable_[NUM]">
-    <div class="col col-xs-6">
-    <select name="relations[[NUM]][form_field]" class="form-control">
+   </div>
+    <div id="editable_{{NUM}}" {{  rel.editable?'':'class="hide"' }}>
+    <div class="col col-xs-4">
+    <select name="relations[{{NUM}}][form_field]" class="form-control default_select">
         <option value="">Choose field type</option>
         {% for k,v in wizard.getAvailableRelationFieldTypes() %}
-            <option value="{{ k }}">{{ v }}</option>
+            <option value="{{ k }}" {{ rel.type==k?'selected' }}>{{ v }}</option>
         {% endfor %}
     </select>
     </div>
-    <div class="col col-xs-6">
-        <input type="text"  class="form-control" data-attr="name" name="relations[[NUM]][find]" placeholder="Data provider method"  ><br />
+    <div class="col col-xs-4">
+        <input type="text"  class="form-control" data-attr="find" name="relations[{{NUM}}][find]" value="{{ rel.find }}" placeholder="Data find method [Optional]"  ><br />
         <span id="helpBlock" class="help-block">The name of the relation model method that provides edit options. See documentation for the details.</span><br />
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" value="1" name="relations[[NUM]][required]" > Required
-        </label>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="1" name="relations[{{NUM}}][required]" {{ rel.required?'checked' }}  > Required
+            </label>
+        </div>
     </div>
     </div>
 </td>

@@ -2,6 +2,7 @@
 
 use Twig_Extension;
 use Twig_SimpleFilter;
+use Twig_SimpleFunction;
 use Illuminate\Foundation\Application as LaravelApplication;
 
 class Acl extends Twig_Extension
@@ -30,4 +31,13 @@ class Acl extends Twig_Extension
             new Twig_SimpleFilter('allowed', [$this, 'checkAcl']),
         ];
     }
+
+    public function getFunctions()
+    {
+        return [
+            new Twig_SimpleFunction('snake_case', 'snake_case'),
+
+        ];
+    }
+
 }

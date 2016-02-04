@@ -28,8 +28,9 @@
 
                                     <td>{{ table }}</td>
                                     <td>
-                                        <form action="{{ route('wizard_model', table) }}" id="form_{{ table }}" method="get">
+
                                         {% if wizard.modelsDefined() %}
+                                        <form action="{{ route('wizard_model', table) }}" id="form_{{ table }}" method="get">
                                             {% if wizard.getModelConfig(table) %}
                                                 <input type="text" class="form-control" name="models[{{ table }}]"
                                                        value="{{ wizard.getModelConfig(table).name }}" disabled/>
@@ -37,17 +38,20 @@
                                                 <input type="text" class="form-control" name="model"
                                                        placeholder="Enter model name * " required/>
                                             {% endif %}
+                                        </form>
                                         {% else %}
                                             <input type="text" class="form-control" name="models[{{ table }}]"/>
                                         {% endif %}
-                                        </form>
+
                                     </td>
                                     <td>
                                         {% if wizard.getModelConfig(table) %}
                                             <a class="btn btn-success"
                                                href="{{ route('wizard_model', table) }}">Edit </a>
                                         {% else %}
+                                            {% if  wizard.modelsDefined() %}
                                             <input type="submit" form="form_{{ table }}" class="btn btn-primary" value="Create model and edit"/>
+                                            {% endif %}
                                         {% endif %}
                                     </td>
 
@@ -56,7 +60,9 @@
                         {% endfor %}
                     </table>
                     {% if not wizard.modelsDefined() %}
+                        <div class="row">
                         <input type="submit" class="btn btn-success" value="Save">
+                        </div>
                     {% endif %}
                     {% if  not wizard.modelsDefined() %}
                 </form>

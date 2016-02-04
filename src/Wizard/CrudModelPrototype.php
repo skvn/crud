@@ -113,7 +113,7 @@ class CrudModelPrototype
             $rel_arr = [
                 'relation' => $rel['type'],
                 'title' => $rel['title'],
-                'model' => snake_case($rel['model']),
+                'model' => $rel['model'],
                 'relation_name' => trim($rel['name']),
 
             ];
@@ -436,7 +436,6 @@ class CrudModelPrototype
     protected  function recordConfig()
     {
 
-        var_dump($this->config_data['fields']);
         //FIXME need some good formatting
         //$v = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $this->app['view']->make('crud_wizard::crud_config', ['model'=>$this->config_data])->render());
         $val = $this->app['view']->make('crud_wizard::crud_config', ['model'=>$this->config_data])->render();

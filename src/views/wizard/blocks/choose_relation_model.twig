@@ -1,9 +1,9 @@
 <td style="width:220px;">
-<select class="form-control" data-attr="model" data-change="crud_action" data-action="wizard_change_relation_model" name="relations[[NUM]][model]" required  >
+<select class="form-control default_select" data-attr="model" data-change="crud_action" data-action="wizard_change_relation_model" name="relations[{{NUM}}][model]" required  >
     <option value="">Choose relation model</option>
     {% for m in wizard.getAvailableModels() %}
         {% if m != model.name %}
-            <option value="{{ m }}">{{ m }}</option>
+            <option value="{{ m|snake_case }}" {{ rel.model == snake_case(m) ? 'selected' }}>{{ m }}</option>
         {% endif %}
     {% endfor %}
 </select>

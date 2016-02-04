@@ -1,0 +1,41 @@
+<div class="form-inline" data-relation="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" {% if ADD_REL %} data-added="1" {%  else  %} id="tpl_rel_{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" style="display: none" {% endif %}>
+<input type="hidden" name="relations[{{NUM}}][type]" data-attr="type" value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}" />
+<table class="table table-condensed table-striped">
+    <tr>
+        {% include 'crud::wizard/blocks/choose_relation_title' %}
+        {% include 'crud::wizard/blocks/choose_relation_name' %}
+        {% include 'crud::wizard/blocks/choose_relation_model' %}
+        <td style="width: 300px;">
+
+            <div class="checkbox"><label><input type="radio" value="0" name="relations[{{NUM}}][pivot]" data-pivot="pivot_{{NUM}}" checked  data-change="crud_action" data-action="wizard_toggle_rel_pivot"  /><b>Generate pivot table</b></label></div>
+            <div class="checkbox"><label><input type="radio" value="1" name="relations[{{NUM}}][pivot]" data-pivot="pivot_{{NUM}}"   data-change="crud_action" data-action="wizard_toggle_rel_pivot"  /><b>Choose existing pivot table</b></label></div>
+            <div id="pivot_{{NUM}}" style="display: none">
+                <select class="form-control" data-attr="relation_table" name="relations[{{NUM}}][pivot_table]"  data-change="crud_action" data-action="wizard_change_pivot_table" required >
+                    <option value="">Choose Pivot table</option>
+                    {% for table in wizard.getTables() %}
+                        {% if '_' in table %}
+                            <option value="{{ table }}">{{ table }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <label> Self key:<br />
+                    <select class="form-control" data-attr="pivot_column" data-rel="self" name="relations[{{NUM}}][pivot_self_key]" required  >
+                        <option value="">Choose pivot self key</option>
+                    </select>
+                </label>
+                <label> Foreign  key:<br />
+                    <select class="form-control" data-attr="pivot_column" data-rel="foreign" name="relations[{{NUM}}][pivot_foreign_key]" required  >
+                        <option value="">Choose pivot foreign key</option>
+                    </select>
+                </label>
+            </div>
+        </td>
+
+        {% include 'crud::wizard/blocks/choose_relation_editable' %}
+        <td></td>
+    </tr>
+    <div class="label label-default">Belongs to many</div>&nbsp;&nbsp;
+    <a href="#" data-click="crud_action" data-action="wizard_remove_relation" data-confirm="Remove this relation?" class="label label-danger">
+        <i class="fa fa-trash-o"></i> Remove</a>
+</table>
+</div>

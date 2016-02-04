@@ -1,5 +1,13 @@
 <td style="width:220px;">
-<select class="form-control" data-attr="ref_column" name="relations[[NUM]][ref_column]" required  >
+<select class="form-control default_select" data-attr="ref_column" name="relations[{{NUM}}][ref_column]"  required  >
+    {%  if rel.model %}
+        {% for col in wizard.getTableColumns(rel.model) %}
+            {%  if col != 'id' %}
+            <option value="{{ col }}" {{ col == rel.ref_column?'selected' }}>{{ col }}</option>
+            {% endif %}
+        {% endfor %}
+    {%  else  %}
     <option value="">Choose relation model first</option>
+    {% endif %}
 </select>
 </td>
