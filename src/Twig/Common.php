@@ -2,6 +2,7 @@
 
 use Twig_Extension;
 use Twig_SimpleFilter;
+use Twig_SimpleFunction;
 use Illuminate\Foundation\Application as LaravelApplication;
 
 class Common extends Twig_Extension
@@ -92,6 +93,14 @@ class Common extends Twig_Extension
             new Twig_SimpleFilter('model_view', [$this, 'modelView']),
             new Twig_SimpleFilter('is_numeric', [$this, 'isNumeric']),
             new Twig_SimpleFilter('array_value', [$this, 'arrayValue']),
+        ];
+    }
+
+    public function getFunctions()
+    {
+        return [
+            new Twig_SimpleFunction('snake_case', 'snake_case'),
+
         ];
     }
 }
