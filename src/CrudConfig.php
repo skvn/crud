@@ -327,6 +327,10 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
             {
                 $this->config['list']['columns'][$k]['hint']['index'] = $this->model->classViewName.'_'.$this->scope.'_'.$col['data'];
             }
+            if (!empty($col['acl']) && !$this->app['skvn.cms']->checkAcl($col['acl'], 'r'))
+            {
+                unset($this->config['list']['columns'][$k]);
+            }
         }
         $this->config['filter'] = $this->getFilter();
         if ($this->app['auth']->check())
