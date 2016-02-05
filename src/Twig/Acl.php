@@ -32,12 +32,6 @@ class Acl extends Twig_Extension
         ];
     }
 
-    public function getFunctions()
-    {
-        return [
-            new Twig_SimpleFunction('snake_case', 'snake_case'),
 
-        ];
-    }
 
 }
