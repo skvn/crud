@@ -137,11 +137,15 @@
             },
             init_modal: function(model, id, args)
             {
+
                 args = args || {};
                 var scope = args['scope'] || '';
                 var url = this.format_setting("model_edit_url", {model: model, id: id, scope:scope});
+
                 $('#crud_form').html('');
-                $('#crud_form').modal('show');
+                if (!$('#crud_form').is(':visible')) {
+                    $('#crud_form').modal('show');
+                }
                 var self = this;
                 $('#crud_form').load(url, function (res)
                 {
@@ -154,7 +158,7 @@
 
                     $('#crud_form').find('form').first().crud_form();
                     self.trigger('crud.content_loaded', {cont: $('#crud_form')});
-                    //$(self.doc).trigger("crud.content_loaded", {cont: $('#crud_form')});
+
                 });
 
 

@@ -63,8 +63,9 @@
                                     }
                                     else
                                     {
+
                                         crud.trigger("crud.reload", res);
-                                        crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
+                                        //crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
                                         crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
 
                                     }
@@ -215,6 +216,7 @@
 
                 data.table = $('*[data-list_table_ref='+data.ref+']').first();
             }
+
 
             var model = data.table.data('crud_table')?data.table.data('crud_table'):data.table.data('crud_tree');
             if (data.table && data.table.data('form_type') == 'tabs') {
