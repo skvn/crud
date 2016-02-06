@@ -166,9 +166,9 @@ class CrudModelPrototype
                 }
             }
 
-            if (!empty($rel_arr['local_column']))
+            if (!empty($rel['local_key']))
             {
-                $key = $rel_arr['local_column'];
+                $key = $rel['local_key'];
 
             } else {
                 $key = $rel_arr['relation_name'];

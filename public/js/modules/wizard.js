@@ -38,11 +38,14 @@
                     list_html = list_html.replace('_TITLE_',title);
                     $(list_html).appendTo('#lists_container');
 
+                    adjust_step_height();
 
                 } else {
                     alert('List alias "'+alias+'" already in use. Use another alias');
                     return false;
                 }
+
+
             },
 
             wizard_add_relation: function (elem) {
@@ -54,6 +57,7 @@
                 }
 
                 $('<a href="#" style="display:none" data-click="crud_action" data-action="clone_fragment"  data-skip_arr="1" data-fragment="tpl_rel_'+type+'" data-container="r_container"></a>').appendTo($('body')).click().remove();
+                adjust_step_height()
 
             },
 
@@ -69,6 +73,7 @@
                 f_html = f_html.replace(new RegExp("_ALIAS_","g"),elem.data('rel'));
                 $('#f_container_'+elem.data('rel')).html(f_html);
                 $('#f_cancel_'+elem.data('rel')).show();
+                adjust_step_height()
 
                 //$('<a href="#" style="display:none" data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="tpl_f_'+type+'" data-container="f_container_'+elem.data('rel')+'"></a>').appendTo($('body')).click().remove();
 
@@ -89,6 +94,7 @@
 
                 $('#'+list+'_f_container_'+elem.data('rel')).html(f_html);
                 $('#'+list+'_f_cancel_'+elem.data('rel')).show();
+                adjust_step_height()
 
             },
 
@@ -97,6 +103,7 @@
                 $('select.ftype[data-rel='+elem.data('field')+']').val('');
                 $('#f_container_'+elem.data('field')).html('');
                 $('#f_cancel_'+elem.data('field')).hide();
+                adjust_step_height()
 
             },
 
@@ -106,6 +113,7 @@
                 $('select.ftype[data-rel='+elem.data('field')+'][data-list='+list+']').val('');
                 $('#'+list+'_f_container_'+elem.data('field')).html('');
                 $('#'+list+'_f_cancel_'+elem.data('field')).hide();
+                adjust_step_height()
 
             },
 
@@ -114,8 +122,10 @@
 
                 if (elem.val()) {
                     var $target = elem.parents('table').first().find('select[data-attr=ref_column]');
+
                     if ($target.length) {
                         var fields = win.models[elem.val()];
+
                         if (fields)
                         {
                             var options = "<option value=''>Choose relation  key</option>";
@@ -136,10 +146,12 @@
             wizard_remove_parent_div: function (elem) {
 
                 elem.parents('div').first().remove();
+                adjust_step_height()
             },
             wizard_remove_relation: function (elem) {
 
                 elem.parents('div[data-relation]').first().remove();
+                adjust_step_height()
             },
             wizard_toggle_rel_pivot: function (elem) {
 
@@ -199,6 +211,7 @@
 
 
         $('[data-toggle="tooltip"]').tooltip();
+        adjust_step_height();
 
         switch (stepIndex){
 
@@ -261,7 +274,9 @@
                 $('#f_container').find('tr').show();
 
                 $('#r_container').find('select[data-attr=local_key]').each(function (){
-                    $('#f_container').find('tr[data-rel='+$(this).val()+']').hide();
+                    if ($(this).val()) {
+                        $('#f_container').find('tr[data-rel=' + $(this).val() + ']').hide();
+                    }
                 });
                 break;
 
@@ -290,6 +305,19 @@
         }
 
     }
+
+    function adjust_step_height()
+    {
+        $(".wizard .content > .title.current").next(".body")
+            .each(function () {
+                var bodyHeight = $(this).height();
+                var padding = $(this).innerHeight() - bodyHeight;
+                bodyHeight += padding;
+                $(this).parent().animate({ height: bodyHeight }, "fast");
+            });
+    }
+
+
     function init_steps()
     {
 

@@ -2,15 +2,15 @@
 <input type="hidden" name="relations[{{NUM}}][type]" data-attr="type" value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_MANY') }}" />
 <table class="table table-condensed table-striped">
     <tr>
-        {% include 'crud::wizard/blocks/choose_relation_title' %}
-        {% include 'crud::wizard/blocks/choose_relation_name' %}
-        {% include 'crud::wizard/blocks/choose_relation_model' %}
-        {% include 'crud::wizard/blocks/choose_relation_model_ref_col' %}
+        {% include 'crud::wizard/blocks/relations/choose_relation_title' %}
+        {% include 'crud::wizard/blocks/relations/choose_relation_name' %}
+        {% include 'crud::wizard/blocks/relations/choose_relation_model' %}
+        {% include 'crud::wizard/blocks/relations/choose_relation_model_ref_col' %}
         <td></td>
         <div class="label label-default">Has many</div>&nbsp;&nbsp;
         <a href="#" data-click="crud_action" data-action="wizard_remove_relation" data-confirm="Remove this relation?" class="label label-danger">
             <i class="fa fa-trash-o"></i> Remove</a>
     </tr>
-    <tr>{% include 'crud::wizard/blocks/choose_relation_editable' %}</tr>
+    <tr>{% include 'crud::wizard/blocks/relations/choose_relation_editable' %}</tr>
 </table>
 </div>

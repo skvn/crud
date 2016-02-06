@@ -3,9 +3,7 @@
 {% block head %}
     <link href="{{ 'css/plugins/steps/jquery.steps.css'|asset }}" rel="stylesheet">
     <style>
-        .wizard-big.wizard > .content {
-            min-height: 680px;
-        }
+
         .wizard > .steps > ul > li
         {
             width: 20%;
@@ -95,7 +93,7 @@
 
             <div class="row">
                 <div class="col-lg-12"  >
-                    <div id="lists_container" style="max-height: 650px; overflow: auto"></div>
+                    <div id="lists_container"></div>
                     <label>
                         <input type="text" class="form-control" id="list_alias" style="display:inline; width:300px;" placeholder="Enter list name" />
                         <a href="#" class="btn btn-success" data-click="crud_action" data-action="wizard_add_list" ><i class="fa fa-plus"></i> Add </a>
@@ -138,7 +136,7 @@
 
 
 {% block modals %}
-    <script src="{{ 'js/plugins/staps/jquery.steps.min.js'|asset }}"></script>
+    <script src="{{ 'js/plugins/staps/jquery.steps.js'|asset }}"></script>
     <script src="{{ 'js/plugins/validate/jquery.validate.min.js'|asset }}"></script>
     <script src="{{ 'js/modules/wizard.js'|asset }}"></script>
     <script>

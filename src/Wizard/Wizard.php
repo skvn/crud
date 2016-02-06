@@ -301,7 +301,7 @@ class Wizard
         $configs = $this->getCrudConfigs();
         foreach ($configs as $model=>$cfg)
         {
-            $ret[$model] = $this->getTableColumns($cfg['table']);
+            $ret[snake_case($model)] = $this->getTableColumns($cfg['table']);
         }
         return $ret;
 
