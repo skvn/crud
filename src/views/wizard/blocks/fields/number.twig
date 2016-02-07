@@ -1,0 +1,32 @@
+<div class="row">
+<div class="form-group">
+    <div class="col col-xs-4">
+    {% include 'crud::wizard/blocks/fields/field_title' %}
+    </div>
+    <div class="col col-xs-4">
+    {% include 'crud::wizard/blocks/fields/field_hint' %}
+    </div>
+    <div class="col col-xs-2">
+        {% include 'crud::wizard/blocks/fields/field_required' %}
+    </div>
+</div>
+</div>
+<div class="row">
+<div class="form-group">
+    <div class="col col-xs-2">
+        <label>Min
+        <input type="text" class="form-control" name="fields[{{ ALIAS }}][min]"  value="{{ fld.min }}" placeholder="Min" size="3" >
+        </label>
+    </div>
+    <div class="col col-xs-2">
+        <label>Max
+        <input type="text" class="form-control" name="fields[{{ ALIAS }}][max]"  value="{{ fld.max }}" placeholder="Max" size="3" >
+        </label>
+    </div>
+    <div class="col col-xs-2">
+        <label>Step
+        <input type="text" class="form-control" name="fields[{{ ALIAS }}][step]"   value="{{ fld.step }}" placeholder="Step" size="3" >
+        </label>
+    </div>
+</div>
+</div>

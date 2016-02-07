@@ -7,7 +7,7 @@
         {%  if not rel %}
         {% include 'crud::wizard/blocks/relations/choose_relation_model' %}
         {%  else %}
-           <td width="150"><input type="text" class="form-control" name="relations[{{NUM}}][model]" value="{{ rel.model }}" readonly /></td>
+           <td width="150"><label>Model<br /><input type="text" class="form-control" name="relations[{{NUM}}][model]" value="{{ rel.model }}" readonly /></label></td>
         {% endif %}
         <td style="width: 300px;">
 
@@ -35,9 +35,13 @@
                 </label>
             </div>
             {% else %}
+            <label> Pivot table:<br />
                 <input type="text" class="form-control" name="relations[{{NUM}}][pivot_table]" value="{{ rel.pivot_table }}" readonly />
+            </label>
                 <input type="hidden" name="relations[{{NUM}}][pivot_self_key]" value="{{ rel.pivot_self_key }}" />
                 <input type="hidden" name="relations[{{NUM}}][pivot_foreign_key]" value="{{ rel.pivot_foreign_key }}" />
+                <input type="hidden" name="relations[{{NUM}}][pivot]" value="1" />
+
             {%  endif %}
         </td>
 

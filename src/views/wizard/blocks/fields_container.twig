@@ -8,17 +8,24 @@
                         <tr data-rel="{{ f }}">
                             <td style="width: 200px;"><b>{{ f }}</b></td>
                             <td style="width: 250px;"><label>
+                                    {% set fld=model.fields[f] %}
                                     <select name="fields[{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-action="wizard_add_field"  style="display:inline; width:250px;"  >
                                         <option value="">Choose field type</option>
                                         {% for k,v in wizard.getAvailableFieldTypes() %}
-                                            <option value="{{ k }}">{{ v }}</option>
+                                            <option value="{{ k }}" {{ fld.type == k?'selected' }}>{{ v }}</option>
                                         {% endfor %}
                                     </select>
                                     {#<a href="#" class="btn btn-success" data-rel="{{ f }}"  data-click="crud_action" data-action="wizard_add_field" ><i class="fa fa-plus"></i> Apply</a>
                                     #}
                                 </label></td>
-                            <td id="f_container_{{ f }}"></td>
-                            <td style="width: 80px;"><div id="f_cancel_{{ f }}" style="display: none"><a href="#" data-click="crud_action" data-field="{{ f }}" data-action="wizard_remove_field" data-confirm="Remove this editable field?" class="label label-danger">
+                            <td id="f_container_{{ f }}">
+                                {%  if fld.type %}
+                                    {%  set ALIAS = f %}
+                                    {% include 'crud::wizard/blocks/fields/'~fld.type~'.twig' %}
+                                {% endif %}
+
+                            </td>
+                            <td style="width: 80px;"><div id="f_cancel_{{ f }}" {% if not fld %}style="display: none"{% endif %}><a href="#" data-click="crud_action" data-field="{{ f }}" data-action="wizard_remove_field" data-confirm="Remove this editable field?" class="label label-danger">
                                     <i class="fa fa-trash-o"></i> Cancel</a></div></td>
                         </tr>
                     {% endif %}

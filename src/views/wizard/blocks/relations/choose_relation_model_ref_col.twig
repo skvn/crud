@@ -1,4 +1,5 @@
 <td style="width:220px;">
+<label>Foreign key<br />
 <select class="form-control default_select" data-attr="ref_column" name="relations[{{NUM}}][ref_column]"  required  >
     {%  if rel.model %}
         {% for col in wizard.getTableColumns(rel.model) %}
@@ -10,4 +11,5 @@
     <option value="">Choose relation model first</option>
     {% endif %}
 </select>
+</label>
 </td>

@@ -1,0 +1,19 @@
+<div class="form-group">
+    <div class="col col-xs-4">
+    {% include 'crud::wizard/blocks/fields/field_title' %}
+    </div>
+    <div class="col col-xs-4">
+        {% include 'crud::wizard/blocks/fields/field_hint' %}
+    </div>
+    <div class="col col-xs-2">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="1" name="fields[{{ ALIAS }}][editor]"  {{ fld.editor?'checked' }} > WYSIWYG editor
+            </label>
+        </div>
+    </div>
+    <div class="col col-xs-2">
+           {% include 'crud::wizard/blocks/fields/field_required' %}
+    </div>
+
+</div>

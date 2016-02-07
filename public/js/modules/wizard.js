@@ -324,7 +324,11 @@
         $("#form").steps({
             bodyTag: "fieldset",
             transitionEffect: "slideLeft",
-            autoFocus: true,
+            enableAllSteps: true,
+            showFinishButtonAlways: true,
+            labels: {
+                finish: "Save model"
+            },
             onStepChanging: function (event, currentIndex, newIndex)
             {
 

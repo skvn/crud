@@ -6,6 +6,7 @@
         {% include 'crud::wizard/blocks/relations/choose_relation_name' %}
         {% include 'crud::wizard/blocks/relations/choose_relation_model' %}
         <td style="width: 200px;">
+            <label>Local key
             <select class="form-control default_select" data-attr="local_key" required name="relations[{{NUM}}][local_key]" >
                 <option value="">Choose Local key</option>
                 {% for f in wizard.getTableColumns(table) %}
@@ -14,6 +15,7 @@
                     {% endif %}
                 {% endfor %}
             </select>
+            </label>
         </td>
         <td></td>
         <div class="label  label-default">Belongs to</div>&nbsp;&nbsp;
