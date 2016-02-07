@@ -1,0 +1,52 @@
+{# COlUMN#}
+<div class="form-inline" {% if column %} data-added="1" {% else %} style="display: none" id="col_tpl_{{ ALIAS }}" {% endif %} data-colidx="col_{{ NUM }}">
+    <table class="table table-striped table-condensed list_col_row" style="width: 50%">
+        <tr>
+            <td style="width:350px;" nowrap="nowrap">
+
+                <select class="form-control default_select" data-list_col="data_col" name="lists[{{ ALIAS }}][columns][{{ NUM }}][data_col]" required>
+                    <option value="">Choose table column</option>
+                    {% for f in wizard.getTableColumns(table) %}
+                        <option value="{{ f }}" {{ f == column.data?'selected' }}>{{ f }}</option>
+                    {% endfor %}
+                </select><br>
+                <b>Or</b><br>
+                <input type="text"  data-list_col="data" style="width:300px;" class="form-control" name="lists[{{ ALIAS }}][columns][{{ NUM }}][data]" placeholder="Enter model attribute name *" required >
+                <b>Or</b><br>
+                <select class="form-control"  default_select  data-list_col="data_rel" data-rel="list_relation" name="lists[{{ ALIAS }}][columns][{{ NUM }}][data_rel]" style="width: 200px; display: inline" required>
+                    <option value="">Choose relation</option>
+                </select>
+                <input type="text"   data-list_col="data_rel" style="width:130px; display: inline" class="form-control" name="lists[{{ ALIAS }}][columns][{{ NUM }}][data_rel_attr]" placeholder="Attribute name" required ><br>
+            </td>
+            <td valign="top" style="width:150px;">
+                <input type="text" class="form-control" name="lists[{{ ALIAS }}][columns][{{ NUM }}][title]"  value="{{ column.title }}"  placeholder="Title *" required >
+            </td>
+            <td valign="top"  style="width:80px;"><input type="text" class="form-control" name="lists[{{ ALIAS }}][columns][{{ NUM }}][width]" value="{{ column.width }}" placeholder="Width"></td>
+            <td  style="width:70px;">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="1" name="lists[{{ ALIAS }}][columns][{{ NUM }}][orderable]" {{ column.orderable?'checked' }} data-toggle="collapse"  data-target="#def_order_{{ NUM }}"> Orderable
+                    </label>
+                </div>
+            </td>
+            <td style="width:150px;!important;" {%  if not column.orderable %}class="collapse"{% endif %}  id="def_order_{{ NUM }}">
+                <select class="form-control default_select" name="lists[{{ ALIAS }}][columns][{{ NUM }}][default_order]" >
+                    <option value="">Default order</option>
+                    <option value="asc" {{ column.default_order == "asc"?'selected' }}>Ascending</option>
+                    <option value="desc" {{ column.default_order == "desc"?'selected' }}>Descending</option>
+                </select>
+            </td>
+            <td  style="width:80px;"><div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="1" name="lists[{{ ALIAS }}][columns][{{ NUM }}][invisible]" {{ column.invisible?'checked' }}  > Invisible
+                    </label>
+                </div>
+            </td>
+            <td><a href="#" data-click="crud_action" data-action="wizard_remove_list_col" data-confirm="Remove this column?" data-list="{{ ALIAS }}" data-idx="{{ NUM }}"  class="label label-danger">
+                    <i class="fa fa-trash-o"></i> Remove</a></td>
+
+
+        </tr>
+    </table>
+</div>
+{# END COlUMN#}

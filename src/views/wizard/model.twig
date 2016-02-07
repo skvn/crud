@@ -93,7 +93,14 @@
 
             <div class="row">
                 <div class="col-lg-12"  >
-                    <div id="lists_container"></div>
+                    <div id="lists_container">
+                        {%  if model.list %}
+                            {%  for ALIAS, list in  model.list%}
+                                {% include 'crud::wizard/blocks/list' %}
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
                     <label>
                         <input type="text" class="form-control" id="list_alias" style="display:inline; width:300px;" placeholder="Enter list name" />
                         <a href="#" class="btn btn-success" data-click="crud_action" data-action="wizard_add_list" ><i class="fa fa-plus"></i> Add </a>
@@ -113,6 +120,9 @@
     {# TEMPLATES#}
 
     {# LIST #}
+    {%  set list_alias = null %}
+    {%  set list = null %}
+    {%  set ALIAS = "_ALIAS_" %}
     {% include 'crud::wizard/blocks/list' %}
     {# RELATIONS#}
     {% include 'crud::wizard/blocks/relations' %}

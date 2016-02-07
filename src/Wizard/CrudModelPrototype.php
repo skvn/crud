@@ -315,19 +315,21 @@ class CrudModelPrototype
 
                 $filter_keys = [];
                 foreach ($fields as $k=>$f) {
-                    $key = $list_alias.'_filter_'.$k;
-                    $filter_keys[] = $key;
-                    $this->config_data['fields'][$key] = $f;
-                    $this->config_data['fields'][$key]['column'] = $k;
+                    if (!empty($f['type'])) {
+                        $key = $list_alias . '_filter_' . $k;
+                        $filter_keys[] = $key;
+                        $this->config_data['fields'][$key] = $f;
+                        $this->config_data['fields'][$key]['column'] = $k;
 
-                    //process date
+                        //process date
 
-                    if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE_RANGE) {
-                        $formats = $this->wizard->getAvailableDateFormats();
-                        $this->config_data['fields'][$key]['format'] = $formats[$f['format']]['php'];
-                        $this->config_data['fields'][$key]['jsformat'] = $formats[$f['format']]['js'];
-                        $this->config_data['fields'][$key]['db_type'] = $this->column_types[$k];
+                        if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE_RANGE) {
+                            $formats = $this->wizard->getAvailableDateFormats();
+                            $this->config_data['fields'][$key]['format'] = $formats[$f['format']]['php'];
+                            $this->config_data['fields'][$key]['jsformat'] = $formats[$f['format']]['js'];
+                            $this->config_data['fields'][$key]['db_type'] = $this->column_types[$k];
 
+                        }
                     }
 
                 }
@@ -436,10 +438,9 @@ class CrudModelPrototype
     protected  function recordConfig()
     {
 
-        //FIXME need some good formatting
-        //$v = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $this->app['view']->make('crud_wizard::crud_config', ['model'=>$this->config_data])->render());
         $val = $this->app['view']->make('crud_wizard::crud_config', ['model'=>$this->config_data])->render();
-        file_put_contents($this->config_path,$val);
+        eval("\$arr = $val");
+        file_put_contents($this->config_path,"<?php \n return ".var_export($arr, 1).";");
 
     }//
 

@@ -1,78 +1,87 @@
-
+{%  if not list %}
 <div id="list_tpl" style="display: none">
+{% endif %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title"><div class="label label-primary pull-right">[_ALIAS_]</div>
-                <input type="text" class="form-control" id="lists[_ALIAS_][title]" name="lists[_ALIAS_][title]" placeholder="List title" value="_TITLE_" required />
-                <input type="text" class="form-control" id="lists[_ALIAS_][description]" name="lists[_ALIAS_][description]" placeholder="List short description" required  />
+            <h3 class="panel-title"><div class="label label-primary pull-right">[{{ ALIAS }}]</div>
+                <input type="text" class="form-control" id="lists[{{ ALIAS }}][title]" name="lists[{{ ALIAS }}][title]" value="{{ list.title }}" placeholder="List title" value="_TITLE_" required />
+                <input type="text" class="form-control" id="lists[{{ ALIAS }}][description]" name="lists[{{ ALIAS }}][description]"  value="{{ list.description }}" placeholder="List short description" required  />
             </h3>
         </div>
         <div class="panel-body">
             <div class="col col-lg-12">
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="lists[_ALIAS_][multi_select]" name="lists[_ALIAS_][multi_select]"  />
+                        <input type="checkbox" value="1" {{ list.multiselect?'checked' }}  id="lists[{{ ALIAS }}][multi_select]" name="lists[{{ ALIAS }}][multi_select]"  />
                         <b>Allow multi select</b>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="lists[_ALIAS_][use_tabs]" name="lists[_ALIAS_][use_tabs]"  />
+                        <input type="checkbox" value="1"  id="lists[{{ ALIAS }}][use_tabs]"  {{ list.edit_tab?'checked' }} name="lists[{{ ALIAS }}][use_tabs]"  />
                         <b>Use tabs for edit interface (otherwise a popup would be used)</b>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="lists[_ALIAS_][edit_btn]" name="lists[_ALIAS_][edit_btn]"  />
+                        <input type="checkbox" value="1"  id="lists[{{ ALIAS }}][edit_btn]" {{ list.buttons.single_edit?'checked' }} name="lists[{{ ALIAS }}][edit_btn]"  />
                         <b>Show "edit" button for each row</b>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="lists[_ALIAS_][delete_btn]" name="lists[_ALIAS_][delete_btn]"  />
+                        <input type="checkbox" value="1"  id="lists[{{ ALIAS }}][delete_btn]"  {{ list.buttons.single_delete?'checked' }} name="lists[{{ ALIAS }}][delete_btn]"  />
                         <b>Show "delete" button for each row</b>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="lists[_ALIAS_][mass_delete_btn]" name="lists[_ALIAS_][mass_delete_btn]"  />
+                        <input type="checkbox" value="1"  id="lists[{{ ALIAS }}][mass_delete_btn]"  {{ list.buttons.mass_delete?'checked' }} name="lists[{{ ALIAS }}][mass_delete_btn]"  />
                         <b>Show "Bulk delete" button</b>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="lists[_ALIAS_][customize_cols]" name="lists[_ALIAS_][customize_cols]"  />
+                        <input type="checkbox" value="1"  id="lists[{{ ALIAS }}][customize_cols]" {{ list.columns.customize_columns?'checked' }}name="lists[{{ ALIAS }}][customize_cols]"  />
                         <b>Allow show/hide columns</b>
                     </label>
                 </div>
                 <div class="hr-line-dashed"></div>
                 <h3>Columns</h3>
                 <div class="row">
-                    <div id="list_cols__ALIAS_"></div>
-                    <a href="#" class="btn btn-success"  data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="col_tpl__ALIAS_" data-container="list_cols__ALIAS_"><i class="fa fa-plus"></i> Add column</a>
+                    <div id="list_cols_{{ ALIAS }}">
+                        {%  if list.columns %}
+                            {%  set NUM =  0 %}
+                            {%  for column in list.columns %}
+                                {% include 'crud::wizard/blocks/list_column.twig' %}
+                                {%  set NUM=(NUM+1)  %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <a href="#" class="btn btn-success"  data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="col_tpl_{{ ALIAS }}" data-container="list_cols_{{ ALIAS }}"><i class="fa fa-plus"></i> Add column</a>
                 </div>
 
                 <h3>Filter fields</h3>
-                <table class="table table-bordered table-striped"  id="_ALIAS_f_container"  style="max-width: 1200px">
+                <table class="table table-bordered table-striped"  id="{{ ALIAS }}f_container"  style="max-width: 1200px">
                     {% for f in wizard.getTableColumns(table) %}
                         {% if f != 'id' %}
                             <tr data-rel="{{ f }}">
                                 <td style="width: 200px;"><b>{{ f }}</b></td>
                                 <td style="width: 250px;"><label>
-                                        <select name="filters[_ALIAS_][{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-list="_ALIAS_" data-action="wizard_add_filter_field"  style="display:inline; width:250px;"  >
+                                        <select name="filters[{{ ALIAS }}][{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-list="{{ ALIAS }}" data-action="wizard_add_filter_field"  style="display:inline; width:250px;"  >
                                             <option value="">Choose field type</option>
                                             {% for k,v in wizard.getAvailableFilterTypes(f) %}
                                                 <option value="{{ k }}">{{ v }}</option>
                                             {% endfor %}
                                         </select>
                                     </label></td>
-                                <td id="_ALIAS__f_container_{{ f }}"></td>
-                                <td style="width: 80px;"><div id="_ALIAS__f_cancel_{{ f }}" style="display: none"><a href="#" data-click="crud_action" data-field="{{ f }}" data-list="_ALIAS_" data-action="wizard_remove_filter_field" data-confirm="Remove this filter field?" class="label label-danger">
+                                <td id="{{ ALIAS }}_f_container_{{ f }}"></td>
+                                <td style="width: 80px;"><div id="{{ ALIAS }}_f_cancel_{{ f }}" style="display: none"><a href="#" data-click="crud_action" data-field="{{ f }}" data-list="{{ ALIAS }}" data-action="wizard_remove_filter_field" data-confirm="Remove this filter field?" class="label label-danger">
                                             <i class="fa fa-trash-o"></i> Cancel</a></div></td>
                             </tr>
                         {% endif %}
@@ -81,61 +90,11 @@
 
             </div>
         </div>
-        {# COlUMN#}
-        <div class="form-inline" style="display: none" id="col_tpl__ALIAS_" data-colidx="col_[NUM]">
-            <table class="table table-striped table-condensed list_col_row" style="width: 50%">
-                <tr>
-                    <td style="width:350px;" nowrap="nowrap">
 
-                    <select class="form-control" data-list_col="data_col" name="lists[_ALIAS_][columns][[NUM]][data_col]" required>
-                        <option value="">Choose table column</option>
-                    {% for f in wizard.getTableColumns(table) %}
-                        <option value="{{ f }}">{{ f }}</option>
-                    {% endfor %}
-                    </select><br>
-                    <b>Or</b><br>
-                    <input type="text"  data-list_col="data" style="width:300px;" class="form-control" name="lists[_ALIAS_][columns][[NUM]][data]" placeholder="Enter model attribute name *" required >
-                    <b>Or</b><br>
-                      <select class="form-control"  data-list_col="data_rel" data-rel="list_relation" name="lists[_ALIAS_][columns][[NUM]][data_rel]" style="width: 200px; display: inline" required>
-                         <option value="">Choose relation</option>
-                      </select>
-                        <input type="text"   data-list_col="data_rel" style="width:130px; display: inline" class="form-control" name="lists[_ALIAS_][columns][[NUM]][data_rel_attr]" placeholder="Attribute name" required ><br>
-                    </td>
-                    <td valign="top" style="width:150px;">
-                        <input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][title]" placeholder="Title *" required >
-                    </td>
-                    <td valign="top"  style="width:80px;"><input type="text" class="form-control" name="lists[_ALIAS_][columns][[NUM]][width]" placeholder="Width"></td>
-                    <td  style="width:70px;">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="1" name="lists[_ALIAS_][columns][[NUM]][orderable]" data-toggle="collapse"  data-target="#def_order_[NUM]"> Orderable
-                            </label>
-                        </div>
-                    </td>
-                    <td style="width:150px;!important;" class="collapse"  id="def_order_[NUM]">
-                            <select class="form-control default_select" name="lists[_ALIAS_][columns][[NUM]][default_order]" >
-                                <option value="">Default order</option>
-                                <option value="asc">Ascending</option>
-                                <option value="desc">Descending</option>
-                            </select>
-                    </td>
-                    <td  style="width:80px;"><div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="1" name="lists[_ALIAS_][columns][[NUM]][invisible]" > Invisible
-                            </label>
-                        </div>
-                    </td>
-                    <td></td>
-
-
-        </tr>
-        </table>
-        </div>
-        {# END COlUMN#}
+        {%  set NUM = "[NUM]" %}
+        {% include 'crud::wizard/blocks/list_column' %}
 
     </div>
-
-
-
-
+{%  if not list %}
 </div>
+{% endif %}

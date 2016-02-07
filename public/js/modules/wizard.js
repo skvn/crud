@@ -114,8 +114,14 @@
                 $('#'+list+'_f_container_'+elem.data('field')).html('');
                 $('#'+list+'_f_cancel_'+elem.data('field')).hide();
                 adjust_step_height()
-
             },
+
+            wizard_remove_list_col: function (elem)
+            {
+                elem.parents('div[data-colidx]').first().remove()
+                adjust_step_height()
+            },
+
 
             wizard_change_relation_model: function (elem)
             {
