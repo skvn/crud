@@ -268,6 +268,7 @@
 
                 break;
 
+
             case 2:
                 //switch to fields
                 //exclude  local keys
@@ -278,6 +279,27 @@
                         $('#f_container').find('tr[data-rel=' + $(this).val() + ']').hide();
                     }
                 });
+                break;
+
+            case 3:
+                //switch to files
+                $('#files_container').find('tr').show();
+                //exclude local keys
+                $('#r_container').find('select[data-attr=local_key]').each(function (){
+                    if ($(this).val()) {
+                        $('#files_container').find('tr[data-rel=' + $(this).val() + ']').hide();
+                    }
+                });
+
+                //exclude existing fields
+                $('#f_container').find('select.ftype').each(function (){
+                    if ($(this).val()) {
+                        $('#files_container').find('tr[data-rel=' + $(this).data('rel') + ']').hide();
+                    }
+                });
+
+
+
                 break;
 
             case 4:

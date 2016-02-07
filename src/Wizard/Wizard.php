@@ -115,7 +115,18 @@ class Wizard
 
         }
 
-        return $arr;
+        $return = [];
+        foreach ($arr as $k=> $table_name)
+        {
+            if ($this->getModelConfig($table_name))
+            {
+                $return[] = $table_name;
+                unset($arr[$k]);
+            }
+        }
+
+        $return += $arr;
+        return $return;
 
     }
 
