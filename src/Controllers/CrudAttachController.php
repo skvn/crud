@@ -15,10 +15,16 @@ class CrudAttachController extends Controller {
         $attachObj = CrudFile::findOrFail($id);
         if (file_exists($attachObj->path))
         {
-            $f = new File($attachObj->path);
-            header("Content-Type: ".$f->getMimeType());
-            header("Content-Length: " . filesize($attachObj->path));
-            readfile($attachObj->path);
+            //$fp = fopen($attachObj->path, 'rb');
+            //$f = new File($attachObj->path);
+
+            //readfile($attachObj->path);
+
+            //header("Content-Type: ".$attachObj->mime_type);
+            //header("Content-Length: " . filesize($attachObj->path));
+            $fp = fopen($attachObj->path,"rb");
+            fpassthru($fp);
+            fclose($fp);
             exit;
         }
         

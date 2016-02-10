@@ -35,7 +35,7 @@ class CrudFile extends Model
 
     public function getDownloadLinkAttribute()
     {
-        return \URL::route('download_attach',array('id' => $this->id, 'filename'=>$this->file_name));
+        return \URL::route('download_attach',array('id' => $this->id, 'filename'=>urlencode($this->file_name)));
     }
 
 
