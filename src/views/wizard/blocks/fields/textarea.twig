@@ -8,9 +8,17 @@
     <div class="col col-xs-2">
         <div class="checkbox">
             <label>
-                <input type="checkbox" value="1" name="fields[{{ ALIAS }}][editor]"  {{ fld.editor?'checked' }} > WYSIWYG editor
+                <input type="checkbox" value="1" name="fields[{{ ALIAS }}][editor]"  {{ fld.editor?'checked' }} data-toggle="collapse" data-target="#ed_type_{{ ALIAS }}" > WYSIWYG editor
             </label>
         </div>
+    </div>
+    <div class="col col-xs-2 collapse" id="ed_type_{{ ALIAS }}">
+        <label> Editor type
+            <select class="form-control" name="fields[{{ ALIAS }}][editor_type]"  >
+                <option value="summernote" {{ fld.editor_type=='summernote'?'selected' }}>Sumernote</option>
+                <option value="tinymce" {{ fld.editor_type=='tinymce'?'selected' }}>TinyMCE</option>
+            </select>
+        </label>
     </div>
     <div class="col col-xs-2">
            {% include 'crud::wizard/blocks/fields/field_required' %}

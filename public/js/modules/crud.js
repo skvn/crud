@@ -327,8 +327,8 @@
                         tinymce.init({
                             selector: '#'+$(this).attr('id'),
                             height: 430,
-                            toolbar: "paste  | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
-                            plugins: ["image", "link", "media"] ,
+                            toolbar: "paste  | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | code",
+                            plugins: ["image", "link", "media", "code"] ,
                             paste_as_text: true,
                             automatic_uploads: false,
                             relative_urls : false,
