@@ -100,12 +100,7 @@ class AttachmentHandler {
     {
 
 
-        $ret = array();
-
-        $ret['originalName'] = $uploadedFile->getClientOriginalName();
-        $ret['originalExt'] = $uploadedFile->getClientOriginalExtension();
-        $ret['originalMime'] = $uploadedFile->getClientMimeType();
-        $ret['originalSize'] = $uploadedFile->getClientSize();
+        $ret = self::generateFdata($uploadedFile);
         $name = uniqid();
         $uploadedFile->move(\Config::get('attach.root'),$name);
         $ret['originalPath'] = \Config::get('attach.root').DIRECTORY_SEPARATOR.$name;
@@ -118,12 +113,7 @@ class AttachmentHandler {
     {
 
 
-        $ret = array();
-
-        $ret['originalName'] = $file->getBasename();
-        $ret['originalExt'] = $file->getExtension();
-        $ret['originalMime'] = $file->getMimeType();
-        $ret['originalSize'] = $file->getSize();
+        $ret = self::generateFdata($file);
         $name = uniqid();
         $file->move(\Config::get('attach.root'),$name);
         $ret['originalPath'] = \Config::get('attach.root').DIRECTORY_SEPARATOR.$name;
@@ -163,7 +153,7 @@ class AttachmentHandler {
                     }
                 }
 
-                $newDest = $this->generateSaveFilename($file);
+                $newDest = self::generateSaveFilename($file);
                 \File::makeDirectory(dirname($newDest), 0755, true, true);
                 \File::move($file['originalPath'], $newDest);
 
@@ -278,7 +268,26 @@ class AttachmentHandler {
     }
 
 
-    private function generateSaveFilename($file)
+    static  function generateFdata($file)
+    {
+        $fdata = [];
+        if ($file instanceof UploadedFile)
+        {
+            $fdata['originalName'] =   $file->getClientOriginalName();
+            $fdata['originalExt']  = $file->getClientOriginalExtension();
+            $fdata['originalMime'] =  $file->getClientMimeType();
+
+        } else {
+            $fdata['originalName'] = $file->getBasename();
+            $fdata['originalExt'] = $file->getExtension();
+            $fdata['originalMime'] = $file->getMimeType();
+
+        }
+        $fdata['originalSize'] = $file->getSize();
+
+        return $fdata;
+    }
+    static function  generateSaveFilename($file)
     {
 
         $md5 = md5($file['originalName']);

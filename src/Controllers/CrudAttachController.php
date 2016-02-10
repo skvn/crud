@@ -1,8 +1,10 @@
 <?php namespace Skvn\Crud\Controllers;
 
 use Illuminate\Routing\Controller;
-use Skvn\Crud\Models\CrudFile;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
+use Skvn\Crud\Models\CrudFile;
+
 
 class CrudAttachController extends Controller {
 
@@ -22,7 +24,28 @@ class CrudAttachController extends Controller {
         
         //return \Response::download($attachObj->path);
 
+    }
 
+    public  function upload()
+    {
+        if (\Request::hasFile('file')) {
+            $file = \Request::file('file');
+            if ($file instanceof UploadedFile)
+            {
+                $crud_file = CrudFile::createFromUpload($file);
+                $ret =  [
+                    'id'=>$crud_file->id,
+                    'url' => $crud_file->getDownloadLinkAttribute(),
+                ];
+                if (strpos($crud_file->mime_type,'image') !== false)
+                {
+                    $dimensions = getimagesize($crud_file->path);
+                    $ret['width'] = $dimensions[0];
+                    $ret['height'] = $dimensions[1];
+                }
+                return $ret;
+            }
+        }
     }
 
 }

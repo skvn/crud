@@ -281,38 +281,106 @@
             {
                 if (container)
                 {
-                    $coll = $('.html_editor', container);
+                    $coll_sum = $('.html_editor[data-editor_type="summernote"]', container);
+                    $coll_tmce = $('.html_editor[data-editor_type="tinymce"]', container);
                 } else {
-                    $coll = $('.html_editor');
+                    $coll_sum = $('.html_editor[data-editor_type="summernote"]');
+                    $coll_tmce = $('.html_editor[data-editor_type="tinymce"]');
                 }
-                $coll.summernote({
-                    lang: 'ru-RU',
-                    toolbar: [
+                if ($coll_sum.length) {
+                    $coll_sum.summernote({
+                        //FIXME
+                        lang: 'ru-RU',
+                        toolbar: [
 
-                        ['style', ['style','bold', 'italic', 'underline', 'clear']],
-                        ['font', ['strikethrough', 'superscript', 'subscript']],
-                        ['fontsize', ['fontsize']],
-                        ['color', ['color']],
-                        ['para', ['ul', 'ol', 'paragraph']],
-                        ['insert', ['picture', 'link', 'video','table']]
+                            ['style', ['style', 'bold', 'italic', 'underline', 'clear']],
+                            ['font', ['strikethrough', 'superscript', 'subscript']],
+                            ['fontsize', ['fontsize']],
+                            ['color', ['color']],
+                            ['para', ['ul', 'ol', 'paragraph']],
+                            ['insert', ['picture', 'link', 'video', 'table']]
 
-                    ],
-                    onpaste: function(e) {
-                        var thisNote = $(this);
-                        var updatePastedText = function(someNote){
-                            var original = someNote.code();
-                            var cleaned = crud.cleanPastedHTML(original); //this is where to call whatever clean function you want. I have mine in a different file, called CleanPastedHTML.
-                            someNote.code('').html(cleaned); //this sets the displayed content editor to the cleaned pasted code.
-                        };
-                        setTimeout(function () {
-                            //this kinda sucks, but if you don't do a setTimeout,
-                            //the function is called before the text is really pasted.
-                            updatePastedText(thisNote);
-                        }, 10);
+                        ],
+                        onpaste: function (e) {
+                            var thisNote = $(this);
+                            var updatePastedText = function (someNote) {
+                                var original = someNote.code();
+                                var cleaned = crud.cleanPastedHTML(original); //this is where to call whatever clean function you want. I have mine in a different file, called CleanPastedHTML.
+                                someNote.code('').html(cleaned); //this sets the displayed content editor to the cleaned pasted code.
+                            };
+                            setTimeout(function () {
+                                //this kinda sucks, but if you don't do a setTimeout,
+                                //the function is called before the text is really pasted.
+                                updatePastedText(thisNote);
+                            }, 10);
 
 
-                    },
-                    height: 500, linksArray: this.win.crudAttachOptions});
+                        },
+                        height: 500, linksArray: this.win.crudAttachOptions
+                    });
+                }
+
+                if ($coll_tmce.length)
+                {
+                    $coll_tmce.each(function () {
+
+                        tinymce.init({
+                            selector: '#'+$(this).attr('id'),
+                            height: 430,
+                            toolbar: "paste  | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
+                            plugins: ["image", "link", "media"] ,
+                            paste_as_text: true,
+                            automatic_uploads: false,
+                            relative_urls : false,
+                            remove_script_host : false,
+                            convert_urls : true,
+                            image_advtab: true,
+
+                            file_picker_callback: function(callback, value, meta) {
+                                if (!$('#tiny_file').length)
+                                {
+                                    $('<input type="file" class="input" name="tiny_file" id="tiny_file" style="display: none"/>').appendTo('body');
+
+                                    $('#tiny_file').on('change', function (event) {
+
+                                        $('.mce-widget.mce-btn.mce-primary.mce-first').css({left:'350px', width:'100px'}).find('button span').text('Loading...');
+                                        var formData = new FormData();
+                                        formData.append("file", this.files[0]);
+                                        $.ajax({
+                                            url : '/admin/crud/attach_upload',
+                                            type : 'POST',
+                                            data : formData,
+                                            processData: false,
+                                            contentType: false,
+                                            success : function(data) {
+                                                $('.mce-widget.mce-btn.mce-primary.mce-first').css({left:'411px', width:'50px'}).find('button span').text('Ok');
+
+                                                if (meta.filetype == 'file') {
+                                                    callback(data.url);
+                                                }
+
+                                                // Provide image and alt text for the image dialog
+                                                if (meta.filetype == 'image') {
+                                                    callback(data.url);
+                                                }
+                                            }
+                                        });
+                                    });
+
+                                }
+                                $('#tiny_file').trigger('click');
+
+
+
+
+                            },
+                            //FIXME
+                            language: 'ru'
+                        });
+
+                    })
+                }
+
             },
             toggle_editors_content: function($form)
             {

@@ -1,6 +1,8 @@
 <?php namespace Skvn\Crud\Models;
 
 use \Illuminate\Database\Eloquent\Model;
+use Skvn\Crud\Handlers\AttachmentHandler;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CrudFile extends Model
 {
@@ -33,7 +35,7 @@ class CrudFile extends Model
 
     public function getDownloadLinkAttribute()
     {
-        return \URL::route('download_attach',array('id' => $this->id, 'filename'=>basename($this->path)));
+        return \URL::route('download_attach',array('id' => $this->id, 'filename'=>$this->file_name));
     }
 
 
@@ -60,7 +62,30 @@ class CrudFile extends Model
             }
         });
 
+    }
 
+    public static function  createFromUpload(UploadedFile $file)
+    {
+
+        $file_data = AttachmentHandler::generateFdata($file);
+        $dest = AttachmentHandler::generateSaveFilename($file_data);
+        \File::makeDirectory(dirname($dest), 0755, true, true);
+        if (file_exists($dest))
+        {
+            unlink($dest);
+        }
+
+        $file->move(dirname($dest), basename($dest));
+
+        $instance = new CrudFile();
+        $instance->fill(['file_name' => $file_data['originalName'],
+            'mime_type' => $file_data['originalMime'],
+            'file_size' => $file_data['originalSize'],
+            'title' => (!empty($file_data['title'])?$file_data['title']:''),
+            'path' => $dest
+        ]);
+        $instance->save();
+        return $instance;
 
     }
 
