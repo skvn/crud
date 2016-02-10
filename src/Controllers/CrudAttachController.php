@@ -20,7 +20,7 @@ class CrudAttachController extends Controller {
 
             //readfile($attachObj->path);
 
-            //header("Content-Type: ".$attachObj->mime_type);
+            header("Content-Type: ".$attachObj->mime_type);
             //header("Content-Length: " . filesize($attachObj->path));
             $fp = fopen($attachObj->path,"rb");
             fpassthru($fp);

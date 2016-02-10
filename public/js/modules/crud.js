@@ -361,7 +361,7 @@
 
                                                 // Provide image and alt text for the image dialog
                                                 if (meta.filetype == 'image') {
-                                                    callback(data.url);
+                                                    callback(data.url, {width:data.width, height:data.height});
                                                 }
                                             }
                                         });
