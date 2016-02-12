@@ -20,9 +20,10 @@ class CrudAttachController extends Controller {
             if (strpos($attachObj->mime_type,'image') !== false )
             {
                 header("Content-Type: ".$attachObj->mime_type);
-                fpassthru($fp);
-                fclose($fp);
-                exit;
+                while (!feof($fp)) {
+                    print fread($fp, 1024);
+                }
+
 
             } else {
 
@@ -34,14 +35,18 @@ class CrudAttachController extends Controller {
                     header("Content-Length: " . (string)filesize($attachObj->path));
                     header('Content-Transfer-Encoding: binary');
 
-                    ob_end_clean();//required here or large files will not work
-                    @fpassthru($fp);//works fine now
-                    fclose($fp);
+                    while (!feof($fp)) {
+                        print fread($fp, 1024);
+                    }
+
                 }
             }
 
+            fclose($fp);
+
         }
-        
+
+        exit;
         //return \Response::download($attachObj->path);
 
     }
