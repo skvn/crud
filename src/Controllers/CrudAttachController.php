@@ -15,17 +15,31 @@ class CrudAttachController extends Controller {
         $attachObj = CrudFile::findOrFail($id);
         if (file_exists($attachObj->path))
         {
-            //$fp = fopen($attachObj->path, 'rb');
-            //$f = new File($attachObj->path);
 
-            //readfile($attachObj->path);
-
-            header("Content-Type: ".$attachObj->mime_type);
-            //header("Content-Length: " . filesize($attachObj->path));
             $fp = fopen($attachObj->path,"rb");
-            fpassthru($fp);
-            fclose($fp);
-            exit;
+            if (strpos($attachObj->mime_type,'image') !== false )
+            {
+                header("Content-Type: ".$attachObj->mime_type);
+                fpassthru($fp);
+                fclose($fp);
+                exit;
+
+            } else {
+
+                if ($fp) {
+                    header("Cache-Control: no-cache, must-revalidate");
+                    header("Pragma: no-cache"); //keeps ie happy
+                    header("Content-Disposition: attachment; filename= " . $attachObj->file_name);
+                    header("Content-Type: " . $attachObj->mime_type);
+                    header("Content-Length: " . (string)filesize($attachObj->path));
+                    header('Content-Transfer-Encoding: binary');
+
+                    ob_end_clean();//required here or large files will not work
+                    @fpassthru($fp);//works fine now
+                    fclose($fp);
+                }
+            }
+
         }
         
         //return \Response::download($attachObj->path);

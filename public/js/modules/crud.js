@@ -324,6 +324,10 @@
                 {
                     $coll_tmce.each(function () {
 
+                        if (container)
+                        {
+                            container.append($('<input type="hidden" name="_attach_to_link_" id="_attach_to_link_" />'))
+                        }
                         tinymce.init({
                             selector: '#'+$(this).attr('id'),
                             height: 430,
@@ -355,6 +359,7 @@
                                             success : function(data) {
                                                 $('.mce-widget.mce-btn.mce-primary.mce-first').css({left:'411px', width:'50px'}).find('button span').text('Ok');
 
+                                                $('#_attach_to_link_').val($('#_attach_to_link_').val() + ' '+data.id);
                                                 if (meta.filetype == 'file') {
                                                     callback(data.url);
                                                 }
