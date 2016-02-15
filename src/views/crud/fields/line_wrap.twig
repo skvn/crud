@@ -3,17 +3,13 @@
 {%  else  %}
 <div class="form-group " >
 
-    <label for="{{ input.name }}" class="control-label col-lg-12 text-left">{{ input.config.title|raw }} {{ input.config.required ? '<span class="asterix"> * </span>' }}
+    <label for="{{ input.name }}">{{ input.config.title|raw }} {{ input.config.required ? '<span class="asterix"> * </span>' }}
         {% if input.config.hint %}
         {{ input.config.hint|tooltip(input.config.hint_default) }}
         {% endif %}
     </label>
+     {% include 'crud::crud/fields/'~input.config.type~'.twig' %}
 
-    <div class="row">
-
-        {% include 'crud::crud/fields/'~input.config.type~'.twig' %}
-
-    </div>
 </div>
 
 {% endif %}

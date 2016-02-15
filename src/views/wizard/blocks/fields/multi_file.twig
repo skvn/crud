@@ -1,0 +1,16 @@
+<table class="table table-bordered table-striped">
+    <tr>
+        <td>
+            <input type="text" class="form-control" name="multi_files[[NUM]][name]" value="{{ fld.name }}" required placeholder="Relation name (snake_case)  *" >
+            <span id="helpBlock" class="help-block">Example: <b>documents</b> or <b>uploaded_files</b></span>
+        </td>
+        <td>
+            <input type="text" class="form-control" name="multi_files[[NUM]][title]" value="{{ fld.title }}" required placeholder="Title *" >
+        </td>
+        <td>
+            <input type="text" class="form-control" name="multi_files[[NUM]][hint_default]" value="{{ fld.hint_default }}" placeholder="Hint" >
+        </td>
+    </tr>
+    <a href="#" data-click="crud_action" data-action="wizard_remove_parent_div" data-confirm="Remove?" class="label label-danger">
+        <i class="fa fa-trash-o"></i> Remove</a>
+</table>

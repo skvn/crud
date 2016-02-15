@@ -22,7 +22,15 @@
             </table>
 
             <h2 style="max-width: 250px; margin-top: 0px;"  data-toggle="tooltip" data-placement="right" title="One model entity can have many multiple file fields. A single multiple file field is a Many2Many relation with CrudFile model">Multiple file fields</h2>
-            <div id="mfiles_container"></div>
+            <div id="mfiles_container">
+
+                {% for ALIAS, fld in model.fields %}
+                    {%  if fld.type=='multi_file' %}
+                        {%  include 'crud::wizard/blocks/fields/multi_file.twig' %}
+                    {%  endif %}
+                {% endfor %}
+
+            </div>
             <div class="hr-line-dashed"></div>
 
             <a href="#" class="btn btn-success"  data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="multi_files_row" data-container="mfiles_container" ><i class="fa fa-plus"></i> Add</a>
@@ -33,20 +41,7 @@
 </fieldset>
 
 <div id="multi_files_row" style="display: none;">
-<table class="table table-bordered table-striped">
-<tr>
-    <td>
-            <input type="text" class="form-control" name="multi_files[[NUM]][name]" required placeholder="Relation name (snake_case)  *" >
-            <span id="helpBlock" class="help-block">Example: <b>documents</b> or <b>uploaded_files</b></span>
-    </td>
-    <td>
-            <input type="text" class="form-control" name="multi_files[[NUM]][title]" required placeholder="Title *" >
-    </td>
-    <td>
-            <input type="text" class="form-control" name="multi_files[[NUM]][hint_default]" placeholder="Hint" >
-    </td>
-</tr>
-    <a href="#" data-click="crud_action" data-action="wizard_remove_parent_div" data-confirm="Remove?" class="label label-danger">
-        <i class="fa fa-trash-o"></i> Remove</a>
-</table>
+    {% set ALIAS = "_ALIAS_" %}
+    {% set fld = null %}
+{%  include 'crud::wizard/blocks/fields/multi_file.twig' %}
 </div>
