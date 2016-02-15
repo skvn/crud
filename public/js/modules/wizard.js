@@ -324,7 +324,15 @@
                     } else {
                         $parent.find('*[data-list_col]').prop('disabled', false);
                     }
+                });
 
+                $('#lists_container *[data-list_col]').each (function () {
+                    var $parent = $(this).parents('td').first();
+                    if ($(this).val() != '')
+                    {
+                        $parent.find('*[data-list_col]').prop('disabled', true);
+                        $(this).prop('disabled', false);
+                    }
                 });
 
                 break;

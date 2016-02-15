@@ -335,6 +335,30 @@ class Wizard
 
         ];
 
+    }//
+
+    /**
+     * Return a list of defined relations for the table name
+     * @param $table
+     * @return array
+     */
+    function  getModelRelations($table)
+    {
+        $config = $this->getModelConfig($table);
+        $ret = [];
+        if (!empty($config['fields']) && is_array($config['fields']))
+        {
+            foreach ($config['fields'] as $k=>$field)
+            {
+                if (!empty($field['relation']))
+                {
+                    $ret[$k] = $field;
+                }
+            }
+        }
+
+        return $ret;
+
     }
 
 
