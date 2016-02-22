@@ -1,6 +1,6 @@
 {
     "name": "skvn/crud",
-    "description": "Under development",
+    "description": "Laravel CRUD package. Make admin ui in minutes!",
     "license": "MIT",
     "authors": [
         {

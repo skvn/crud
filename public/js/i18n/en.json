@@ -1,0 +1,12 @@
+{
+  "delete": "Delete",
+  "delete_element": "Delete this element",
+  "delete_selected": "Delete selected",
+  "no_item_selected": "No item(s) selected",
+  "error_occured": "Error occurred",
+  "error_duplicate": "Unable to save: DUPLICATE",
+  "alert_delete_tree":"All parent elements will be removed with the children!\nDo you confirm deleting the selected elements?"
+
+
+
+}

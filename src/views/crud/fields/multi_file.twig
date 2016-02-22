@@ -13,10 +13,10 @@
                     <table class="table table-bordered table-stripped">
                         <thead>
                         <tr>
-                            <th width="20%">Файл</th>
-                            <th width="30%">Изменить</th>
-                            <th>Название</th>
-                            <th width="50">Удалить</th>
+                            <th width="20%">{{ trans('crud::messages.file') }}</th>
+                            <th width="30%">{{ trans('crud::messages.change') }}</th>
+                            <th>{{ trans('crud::messages.title') }}</th>
+                            <th width="50">{{ trans('crud::messages.delete') }}</th>
                         </thead>
                         <tbody>
                         {%  for fileObj in  input.getExisting() %}
@@ -31,7 +31,7 @@
                                     <input class="form-control"  data-title_for="{{ input.name }}[{{ fileObj.id }}]" name="{{ input.name }}_title[{{ fileObj.id }}]" value="{{ fileObj.title }}"  type="text">
                                 </td>
                                 <td>
-                                    <a class="badge badge-danger" href="/admin/crud/{{ crudObj.classViewName }}/{{ crudObj.id }}/command/delete_single_attach" data-confirm="Действительно удалить файл?" data-args='{"field":"{{ input.name }}","id":"{{ fileObj.id }}" }'  data-click="crud_action" data-action="crud_command" data-callback="elem.parent().parent().remove();"><i class="fa fa-times-circle"></i> Удалить</a>
+                                    <a class="badge badge-danger" href="/admin/crud/{{ crudObj.classViewName }}/{{ crudObj.id }}/command/delete_single_attach" data-confirm="{{ trans('crud::messages.really_delete') }} {{ trans('crud::messages.file') }}?" data-args='{"field":"{{ input.name }}","id":"{{ fileObj.id }}" }'  data-click="crud_action" data-action="crud_command" data-callback="elem.parent().parent().remove();"><i class="fa fa-times-circle"></i> {{ trans('crud::messages.delete') }}</a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -40,7 +40,7 @@
                     </table>
 
                 {%  else  %}
-                    Нет загруженных файлов.
+                    {{ trans('crud::messages.no_files') }}.
                 {% endif %}
             </div>
           </div>

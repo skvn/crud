@@ -1,5 +1,6 @@
-;(function($, crud){
+;(function($, crud, win){
     var columns = [];
+    var i18n = win.i18n;
     bind_events();
     $.widget("crud.crud_list", {
         options: {},
@@ -52,7 +53,7 @@
 
                             if (tbl.data('btn_delete'))
                             {
-                                buttons += "<a class='text-danger' data-confirm='Действительно удалить элемент?' data-id='"+rowData.id+"' data-click='crud_event' data-event='crud.delete_element'  style='cursor:pointer;font-size:24px;'><i class='fa fa-trash-o'> </i></a>";
+                                buttons += "<a class='text-danger' data-confirm='"+i18n.say('delete_element')+"?' data-id='"+rowData.id+"' data-click='crud_event' data-event='crud.delete_element'  style='cursor:pointer;font-size:24px;'><i class='fa fa-trash-o'> </i></a>";
                             }
                             buttons +='</nobr>';
                             $(td).html(buttons);
@@ -83,7 +84,7 @@
                     order: order,
                     columns: columns,
                     language: {
-                        url: "/vendor/crud/js/plugins/dataTables/lang/russian.json"
+                        url: "/vendor/crud/js/plugins/dataTables/lang/"+win.CURRENT_LOCALE+".json"
                     },
                     rowCallback: rowCallBack
 
@@ -148,7 +149,7 @@
             {
                 if (!elem.data('ref'))
                 {
-                    alert('Не указана таблица для удаления элементов');
+                    alert('No ref table provided');
                     return;
                 }
                 var tbl = $('table[data-list_table_ref='+elem.data('ref')+']');
@@ -161,10 +162,10 @@
                 });
                 if (ids.length <= 0)
                 {
-                    alert('Не выбрано ни одного элемена');
+                    alert(i18n.say('no_item_selected'));
                     return;
                 }
-                if (confirm('Действительно удалить выбранные элемены ?'))
+                if (confirm(i18n.say('delete_selected')+'?'))
                 {
                     $.post(crud.format_setting('model_delete_url', {model: tbl.data('crud_table')}),{ids:ids}, function (res) {
                         crud.trigger('crud.delete',res);
@@ -293,4 +294,4 @@
 
     }
 
-})(jQuery, CRUD)
+})(jQuery, CRUD, window)

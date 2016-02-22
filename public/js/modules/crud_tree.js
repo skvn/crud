@@ -1,6 +1,7 @@
-;(function($, crud){
+;(function($, crud, win){
 
 
+    var i18n  = win.i18n;
     crud.bind('page.start', function(){
         init_tree();
         init_events();
@@ -90,7 +91,7 @@
 
 
         $('.crud_delete').on('click', function (){
-            if (confirm("Все родительские элементы будут удалены вместе с дочерними!\nДействительно удалить выбранные элементы?"))
+            if (confirm(i18n.say('alert_delete_tree')))
             {
                 var ids =[];
                 $('.crud_tree input[data-rel=row]').each(function(){
@@ -132,4 +133,4 @@
         });
     }
 
-})(jQuery, CRUD)
+})(jQuery, CRUD, window)

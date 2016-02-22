@@ -358,4 +358,9 @@ class CmsHelper
     }
 
 
+    function getLocale()
+    {
+        return $this->app->getLocale();
+    }
+
 }

@@ -338,7 +338,7 @@ class Wizard
     }//
 
     /**
-     * Return a list of defined relations for the table name
+     * Return the list of defined relations for the table name
      * @param $table
      * @return array
      */
@@ -359,7 +359,8 @@ class Wizard
 
         return $ret;
 
-    }
+    }//
+
 
 
 }

@@ -10,6 +10,9 @@ class ServiceProvider extends LServiceProvider {
     {
 
 
+        //Messages
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'crud');
+
         //Assets
         if (!$this->isLumen())
         {

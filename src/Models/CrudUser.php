@@ -80,9 +80,15 @@ class CrudUser extends CrudModel implements AuthenticatableContract, CanResetPas
         return $opts;
     }
 
-
-
-
+    function onBeforeCreate()
+    {
+        $count_all = self::count();
+        if (!$count_all)
+        {
+            $this->acl_role = 'root';
+        }
+        return parent::onBeforeCreate();
+    }
 
 
 }

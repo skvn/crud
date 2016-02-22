@@ -321,6 +321,23 @@
                     {
                         $parent.find('*[data-list_col]').prop('disabled', true);
                         $(this).prop('disabled', false);
+                        if ($(this).data('rel') == 'list_relation')
+                        {
+                            var $rel_attr = $parent.find('*[data-rel=list_relation_attr]');
+                            $rel_attr.prop('disabled', false);
+                            $.get('/admin/crud_setup/rel_attr/'+$('input[data-model_name]').val()+'/'+$(this).val(), function(res) {
+
+                                    var fields = res;
+
+                                    //var options = "<option value=''>Choose pivot " + $(this).data('rel') + " key</option>";
+                                    //for (var i in fields) {
+                                    //    if (fields[i] != 'id') {
+                                    //        options += "<option value='" + fields[i] + "'>" + fields[i] + "</option>";
+                                    //    }
+                                    //}
+                                }
+                            , 'json');
+                        }
                     } else {
                         $parent.find('*[data-list_col]').prop('disabled', false);
                     }

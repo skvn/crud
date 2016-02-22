@@ -9,22 +9,6 @@ $(function() {
   });
 });
 
-//$(function() {
-//  return $('select').select2();
-//});
-
-//$(function() {
-//  return $('.toggle-checkbox').bootstrapSwitch({
-//    size: "small"
-//  });
-//});
-
-//$(function() {
-//  return $('.match-height').matchHeight();
-//});
-
-
-
 $(function() {
   return $(".side-menu .nav .dropdown").on('show.bs.collapse', function() {
     return $(".side-menu .nav .dropdown .collapse").collapse('hide');

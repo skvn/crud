@@ -10,6 +10,7 @@
         model_tree_url: '/admin/crud/{model}/tree/{scope}'
     };
     var crud_actions = {};
+    var i18n = w.i18n;
 
 
     w.CRUD = w.CRUD || {
@@ -399,11 +400,11 @@
             {
                 if (error.indexOf("SQLSTATE[23000]")>=0)
                 {
-                    return 'Невозможно сохранить: ДУБЛИКАТ';
+                    return i18n.say('error_duplicate');
                 }
                 else
                 {
-                    return 'Произошла ошибка: ' + error;
+                    return i18n.say('error_occured')+': ' + error;
                 }
             }
 
@@ -487,7 +488,7 @@
                 })
                 if (ids.length <= 0)
                 {
-                    alert('Элементы не выбраны');
+                    alert(i18n.say('no_item_selected'));
                     return;
                 }
                 args['ids'] = ids;

@@ -113,12 +113,13 @@
         <script src="{{ 'js/plugins/ajaxform/jquery.form.js'|asset }}"></script>
         <script src="{{ 'js/plugins/jquery-matchheight/jquery.matchHeight-min.js'|asset }}"></script>
 
-
         <!-- LOCALIZATION -->
-        <script src="{{ 'js/plugins/datapicker/ru.js'|asset }}"  charset="UTF-8"></script>
-        <script src="{{ 'js/plugins/bvalidation/language/ru_RU.js'|asset }}"></script>
-        <script src="{{ 'js/plugins/select2/i18n/ru.js'|asset }}" ></script>
-        <script src="{{ 'js/plugins/summernote/lang/summernote-ru-RU.js'|asset }}" ></script>
+        <script src="{{ 'js/modules/i18n.js'|asset }}"></script>
+        {% include 'crud::blocks/lang/'~cmsHelper.getLocale()~'/js_local.twig' %}
+        <script type="text/javascript">
+            {%  set messages_uri   = 'js/i18n/'~cmsHelper.getLocale()~'.json' %}
+            window.i18n.init("{{ messages_uri|asset }}");
+        </script>
 
         <!-- CRUD MODULES AND WIDGETS -->
         <script src="{{ 'js/modules/crud.js'|asset }}"></script>

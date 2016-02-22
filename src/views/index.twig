@@ -53,5 +53,5 @@
 
 
 {% block title_right  %}
-    <a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> Add {{ crudObj.config.get('ent_name') }}</a>
+    <a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> {{ trans('crud::messages.add') }} {{ crudObj.config.get('ent_name') }}</a>
 {% endblock %}

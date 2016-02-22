@@ -17,6 +17,7 @@ class ModUsersTable extends Migration
             $table->string('acl_abilities');
             $table->string('first_name');
             $table->string('last_name');
+            $table->dropColumn('name');
 
         });
 

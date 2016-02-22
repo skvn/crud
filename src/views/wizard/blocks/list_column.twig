@@ -21,7 +21,7 @@
                         {% endif %}
                     {% endfor %}
                 </select>
-                <input type="text"   data-list_col="data_rel" style="width:130px; display: inline" class="form-control" name="lists[{{ ALIAS }}][columns][{{ NUM }}][data_rel_attr]" placeholder="Attribute name" required ><br>
+                <input type="text" data-list_col="data_rel" data-rel="list_relation_attr" style="width:130px; display: inline" class="form-control" name="lists[{{ ALIAS }}][columns][{{ NUM }}][data_rel_attr]" placeholder="Relation attribute"/>
             </td>
             <td valign="top" style="width:150px;">
                 <input type="text" class="form-control" name="lists[{{ ALIAS }}][columns][{{ NUM }}][title]"  value="{{ column.title }}"  placeholder="Title *" required >
