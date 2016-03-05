@@ -100,6 +100,8 @@ class Common extends Twig_Extension
     {
         return [
             new Twig_SimpleFunction('snake_case', 'snake_case'),
+            new Twig_SimpleFunction('camel_case', 'camel_case'),
+            new Twig_SimpleFunction('studly_case', 'studly_case'),
 
         ];
     }

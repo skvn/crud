@@ -8,3 +8,7 @@
   width: 100%;
   z-index: 20;
 }
+
+.CodeMirror {
+  height: 450px;
+}

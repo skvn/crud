@@ -36,6 +36,12 @@ class Form {
      *
      */
     const FIELD_DATE = 'date';
+
+    /**
+     *
+     */
+    const FIELD_DATE_TIME = 'date_time';
+
     /**
      *
      */
@@ -186,6 +192,7 @@ class Form {
             self::FIELD_NUMBER => 'Number input',
             self::FIELD_TEXTAREA => 'Textarea',
             self::FIELD_DATE => 'Date',
+            self::FIELD_DATE_TIME => 'Date + Time',
             self::FIELD_SELECT => 'Select',
             self::FIELD_CHECKBOX => 'Checkbox',
             //self::FIELD_FILE => 'File',

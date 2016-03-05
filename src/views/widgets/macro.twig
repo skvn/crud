@@ -37,15 +37,15 @@
     {% if crudObj.getFilterColumns() %}
         <div class="row">
                 <div class="panel panel-default">
-                    <div class="panel-heading"><a data-toggle="collapse" href="#filter_panel_{{ crudObj.classViewName }}_{{ scope }}"><i class="icon fa fa-filter"></i> Фильтрация списка</a></div>
+                    <div class="panel-heading"><a data-toggle="collapse" href="#filter_panel_{{ crudObj.classViewName }}_{{ scope }}"><i class="icon fa fa-filter"></i> {{ trans('crud::messages.filter_list') }}</a></div>
                     <div class="panel-body collapse" id="filter_panel_{{ crudObj.classViewName }}_{{ scope }}">
                         <div class="col-lg-12">
                         <form id="crud_filter_form"  data-crud_model="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.config.scope }}">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
                             {% include "widgets/blocks/tbl_filter.twig"|model_view(crudObj) %}
                             <div class="modal-footer">
-                                <button type="reset"  class="btn btn-default crud_reset_filter">Сбросить фильтр</button>
-                                <button type="submit" class="btn btn-success">Применить фильтр</button>
+                                <button type="reset"  class="btn btn-default crud_reset_filter">{{ trans('crud::messages.reset_filter') }}</button>
+                                <button type="submit" class="btn btn-success">{{ trans('crud::messages.apply_filter') }}</button>
                                 {% include 'crud::blocks/progress_bar.twig' %}
                             </div>
                         </form>

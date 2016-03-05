@@ -12,6 +12,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
     const FIELD_MULTI_FILE = 'multi_file';
     const FIELD_TEXTAREA = 'textarea';
     const FIELD_DATE = 'date';
+    const FIELD_DATE_TIME = 'date_time';
     const FIELD_RANGE = 'range';
     const FIELD_DATE_RANGE = 'date_range';
     const FIELD_NUMBER = 'number';

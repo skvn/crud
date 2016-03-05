@@ -1,0 +1,28 @@
+<div class="row">
+<div class="form-group">
+    <div class="col col-xs-4">
+    {% include 'crud::wizard/blocks/fields/field_title' %}
+    </div>
+    <div class="col col-xs-4">
+        {% include 'crud::wizard/blocks/fields/field_hint' %}
+    </div>
+    <div class="col col-xs-2">
+        {% include 'crud::wizard/blocks/fields/field_required' %}
+    </div>
+</div>
+</div>
+<div class="row">
+    <div class="form-group">
+        <div class="col col-xs-1">
+            <label for="fields_{{ ALIAS }}_format">Format:</label>
+        </div>
+        <div class="col col-xs-4">
+            <select class="form-control default_select" id="fields_{{ ALIAS }}_format" name="fields[{{ ALIAS }}][format]" required >
+                <option value="">Datetime format</option>
+                {%  for k,v in wizard.getAvailableDateTimeFormats() %}
+                    <option value="{{ k }}" {{ fld.format == v.php?'selected' }}>{{ v.php }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>

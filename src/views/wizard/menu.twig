@@ -1,0 +1,62 @@
+{% extends "crud::page" %}
+
+{% block head %}
+    <link href="{{ 'css/plugins/nestable/nestable.css'|asset }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    {% if not alert %}
+        <h1>Define navigation menu</h1>
+          <div class="col col-lg-6">
+              <h3>Existing menu items</h3>
+               <span class="help-block">Drag available menu items  from  the right</span>
+              <div class="dd" id="menu">
+                  <div class="dd-empty"></div>
+              </div>
+
+          </div>
+        <div class="col col-lg-6">
+        <h3>Available menu items (lists)</h3>
+            <div class="dd" id="menu_tpl">
+                <ol class="dd-list">
+                    {%  for model, lists in wizard.getAllLists() %}
+                        {%  for alias, list in lists %}
+                            <li class="dd-item" data-id="{{ model }}_{{ alias }}">
+                                <div class="dd-handle">{{ list.title }} ({{ model }} model)</div>
+                            </li>
+                        {% endfor %}
+                    {% endfor %}
+                </ol>
+            </div>
+            <br clear="all" />
+
+            <h4>You van add menu items to make a hierarchy</h4>
+            <input type="text" class="form-control" id="new_menu_item" style="display:inline; width:300px;" placeholder="Enter menu item name" />
+            <a href="#" class="btn btn-success" data-click="crud_action" data-action="wizard_add_menu_item" ><i class="fa fa-plus"></i> Add </a>
+
+        </div>
+    {% else %}
+        <div class="alert alert-danger" role="alert">{{ alert }}</div>
+    {% endif %}
+
+{% endblock %}
+
+{% block modals %}
+    <script src="{{ 'js/plugins/nestable/jquery.nestable.js'|asset }}"></script>
+    <script src="{{ 'js/modules/wizard_menu.js'|asset }}"></script>
+{% endblock %}
+
+
+{% block bc %}
+    <div class="navbar-header">
+        <button type="button" class="navbar-expand-toggle">
+            <i class="fa fa-bars icon"></i>
+        </button>
+        <ol class="breadcrumb navbar-breadcrumb">
+            <li class="active">Configure menu</li>
+        </ol>
+        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+            <i class="fa fa-th icon"></i>
+        </button>
+    </div>
+{% endblock %}

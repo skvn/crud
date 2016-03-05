@@ -4,15 +4,20 @@ use Illuminate\Routing\Controller;
 use Skvn\Crud\Wizard\Wizard;
 use Skvn\Crud\Wizard\CrudModelPrototype;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Application as LaravelApplication;
 
 class WizardController extends Controller {
 
 
 
     private $request;
-    function __construct(Request $request)
+    function __construct(LaravelApplication $app, Request $request)
     {
+        $this->app = $app;
         $this->request = $request;
+        $this->helper = $this->app->make('skvn.crud');
+        $this->cmsHelper = $this->app->make('skvn.cms');
+
         $wizard = new Wizard();
         if (!$wizard->checkConfigDir())
         {
@@ -23,6 +28,9 @@ class WizardController extends Controller {
         {
             view()->share('alert', 'Models directory "'.$wizard->model_dir_path.'" is not writable');
         }
+
+
+        \View::share('cmsHelper', $this->cmsHelper);
     }
 
     function index()
@@ -62,6 +70,13 @@ class WizardController extends Controller {
         }
 
         return view('crud::wizard/model', ['wizard'=>$wizard,'table'=>$table,'model'=>$model]);
+    }
+
+
+    function menu()
+    {
+        $wizard = new Wizard();
+        return view('crud::wizard/menu', ['wizard'=>$wizard]);
     }
 
     function createModels()

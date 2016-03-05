@@ -13,17 +13,25 @@
     {% if not alert %}
           <div class="col col-lg-6">
                 <h1>Define models</h1>
+              {% set tables = wizard.getTables(1) %}
+              {% if not tables|length %}
+                  <div class="alert alert-danger" role="alert">No tables found. Define database structure first.</div>
+              {%  else %}
                 {% if  not wizard.modelsDefined() %}
+                 <h2>Step 1. Name the Models.</h2>
                 <form method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-                    {% endif %}
+                    {%  else %}
+                        <h2>Step 2. Configure each Models.</h2>
+                {% endif %}
+
                     <table class="table table-striped">
                         <tr>
                             <th>Table</th>
                             <th>Model name</th>
                             <th width="100">Actions</th>
                         </tr>
-                        {% for table in wizard.getTables() %}
+                        {% for table in tables %}
                                 <tr>
 
                                     <td>{{ table }}</td>
@@ -36,11 +44,14 @@
                                                        value="{{ wizard.getModelConfig(table).name }}" disabled/>
                                             {% else %}
                                                 <input type="text" class="form-control" name="model"
-                                                       placeholder="Enter model name * " required/>
+                                                       placeholder="Enter model name * "  required/>
                                             {% endif %}
                                         </form>
                                         {% else %}
-                                            <input type="text" class="form-control" name="models[{{ table }}]"/>
+                                        <div class="input-group" style="width: 250px" >
+                                            <input type="text" class="form-control" placeholder="{{ studly_case(table) }}" id="models_{{ table }}" name="models[{{ table }}]"/>
+                                            <div class="input-group-addon"><a href="#" class="text-success" onclick="$('#models_{{ table }}').val($('#models_{{ table }}').attr('placeholder'))"  title="Name as '{{ studly_case(table) }}' " ><i class="fa fa-thumbs-up"></i></a></div>
+                                        </div>
                                         {% endif %}
 
                                     </td>
@@ -68,11 +79,10 @@
                 </form>
                 {% endif %}
             </div>
-
+    {% endif %}
     {% else %}
 
         <div class="alert alert-danger" role="alert">{{ alert }}</div>
-
     {% endif %}
 {% endblock %}
 

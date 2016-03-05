@@ -1,3 +1,4 @@
+<div class="row">
 <div class="form-group">
     <div class="col col-xs-4">
     {% include 'crud::wizard/blocks/fields/field_title' %}
@@ -12,16 +13,22 @@
             </label>
         </div>
     </div>
-    <div class="col col-xs-2 collapse" id="ed_type_{{ ALIAS }}">
+    <div class="col col-xs-2">
+        {% include 'crud::wizard/blocks/fields/field_required' %}
+    </div>
+</div>
+</div>
+
+<div class="row">
+    <div class="col col-xs-4">
+    <div class="form-group">
         <label> Editor type
-            <select class="form-control" name="fields[{{ ALIAS }}][editor_type]"  >
-                <option value="summernote" {{ fld.editor_type=='summernote'?'selected' }}>Sumernote</option>
-                <option value="tinymce" {{ fld.editor_type=='tinymce'?'selected' }}>TinyMCE</option>
+            <select class="form-control  default_select" name="fields[{{ ALIAS }}][editor_type]"  >
+                {%  for e, title in wizard.getAvailableEditors() %}
+                    <option value="{{ e }}" {{ fld.editor_type==e?'selected' }}>{{ title }}</option>
+                {% endfor %}
             </select>
         </label>
     </div>
-    <div class="col col-xs-2">
-           {% include 'crud::wizard/blocks/fields/field_required' %}
     </div>
-
 </div>

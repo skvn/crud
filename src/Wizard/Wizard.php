@@ -59,6 +59,11 @@ class Wizard
      */
     public $model_dir_path = '';
 
+    /*
+     * @var array array of tables not showing in wizard model list
+     */
+    private $skip_tables = ['users','password_resets','migrations'];
+
 
     /**
      * Wizard constructor.
@@ -99,7 +104,7 @@ class Wizard
      * Return db tables
      * @return array
      */
-    function getTables()
+    function getTables($for_index = false)
     {
 
         $tables = $this->app['db']->select('SELECT  table_name FROM   information_schema.tables WHERE   table_type = \'BASE TABLE\' AND   table_schema=?', [env('DB_DATABASE')]);
@@ -110,6 +115,9 @@ class Wizard
 
             if (strpos($table->table_name,'crud_') !==0 && strpos($table->table_name,'crud_file') === false)
             {
+                if ($for_index && in_array($table->table_name, $this->skip_tables))   {
+                        continue;
+                }
                 $arr[] = $table->table_name;
             }
 
@@ -125,8 +133,8 @@ class Wizard
             }
         }
 
-        $return += $arr;
-        return $return;
+
+        return array_merge($return, $arr);
 
     }
 
@@ -241,7 +249,7 @@ class Wizard
         if ($this->is_models_defined === null)
         {
             $configs = $this->getCrudConfigs();
-            if (count($configs))
+            if (count($configs)>1)
             {
                 $this->is_models_defined = true;
             } else {
@@ -338,6 +346,52 @@ class Wizard
     }//
 
     /**
+     * @return array List of available datetime formats in php and js forms
+     */
+    function getAvailableDateTimeFormats()
+    {
+
+        return [
+            ['js'=>'DD.MM.YYYY', 'php' => 'd.m.Y' ],
+            ['js'=>'MM/DD/YYYY', 'php' => 'm/d/Y' ],
+            ['js'=>'YYYY-MM-DD', 'php' => 'Y-m-d' ],
+            ['js'=>'DD.MM.YYYY HH:mm', 'php' => 'd.m.Y H:i' ],
+            ['js'=>'MM/DD/YYYY hh:mm A', 'php' => 'm/d/Y h:i A' ],
+            ['js'=>'YYYY-MM-DD HH:mm', 'php' => 'Y-m-d H:i' ],
+
+
+        ];
+
+    }//
+
+    /**
+     * @return array List of available locales
+     */
+    function getAvailableLocales()
+    {
+
+        return [
+                'en',
+                'ru'
+
+            ];
+
+    }//
+
+    /**
+     * @return array List of available wysiwyg
+     */
+    function getAvailableEditors()
+    {
+        return  [
+            '' => 'None',
+            'summernote' => 'Summernote',
+            'tinymce' => 'TinyMCE',
+            'mde' => 'Markdown',
+        ];
+    }
+
+    /**
      * Return the list of defined relations for the table name
      * @param $table
      * @return array
@@ -360,6 +414,20 @@ class Wizard
         return $ret;
 
     }//
+
+    function getAllLists()
+    {
+        $ret = [];
+        $configs = $this->getCrudConfigs();
+        foreach ($configs as $model=>$cfg)
+        {
+            if (!empty($cfg['list']))
+            {
+                $ret[$model] = $cfg['list'];
+            }
+        }
+        return $ret;
+    }
 
 
 

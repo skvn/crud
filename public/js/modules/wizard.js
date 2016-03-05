@@ -206,8 +206,6 @@
                 },
 
 
-
-
         };
         crud.add_actions(crud_actions);
     }

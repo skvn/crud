@@ -1,4 +1,5 @@
 ;(function(w, d, l, c, $){
+
     var listeners = {};
     var events = {};
     var settings = {
@@ -170,6 +171,7 @@
             },
             init_date_pickers: function(container)
             {
+                //date
                 if (container)
                 {
                     var $coll = $('.input-group.date', container);
@@ -190,6 +192,26 @@
 
                     $(this).parents('form').first().bootstrapValidator('revalidateField',$(this).find('input'));
                 });
+                //datetime
+                if (container)
+                {
+                    var $coll = $('.input-group.date_time', container);
+                } else {
+                    var $coll = $('.input-group.date_time');
+                }
+                $coll.each(function () {
+                    $(this).val(moment($(this).val));
+                    $(this).datetimepicker(
+                        {
+                            locale: "ru",
+                            format: $(this).data('format')
+
+                        }).on('changeDate', function(e) {
+                        // Revalidate the date field
+                        $(this).parents('form').first().bootstrapValidator('revalidateField',$(this).find('input'));
+                    });
+                })
+
             },
             init_selects: function($form)
             {
@@ -284,10 +306,31 @@
                 {
                     $coll_sum = $('.html_editor[data-editor_type="summernote"]', container);
                     $coll_tmce = $('.html_editor[data-editor_type="tinymce"]', container);
+                    $coll_mde = $('.html_editor[data-editor_type="mde"]', container);
+
                 } else {
                     $coll_sum = $('.html_editor[data-editor_type="summernote"]');
                     $coll_tmce = $('.html_editor[data-editor_type="tinymce"]');
+                    $coll_mde = $('.html_editor[data-editor_type="mde"]');
                 }
+
+                if ($coll_mde.length) {
+
+                    simple_mdes = new Object();
+                    $coll_mde.each(function () {
+                        simple_mdes[this.id] = new SimpleMDE(
+                            {
+                                element: this,
+                                toolbar: ["heading","bold", "italic", "heading", "strikethrough", "|", "code","quote","|","unordered-list","ordered-list","|","link","image","table","|","clean-block","|","preview","guide"],
+                                spellChecker:false
+
+
+                            }
+                        );
+                    });
+
+                }
+                //summernote
                 if ($coll_sum.length) {
                     $coll_sum.summernote({
                         //FIXME
@@ -381,7 +424,7 @@
 
                             },
                             //FIXME
-                            language: 'ru'
+                            language: i18n.say('locale_short')
                         });
 
                     })
@@ -390,7 +433,16 @@
             },
             toggle_editors_content: function($form)
             {
-                $form.find('textarea.html_editor').each(function () {
+
+                $form.find('textarea[data-editor_type=mde]').each(function () {
+                    if (simple_mdes[this.id])
+                    {
+                        $(this).val(simple_mdes[this.id].value())
+                    }
+                });
+
+
+                $form.find('textarea[data-editor_type=summernote]').each(function () {
 
                     $(this).val($(this).summernote('code'));
                 })

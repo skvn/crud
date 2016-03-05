@@ -276,6 +276,16 @@ class CrudModelPrototype
 
                 }
 
+                //process date time
+                if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE_TIME)
+                {
+                    $formats = $this->wizard->getAvailableDateTimeFormats();
+                    $this->config_data['fields'][$k]['format'] = $formats[$f['format']]['php'];
+                    $this->config_data['fields'][$k]['jsformat'] = $formats[$f['format']]['js'];
+                    $this->config_data['fields'][$k]['db_type'] = $this->column_types[$k];
+
+                }
+
                 //if any textarea has a html editor, add inline img trait
                 if (!empty($f['type']) && $f['type'] == Form::FIELD_TEXTAREA && !empty($f['editor']))
                 {
@@ -322,7 +332,6 @@ class CrudModelPrototype
                         $this->config_data['fields'][$key]['column'] = $k;
 
                         //process date
-
                         if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE_RANGE) {
                             $formats = $this->wizard->getAvailableDateFormats();
                             $this->config_data['fields'][$key]['format'] = $formats[$f['format']]['php'];
