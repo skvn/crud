@@ -196,6 +196,7 @@ class CrudModel extends Model {
     {
 
 
+
         foreach ($attributes as $k=>$v) {
             if (array_key_exists($k,$this->config->getProcessableRelations()))
             {
@@ -501,6 +502,10 @@ class CrudModel extends Model {
 //        return $selectVals;
 //    }
 
+    /**
+     *  Save relations
+     */
+
     public function saveRelations()
     {
 
@@ -511,6 +516,14 @@ class CrudModel extends Model {
             foreach ($this->dirtyRelations as $k => $v) {
 
                 switch ($this->config->getCrudRelations()[$k]) {
+
+                    case 'hasOne':
+                        $class = $this->app['skvn.crud']->getModelClass($formConf[$k]['model']);
+                        $relObj = $class::find($v);
+                        $relObj->setAttribute($formConf[$k]['ref_column'], $this->id);
+                        $relObj->save();
+                    break;
+
                     case 'hasMany':
                         $class = $this->app['skvn.crud']->getModelClass($formConf[$k]['model']);
                         //$class = '\App\Model\\' . $formConf[$k]['model'];

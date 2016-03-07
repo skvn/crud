@@ -1,6 +1,8 @@
 <?php namespace Skvn\Crud\Form;
 
 
+use Skvn\Crud\CrudConfig;
+
 class Select extends Field {
 
 
@@ -10,17 +12,29 @@ class Select extends Field {
         $options = array();
         $options[] = ['value'=>'', 'text'=>$empty_option];
 
-
         if (!empty($this->config['select_options']))
         {
+
             if (!$this->value)
             {
-                if (!empty($this->config['relation']) && $this->form->crudObj->config->isManyRelation($this->config['relation'])) {
+
+
+                if (!empty($this->config['relation'])
+                    &&
+                    $this->form->crudObj->config->isManyRelation($this->config['relation']))
+                {
 
                     $this->value = $this->form->crudObj->getRelationIds($this->getName());
 
 
-                } else {
+                } else if (!empty($this->config['relation'])
+                    && $this->config['relation'] == CrudConfig::RELATION_HAS_ONE) {
+
+                    $relation = $this->getName();
+                    $this->value = $this->$relation->id;
+
+                } else
+                {
                     $this->value = $this->form->crudObj->getAttribute($this->getName());
                 }
 
@@ -110,7 +124,14 @@ class Select extends Field {
                 $this->value = $this->form->crudObj->getRelationIds($this->getName());
 
 
-            } else {
+            }  else if (!empty($this->config['relation'])
+                && $this->config['relation'] == CrudConfig::RELATION_HAS_ONE) {
+
+                $relation = $this->getName();
+                $this->value = $this->form->crudObj->$relation->id;
+
+            }
+               else {
                 $this->value = $this->form->crudObj->getAttribute($this->getName());
             }
 

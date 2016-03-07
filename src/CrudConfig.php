@@ -77,12 +77,15 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
                 if (in_array($name,$this->config['form']) || !empty($col['fillable'])) {
 
                     if (isset($col['relation']) &&
-                        ($col['relation'] == 'belongsToMany' || $col['relation'] == 'hasMany')
+                        ($col['relation'] == 'belongsToMany' || $col['relation'] == 'hasMany' || $col['relation'] == 'hasOne')
 
                     ) {
 
 
-                        $this->config['fields'][$name]['multiple'] = 1;
+                        if ($col['relation'] != 'belongsTo') {
+                            $this->config['fields'][$name]['multiple'] = 1;
+                        }
+
                         //Add multi file to fillable since it is handled by fill not by post save relations
                         if ($col['type'] != 'multi_file') {
                             $this->processableRelations[$name] = $col['relation'];
