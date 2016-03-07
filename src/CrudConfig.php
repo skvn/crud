@@ -82,7 +82,7 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
                     ) {
 
 
-                        if ($col['relation'] != 'belongsTo') {
+                        if ($col['relation'] != 'hasOne') {
                             $this->config['fields'][$name]['multiple'] = 1;
                         }
 
