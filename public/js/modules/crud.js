@@ -206,7 +206,7 @@
                             locale: "ru",
                             format: $(this).data('format')
 
-                        }).on('changeDate', function(e) {
+                        }).on('dp.change', function(e) {
                         // Revalidate the date field
                         $(this).parents('form').first().bootstrapValidator('revalidateField',$(this).find('input'));
                     });
