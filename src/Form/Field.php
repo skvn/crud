@@ -67,6 +67,11 @@ class Field
         return $this->getValue();
     }
 
+    function  getValueForList()
+    {
+        return $this->getValue();
+    }
+
     function validateConfig()
     {
         return true;

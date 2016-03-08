@@ -219,7 +219,9 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
             return $form;
         } else{
 
-            return $form[$prop];
+            if (!empty($form[$prop])) {
+                return $form[$prop];
+            }
         }
     }
 

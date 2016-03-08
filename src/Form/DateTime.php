@@ -43,6 +43,16 @@ class DateTime extends Field {
 //
 //    }
 
+    function getValueForList()
+    {
+
+        if (empty($this->config['db_type']) ||$this->config['db_type'] == 'int' ) {
+            return date($this->config['format'], $this->getValue());
+        } else {
+            return date($this->config['format'], strtotime($this->getValue()));
+        }
+    }
+
     function  getValueForDb()
     {
         if (empty($this->config['db_type']) ||$this->config['db_type'] == 'int' ) {

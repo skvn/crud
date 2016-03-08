@@ -2,6 +2,7 @@
 
 use \Illuminate\Database\Eloquent\Model;
 use Skvn\Crud\CrudConfig;
+use Skvn\Crud\Form\FieldFactory;
 use Skvn\Crud\Form\Form;
 use Skvn\Crud\Filter\FilterFactory;
 use Illuminate\Support\Collection ;
@@ -774,6 +775,13 @@ class CrudModel extends Model {
 
         } else {
             if ($this->__isset($col)) {
+                $form_config = $this->config->getFields($col);
+                if ($form_config && !empty($form_config['type']))
+                {
+                    $form_config['name'] = $col;
+                    $field = FieldFactory::create($this->getForm(), $form_config);
+                    return $field->getValueForList();
+                }
                 return $this->$col;
             } else {
                 $meth = camel_case('get_' . $col);
