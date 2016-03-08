@@ -36,11 +36,11 @@ trait TooltipTrait
             $t = $this->app['db']->table("crud_tooltip")->where('tt_index', $id)->first();
             if ($t && !empty($t->id))
             {
-                $this->app['db']->table("crud_tooltip")->where('tt_index', $id)->update(['tt_text' => \Input :: get('tt_text')]);
+                $this->app['db']->table("crud_tooltip")->where('tt_index', $id)->update(['tt_text' => \Request :: get('tt_text')]);
             }
             else
             {
-                $this->app['db']->table("crud_tooltip")->insert(['tt_index' => $id, 'tt_text' => \Input :: get('tt_text')]);
+                $this->app['db']->table("crud_tooltip")->insert(['tt_index' => $id, 'tt_text' => \Request :: get('tt_text')]);
             }
         }
         return ['success' => true];

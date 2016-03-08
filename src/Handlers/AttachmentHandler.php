@@ -90,7 +90,7 @@ class AttachmentHandler {
 
     protected  function processUploadedTitle($key)
     {
-        $titles = \Input::get($this->parentPropName.'_title');
+        $titles = \Request::get($this->parentPropName.'_title');
         if (!empty($titles[$key]))
         {
             return $titles[$key];
