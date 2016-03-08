@@ -101,6 +101,17 @@ class Wizard
     }//
 
     /**
+     * @return bool Check if migrations directory is writable
+     */
+
+    public  function checkMigrationsDir()
+    {
+
+        return (is_dir(base_path() . '/database/migrations') && is_writable(base_path() . '/database/migrations'));
+
+    }//
+
+    /**
      * Return db tables
      * @return array
      */

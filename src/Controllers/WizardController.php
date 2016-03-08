@@ -29,6 +29,11 @@ class WizardController extends Controller {
             view()->share('alert', 'Models directory "'.$wizard->model_dir_path.'" is not writable');
         }
 
+        if (!$wizard->checkMigrationsDir())
+        {
+            view()->share('alert', 'Migrations directory "'.base_path() . '/database/migrations" is not writable');
+        }
+
 
         \View::share('cmsHelper', $this->cmsHelper);
     }
