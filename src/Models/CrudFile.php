@@ -35,6 +35,11 @@ class CrudFile extends Model
 
     public function getDownloadLinkAttribute()
     {
+        $symlink = \Config::get('attach.symlink');
+        if (!empty($symlink))
+        {
+            return '/'.str_replace(\Config::get('attach.root'), $symlink,$this->path);
+        }
         return \URL::route('download_attach',array('id' => $this->id, 'filename'=>urlencode($this->file_name)));
     }
 
