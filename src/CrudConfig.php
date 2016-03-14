@@ -1,6 +1,7 @@
 <?php namespace Skvn\Crud;
 
 use JsonSerializable, ArrayAccess;
+use Skvn\Crud\Form\Form;
 
 class CrudConfig implements JsonSerializable, ArrayAccess {
 
@@ -418,11 +419,16 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
 
 
 
-    static  function getAvailableRelationFieldTypes()
+    static  function getAvailableRelationFieldTypes($multiple)
     {
-        return [
-            self::FIELD_SELECT => 'Select',
-
+        $ret =  [
+            Form::FIELD_SELECT => 'Select',
         ];
+        if ($multiple)
+        {
+            $ret[Form::FIELD_TAGS] = 'Tags';
+        }
+
+        return $ret;
     }
 }

@@ -2,6 +2,7 @@
 
 use \Illuminate\Database\Eloquent\Model;
 use Skvn\Crud\CrudConfig;
+use Skvn\Crud\CrudException;
 use Skvn\Crud\Form\FieldFactory;
 use Skvn\Crud\Form\Form;
 use Skvn\Crud\Filter\FilterFactory;
@@ -156,6 +157,7 @@ class CrudModel extends Model {
         if ($this->validate()) {
             $dirty = $this->getDirty();
 
+            //process dirty attributes
             if (count($dirty)) {
                 $this->getForm($dirty, true);
                 if (!empty($this->form->fields) && is_array($this->form->fields)) {
@@ -172,7 +174,6 @@ class CrudModel extends Model {
                         }
                     }
                 }
-
             }
 
             if ($this->track_authors && $this->app['auth']->check())
@@ -514,7 +515,15 @@ class CrudModel extends Model {
         $formConf = $this->config->getFields();
 
         if ($this->dirtyRelations  && is_array($this->dirtyRelations )) {
+
+            $form = $this->getForm($this->dirtyRelations, true);
+
             foreach ($this->dirtyRelations as $k => $v) {
+
+                if (!empty($form->fields[$k]))
+                {
+                    $v = $form->fields[$k]->getValueForDb();
+                }
 
                 switch ($this->config->getCrudRelations()[$k]) {
 
@@ -537,7 +546,6 @@ class CrudModel extends Model {
                             }
                             $toUnlink = array_diff($oldIds, $v);
 
-
                         } else {
                             $toUnlink = $this->$k()->lists('id');
 
@@ -559,7 +567,6 @@ class CrudModel extends Model {
 
                         break;
                     case 'belongsToMany':
-
 
                         if (is_array($v)) {
 
@@ -853,5 +860,19 @@ class CrudModel extends Model {
         return snake_case($this->classShortName);
     }
 
+    function getAutocompleteList($query)
+    {
+        if (!$this->config->get('title_field'))
+        {
+            throw new CrudException('Unable to init AutocompleteList: title_field is not configured');
+        }
+
+        if (!empty($query)) {
+            return self::where($this->config->get('title_field'), 'LIKE', $query . '%')
+                ->pluck($this->config->get('title_field'));
+        }
+
+        return [];
+    }
 
 }

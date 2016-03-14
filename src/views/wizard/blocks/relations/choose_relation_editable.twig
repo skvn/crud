@@ -10,7 +10,7 @@
     <div class="col col-xs-2">
     <select name="relations[{{NUM}}][form_field]" class="form-control default_select">
         <option value="">Choose field type</option>
-        {% for k,v in wizard.getAvailableRelationFieldTypes() %}
+        {% for k,v in wizard.getAvailableRelationFieldTypes(multiple) %}
             <option value="{{ k }}" {{ rel.type==k?'selected' }}>{{ v }}</option>
         {% endfor %}
     </select>

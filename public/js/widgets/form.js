@@ -9,6 +9,7 @@
 
             //init controls
             crud.init_selects($form);
+            crud.init_tag_inputs($form);
             crud.init_date_pickers($form);
             crud.init_html_editors($form);
             crud.init_ichecks($form);

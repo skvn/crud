@@ -8,7 +8,8 @@
         model_list_url: '/admin/crud/{model}/list/{scope}',
         model_delete_url: '/admin/crud/{model}/delete',
         model_move_tree_url: '/admin/crud/{model}/move_tree',
-        model_tree_url: '/admin/crud/{model}/tree/{scope}'
+        model_tree_url: '/admin/crud/{model}/tree/{scope}',
+        model_autocomplete_url: '/admin/crud/{model}/autocomplete/{scope}'
     };
     var crud_actions = {};
     var i18n = w.i18n;
@@ -236,6 +237,64 @@
 
                 });
             },
+
+            init_tag_inputs: function ($form)
+            {
+                var self = this;
+                $form.each(function (){
+
+                    var self_form = $(this);
+                    $('.tagsinput',self_form).each(function () {
+
+                        var scope = self_form.data('crud_scope');
+                        var model = $(this).data('model');
+                        var url = self.format_setting("model_autocomplete_url", {model: model, scope:scope});
+                        var fid = $(this).attr('id');
+
+                        var options = new Bloodhound({
+                            datumTokenizer: function (datum) {
+                                return Bloodhound.tokenizers.whitespace(datum.name);
+                            },
+                            queryTokenizer: Bloodhound.tokenizers.whitespace,
+                            limit: 5,
+                            remote: {
+                                url: url,
+                                replace: function(url, query) {
+                                    return url + "?q=" + query;
+                                }
+                            }
+                        });
+
+                        options.initialize();
+                        var tagApi = $(this).tagsManager({
+                            hiddenTagListId: fid+'_hidden',
+                            deleteTagsOnBackspace: false,
+                            prefilled: $('#'+fid+'_hidden').val()
+                        });
+                        $('#'+fid).typeahead(null, {
+                            minLength: 1, // send AJAX request only after user type in at least X characters
+                            source: options.ttAdapter()
+                        }).on('typeahead:selected', function (e, d) {
+                            tagApi.tagsManager("pushTag", d);
+                        });
+
+
+                        //$(this).tagsinput(
+                        //    {
+                        //        typeahead: {
+                        //            //source: function (query)
+                        //            //{
+                        //            //    alert(query);
+                        //            //    return $.getJSON(url+'?q='+query);
+                        //            //}
+                        //            source: options.ttAdapter()
+                        //    }
+                        //});
+                    });
+
+                });
+            },
+
             reset_selects: function()
             {
                 $('#crud_form select').select2('val','');

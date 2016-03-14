@@ -2,8 +2,9 @@
 
 Route::group(array('prefix'=>'admin','namespace' => 'Skvn\Crud\Controllers','middleware' => ['web','auth']), function() {
 
-    Route::get('/',                                                 array('as' => 'crud_welcome',               'uses' => 'CrudController@welcome'));
+    Route::get('/',                                               array('as' => 'crud_welcome',               'uses' => 'CrudController@welcome'));
     Route::get('crud/{model}/tree/{scope}',                       array('as' => 'crud_tree',                  'uses' => 'CrudController@crudTree'));
+    Route::get('crud/{model}/autocomplete/{scope}',               array('as' => 'crud_autocomplete',                  'uses' => 'CrudController@crudAutocompleteList'));
     Route::post('crud/{model}/move_tree',                         array('as' => 'crud_move_tree',             'uses' => 'CrudController@crudTreeMove'));
     Route::get('crud/{model}',                                    array('as' => 'crud_index',                 'uses' => 'CrudController@crudIndex'));
     Route::get('crud/{model}/edit/{id}',                          array('as' => 'crud_edit',                  'uses' => 'CrudController@crudEdit'));

@@ -56,6 +56,11 @@ class Form {
     const FIELD_NUMBER = 'number';
 
     /**
+     *
+     */
+    const FIELD_TAGS = 'tags';
+
+    /**
      * @var
      */
     public $config;

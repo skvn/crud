@@ -68,6 +68,17 @@ class CrudController extends Controller
 
 
 
+    function crudAutocompleteList($model, $scope)
+    {
+        $obj = $this->helper->getModelInstance($model, $scope);
+
+        if (!$obj->checkAcl())
+        {
+            return \Response('Access denied',403);
+        }
+
+        return $obj->getAutocompleteList(\Request::get('q'));
+    }
 
     function crudList($model,$scope)
     {
@@ -146,6 +157,7 @@ class CrudController extends Controller
         } catch( \Exception $e)
         {
 
+//            var_dump($e)
             return ['success'=>false, 'error'=>$e->getMessage(),'trace' => $e->getTraceAsString()];
         }
 

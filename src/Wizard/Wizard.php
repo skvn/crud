@@ -316,9 +316,9 @@ class Wizard
      * Get an array of available form field types for  relations
      * @return array
      */
-    function getAvailableRelationFieldTypes()
+    function getAvailableRelationFieldTypes($multiple=false)
     {
-        return CrudConfig::getAvailableRelationFieldTypes();
+        return CrudConfig::getAvailableRelationFieldTypes($multiple);
     }
 
     /**

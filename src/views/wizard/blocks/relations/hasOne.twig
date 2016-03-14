@@ -12,6 +12,7 @@
             <i class="fa fa-trash-o"></i> Remove</a>
     </tr>
     <tr>
+        {% set multiple = false %}
         {% include 'crud::wizard/blocks/relations/choose_relation_editable' %}
     </tr>
 </table>
