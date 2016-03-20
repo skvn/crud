@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "devDependencies": {
+    "gulp": "^3.8.8",
+    "gulp-concat": "^2.6.0"
+  },
+  "dependencies": {
+    "gulp-clean-css": "^2.0.3",
+    "gulp-less": "^3.0.5",
+    "gulp-uglify": "^1.5.3",
+    "laravel-elixir": "^4.0.0"
+  }
+}

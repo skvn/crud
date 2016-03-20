@@ -229,11 +229,14 @@
 
                 $form.each(function (){
 
-                    $('select:not(.default_select)',$(this)).select2(
-                        {
-                            allowClear: true,
-                            formatSelection: format
-                        });
+                     $('select:not(.default_select)',$(this)).selectpicker({
+
+                     });
+                    //$('select:not(.default_select)',$(this)).select2(
+                    //    {
+                    //        allowClear: true,
+                    //        formatSelection: format
+                    //    });
 
                 });
             },
@@ -297,7 +300,7 @@
 
             reset_selects: function()
             {
-                $('#crud_form select').select2('val','');
+                //$('#crud_form select').select2('val','');
             },
             init_form_progress: function($form)
             {
@@ -327,8 +330,9 @@
             init_ichecks: function(cont)
             {
                 $('.i-checks', cont).iCheck({
-                    checkboxClass: 'icheckbox_square-green',
-                    radioClass: 'iradio_square-green'
+                    checkboxClass: 'icheckbox_square',
+                    radioClass: 'iradio_square',
+                    increaseArea: '20%'
                 }).on('ifChanged', function ()
                 {
 
@@ -380,7 +384,7 @@
                         simple_mdes[this.id] = new SimpleMDE(
                             {
                                 element: this,
-                                toolbar: ["heading","bold", "italic", "heading", "strikethrough", "|", "code","quote","|","unordered-list","ordered-list","|","link","image","table","|","clean-block","|","preview","guide"],
+                                toolbar: ["heading","bold", "italic", "strikethrough", "|", "code","quote","|","unordered-list","ordered-list","|","link","image","table","|","clean-block","|","preview","guide"],
                                 spellChecker:false
 
 

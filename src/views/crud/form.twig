@@ -1,23 +1,23 @@
-<form action="{{ route('crud_update',{'model':crudObj.config.get('class_name'),'id':id}) }}" method="post" enctype="multipart/form-data" role="form"  data-crud_scope="{{ crudObj.config.scope }}" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}" data-rel="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}_{{ id }}">
+<form action="{{ route('crud_update',{'model':crudObj.config.get('class_name'),'id':id}) }}" method="post" enctype="multipart/form-data" role="form"  data-crud_scope="{{ crudObj.config.scope }}" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}" data-rel="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}_{{ id }}" class="form-horizontal">
     <input type="hidden" id="tree_action" name="tree_action" value=""/>
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-    <fieldset style="padding-bottom: 20px;">
-        {% for input in  crudObj.getForm().fields %}
-            {% if input.config.type=='checkbox' %}
-                {% include 'crud::crud/fields/line_wrap_compact.twig' %}
-            {% else %}
-                {% include 'crud::crud/fields/line_wrap.twig' %}
-            {% endif %}
-        {% endfor %}
-    </fieldset>
 
-    <div class="modal-footer">
+
+        {% for input in  crudObj.getForm().fields %}
+                {% include 'crud::crud/fields/line_wrap.twig' %}
+        {% endfor %}
+
+
+
+        <div class="col-md-10 col-md-offset-2 modal-footer" style="margin-bottom: 30px; margin-top: 30px; text-align: left">
         <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" data-click="crud_event" data-event="crud.cancel_edit" data-rel="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}_{{ id }}">{{ trans('crud::messages.cancel') }}</button>
         {% if crudObj.config.get('acl')|allowed('u') %}
             <button class="btn btn-success crud_submit" type="submit" data-close="1">{{ trans('crud::messages.save_close') }}</button>
             <button class="btn btn-primary crud_submit" type="submit" data-close="0">{{ trans('crud::messages.save') }}</button>
         {% endif %}
         {% include 'crud::blocks/progress_bar.twig' %}
-    </div>
+        </div>
+
+
 
 </form>

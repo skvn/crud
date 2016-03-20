@@ -397,7 +397,7 @@ class Wizard
         return  [
             '' => 'None',
             'summernote' => 'Summernote',
-            'tinymce' => 'TinyMCE',
+//            'tinymce' => 'TinyMCE',
             'mde' => 'Markdown',
         ];
     }

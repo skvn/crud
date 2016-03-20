@@ -24,7 +24,9 @@ return [
     'save_close' => 'Сохранить и закрыть',
     'reset_filter' => 'Сбросить фильтр',
     'apply_filter' => 'Применить фильтр',
-    'filter_list' => 'Фильтрация списка'
+    'filter_list' => 'Фильтрация списка',
+	'settings' => 'Настройки',
+	'toggle_nav' => 'Навигация',
 
 
 

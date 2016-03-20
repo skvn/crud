@@ -2,7 +2,6 @@
 <label for="{{ input.getUniqueId() }}">
     <input class="crud_checkbox i-checks" id="{{  input.getUniqueId() }}" data-name="{{ input.name }}"    type="checkbox"  {{ input.getValue()>0?'checked':''}} />
     <input type="hidden" name="{{ input.name }}" id="_{{  crudObj.id }}"  value="{{ input.getValue() }}"  data-default="{{ input.config.default }}" />
-    <b>{{ input.config.title }}</b>
 </label>
 </div>
 

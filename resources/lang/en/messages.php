@@ -24,7 +24,9 @@ return [
     'save_close' => 'Save and close',
     'reset_filter' => 'Reset filter',
     'apply_filter' => 'Apply filter',
-    'filter_list' => 'List filter'
+    'filter_list' => 'List filter',
+	'settings' => 'Settings',
+	'toggle_nav' => 'Toggle navigation',
 
 
 

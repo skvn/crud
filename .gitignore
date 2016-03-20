@@ -1,2 +1,4 @@
 .idea
 docs
+/node_modules
+/resources/bower_components

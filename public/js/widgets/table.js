@@ -84,7 +84,7 @@
                     order: order,
                     columns: columns,
                     language: {
-                        url: "/vendor/crud/js/plugins/dataTables/lang/"+win.CURRENT_LOCALE+".json"
+                        url: "/vendor/crud/js/i18n/vendor/dataTables/"+win.CURRENT_LOCALE+".json"
                     },
                     rowCallback: rowCallBack
 
@@ -266,7 +266,7 @@
                         val = $(this).data('default')
                     }
                 }
-                $(this).select2("val", val);
+                $(this).selectpicker("val", val);
             });
 
             $('input', $form).each(function (){

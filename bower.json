@@ -1,0 +1,26 @@
+{
+  "name": "crud",
+  "homepage": "https://github.com/skvn/crud",
+  "authors": [
+    "Vitaly Nikolenko <vit@webstandart.ru>"
+  ],
+  "description": "Laravel CRUD",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "patternfly": "latest",
+    "jquery.steps": "latest",
+    "nestable": "latest",
+    "summernote": "latest",
+    "simplemde": "latest",
+    "jquery-form": "latest",
+    "typeahead.js": "~0.11.1",
+    "tagmanager": "~3.0.2",
+    "jquery-ui": "~1.11.4",
+    "bootstrapvalidator": "~0.5.3",
+    "iCheck": "jquery-icheck#~1.0.2",
+    "jstree": "~3.3.0"
+  }
+}

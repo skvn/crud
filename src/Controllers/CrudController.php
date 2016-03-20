@@ -20,6 +20,7 @@ class CrudController extends Controller
         $this->cmsHelper = $this->app->make('skvn.cms');
         $this->request = $this->app['request'];
         \View::share('cmsHelper', $this->cmsHelper);
+        \View::share('config', $this->app['config']->get('crud_common'));
 
     }
 

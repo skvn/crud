@@ -1,0 +1,80 @@
+{
+	"paths": {
+	    "dist_css": "public/css",
+        "dist_fonts": "public/fonts",
+        "dist_js": "public/js",
+        "dist_js_locales": "public/js/i18n/vendor",
+        "dist_img": "public/img",
+        "css": "resources/assets/css",
+        "vendor_fonts": [
+          "resources/bower_components/patternfly/dist/fonts"
+          ],
+		"vendor_css": [
+
+          "resources/bower_components/patternfly/dist/css/patternfly.css",
+          "resources/bower_components/patternfly/dist/css/patternfly-additions.css",
+          "resources/bower_components/simplemde/dist/simplemde.min.css",
+          "resources/bower_components/summernote/dist/summernote.css",
+          "resources/bower_components/tagmanager/tagmanager.css",
+          "resources/bower_components/bootstrapvalidator/dist/css/bootstrapValidator.min.css",
+          "resources/bower_components/iCheck/skins/square/square.css",
+          "resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css",
+          "resources/bower_components/jstree/dist/themes/default/style.min.css"
+
+		],
+      "vendor_css_images": [
+        "resources/bower_components/iCheck/skins/square/square.png",
+        "resources/bower_components/iCheck/skins/square/square@2x.png",
+        "resources/bower_components/jstree/dist/themes/default/32px.png",
+        "resources/bower_components/jstree/dist/themes/default/40px.png",
+        "resources/bower_components/jstree/dist/themes/default/throbber.gif"
+      ],
+
+      "vendor_css_fonts": [
+        "resources/bower_components/summernote/dist/font"
+      ],
+
+
+        "vendor_js": [
+          "resources/bower_components/jquery/dist/jquery.min.js",
+          "resources/bower_components/bootstrap/dist/js/bootstrap.min.js",
+          "resources/bower_components/bootstrap-combobox/js/bootstrap-combobox.js",
+          "resources/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js",
+          "resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js",
+          "resources/bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js",
+          "resources/bower_components/bootstrap-treeview/dist/bootstrap-treeview.min.js",
+          "resources/bower_components/datatables/media/js/jquery.dataTables.min.js",
+          "resources/bower_components/datatables/media/js/dataTables.bootstrap.min.js",
+          "resources/bower_components/jquery.steps/build/jquery.steps.min.js",
+          "resources/bower_components/matchHeight/jquery.matchHeight-min.js",
+          "resources/bower_components/moment/min/moment-with-locales.min.js",
+          "resources/bower_components/nestable/jquery.nestable.js",
+          "resources/bower_components/simplemde/dist/simplemde.min.js",
+          "resources/bower_components/summernote/dist/summernote.min.js",
+          "resources/bower_components/jquery-form/jquery.form.js",
+          "resources/bower_components/typeahead.js/dist/typeahead.bundle.min.js",
+          "resources/bower_components/tagmanager/tagmanager.js",
+          "resources/bower_components/jquery-ui/ui/minified/widget.min.js",
+          "resources/bower_components/bootstrapvalidator/dist/js/bootstrapValidator.min.js",
+          "resources/bower_components/iCheck/icheck.min.js",
+          "resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
+          "resources/bower_components/jstree/dist/jstree.min.js"
+
+        ],
+
+      "vendor_js_locales": {
+        "ru": [
+          "resources/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js",
+          "resources/bower_components/bootstrap-select/js/i18n/defaults-ru_RU.js",
+          "resources/bower_components/summernote/dist/lang/summernote-ru-RU.js",
+          "resources/bower_components/bootstrapvalidator/dist/js/language/ru_RU.js"
+        ],
+        "en": [
+          "resources/bower_components/bootstrap-select/js/i18n/defaults-en_US.js",
+          "resources/bower_components/bootstrapvalidator/dist/js/language/en_US.js"
+        ]
+      }
+
+
+	}
+}

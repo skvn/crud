@@ -10,8 +10,6 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="ibox-content">
-
                 {%  if crudObj.isTree() %}
                     {{ widgets.tree(crudObj) }}
                 {%  else  %}
@@ -19,8 +17,6 @@
                     {{ widgets.table(crudObj) }}
 
                 {% endif %}
-
-            </div>
         </div>
     </div>
 
@@ -32,26 +28,15 @@
 {% endblock %}
 
 {% block bc %}
+    {#<ol class="breadcrumb">#}
+        {#<li><a href="#">Home</a></li>#}
+        {#<li>Basic</li>#}
+    {#</ol>#}
+    <h1>{{ TITLE }} <a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> {{ trans('crud::messages.add') }} {{ crudObj.config.get('ent_name') }}</a></h1>
 
-    <div class="navbar-header">
-        <button type="button" class="navbar-expand-toggle">
-            <i class="fa fa-bars icon"></i>
-        </button>
-        <ol class="breadcrumb navbar-breadcrumb">
-            {% for bc in crudObj.config.get('bc')%}
-                <li>
-                    <a href="{{ bc.href }}">{{ bc.title }}</a>
-                </li>
-            {% endfor %}
-            <li class="active">{{ crudObj.config.getList('title') }}</li>
-        </ol>
-        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
-            <i class="fa fa-th icon"></i>
-        </button>
-    </div>
 {% endblock %}
 
 
 {% block title_right  %}
-    <a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> {{ trans('crud::messages.add') }} {{ crudObj.config.get('ent_name') }}</a>
+
 {% endblock %}
