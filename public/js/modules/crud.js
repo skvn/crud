@@ -230,6 +230,7 @@
                 $form.each(function (){
 
                      $('select:not(.default_select)',$(this)).selectpicker({
+                         liveSearch: true
 
                      });
                     //$('select:not(.default_select)',$(this)).select2(

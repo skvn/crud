@@ -10,7 +10,7 @@ class Select extends Field {
     public function getOptions($empty_option=null)
     {
         $options = array();
-        $options[] = ['value'=>'', 'text'=>$empty_option];
+        //$options[] = ['value'=>'', 'text'=>$empty_option];
 
         if (!empty($this->config['select_options']))
         {
