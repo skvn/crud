@@ -53,7 +53,7 @@
           "resources/bower_components/summernote/dist/summernote.min.js",
           "resources/bower_components/jquery-form/jquery.form.js",
           "resources/bower_components/typeahead.js/dist/typeahead.bundle.min.js",
-          "resources/bower_components/tagmanager/tagmanager.js",
+          "resources/plugins/tagmanager.js",
           "resources/bower_components/jquery-ui/ui/minified/widget.min.js",
           "resources/bower_components/bootstrapvalidator/dist/js/bootstrapValidator.min.js",
           "resources/bower_components/iCheck/icheck.min.js",

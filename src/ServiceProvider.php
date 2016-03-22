@@ -45,6 +45,7 @@ class ServiceProvider extends LServiceProvider {
 
         // Register dependency packages
         $this->app->register('Intervention\Image\ImageServiceProvider');
+        $this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
 
 
         // Register dependancy aliases
