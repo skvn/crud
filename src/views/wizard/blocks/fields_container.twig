@@ -2,35 +2,26 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <h2  style="margin-top: 0px;">Choose editable fields</h2>
-            <table class="table table-bordered table-striped"  id="f_container"  style="max-width: 1200px">
-                {% for f in wizard.getTableColumns(table) %}
-                    {% if f != 'id' %}
-                        <tr data-rel="{{ f }}">
-                            <td style="width: 200px;"><b>{{ f }}</b></td>
-                            <td style="width: 250px;"><label>
-                                    {% set fld=model.fields[f] %}
-                                    <select name="fields[{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-action="wizard_add_field"  style="display:inline; width:250px;"  >
-                                        <option value="">Choose field type</option>
-                                        {% for k,v in wizard.getAvailableFieldTypes() %}
-                                            <option value="{{ k }}" {{ fld.type == k?'selected' }}>{{ v }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    {#<a href="#" class="btn btn-success" data-rel="{{ f }}"  data-click="crud_action" data-action="wizard_add_field" ><i class="fa fa-plus"></i> Apply</a>
-                                    #}
-                                </label></td>
-                            <td id="f_container_{{ f }}">
-                                {%  if fld.type  and fld.type != 'file'%}
-                                    {%  set ALIAS = f %}
-                                    {% include 'crud::wizard/blocks/fields/'~fld.type~'.twig' %}
-                                {% endif %}
 
-                            </td>
-                            <td style="width: 80px;"><div id="f_cancel_{{ f }}" {%  if not fld.type  or fld.type == 'file'%}style="display: none"{% endif %}><a href="#" data-click="crud_action" data-field="{{ f }}" data-action="wizard_remove_field" data-confirm="Remove this editable field?" class="label label-danger">
-                                    <i class="fa fa-trash-o"></i> Cancel</a></div></td>
-                        </tr>
+            <div id="f_container">
+            {%  for f, fld in model.fields %}
+                {%  include  'crud::wizard/blocks/fields/field_row' %}
+            {% endfor %}
+            </div>
+            <hr />
+            <label>
+                <select class="form-control default_select" id="field_existing" style="display:inline; width:250px;"  >
+                    <option value="">Choose existing database table field</option>
+                    {% for f in wizard.getTableColumns(table) %}
+                    {% if f != 'id' %}
+                        <option value="{{ f }}">{{ f }}</option>
                     {% endif %}
-                {% endfor %}
-            </table>
+                    {% endfor %}
+                </select>
+                Or add a  one <input type="text" style="display:inline; width:150px;" id="field_new" />
+                <a href="#" class="btn btn-success"  data-click="crud_action" data-action="wizard_add_field_row" ><i class="fa fa-plus"></i> Add</a>
+            </label>
+
         </div>
     </div>
 </fieldset>

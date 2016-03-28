@@ -1,8 +1,13 @@
 {% extends "crud::page" %}
 
 {% block head %}
-    <link href="{{ 'css/plugins/steps/jquery.steps.css'|asset }}" rel="stylesheet">
+    {#<link href="{{ 'css/plugins/steps/jquery.steps.css'|asset }}" rel="stylesheet">#}
     <style>
+
+        .wizard > .content
+        {
+            min-height: 500px;;
+        }
 
         .wizard > .steps > ul > li
         {
@@ -153,8 +158,8 @@
 
 
 {% block modals %}
-    <script src="{{ 'js/plugins/staps/jquery.steps.js'|asset }}"></script>
-    <script src="{{ 'js/plugins/validate/jquery.validate.min.js'|asset }}"></script>
+    {#<script src="{{ 'js/plugins/staps/jquery.steps.js'|asset }}"></script>#}
+    {#<script src="{{ 'js/plugins/validate/jquery.validate.min.js'|asset }}"></script>#}
     <script src="{{ 'js/modules/wizard.js'|asset }}"></script>
     <script>
         var models = {{ wizard.getAllModelColumns()|json_encode|raw }};
@@ -162,18 +167,11 @@
 {% endblock %}
 
 {% block bc %}
-    <div class="navbar-header">
-        <button type="button" class="navbar-expand-toggle">
-            <i class="fa fa-bars icon"></i>
-        </button>
-        <ol class="breadcrumb navbar-breadcrumb">
-            <li><a href="{{ route('wizard_index') }}">Models index</a></li>
-            <li class="active">Configure model "{{ model.name }}"</li>
-        </ol>
-        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
-            <i class="fa fa-th icon"></i>
-        </button>
-    </div>
+<ol class="breadcrumb">
+    <li><a href="{{ route('wizard_index') }}">Models index</a></li>
+    <li>Configure model "{{ model.name }}"</li>
+</ol>
+
 {% endblock %}
 
 

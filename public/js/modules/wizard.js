@@ -79,6 +79,29 @@
 
             },
 
+            wizard_add_field_row: function (elem) {
+
+                var fname = '';
+                if ($('#field_new').val())
+                {
+                    fname = $('#field_new').val();
+                } else if ($('#field_existing').val())
+                {
+                    fname = $('#field_existing').val();
+                }
+
+                if (fname)
+                {
+                    $.get('/admin/crud_setup/get_field_row/'+fname, function (res) {
+
+                        $('#f_container').append(res);
+                    });
+                }
+
+
+
+            },
+
             wizard_add_filter_field: function (elem) {
                 var type = elem.val();
                 var list = elem.data('list');
@@ -100,9 +123,10 @@
 
             wizard_remove_field: function (elem)
             {
-                $('select.ftype[data-rel='+elem.data('field')+']').val('');
-                $('#f_container_'+elem.data('field')).html('');
-                $('#f_cancel_'+elem.data('field')).hide();
+                elem.parents('table').first().remove();
+               // $('select.ftype[data-rel='+elem.data('field')+']').val('');
+                //$('#f_container_'+elem.data('field')).parents('table').first().remove();
+                //$('#f_cancel_'+elem.data('field')).hide();
                 adjust_step_height()
 
             },
@@ -283,6 +307,30 @@
                         $('#f_container').find('tr[data-rel=' + $(this).val() + ']').hide();
                     }
                 });
+                
+                $('#field_existing').off('change');
+                $('#field_new').off('change');
+
+                $('#field_existing').on('change', function () {
+                    if ($(this).val() != '')
+                    {
+                        $('#field_new').val('');
+                        $('#field_new').prop('disabled', true);
+                    } else {
+                        $('#field_new').prop('disabled', false);
+                    }
+                });
+
+                $('#field_new').on('change', function () {
+                    if ($(this).val() != '')
+                    {
+                        $('#field_existing').val('');
+                        $('#field_existing').prop('disabled', true);
+                    } else {
+                        $('#field_existing').prop('disabled', false);
+                    }
+                });
+
                 break;
 
             case 3:
@@ -363,7 +411,7 @@
             .each(function () {
                 var bodyHeight = $(this).height();
                 var padding = $(this).innerHeight() - bodyHeight;
-                bodyHeight += padding;
+                bodyHeight += (padding+50) ;
                 $(this).parent().animate({ height: bodyHeight }, "fast");
             });
     }

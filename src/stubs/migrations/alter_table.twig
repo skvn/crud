@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class {{migration.class}} extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+
+        Schema::table('{{migration.table_name}}', function (Blueprint $table) {
+            {% for col_name, col_type in  migration.columns %}
+                $table->{{ col_type }}('{{ col_name }}');
+            {% endfor %}
+
+        });
+
+
+
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('{{migration.table_name}}', function (Blueprint $table) {
+        {% for col_name, col_type in migration.columns %}
+            $table->dropColumn('{{ col_name }}');
+        {% endfor %}
+
+        });
+    }
+}

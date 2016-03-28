@@ -1,6 +1,9 @@
 <?php  namespace Skvn\Crud\Controllers;
 
 use Illuminate\Routing\Controller;
+use Skvn\Crud\CrudException;
+use Skvn\Crud\CrudWizardException;
+use Skvn\Crud\Wizard\Migrator;
 use Skvn\Crud\Wizard\Wizard;
 use Skvn\Crud\Wizard\CrudModelPrototype;
 use Illuminate\Http\Request;
@@ -11,6 +14,8 @@ class WizardController extends Controller {
 
 
     private $request;
+    private $wizard;
+    
     function __construct(LaravelApplication $app, Request $request)
     {
         $this->app = $app;
@@ -18,24 +23,25 @@ class WizardController extends Controller {
         $this->helper = $this->app->make('skvn.crud');
         $this->cmsHelper = $this->app->make('skvn.cms');
 
-        $wizard = new Wizard();
-        if (!$wizard->checkConfigDir())
+        $this->wizard = new Wizard();
+        if (!$this->wizard->checkConfigDir())
         {
-            view()->share('alert', 'Config directory "'.$wizard->config_dir_path.'" is not writable');
+            view()->share('alert', 'Config directory "'.$this->wizard->config_dir_path.'" is not writable');
         }
 
-        if (!$wizard->checkModelsDir())
+        if (!$this->wizard->checkModelsDir())
         {
-            view()->share('alert', 'Models directory "'.$wizard->model_dir_path.'" is not writable');
+            view()->share('alert', 'Models directory "'.$this->wizard->model_dir_path.'" is not writable');
         }
 
-        if (!$wizard->checkMigrationsDir())
+        if (!$this->wizard->checkMigrationsDir())
         {
             view()->share('alert', 'Migrations directory "'.base_path() . '/database/migrations" is not writable');
         }
 
 
         \View::share('cmsHelper', $this->cmsHelper);
+        \View::share('wizard', $this->wizard);
     }
 
     function index()
@@ -45,7 +51,7 @@ class WizardController extends Controller {
         {
              return $this->createModels();
         }
-        return view('crud::wizard/index', ['wizard'=>new Wizard()]);
+        return view('crud::wizard/index', ['wizard'=>$this->wizard]);
     }
 
     function model($table)
@@ -61,8 +67,8 @@ class WizardController extends Controller {
 
         }
 
-        $wizard = new Wizard();
-        $model = $wizard->getModelConfig($table);
+
+        $model = $this->wizard->getModelConfig($table);
         if (!$model)
         {
             if (!empty($this->request->get('model'))) {
@@ -74,14 +80,14 @@ class WizardController extends Controller {
             }
         }
 
-        return view('crud::wizard/model', ['wizard'=>$wizard,'table'=>$table,'model'=>$model]);
+        return view('crud::wizard/model', ['table'=>$table,'model'=>$model]);
     }
 
 
     function menu()
     {
-        $wizard = new Wizard();
-        return view('crud::wizard/menu', ['wizard'=>$wizard]);
+
+        return view('crud::wizard/menu');
     }
 
     function createModels()
@@ -103,8 +109,50 @@ class WizardController extends Controller {
 
     function getTableColumns($table)
     {
-        $wizard = new Wizard();
-        return $wizard->getTableColumns($table);
+
+        return $this->wizard->getTableColumns($table);
+    }
+    
+    function getFieldRowTpl($field_name)
+    {
+        return view('crud::wizard/blocks/fields/field_row', ['f'=>$field_name]);
+    }
+    
+    function migrationCreate()
+    {
+        $migrator = new Migrator($this->request);
+
+        if ($migrator->createTable()->migrate())
+        {
+             return redirect()->back();
+
+        } else {
+
+            return redirect()->back()->with('error', $migrator->error);
+        }
+    
+    }
+
+    function migrationAlter(Request $req)
+    {
+        $table = $req->get('table_name');
+        $columns = $req->get('columns');
+        
+        if (empty($table) || empty($columns))
+        {
+            throw new CrudWizardException('No table name or columns specified');
+        }
+
+        
+
+        $options = ['name'=>"add_".$table];
+        $command = "make:migration:schema";
+        \Artisan::call($command, $options);
+
+        \Artisan::call("migrate", ['--force'=>true,'--quiet'=>true]);
+
+        return redirect()->back();
+
     }
 
 

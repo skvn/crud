@@ -1,7 +1,6 @@
 {% extends "crud::page" %}
 
 {% block head %}
-    <link href="{{ 'css/plugins/steps/jquery.steps.css'|asset }}" rel="stylesheet">
     <style>
         .wizard-big.wizard > .content {
             min-height: 700px;
@@ -12,11 +11,11 @@
 {% block content %}
     {% if not alert %}
           <div class="col col-lg-6">
-                <h1>Define models</h1>
+
               {% set tables = wizard.getTables(1) %}
-              {% if not tables|length %}
-                  <div class="alert alert-danger" role="alert">No tables found. Define database structure first.</div>
-              {%  else %}
+              {#{% if not tables|length %}#}
+                  {#<div class="alert alert-danger" role="alert">No tables found. Define database structure first.</div>#}
+              {#{%  else %}#}
                 {% if  not wizard.modelsDefined() %}
                  <h2>Step 1. Name the Models.</h2>
                 <form method="post">
@@ -25,11 +24,11 @@
                         <h2>Step 2. Configure each Models.</h2>
                 {% endif %}
 
-                    <table class="table table-striped">
+                    <table class="table">
                         <tr>
-                            <th>Table</th>
+                            <th width="150">Table</th>
                             <th>Model name</th>
-                            <th width="100">Actions</th>
+                            <th width="200">Actions</th>
                         </tr>
                         {% for table in tables %}
                                 <tr>
@@ -44,7 +43,7 @@
                                                        value="{{ wizard.getModelConfig(table).name }}" disabled/>
                                             {% else %}
                                                 <input type="text" class="form-control" name="model"
-                                                       placeholder="Enter model name * "  required/>
+                                                       placeholder="Enter model name * " value="{{  studly_case(table) }}"  required/>
                                             {% endif %}
                                         </form>
                                         {% else %}
@@ -67,8 +66,22 @@
                                     </td>
 
                                 </tr>
-
                         {% endfor %}
+                    </table>
+                    <br><br>
+                    <table class="table table-striped">
+                    <tr class="info">
+                        <td width="150"><h3 class="text-info">Add new table</h3></td>
+                        <td valign="middle" style="padding-top: 15px;">
+                            <form method="post" id="new_table" action="{{ route('wizard_migrate_create') }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+                                <input type="text" class="form-control" placeholder="table_name"  name="table_name" required/>
+                            </form>
+                        </td>
+                        <td width="200" valign="middle" style="padding-top: 15px;">
+                            <input type="submit" form="new_table" class="btn btn-danger" value="Create"/>
+                        </td>
+                    </tr>
                     </table>
                     {% if not wizard.modelsDefined() %}
                         <div class="row">
@@ -79,7 +92,7 @@
                 </form>
                 {% endif %}
             </div>
-    {% endif %}
+    {#{% endif %}#}
     {% else %}
 
         <div class="alert alert-danger" role="alert">{{ alert }}</div>
@@ -87,15 +100,5 @@
 {% endblock %}
 
 {% block bc %}
-    <div class="navbar-header">
-        <button type="button" class="navbar-expand-toggle">
-            <i class="fa fa-bars icon"></i>
-        </button>
-        <ol class="breadcrumb navbar-breadcrumb">
-            <li class="active">Models index</li>
-        </ol>
-        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
-            <i class="fa fa-th icon"></i>
-        </button>
-    </div>
+    <h1>Define models</h1>
 {% endblock %}

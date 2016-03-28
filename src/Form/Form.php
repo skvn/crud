@@ -58,6 +58,11 @@ class Form {
     /**
      *
      */
+    const FIELD_DECIMAL = 'decimal';
+
+    /**
+     *
+     */
     const FIELD_TAGS = 'tags';
 
     /**

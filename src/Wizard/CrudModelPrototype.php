@@ -44,7 +44,7 @@ class CrudModelPrototype
     protected $table;
 
     /**
-     * @var array  data for migations
+     * @var array  data for migrations
      */
     protected $migrations_data = [];
 
@@ -57,6 +57,11 @@ class CrudModelPrototype
      * @var array Table column types arrays
      */
     private $column_types = [];
+
+    /**
+     * @var array Array of columns that should be added to the table
+     */
+    private $add_fields = [];
 
     /**
      * CrudModelPrototype constructor.
@@ -260,8 +265,14 @@ class CrudModelPrototype
 
         if (!empty($this->config_data['fields']))
         {
+                        
             foreach ($this->config_data['fields'] as $k=> $f)
             {
+                if (!isset($this->column_types[$k]))
+                {
+                    $this->add_fields[$k] = $f; 
+                }
+                
                 if (!empty($f['type']))
                 {
                     $this->config_data['fields'][$k]['editable'] = 1;
@@ -437,6 +448,7 @@ class CrudModelPrototype
         $this->recordConfig();
         $this->recordModels();
         $this->recordMigrations();
+        $this->migrate();
 
 
     }
@@ -481,29 +493,63 @@ class CrudModelPrototype
      */
     protected function recordMigrations()
     {
-
-
+        
         $this->recordPivotMigrations();
-
+        $this->recordAddFieldsMigrations();
 
 
     }//
 
+    /**
+     *  Record mirations for add fields
+     */
+    private function recordAddFieldsMigrations()
+    {
+        if (count($this->add_fields))
+        {
+            $migrator = new Migrator();
+            $columns = [];
+            foreach ($this->add_fields as $fname=>$fdesc)
+            {
+                $dbtype = $migrator->getColumDbTypeByEditType($fdesc['type']);
+                if (!empty($dbtype)) {
+                    $columns[$fname] = $dbtype;
+                }
+            }
+            
+            if (count($columns)) {
+                $migrator->appendColumns($this->table, $columns);
+                $this->migrations_created = true;
+            }
+            
+            
+        }
+    }//
+
+
+    /**
+     *  run artisan migrate
+     */
+    private function migrate()
+    {
+        if ($this->migrations_created)
+        {
+            $migrator = new Migrator();
+            $migrator->migrate();
+        }
+    }
+    
+    
     private function recordPivotMigrations()
     {
         if (!empty($this->migrations_data['pivot']) && is_array($this->migrations_data['pivot']))
         {
+            $migrator = new Migrator();
             foreach ($this->migrations_data['pivot'] as $p)
             {
 
                 $this->migrations_created = true;
-                $p['class']  =   "Create".studly_case($p['table_name'])."PivotTable";
-                $path = base_path() . '/database/migrations/' . date('Y_m_d_His') .
-                '_create_' . $p['table_name'] . '_pivot_table.php';
-
-                file_put_contents($path,
-                    $this->app['view']->make('crud_wizard::migrations/pivot', ['pivot'=>$p])->render()
-                );
+                $migrator->createPivotTable($p);
 
             }
         }

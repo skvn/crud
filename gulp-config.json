@@ -19,7 +19,8 @@
           "resources/bower_components/bootstrapvalidator/dist/css/bootstrapValidator.min.css",
           "resources/bower_components/iCheck/skins/square/square.css",
           "resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css",
-          "resources/bower_components/jstree/dist/themes/default/style.min.css"
+          "resources/bower_components/jstree/dist/themes/default/style.min.css",
+          "resources/bower_components/jquery.steps/demo/css/jquery.steps.css"
 
 		],
       "vendor_css_images": [
@@ -45,6 +46,7 @@
           "resources/bower_components/bootstrap-treeview/dist/bootstrap-treeview.min.js",
           "resources/bower_components/datatables/media/js/jquery.dataTables.min.js",
           "resources/bower_components/datatables/media/js/dataTables.bootstrap.min.js",
+          "resources/bower_components/jquery-validation/dist/jquery.validate.min.js",
           "resources/bower_components/jquery.steps/build/jquery.steps.min.js",
           "resources/bower_components/matchHeight/jquery.matchHeight-min.js",
           "resources/bower_components/moment/min/moment-with-locales.min.js",
