@@ -64,6 +64,11 @@ class CrudModelPrototype
     private $add_fields = [];
 
     /**
+     * @var string Contains error if any
+     */
+    public $error;
+
+    /**
      * CrudModelPrototype constructor.
      * @param $config_data
      */
@@ -535,7 +540,10 @@ class CrudModelPrototype
         if ($this->migrations_created)
         {
             $migrator = new Migrator();
-            $migrator->migrate();
+            if (!$migrator->migrate())
+            {
+                $this->error = $migrator->error;
+            }
         }
     }
     

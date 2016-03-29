@@ -47,6 +47,11 @@
 
 
             },
+            
+            wizard_add_list_col: function (elem) {
+                crud.action(elem,'clone_fragment');
+                adjust_step_height();
+            },
 
             wizard_add_relation: function (elem) {
                 var type = $('#rtype').val();
@@ -90,10 +95,17 @@
                     fname = $('#field_existing').val();
                 }
 
+                if ($('table[data-rel='+fname+']').length)
+                {
+                    $('table[data-rel='+fname+']').find('select').first().focus();
+                    return;
+                }
                 if (fname)
                 {
                     $.get('/admin/crud_setup/get_field_row/'+fname, function (res) {
 
+                        $('#field_existing').val('');
+                        $('#field_new').val('');
                         $('#f_container').append(res);
                     });
                 }
@@ -331,6 +343,9 @@
                     }
                 });
 
+                $('#f_container').sortable({cursor: "move",axis: "y"});
+                
+
                 break;
 
             case 3:
@@ -350,6 +365,7 @@
                     }
                 });
 
+                adjust_step_height()
 
 
                 break;
@@ -409,6 +425,7 @@
     {
         $(".wizard .content > .title.current").next(".body")
             .each(function () {
+                console.log($(this));
                 var bodyHeight = $(this).height();
                 var padding = $(this).innerHeight() - bodyHeight;
                 bodyHeight += (padding+50) ;

@@ -522,6 +522,11 @@
                 {
                     return i18n.say('error_occured')+': ' + error;
                 }
+            },
+
+            action: function  (elm, action)
+            {
+                return  crud_actions[action](elm);;
             }
 
         };

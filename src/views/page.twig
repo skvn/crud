@@ -23,7 +23,7 @@
             <span class="pficon pficon-close"></span>
         </button>
         <span class="pficon pficon-warning-triangle-o"></span>
-        {{ session('error') }}
+        {{ session('error')|raw }}
     </div>
 {% endif %}
 <body>

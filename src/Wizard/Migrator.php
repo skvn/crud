@@ -116,7 +116,9 @@ class Migrator
 
     private function isMigrateAllowed()
     {
-        $this->error = "Running automatic migrations is prohibited by your configuration file. Please, run php artisan migrate from the command line";
+        //return true;
+
+        $this->error = "Running automatic migrations is prohibited by your configuration file. <br>Please, <b>run php artisan migrate</b> from the command line";
         return false;
     }
 
