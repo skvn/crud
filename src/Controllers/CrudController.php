@@ -222,8 +222,6 @@ class CrudController extends Controller
 
         try {
             $obj = $this->helper->getModelInstance($model, CrudConfig :: DEFAULT_SCOPE, $id);
-            //$model = 'App\Model\\' . studly_case($model);
-            //$obj = $model::findOrNew((int)$id);
 
             if (!$obj->checkAcl())
             {
@@ -246,10 +244,7 @@ class CrudController extends Controller
         $parent_id = $this->app['request']->get('parent_id');
         $position = $this->app['request']->get('position');
 
-//        $model = 'App\Model\\'.studly_case($model);
-//        $obj = $model::findOrFail((int)$id);
         $obj = $this->helper->getModelInstance($model, CrudConfig :: DEFAULT_SCOPE, $id);
-
 
         if (!$obj->checkAcl())
         {

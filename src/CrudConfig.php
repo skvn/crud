@@ -315,7 +315,11 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
             array_unshift($this->config['list']['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
         }
 
-        if (!empty($this->config['list']['buttons']['single_edit']) || !empty(!empty($this->config['list']['buttons']['single_delete'])))
+        if (!empty($this->config['list']['buttons']['single_edit'])
+            || !empty($this->config['list']['buttons']['single_delete'])
+            || !empty($this->config['list']['list_actions'])
+
+        )
         {
             $this->config['list']['columns'][] = [ "data"=>"actions", "orderable"=>false,'title'=>'  ', 'width'=>50, 'ctype'=>'actions'];
         }
@@ -356,6 +360,18 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
                 $this->config['list']['columns'] = $cols;
             }
         }
+
+        if (!empty($this->config['list']['list_actions'])) {
+//            $actions = [];
+//            foreach ($this->config['list']['list_actions'] as $action) {
+//                $actions[] = $action['title'].'|'.$action['command'].(isset($action['class'])?'|'.$action['class']:'');
+//            }
+//            $this->config['list_actions'] = implode(',',$actions);
+            $this->config['list_actions'] = json_encode($this->config['list']['list_actions']);
+        } else {
+            $this->config['list_actions'] = "";
+        }
+
 
         $this->config['list_name'] = $this->getListName();
         $this->config['scope'] = $this->scope;

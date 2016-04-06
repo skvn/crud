@@ -6,7 +6,8 @@
   "no_item_selected": "No item(s) selected",
   "error_occured": "Error occurred",
   "error_duplicate": "Unable to save: DUPLICATE",
-  "alert_delete_tree":"All parent elements will be removed with the children!\nDo you confirm deleting the selected elements?"
+  "alert_delete_tree":"All parent elements will be removed with the children!\nDo you confirm deleting the selected elements?",
+  "error_sending_request": "Error occured while sending request"
 
 
 

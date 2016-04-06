@@ -268,11 +268,14 @@ class CrudModelPrototype
     private  function processFields()
     {
 
+        $this->config_data['form_fields'] = [];
+
         if (!empty($this->config_data['fields']))
         {
                         
             foreach ($this->config_data['fields'] as $k=> $f)
             {
+
                 if (!isset($this->column_types[$k]))
                 {
                     $this->add_fields[$k] = $f; 
@@ -281,6 +284,7 @@ class CrudModelPrototype
                 if (!empty($f['type']))
                 {
                     $this->config_data['fields'][$k]['editable'] = 1;
+                    $this->config_data['form_fields'][] = $k;
                 }
                 //process date
                 if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE)
@@ -339,26 +343,28 @@ class CrudModelPrototype
             foreach ($this->config_data['filters'] as $list_alias=> $fields)
             {
 
-                $filter_keys = [];
+                $filter_fields = [];
                 foreach ($fields as $k=>$f) {
                     if (!empty($f['type'])) {
                         $key = $list_alias . '_filter_' . $k;
-                        $filter_keys[] = $key;
-                        $this->config_data['fields'][$key] = $f;
-                        $this->config_data['fields'][$key]['column'] = $k;
+
+                        $field = $f;
+                        $field['column'] = $k;
 
                         //process date
                         if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE_RANGE) {
                             $formats = $this->wizard->getAvailableDateFormats();
-                            $this->config_data['fields'][$key]['format'] = $formats[$f['format']]['php'];
-                            $this->config_data['fields'][$key]['jsformat'] = $formats[$f['format']]['js'];
-                            $this->config_data['fields'][$key]['db_type'] = $this->column_types[$k];
+                            $field['format'] = $formats[$f['format']]['php'];
+                            $field['jsformat'] = $formats[$f['format']]['js'];
+                            $field['db_type'] = $this->column_types[$k];
 
                         }
+
+                        $filter_fields[$key] = $field;
                     }
 
                 }
-                $this->config_data['lists'][$list_alias]['filter'] = $filter_keys;
+                $this->config_data['lists'][$list_alias]['filter'] = var_export($filter_fields, 1);
 
             }
 
@@ -380,6 +386,8 @@ class CrudModelPrototype
         {
             foreach ($this->config_data['lists'] as $alias=>$list)
             {
+
+                //columns
                 if (!empty($list['columns']))
                 {
                     foreach ($list['columns'] as $k=>$column)
@@ -394,8 +402,30 @@ class CrudModelPrototype
                         }
                     }
                 }
+
+                //actions
+                if (!empty($list['actions'])) {
+                    $actions = [];
+                    foreach ($list['actions'] as $action) {
+
+                        if (is_array($action))
+                        {
+                            $actions[] = $action;
+                        }
+                    }
+
+                    if (count($actions)) {
+                        $this->config_data['lists'][$alias]['actions'] = var_export($actions, 1);
+                    } else {
+                        $this->config_data['lists'][$alias]['actions'] = null;
+                    }
+                }
+
             }
+            //exit;
         }
+
+
     }//
 
     /**
@@ -404,21 +434,21 @@ class CrudModelPrototype
     private function prepareConfigData()
     {
 
-        if (!empty($this->config_data['fields']))
-        {
-            $form_fields = [];
-            foreach ($this->config_data['fields'] as $key=>$f)
-            {
-
-                if (isset($f['editable']) && $f['editable'] )
-                {
-                    $form_fields[] = $key;
-                }
-
-            }
-
-            $this->config_data['form_fields'] = $form_fields;
-        }
+//        if (!empty($this->config_data['fields']))
+//        {
+//            $form_fields = [];
+//            foreach ($this->config_data['fields'] as $key=>$f)
+//            {
+//
+//                if (isset($f['editable']) && $f['editable'] )
+//                {
+//                    $form_fields[] = $key;
+//                }
+//
+//            }
+//
+//            $this->config_data['form_fields'] = $form_fields;
+//        }
 
         //track timestamps?
         if (isset($this->column_types['created_at']) && isset($this->column_types['updated_at']))
@@ -448,7 +478,7 @@ class CrudModelPrototype
     public  function record()
     {
 
-        $this->app['view']->addNamespace('crud_wizard', __DIR__ . '/../stubs');
+        $this->app['view']->addNamespace('crud_wizard', __DIR__ . '/../../stubs');
 
         $this->recordConfig();
         $this->recordModels();
@@ -465,6 +495,7 @@ class CrudModelPrototype
     {
 
         $val = $this->app['view']->make('crud_wizard::crud_config', ['model'=>$this->config_data])->render();
+        var_dump($val);
         eval("\$arr = $val");
         file_put_contents($this->config_path,"<?php \n return ".var_export($arr, 1).";");
 
@@ -521,10 +552,11 @@ class CrudModelPrototype
                     $columns[$fname] = $dbtype;
                 }
             }
-            
+
             if (count($columns)) {
-                $migrator->appendColumns($this->table, $columns);
-                $this->migrations_created = true;
+                if ($migrator->appendColumns($this->table, $columns)) {
+                    $this->migrations_created = true;
+                }
             }
             
             

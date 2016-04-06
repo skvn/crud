@@ -63,11 +63,14 @@
             {% for col in list.columns %}
 
               {%  if col.data %}
-            ["data" => "{{ col.data }}", "title" => "{{ col.title }}", "orderable"=>{{ col.orderable?"true":"false" }}, {% if col.hint %}"hint" => ["default" => "{{ col.hint }}"],{% endif %} {% if col.orderable and col.default_order %}"default_order"=>"{{ col.default_order }}",{% endif %} {% if col.invisible %}"invisible" => 1,{% endif %}{% if col.width %}"width" => "{{ col.width }}"{% endif %}],
+            ["data" => "{{ col.data }}", "title" => "{{ col.title }}", "orderable"=>{{ col.orderable?"true":"false" }}, {% if col.hint %}"hint" => ["default" => "{{ col.hint }}"],{% endif %} {% if col.orderable and col.default_order %}"default_order"=>"{{ col.default_order }}",{% endif %}{% if col.searchable %}"searchable" => 1,{% endif %} {% if col.invisible %}"invisible" => 1,{% endif %}{% if col.width %}"width" => "{{ col.width }}"{% endif %}],
             {% endif %}
             {% endfor %}
             ],
-            "filter" => {{ list.filter|json_encode|raw }},
+            "filter" => {{ list.filter|raw }},
+            {%  if list.actions %}
+            "list_actions" => {{ list.actions|raw}},
+            {% endif %}
             {%  if list.use_tabs %}
             /* 1 for using tabs  instead of popups */
             "edit_tab"=>1,

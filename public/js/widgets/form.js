@@ -1,4 +1,5 @@
 ;(function($, crud){
+    var i18n = win.i18n;
     bind_events();
     $.widget("crud.crud_form", {
         options: {},
@@ -101,7 +102,11 @@
                         },
                         error: function(res){
                             crud.toggle_form_progress($form);
-                            alert(res.responseJSON.error.message)
+                            if (res.responseJSON.error.message) {
+                                alert(res.responseJSON.error.message)
+                            } else {
+                                alert(i18n.say('error_sending_request'));
+                            }
                         }
                     });
                 }

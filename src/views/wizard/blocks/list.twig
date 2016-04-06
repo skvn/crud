@@ -53,7 +53,7 @@
                 </div>
                 <div class="hr-line-dashed"></div>
                 <h3>Columns</h3>
-                <div class="row">
+
                     <div id="list_cols_{{ ALIAS }}">
                         {%  if list.columns %}
                             {%  set NUM =  0 %}
@@ -64,7 +64,19 @@
                         {% endif %}
                     </div>
                     <a href="#" class="btn btn-success"  data-click="crud_action"  data-action="wizard_add_list_col" data-skip_arr="1" data-fragment="col_tpl_{{ ALIAS }}" data-container="list_cols_{{ ALIAS }}"><i class="fa fa-plus"></i> Add column</a>
+
+                <hr>
+                <h3>List actions</h3>
+
+                <div id="list_actions_{{ ALIAS }}">
+                    {%  for action in list.list_actions %}
+                        {%  set NUM=loop.index  %}
+                        {% include 'crud::wizard/blocks/list_action' %}
+                    {% endfor %}
                 </div>
+                <a href="#" class="btn btn-primary"  data-click="crud_action"  data-action="wizard_add_list_col" data-skip_arr="1" data-fragment="action_tpl_{{ ALIAS }}" data-container="list_actions_{{ ALIAS }}"><i class="fa fa-plus"></i> Add action</a>
+
+                <hr>
 
                 <h3>Filter fields</h3>
                 <table class="table table-bordered table-striped"  id="{{ ALIAS }}f_container"  style="max-width: 1200px">
@@ -93,6 +105,7 @@
 
         {%  set NUM = "[NUM]" %}
         {% include 'crud::wizard/blocks/list_column' %}
+        {% include 'crud::wizard/blocks/list_action' %}
 
     </div>
 {%  if not list %}

@@ -41,12 +41,19 @@
                     <option value="desc" {{ column.default_order == "desc"?'selected' }}>Descending</option>
                 </select>
             </td>
-            <td  style="width:80px;"><div class="checkbox">
+            <td  style="width:80px;">
+                <div class="checkbox">
                     <label>
                         <input type="checkbox" value="1" name="lists[{{ ALIAS }}][columns][{{ NUM }}][invisible]" {{ column.invisible?'checked' }}  > Invisible
                     </label>
                 </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="1" name="lists[{{ ALIAS }}][columns][{{ NUM }}][searchable]" {{ column.searchable?'checked' }}  > Searchable
+                    </label>
+                </div>
             </td>
+
             <td><a href="#" data-click="crud_action" data-action="wizard_remove_list_col" data-confirm="Remove this column?" data-list="{{ ALIAS }}" data-idx="{{ NUM }}"  class="label label-danger">
                     <i class="fa fa-trash-o"></i> Remove</a></td>
 

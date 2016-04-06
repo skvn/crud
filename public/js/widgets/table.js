@@ -56,6 +56,34 @@
                                 buttons += "<a class='text-danger' data-confirm='"+i18n.say('delete_element')+"?' data-id='"+rowData.id+"' data-click='crud_event' data-event='crud.delete_element'  style='cursor:pointer;font-size:24px;'><i class='fa fa-trash-o'> </i></a>";
                             }
                             buttons +='</nobr>';
+
+                            if (tbl.data('list_actions')) {
+
+                                var actions = tbl.data('list_actions');
+                                buttons += '<div class="dropdown  dropdown-kebab-pf" style="width:15px;">'
+                                    + '<button class="btn btn-link dropdown-toggle" type="button"  data-toggle="dropdown">'
+                                    + '<span class="fa fa-ellipsis-v"></span>'
+                                    + '</button>'
+                                    + '<ul class="dropdown-menu dropdown-menu-right" >';
+
+                                for (var i=0; i<actions.length; i++)
+                                {
+                                    var com_url = crud.format_setting("model_command_url", {command:actions[i]['command'],id:rowData.id, model:tbl.data('crud_table'), scope:tbl.data('crud_scope')} );
+                                    buttons += '<li><a href="'+com_url+'" data-click="crud_action" data-action="crud_command" >';
+                                    if (actions[i]['class'])
+                                    {
+                                        buttons += '<i class="'+actions[i]['class']+'"></i> ';
+                                    }
+                                    buttons += actions[i]['title']+'</a></li>';
+                                    if (i<(actions.length-1))
+                                    {
+                                        buttons += '<li role="separator" class="divider"></li>';
+                                    }
+                                }
+
+                                + '</ul>'
+                                + '</div>';
+                            }
                             $(td).html(buttons);
                         }
 

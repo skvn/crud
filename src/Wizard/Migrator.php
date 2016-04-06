@@ -85,16 +85,22 @@ class Migrator
     {
         $migration = [
             'table_name' => $table,
-            'class'  =>   "Alter".studly_case($table)."Table".ucfirst(strtolower(str_random(10))),
+            'class'  =>   "Alter".studly_case($table)."Table".md5($table.implode(',',$cols)),
             'columns' => $cols
         ];
 
-        $path = base_path() . '/database/migrations/' . date('Y_m_d_His') .
-            '_'.snake_case($migration['class']).'.php';
+        if ($this->checkMigrationName($migration['class'])) {
 
-        file_put_contents($path,
-            $this->app['view']->make('crud_wizard::migrations/alter_table', compact('migration'))->render()
-        );
+
+            $path = base_path() . '/database/migrations/' . date('Y_m_d_His') .
+                '_' . snake_case($migration['class']) . '.php';
+
+         return  file_put_contents($path,
+                $this->app['view']->make('crud_wizard::migrations/alter_table', compact('migration'))->render()
+            );
+        }
+
+        return false;
     }
 
     public  function getColumDbTypeByEditType($type)
@@ -103,7 +109,22 @@ class Migrator
             return $this->type_map[$type];
         }
     }//
-    
+
+    private  function checkMigrationName($class_name)
+    {
+        $file_name = snake_case($class_name);
+        $all_migrations = \File::allFiles(base_path() . '/database/migrations');
+        foreach ($all_migrations as $file)
+        {
+           if (strpos($file->getBasename(), $file_name) !== false)
+           {
+               return false;
+           }
+
+        }
+        return true;
+    }
+
     public  function migrate()
     {
 

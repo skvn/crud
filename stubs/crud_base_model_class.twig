@@ -33,6 +33,20 @@ class {{ model.name }}Base extends CrudModel{
     }//
 
 
+    //LISTS data providers
+
+    {%  for alias, list in model.lists %}
+    /**
+    /* Query generation for "{{ list.title }}" list
+    /* Override this method to change the dataset
+    /* @param $order  Sort order from the request
+    /* @param $joins  array  Array of joins to use in with($joins); Eloquent method
+    */
+    public function   {{ camel_case("get_"~alias~"_list_query") }}($order, $joins) {
+            return  $this->getBasicListQuery($joins);
+     }
+    {% endfor %}
+
     public static function boot()
     {
         {%  if model.attaches %}self::attachBoot();

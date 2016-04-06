@@ -45,36 +45,58 @@ class Filter {
         $filters = $this->crudObj->config->getFilter();
         $this->defaults = $this->crudObj->config->getListDefaultFilter();
 
-
         if ($filters)
         {
-            foreach ($filters as $columnName)
-            {
-
-                 $this->initOneFilterColumn($columnName);
-
+            //SUPPORT FOR OLD STYLE 
+            //when filter field is described in 'fields'
+            // and filter contains only field names
+            if (isset($filters[0])) {
+                foreach ($filters as $column_name) {
+                    if ($field_description = $this->initOneFilterColumn($column_name)) {
+                        $this->filters[$column_name] = $field_description;
+                    }
+                }
+            } else {
+                foreach ($filters as $column_name=>$field_description) {
+                    if (is_array($field_description)) {
+                        $this->appendColumnDefaults($column_name, $field_description);
+                        $this->filters[$column_name] = $field_description;
+                    } else {
+                        if ($field_description = $this->initOneFilterColumn($column_name)) {
+                            $this->filters[$column_name] = $field_description;
+                        }   
+                    }
+                }
             }
+
         }
     }
 
-    public function initOneFilterColumn($columnName)
+    public function initOneFilterColumn($column_name)
     {
-        if ($fieldDescription = $this->crudObj->config->getColumn($columnName))
+        if ($field_description = $this->crudObj->config->getColumn($column_name, $this->getScope()))
         {
-            $fieldDescription['required'] = 0;
-            if ($fieldDescription['type'] == \Skvn\Crud\CrudConfig::FIELD_SELECT)
+            $field_description['required'] = 0;
+            if ($field_description['type'] == \Skvn\Crud\CrudConfig::FIELD_SELECT)
             {
-                $fieldDescription['multiple'] = 1;
+                $field_description['multiple'] = 1;
             }
 
-            if (!empty($this->defaults[$columnName]))
-            {
-                $fieldDescription['default'] = (is_array($this->defaults[$columnName])?implode(',',$this->defaults[$columnName]):$this->defaults[$columnName]);
-            }
+            $this->appendColumnDefaults($column_name, $field_description);
 
-            $this->filters[$columnName] = $fieldDescription;
+            return $field_description;
         }
 
+    }
+    
+    private function appendColumnDefaults($column_name, $field_description)
+    {
+        if (!empty($this->defaults[$column_name]))
+        {
+            $field_description['default'] = (is_array($this->defaults[$column_name])?implode(',',$this->defaults[$column_name]):$this->defaults[$column_name]);
+        }
+
+        return $field_description;
     }
 
     public function getScope()

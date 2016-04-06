@@ -9,7 +9,9 @@
         model_delete_url: '/admin/crud/{model}/delete',
         model_move_tree_url: '/admin/crud/{model}/move_tree',
         model_tree_url: '/admin/crud/{model}/tree/{scope}',
-        model_autocomplete_url: '/admin/crud/{model}/autocomplete/{scope}'
+        model_autocomplete_url: '/admin/crud/{model}/autocomplete/{scope}',
+        model_command_url: '/admin/crud/{model}/{id}/command/{command}?scope={scope}',
+
     };
     var crud_actions = {};
     var i18n = w.i18n;
@@ -533,56 +535,6 @@
 
     var crud = w.CRUD;
     crud_actions = {
-
-        open_popup: function(elem)
-        {
-            var popup = elem.data('popup');
-            if ($('#'+popup).length <= 0)
-            {
-                $('<div id="'+popup+'" style="display: none;"></div>').appendTo($(crud.doc.body));
-            }
-            $.get(elem.data('uri'), $.extend({}, elem.data()), function(res){
-                $('#'+popup).replaceWith(res);
-                var w = $('#'+popup);
-                crud.trigger('crud.content_loaded', {cont: w});
-                w.modal({keyboard:false, show:true,backdrop:'static'});
-                if (elem.data('title'))
-                {
-                    $("h4", w).html(elem.data("title"));
-                }
-                if (elem.data('report'))
-                {
-                    $("input[name=type]", w).val(elem.data('report'))
-                }
-                if (elem.data('source'))
-                {
-                    $("input[name=source]", w).val(elem.data('source'))
-                }
-                if (crud_actions['onShow_'+popup])
-                {
-                    crud_actions['onShow_'+popup]($('#'+popup));
-                }
-                if (elem.data("onshow"))
-                {
-                    switch (elem.data("onshow"))
-                    {
-                        case 'pass_row_ids':
-                            var ids = [];
-                            $('table input[data-rel=row]').each(function ()
-                            {
-                                if ($(this).prop('checked'))
-                                {
-                                    ids.push($(this).attr('value'));
-                                }
-                            });
-                            $('input[name=row_ids]', w).val(ids.join(','));
-                            break;
-                    }
-                }
-                crud.init_ichecks(w);
-                $("form", w).crud_form();
-            });
-        },
         call_uri: function(elem)
         {
             $.get(elem.data('uri'), $.extend({}, elem.data()), function(res){
@@ -636,8 +588,61 @@
                     alert(res.error);
                 }
 
-            }, 'json')
+            }, 'json').fail(function (res) {
+                alert(res.statusText)
+            });
+
+        },
+        open_popup: function(elem)
+        {
+            var popup = elem.data('popup');
+            if ($('#'+popup).length <= 0)
+            {
+                $('<div id="'+popup+'" style="display: none;"></div>').appendTo($(crud.doc.body));
+            }
+            $.get(elem.data('uri'), $.extend({}, elem.data()), function(res){
+                $('#'+popup).replaceWith(res);
+                var w = $('#'+popup);
+                crud.trigger('crud.content_loaded', {cont: w});
+                w.modal({keyboard:false, show:true,backdrop:'static'});
+                if (elem.data('title'))
+                {
+                    $("h4", w).html(elem.data("title"));
+                }
+                if (elem.data('report'))
+                {
+                    $("input[name=type]", w).val(elem.data('report'))
+                }
+                if (elem.data('source'))
+                {
+                    $("input[name=source]", w).val(elem.data('source'))
+                }
+                if (crud_actions['onShow_'+popup])
+                {
+                    crud_actions['onShow_'+popup]($('#'+popup));
+                }
+                if (elem.data("onshow"))
+                {
+                    switch (elem.data("onshow"))
+                    {
+                        case 'pass_row_ids':
+                            var ids = [];
+                            $('table input[data-rel=row]').each(function ()
+                            {
+                                if ($(this).prop('checked'))
+                                {
+                                    ids.push($(this).attr('value'));
+                                }
+                            });
+                            $('input[name=row_ids]', w).val(ids.join(','));
+                            break;
+                    }
+                }
+                crud.init_ichecks(w);
+                $("form", w).crud_form();
+            });
         }
+
     };
     $.ajaxSetup({
         headers: {

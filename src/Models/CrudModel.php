@@ -231,37 +231,47 @@ class CrudModel extends Model {
 
         }
         $config_cols = $this->config->getList('columns');
-        $coll = $this->getListCollection($scope, $order);
+        $coll = $this->getListQuery($scope, $order);
         if (!$this->isTree()) {
 
-            $coll = $this->applyCollectionFilters($coll, $scope);
-            $coll = $this->paginateListCollection($coll, $skip, $take);
+            $coll = $this->applyQueryFilter($coll, $scope);
+            $coll = $this->paginateQuery($coll, $skip, $take);
         }
         
         return $this->app['skvn.crud']->prepareCollectionForView($coll, $this->app['request']->all(), $viewType, $config_cols);
     }
 
 
+    /**
+     * DEPRECATED  use getListQuery instead
+     * @param null $scope
+     * @param null $order
+     * @return mixed
+     */
     function getListCollection($scope=null, $order=null)
     {
-        //$scope = $this->purifyContext($context);
+        return $this->getListQuery($scope, $order);
+    }    
+    
+    
+    function getListQuery($scope=null, $order=null)
+    {
+       
 
         if (!empty($scope))
         {
             $method = camel_case('get_' . $scope . '_list_collection');
+            $method_query = camel_case('get_' . $scope . '_list_query');
         }
 
 
         //define if need eager join
         $listCols = $this->config->getList('columns');
-        $sort = $this->config->getList('sort');
         $joins =[];
         foreach ($listCols as $listCol) {
 
             if ($relSpl = $this->resolveListRelation($listCol['data'])) {
                 $joins[$relSpl[0]] = function ($query) {
-
-
                 };
 
             }
@@ -271,51 +281,50 @@ class CrudModel extends Model {
         {
             return $this->$method($order, $joins);
         }
+        else if (!empty($scope) && method_exists($this, $method_query))
+        {
+            return $this->$method_query($order, $joins);
+        }
         else
         {
 
-
-//            if (!$this->isTree())
-//            {
-
-                $basic = self::query();
-//
-//            } else {
-//                //return \DB::table($this->table)->select(\DB::raw($this->table.'.*,  CONCAT(tree_path,id) as full_path'))->orderBy('full_path', 'asc');;
-//                return $this->getAllTree();
-//
-//            }
-
-
-            if (count($joins))
-            {
-
-                $basic = $basic->with($joins);
-            }
-
-
-            if ($this->isTree())
-            {
-                $basic->orderBy($this->getColumnTreePath() , 'asc');
-                $basic->orderBy($this->getColumnTreeOrder(), 'asc');
-
-            } else {
-
-                if (!empty($sort)) {
-                    foreach ($sort as $o => $v) {
-                        $basic->orderBy($o, $v);
-                    }
-
-                }
-            }
-
-            return $basic;
-
+           return $this->getBasicListQuery($joins);
 
         }
+    }//
+
+
+    function getBasicListQuery($joins)
+    {
+        $sort = $this->config->getList('sort');
+        
+        $basic = self::query();
+
+        if (count($joins))
+        {
+
+            $basic = $basic->with($joins);
+        }
+
+        if ($this->isTree())
+        {
+            $basic->orderBy($this->getColumnTreePath() , 'asc');
+            $basic->orderBy($this->getColumnTreeOrder(), 'asc');
+
+        } else {
+
+            if (!empty($sort)) {
+                foreach ($sort as $o => $v) {
+                    $basic->orderBy($o, $v);
+                }
+
+            }
+        }
+
+        return $basic;
     }
 
-    protected  function paginateListCollection($coll, $skip, $take)
+    protected  function paginateQuery($coll, $skip, $take)
     {
         $coll->cnt = $coll->count();
         if ($take>0)
@@ -327,7 +336,7 @@ class CrudModel extends Model {
         return $coll;
     }
 
-    public  function applyCollectionFilters($coll, $scope)
+    public  function applyQueryFilter($coll, $scope)
     {
         //$context = $this->purifyContext($context);
         $this->initFilter($scope);

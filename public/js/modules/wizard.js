@@ -53,6 +53,8 @@
                 adjust_step_height();
             },
 
+            
+
             wizard_add_relation: function (elem) {
                 var type = $('#rtype').val();
                 if (type == '')
@@ -133,12 +135,25 @@
 
             },
 
-            wizard_remove_field: function (elem)
+            // wizard_remove_field: function (elem)
+            // {
+            //     elem.parents('table').first().remove();
+            //    // $('select.ftype[data-rel='+elem.data('field')+']').val('');
+            //     //$('#f_container_'+elem.data('field')).parents('table').first().remove();
+            //     //$('#f_cancel_'+elem.data('field')).hide();
+            //     adjust_step_height()
+            //
+            // },
+
+            wizard_remove_parent: function (elem)
             {
-                elem.parents('table').first().remove();
-               // $('select.ftype[data-rel='+elem.data('field')+']').val('');
-                //$('#f_container_'+elem.data('field')).parents('table').first().remove();
-                //$('#f_cancel_'+elem.data('field')).hide();
+                if (elem.data('parent'))
+                {
+                    elem.parents(elem.data('parent')).first().remove();    
+                } else {
+                    elem.parent().remove();
+                }   
+                
                 adjust_step_height()
 
             },
