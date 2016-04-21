@@ -69,6 +69,14 @@
                         {% endfor %}
                     </table>
                     <br><br>
+                    {% if not wizard.modelsDefined() %}
+                        <div class="row">
+                            <input type="submit" class="btn btn-success" value="Save">
+                        </div>
+                    {% endif %}
+                    {% if  not wizard.modelsDefined() %}
+                </form>
+
                     <table class="table table-striped">
                     <tr class="info">
                         <td width="150"><h3 class="text-info">Add new table</h3></td>
@@ -83,13 +91,7 @@
                         </td>
                     </tr>
                     </table>
-                    {% if not wizard.modelsDefined() %}
-                        <div class="row">
-                        <input type="submit" class="btn btn-success" value="Save">
-                        </div>
-                    {% endif %}
-                    {% if  not wizard.modelsDefined() %}
-                </form>
+
                 {% endif %}
             </div>
     {#{% endif %}#}

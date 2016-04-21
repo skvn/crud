@@ -1,9 +1,10 @@
 {% extends "crud::page.twig" %}
-
+{% import "crud::widgets/macro.twig" as widgets%}
 {%  set TITLE =crudObj.config.getList('title')  %}
 {%  set DESCRIPTION =crudObj.config.getList('description')  %}
 
 {% block content %}
+
 
     {{ widgets.filters(crudObj) }}
 
@@ -14,7 +15,9 @@
                     {{ widgets.tree(crudObj) }}
                 {%  else  %}
 
+
                     {{ widgets.table(crudObj) }}
+
 
                 {% endif %}
         </div>
