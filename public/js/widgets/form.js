@@ -1,4 +1,4 @@
-;(function($, crud){
+;(function($, crud, win){
     var i18n = win.i18n;
     bind_events();
     $.widget("crud.crud_form", {
@@ -254,4 +254,4 @@
 
 
 
-})(jQuery, CRUD)
+})(jQuery, CRUD, window)
