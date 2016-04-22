@@ -28,6 +28,7 @@ class Migrator
     {
         $this->request = $request;
         $this->app = app();
+        $this->app['view']->addNamespace('crud_wizard', __DIR__ . '/../../stubs');
     }
 
     public  function createTable($table=null)
