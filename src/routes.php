@@ -1,6 +1,11 @@
 <?php
-
-Route::group(array('prefix'=>'admin','namespace' => 'Skvn\Crud\Controllers','middleware' => ['web','auth']), function() {
+$adm_route_params = array('prefix'=>'admin','namespace' => 'Skvn\Crud\Controllers','middleware' => ['web','auth']);
+$domain = env('APP_BACKEND_DOMAIN');
+if ($domain)
+{
+    $adm_route_params['domain'] = $domain;
+}
+Route::group($adm_route_params, function() {
 
     Route::get('/',                                               array('as' => 'crud_welcome',               'uses' => 'CrudController@welcome'));
     Route::get('crud/{model}/tree/{scope}',                       array('as' => 'crud_tree',                  'uses' => 'CrudController@crudTree'));
