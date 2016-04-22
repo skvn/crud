@@ -138,10 +138,14 @@ class Migrator
 
     private function isMigrateAllowed()
     {
-        //return true;
+        if ($this->app['config']['crud_common.auto_migrate_allowed'])
+        {
+            return true;
 
-        $this->error = "Running automatic migrations is prohibited by your configuration file. <br>Please, <b>run php artisan migrate</b> from the command line";
-        return false;
+        } else {
+            $this->error = "Running automatic migrations is prohibited by your configuration file. <br>Please, <b>run php artisan migrate</b> from the command line";
+            return false;
+        }
     }
 
 
