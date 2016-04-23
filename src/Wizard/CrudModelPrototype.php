@@ -364,7 +364,8 @@ class CrudModelPrototype
                     }
 
                 }
-                $this->config_data['lists'][$list_alias]['filter'] = var_export($filter_fields, 1);
+                //$this->config_data['lists'][$list_alias]['filter'] = var_export($filter_fields, 1);
+                $this->config_data['lists'][$list_alias]['filter'] = $filter_fields;
 
             }
 
@@ -415,7 +416,8 @@ class CrudModelPrototype
                     }
 
                     if (count($actions)) {
-                        $this->config_data['lists'][$alias]['actions'] = var_export($actions, 1);
+                        //$this->config_data['lists'][$alias]['actions'] = var_export($actions, 1);
+                        $this->config_data['lists'][$alias]['actions'] = $actions;
                     } else {
                         $this->config_data['lists'][$alias]['actions'] = null;
                     }
