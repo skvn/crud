@@ -495,9 +495,14 @@ class CrudModelPrototype
     {
 
         $val = $this->app['view']->make('crud_wizard::crud_config', ['model'=>$this->config_data])->render();
-        var_dump($val);
+        //var_dump($val);
         eval("\$arr = $val");
-        file_put_contents($this->config_path,"<?php \n return ".var_export($arr, 1).";");
+        //file_put_contents($this->config_path,"<?php \n return ".var_export($arr, 1).";");
+        //file_put_contents($this->config_path,"<?php \n return ".$val.";");
+        $conf = json_encode($arr, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES + JSON_UNESCAPED_UNICODE);
+        $conf = str_replace(['{', '}'], ['[', ']'], $conf);
+        $conf = str_replace('":', '" =>', $conf);
+        file_put_contents($this->config_path,"<?php \n return ".$conf.";");
 
     }//
 

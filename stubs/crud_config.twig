@@ -1,5 +1,4 @@
 [
-
     "name" => "{{ model.name }}",
     "title_field" => "{{ model.title_field }}",
     {% if model.is_tree %}
@@ -10,42 +9,15 @@
     "tree_order_column" => "tree_order",
     {% endif%}
 
-    {% if model.acl  %}
-    /* Access level rule name (optional)*/
-    "acl" => "{{ model.acl }}",
-    {% endif %}
+    {% if model.acl  %}"acl" => "{{ model.acl }}",{% endif %}
     "ent_name" => "{{ model.ent_name }}",
-    {%  if  model.ent_name_r  %}
-    /* Russian Родительный падеж (optional) */
-    "ent_name_r" => "user",
-    {% endif %}
-
-    {%  if  model.ent_name_v  %}
-    /* Russian Винительный падеж (optional) */
-    "ent_name_v" => "user",
-    {%  endif %}
-
+    {%  if  model.ent_name_r  %}"ent_name_r" => "user",{% endif %}
+    {%  if  model.ent_name_v  %}"ent_name_v" => "user",{%  endif %}
     {#/* Breadcrumbs */#}
     {#"bc" => [["href"=>"/admin/users","title"=>"Управление пользователями"]],#}
-
-    {%  if  model.dialog_width  %}
-    /* Modal dialog width (optional) */
-    "dialog_width" => 1000,
-    {% endif %}
-
-    {%  if  model.timestamps  %}
-    /* track timestamp*/
-    "timestamps" => true,
-    "timestamps_type" => "{{ model.timestamps }}",
-    {% endif %}
-
-    {%  if  model.track_author  %}
-    /* track author*/
-    "authors" => true,
-    {% endif %}
-
-
-
+    {%  if  model.dialog_width  %}"dialog_width" => 1000,{% endif %}
+    {%  if  model.timestamps  %}"timestamps" => true, "timestamps_type" => "{{ model.timestamps }}",{% endif %}
+    {%  if  model.track_author  %}"authors" => true,{% endif %}
     {%  if model.lists %}
     "list"=> [
         {%  for alias, list in model.lists %}
