@@ -494,17 +494,128 @@ class CrudModelPrototype
     protected  function recordConfig()
     {
 
-        $val = $this->app['view']->make('crud_wizard::crud_config', ['model'=>$this->config_data])->render();
+        //var_dump($this->config_data);
+        //exit;
+        //$val = $this->app['view']->make('crud_wizard::crud_config', ['model'=>$this->config_data])->render();
         //var_dump($val);
-        eval("\$arr = $val");
+        //eval("\$arr = $val");
         //file_put_contents($this->config_path,"<?php \n return ".var_export($arr, 1).";");
         //file_put_contents($this->config_path,"<?php \n return ".$val.";");
-        $conf = json_encode($arr, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES + JSON_UNESCAPED_UNICODE);
+        $conf = json_encode($this->buildConfig(), JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES + JSON_UNESCAPED_UNICODE);
         $conf = str_replace(['{', '}'], ['[', ']'], $conf);
         $conf = str_replace('":', '" =>', $conf);
         file_put_contents($this->config_path,"<?php \n return ".$conf.";");
 
     }//
+
+    protected function buildConfig()
+    {
+        $conf = [];
+        $conf['name'] = $this->config_data['name'];
+        $conf['title_field'] = $this->config_data['title_field'];
+        if (!empty($this->config_data['is_tree']))
+        {
+            $conf['tree'] = 1;
+            $conf['tree_level_column'] = "tree_level";
+            $conf['tree_path_column'] = "tree_path";
+            $conf['tree_pid_column'] = "tree_pid";
+            $conf['tree_order_column'] = "tree_order";
+        }
+        if (!empty($this->config_data['acl']))
+        {
+            $conf['acl'] = $this->config_data['acl'];
+        }
+        $conf['ent_name'] = $this->config_data['ent_name'];
+        if (!empty($this->config_data['ent_name_r']))
+        {
+            $conf['ent_name_r'] = "user";
+        }
+        if (!empty($this->config_data['ent_name_v']))
+        {
+            $conf['ent_name_v'] = "user";
+        }
+        if (!empty($this->config_data['dialog_width']))
+        {
+            $conf['dialog_width'] = 1000;
+        }
+        if (!empty($this->config_data['timestamps']))
+        {
+            $conf['timestamps'] = true;
+            $conf['timestamps_type'] = $this->config_data['timestamps'];
+        }
+        if (!empty($this->config_data['track_authors']))
+        {
+            $conf['authors'] = true;
+        }
+        if (!empty($this->config_data['lists']))
+        {
+            $conf['list'] = [];
+            foreach ($this->config_data['lists'] as $alias => $ldata)
+            {
+                $list = [];
+                $list['title'] = $ldata['title'];
+                $list['description'] = $ldata['description'];
+                if (!empty($ldata['multi_select'])) $list['multiselect'] = true;
+                $list['columns'] = [];
+                foreach ($ldata['columns'] as $col)
+                {
+                    if (!empty($col['data']))
+                    {
+                        $column = [
+                            'data' => $col['data'],
+                            'title' => $col['title'],
+                            'orderable' => !empty($col['orderable'])
+                        ];
+                        if (!empty($col['hint'])) $column['hint'] = ['default' => $col['hint']];
+                        if (!empty($col['orderable']) && !empty($col['default_order']))
+                        {
+                            $column['default_order'] = $col['default_order'];
+                        }
+                        if (!empty($col['searchable'])) $column['searchable'] = 1;
+                        if (!empty($col['invisible'])) $column['invisible'] = 1;
+                        if (!empty($col['width'])) $column['width'] = $col['width'];
+                        $list['columns'][] = $column;
+                    }
+                }
+                $list['filter'] = $ldata['filter'];
+                if (!empty($ldata['actions']))
+                {
+                    $list['list_actions'] = $ldata['actions'];
+                }
+                if (!empty($ldata['use_tabs']))
+                {
+                    $list['edit_tab'] = 1;
+                }
+                if (!empty($ldata['use_tabbed_form']))
+                {
+                    $list['form_tabbed'] = 1;
+                }
+                $list['buttons'] = [];
+                if (!empty($ldata['edit_btn'])) $list['buttons']['single_edit'] = true;
+                if (!empty($ldata['delete_btn'])) $list['buttons']['single_delete'] = true;
+                if (!empty($ldata['mass_delete_btn'])) $list['buttons']['mass_delete'] = true;
+                if (!empty($ldata['customize_cols'])) $list['buttons']['customize_columns'] = true;
+
+                $conf['list'][$alias] = $list;
+            }
+        }
+
+        $conf['form'] = $this->config_data['form'];
+        $conf['fields'] = [];
+        foreach ($this->config_data['fields'] as $index => $fdata)
+        {
+            if (!empty($fdata['type']) || !empty($fdata['relation']))
+            {
+                $field = [];
+                foreach ($fdata as $k => $v)
+                {
+                    $field[$k] = $v;
+                }
+                $conf['fields'][$index] = $field;
+            }
+        }
+        return $conf;
+    }
 
     /**
      * Record Model files
