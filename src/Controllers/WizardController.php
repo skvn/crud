@@ -1,8 +1,8 @@
 <?php  namespace Skvn\Crud\Controllers;
 
 use Illuminate\Routing\Controller;
-use Skvn\Crud\CrudException;
-use Skvn\Crud\CrudWizardException;
+use Skvn\Crud\Exceptions\Exception as CrudException;
+use Skvn\Crud\Exceptions\WizardException;
 use Skvn\Crud\Wizard\Migrator;
 use Skvn\Crud\Wizard\Wizard;
 use Skvn\Crud\Wizard\CrudModelPrototype;
@@ -140,7 +140,7 @@ class WizardController extends Controller {
         
         if (empty($table) || empty($columns))
         {
-            throw new CrudWizardException('No table name or columns specified');
+            throw new WizardException('No table name or columns specified');
         }
 
         

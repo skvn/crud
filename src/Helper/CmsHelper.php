@@ -31,7 +31,7 @@ class CmsHelper
         $menu = [];
         foreach ($conf as $index=>$parent)
         {
-            if ($this->checkAcl($parent['acl']))
+            if (empty($parenr['acl']) || $this->checkAcl($parent['acl']))
             {
                 $item = $parent;
                 $item['kids'] = null;
@@ -52,7 +52,7 @@ class CmsHelper
                 if (!empty($parent['kids'] )) {
                     foreach ($parent['kids'] as $kindex => $kid) {
 
-                        if ($this->checkAcl($kid['acl'])) {
+                        if (empty($kid['acl']) || $this->checkAcl($kid['acl'])) {
                             $item['kids'][$kindex] = $kid;
 
                             if (!isset($kid['route']['args'])) {

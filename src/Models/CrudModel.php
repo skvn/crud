@@ -2,7 +2,7 @@
 
 use \Illuminate\Database\Eloquent\Model;
 use Skvn\Crud\CrudConfig;
-use Skvn\Crud\CrudException;
+use Skvn\Crud\Exceptions\Exception as CrudException;
 use Skvn\Crud\Form\FieldFactory;
 use Skvn\Crud\Form\Form;
 use Skvn\Crud\Filter\FilterFactory;

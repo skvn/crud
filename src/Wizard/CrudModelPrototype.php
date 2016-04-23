@@ -2,7 +2,7 @@
 
 
 
-use Skvn\Crud\CrudWizardException;
+use Skvn\Crud\Exceptions\WizardException;
 use Skvn\Crud\Form\Form;
 
 /**
@@ -77,7 +77,7 @@ class CrudModelPrototype
 
         if (empty($config_data['table']))
         {
-            throw new CrudWizardException('Table  for model prototype is not defined');
+            throw new WizardException('Table  for model prototype is not defined');
         }
 
 

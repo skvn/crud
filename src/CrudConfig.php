@@ -2,6 +2,7 @@
 
 use JsonSerializable, ArrayAccess;
 use Skvn\Crud\Form\Form;
+use Skvn\Crud\Exceptions\ConfigException;
 
 class CrudConfig implements JsonSerializable, ArrayAccess {
 
@@ -150,6 +151,10 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
         else
         {
             $this->scope = $scope;
+        }
+        if (!isset($this->config['list'][$this->scope]))
+        {
+            throw new ConfigException('Scope ' . $this->scope . ' for model ' . $this->config['class_name'] . ' not found');
         }
     }
 

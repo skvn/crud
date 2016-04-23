@@ -12,6 +12,7 @@ Route::group($adm_route_params, function() {
     Route::get('crud/{model}/autocomplete/{scope}',               array('as' => 'crud_autocomplete',                  'uses' => 'CrudController@crudAutocompleteList'));
     Route::post('crud/{model}/move_tree',                         array('as' => 'crud_move_tree',             'uses' => 'CrudController@crudTreeMove'));
     Route::get('crud/{model}',                                    array('as' => 'crud_index',                 'uses' => 'CrudController@crudIndex'));
+    Route::get('crud/{model}/{scope}',                            array('as' => 'crud_scoped_index',          'uses' => 'CrudController@crudIndex'));
     Route::get('crud/{model}/edit/{id}',                          array('as' => 'crud_edit',                  'uses' => 'CrudController@crudEdit'));
     Route::post('crud/{model}/update/{id}',                       array('as' => 'crud_update',                'uses' => 'CrudController@crudUpdate'));
     Route::post('crud/{model}/filter/{scope}',                    array('as' => 'crud_filter',                'uses' => 'CrudController@crudFilter'));

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Skvn\Crud\Form\Form;
+use Skvn\Crud\Exceptions\WizardException;
 
 class Migrator
 {
@@ -38,7 +39,7 @@ class Migrator
         }
         if (empty($table))
         {
-            throw new CrudWizardException('No table name specified');
+            throw new WizardException('No table name specified');
         }
 
         
