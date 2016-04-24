@@ -237,7 +237,9 @@ class CrudModel extends Model {
             $coll = $this->applyQueryFilter($coll, $scope);
             $coll = $this->paginateQuery($coll, $skip, $take);
         }
-        
+        //var_dump($coll->getQuery()->toSQL());
+        //var_dump($coll->getQuery()->getBindings());
+
         return $this->app['skvn.crud']->prepareCollectionForView($coll, $this->app['request']->all(), $viewType, $config_cols);
     }
 

@@ -346,7 +346,7 @@ class CrudModelPrototype
                 $filter_fields = [];
                 foreach ($fields as $k=>$f) {
                     if (!empty($f['type'])) {
-                        $key = $list_alias . '_filter_' . $k;
+                        //$key = $list_alias . '_filter_' . $k;
 
                         $field = $f;
                         $field['column'] = $k;
@@ -360,7 +360,7 @@ class CrudModelPrototype
 
                         }
 
-                        $filter_fields[$key] = $field;
+                        $filter_fields[$k] = $field;
                     }
 
                 }

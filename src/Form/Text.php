@@ -22,13 +22,14 @@ class Text extends Field {
         if (!empty($this->value))
         {
             $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
-            if (strpos($this->value, "~") === 0)
+            $value = str_replace(['*', '?'], ['%', '_'], $this->value);
+            if (strpos($value, "~") === 0)
             {
-                return ['cond' => [$col, 'NOT LIKE',  substr($this->value, 1) ]];
+                return ['cond' => [$col, 'NOT LIKE',  substr($value, 1) ]];
             }
             else
             {
-                return ['cond' => [$col, 'LIKE',  $this->value ]];
+                return ['cond' => [$col, 'LIKE',  $value ]];
             }
         }
 

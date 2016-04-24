@@ -241,6 +241,17 @@ class Wizard
             if (file_exists(config_path('crud/crud_'.$table_name.'.php')))
             {
                 $this->model_configs[$table_name] = $this->app['config']->get('crud.crud_'.$table_name);
+                $this->model_configs[$table_name]['filters'] = [];
+                if (!empty($this->model_configs[$table_name]['list']))
+                {
+                    foreach ($this->model_configs[$table_name]['list'] as $alias => $list)
+                    {
+                        if (!empty($list['filter']))
+                        {
+                            $this->model_configs[$table_name]['filters'][$alias] = $list['filter'];
+                        }
+                    }
+                }
             } else {
                 $this->model_configs[$table_name] = false;
             }
