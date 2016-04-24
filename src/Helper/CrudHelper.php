@@ -52,10 +52,16 @@ class CrudHelper {
                 {
 
                     $text .= " <span class=\"badge\">".$row->getDescribedColumnValue($col['data'])."</span>";
-                    $text .= "&nbsp;&nbsp;<a class=\"text-info\" data-id=\"".$row->id."\" data-click=\"crud_event\" data-event=\"crud.edit_tree_element\"><i class=\"fa fa-edit\"> </i></a>";
-                    $text .= "&nbsp;&nbsp;<a class=\"text-danger\" data-confirm=\"".trans('crud::messages.really_delete')."?\" data-id=\"".$row->id."\" data-click=\"crud_event\" data-event=\"crud.delete_tree_element\" ><i class=\"fa fa-trash-o\"> </i></a>";
 
                 }
+            }
+            if (!empty($args['buttons']['single_edit']))
+            {
+                $text .= "&nbsp;&nbsp;<a class=\"text-info\" data-id=\"".$row->id."\" data-click=\"crud_event\" data-event=\"crud.edit_tree_element\"><i class=\"fa fa-edit\"> </i></a>";
+            }
+            if (!empty($args['buttons']['single_delete']))
+            {
+                $text .= "&nbsp;&nbsp;<a class=\"text-danger\" data-confirm=\"".trans('crud::messages.really_delete')."?\" data-id=\"".$row->id."\" data-click=\"crud_event\" data-event=\"crud.delete_tree_element\" ><i class=\"fa fa-trash-o\"> </i></a>";
             }
 
             $node = [

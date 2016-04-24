@@ -239,8 +239,10 @@ class CrudModel extends Model {
         }
         //var_dump($coll->getQuery()->toSQL());
         //var_dump($coll->getQuery()->getBindings());
+        $args = $this->app['request']->all();
+        $args['buttons'] = $this->config->getList('buttons');
 
-        return $this->app['skvn.crud']->prepareCollectionForView($coll, $this->app['request']->all(), $viewType, $config_cols);
+        return $this->app['skvn.crud']->prepareCollectionForView($coll, $args, $viewType, $config_cols);
     }
 
 
