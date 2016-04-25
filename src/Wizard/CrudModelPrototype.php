@@ -364,8 +364,8 @@ class CrudModelPrototype
                     }
 
                 }
-                //$this->config_data['lists'][$list_alias]['filter'] = var_export($filter_fields, 1);
-                $this->config_data['lists'][$list_alias]['filter'] = $filter_fields;
+                //$this->config_data['list'][$list_alias]['filter'] = var_export($filter_fields, 1);
+                //$this->config_data['list'][$list_alias]['filter'] = $filter_fields;
 
             }
 
@@ -383,47 +383,67 @@ class CrudModelPrototype
      */
     private function processLists()
     {
-        if (!empty($this->config_data['lists']))
+        if (!empty($this->config_data['list']))
         {
-            foreach ($this->config_data['lists'] as $alias=>$list)
+            foreach ($this->config_data['list'] as $alias=>$list)
             {
 
                 //columns
                 if (!empty($list['columns']))
                 {
+                    $cols = [];
                     foreach ($list['columns'] as $k=>$column)
                     {
+
                         if (!empty($column['data_col']))
                         {
-                            $this->config_data['lists'][$alias]['columns'][$k]['data'] = $column['data_col'];
+                            $column['data'] = $column['data_col'];
+                            unset($column['data_col']);
 
                         } else if (!empty($column['data_rel']))
                         {
-                            $this->config_data['lists'][$alias]['columns'][$k]['data'] = $column['data_rel'].'::'.$column['data_rel_attr'];
+                            $column['data'] = $column['data_rel'].'::'.$column['data_rel_attr'];
+                            unset($column['data_rel']);
+                            unset($column['data_rel_attr']);
                         }
+
+                        if (empty($column['data'] ))
+                        {
+                            continue;
+                        }
+
+                        if (!empty($column['hint']))
+                        {
+                            $column['hint'] = ['default' => $column['hint']];
+
+                        }
+
+                        $cols[] = $column;
                     }
+                    $this->config_data['list'][$alias]['columns'] = $cols;
                 }
 
                 //actions
-                if (!empty($list['actions'])) {
+                if (!empty($list['list_actions'])) {
                     $actions = [];
-                    foreach ($list['actions'] as $action) {
+                    foreach ($list['list_actions'] as $action) {
 
-                        if (is_array($action))
+                        if (is_array($action)&& !empty($action['command']))
                         {
                             $actions[] = $action;
                         }
                     }
 
                     if (count($actions)) {
-                        //$this->config_data['lists'][$alias]['actions'] = var_export($actions, 1);
-                        $this->config_data['lists'][$alias]['actions'] = $actions;
+                        $this->config_data['list'][$alias]['list_actions'] = $actions;
                     } else {
-                        $this->config_data['lists'][$alias]['actions'] = null;
+                        unset($this->config_data['list'][$alias]['list_actions']);
                     }
                 }
 
+
             }
+
             //exit;
         }
 
@@ -514,7 +534,9 @@ class CrudModelPrototype
     {
         $conf = [];
         $conf['name'] = $this->config_data['name'];
-        $conf['title_field'] = $this->config_data['title_field'];
+        if (!empty($this->config_data['title_field'])) {
+            $conf['title_field'] = $this->config_data['title_field'];
+        }
         if (!empty($this->config_data['is_tree']))
         {
             $conf['tree'] = 1;
@@ -527,7 +549,10 @@ class CrudModelPrototype
         {
             $conf['acl'] = $this->config_data['acl'];
         }
-        $conf['ent_name'] = $this->config_data['ent_name'];
+        if (!empty($this->config_data['ent_name'])) {
+            $conf['ent_name'] = $this->config_data['ent_name'];
+        }
+
         if (!empty($this->config_data['ent_name_r']))
         {
             $conf['ent_name_r'] = "user";
@@ -549,71 +574,80 @@ class CrudModelPrototype
         {
             $conf['authors'] = true;
         }
-        if (!empty($this->config_data['lists']))
-        {
-            $conf['list'] = [];
-            foreach ($this->config_data['lists'] as $alias => $ldata)
-            {
-                $list = [];
-                $list['title'] = $ldata['title'];
-                $list['description'] = $ldata['description'];
-                if (!empty($ldata['multi_select'])) $list['multiselect'] = true;
-                $list['columns'] = [];
-                foreach ($ldata['columns'] as $col)
-                {
-                    if (!empty($col['data']))
-                    {
-                        $column = [
-                            'data' => $col['data'],
-                            'title' => $col['title'],
-                            'orderable' => !empty($col['orderable'])
-                        ];
-                        if (!empty($col['hint'])) $column['hint'] = ['default' => $col['hint']];
-                        if (!empty($col['orderable']) && !empty($col['default_order']))
-                        {
-                            $column['default_order'] = $col['default_order'];
-                        }
-                        if (!empty($col['searchable'])) $column['searchable'] = 1;
-                        if (!empty($col['invisible'])) $column['invisible'] = 1;
-                        if (!empty($col['width'])) $column['width'] = $col['width'];
-                        $list['columns'][] = $column;
-                    }
-                }
-                $list['filter'] = $ldata['filter'];
-                if (!empty($ldata['actions']))
-                {
-                    $list['list_actions'] = $ldata['actions'];
-                }
-                if (!empty($ldata['use_tabs']))
-                {
-                    $list['edit_tab'] = 1;
-                }
-                if (!empty($ldata['use_tabbed_form']))
-                {
-                    $list['form_tabbed'] = 1;
-                }
-                $list['buttons'] = [];
-                if (!empty($ldata['edit_btn'])) $list['buttons']['single_edit'] = true;
-                if (!empty($ldata['delete_btn'])) $list['buttons']['single_delete'] = true;
-                if (!empty($ldata['mass_delete_btn'])) $list['buttons']['mass_delete'] = true;
-                if (!empty($ldata['customize_cols'])) $list['buttons']['customize_columns'] = true;
 
-                $conf['list'][$alias] = $list;
-            }
+
+        if (!empty($this->config_data['list']))
+        {
+            $conf['list'] = $this->config_data['list'];
+        }
+//            $conf['list'] = [];
+//            foreach ($this->config_data['list'] as $alias => $ldata)
+//            {
+//                
+//                $list = [];
+//                $list['title'] = $ldata['title'];
+//                $list['description'] = $ldata['description'];
+//                if (!empty($ldata['multi_select'])) $list['multiselect'] = true;
+//                $list['columns'] = [];
+//                foreach ($ldata['columns'] as $col)
+//                {
+//                    if (!empty($col['data']))
+//                    {
+//                        $column = [
+//                            'data' => $col['data'],
+//                            'title' => $col['title'],
+//                            'orderable' => !empty($col['orderable'])
+//                        ];
+//                        if (!empty($col['hint'])) $column['hint'] = ['default' => $col['hint']];
+//                        if (!empty($col['orderable']) && !empty($col['default_order']))
+//                        {
+//                            $column['default_order'] = $col['default_order'];
+//                        }
+//                        if (!empty($col['searchable'])) $column['searchable'] = 1;
+//                        if (!empty($col['invisible'])) $column['invisible'] = 1;
+//                        if (!empty($col['width'])) $column['width'] = $col['width'];
+//                        $list['columns'][] = $column;
+//                    }
+//                }
+//                $list['filter'] = $ldata['filter'];
+//                if (!empty($ldata['actions']))
+//                {
+//                    $list['list_actions'] = $ldata['actions'];
+//                }
+//                if (!empty($ldata['use_tabs']))
+//                {
+//                    $list['edit_tab'] = 1;
+//                }
+//                if (!empty($ldata['use_tabbed_form']))
+//                {
+//                    $list['form_tabbed'] = 1;
+//                }
+//                $list['buttons'] = [];
+//
+//                if (!empty($ldata['edit_btn'])) $list['buttons']['single_edit'] = true;
+//                if (!empty($ldata['delete_btn'])) $list['buttons']['single_delete'] = true;
+//                if (!empty($ldata['mass_delete_btn'])) $list['buttons']['mass_delete'] = true;
+//                if (!empty($ldata['customize_cols'])) $list['buttons']['customize_columns'] = true;
+//
+//                $conf['list'][$alias] = $list;
+//            }
+//        }
+
+        if (!empty($this->config_data['form'])) {
+            $conf['form'] = $this->config_data['form'];
         }
 
-        $conf['form'] = $this->config_data['form'];
         $conf['fields'] = [];
-        foreach ($this->config_data['fields'] as $index => $fdata)
-        {
-            if (!empty($fdata['type']) || !empty($fdata['relation']))
-            {
-                $field = [];
-                foreach ($fdata as $k => $v)
-                {
-                    $field[$k] = $v;
+
+        if (!empty($this->config_data['fields'])) {
+            foreach ($this->config_data['fields'] as $index => $fdata) {
+                if (!empty($fdata['type']) || !empty($fdata['relation'])) {
+                    $field = [];
+                    foreach ($fdata as $k => $v) {
+                        $field[$k] = $v;
+                    }
+                    $conf['fields'][$index] = $field;
                 }
-                $conf['fields'][$index] = $field;
             }
         }
         return $conf;

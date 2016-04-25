@@ -118,8 +118,10 @@
 
                     </div>
                     <label>
-                        <input type="text" class="form-control" id="list_alias" style="display:inline; width:300px;" placeholder="Enter list name" />
-                        <a href="#" class="btn btn-success" data-click="crud_action" data-action="wizard_add_list" ><i class="fa fa-plus"></i> Add </a>
+
+                        <input  type="text" class="form-control" id="list_alias" style="{%  if not model.list|length %}display:none;{% endif %} width:300px;" placeholder="Enter scope name" />
+
+                        <a href="#" class="btn btn-success" data-click="crud_action" data-action="wizard_add_list" ><i class="fa fa-plus"></i> Add scope</a>
 
                     </label>
                 </div>

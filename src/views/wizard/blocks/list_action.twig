@@ -3,18 +3,18 @@
 <div class="form-inline">
         <div class="form-group">
             <label>
-            Action title * <input type="text" required class="form-control" value="{{ action.title }}" name="lists[{{ ALIAS }}][actions][{{ NUM }}][title]">
+            Action title * <input type="text" required class="form-control" value="{{ action.title }}" name="list[{{ ALIAS }}][list_actions][{{ NUM }}][title]">
             </label>
         </div>
         <div class="form-group">
             <label>
-                Model method *  <input type="text" required class="form-control" value="{{ action.command }}"  name="lists[{{ ALIAS }}][actions][{{ NUM }}][command]">
+                Model method *  <input type="text" required class="form-control" value="{{ action.command }}"  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][command]">
             </label>
         </div>
 
     <div class="form-group">
         <label>
-            Icon class <input type="text" class="form-control" value="{{ action.class }}"  name="lists[{{ ALIAS }}][actions][{{ NUM }}][class]">
+            Icon class <input type="text" class="form-control" value="{{ action.class }}"  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][class]">
         </label>
     </div>
     <div class="form-group" style="padding-top: 10px;">

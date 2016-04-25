@@ -3,51 +3,56 @@
 {% endif %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title"><div class="label label-primary pull-right">[{{ ALIAS }}]</div>
-                <input type="text" class="form-control" id="lists[{{ ALIAS }}][title]" name="lists[{{ ALIAS }}][title]" value="{{ list.title }}" placeholder="List title" value="_TITLE_" required />
-                <input type="text" class="form-control" id="lists[{{ ALIAS }}][description]" name="lists[{{ ALIAS }}][description]"  value="{{ list.description }}" placeholder="List short description" required  />
+            <h3 class="panel-title">
+                <button  data-click="crud_action"  data-parent=".panel" data-action="wizard_remove_parent" data-confirm="Remove this scope?" class="label btn-inverse label-danger pull-right">
+                    <i class="fa fa-trash-o"></i> Remove</button>&nbsp;&nbsp;
+                {#<div class="label label-primary pull-right">[{{ ALIAS }}]</div>&nbsp;&nbsp;#}
+
+
+                <input type="text" class="form-control" id="list[{{ ALIAS }}][title]" name="list[{{ ALIAS }}][title]" value="{{ list.title }}" placeholder="List title" value="_TITLE_" required />
+                <input type="text" class="form-control" id="list[{{ ALIAS }}][description]" name="list[{{ ALIAS }}][description]"  value="{{ list.description }}" placeholder="List short description" required  />
             </h3>
         </div>
         <div class="panel-body">
             <div class="col col-lg-12">
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1" {{ list.multiselect?'checked' }}  id="lists[{{ ALIAS }}][multi_select]" name="lists[{{ ALIAS }}][multi_select]"  />
+                        <input type="checkbox" value="1" {{ list.multiselect?'checked' }}  id="list[{{ ALIAS }}][multiselect]" name="list[{{ ALIAS }}][multiselect]"  />
                         <b>Allow multi select</b>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="lists[{{ ALIAS }}][use_tabs]"  {{ list.edit_tab?'checked' }} name="lists[{{ ALIAS }}][use_tabs]"  />
+                        <input type="checkbox" value="1"  id="list[{{ ALIAS }}][edit_tab]"  {{ list.edit_tab?'checked' }} name="list[{{ ALIAS }}][edit_tab]"  />
                         <b>Use tabs for edit interface (otherwise a popup would be used)</b>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="lists[{{ ALIAS }}][edit_btn]" {{ list.buttons.single_edit?'checked' }} name="lists[{{ ALIAS }}][edit_btn]"  />
+                        <input type="checkbox" value="1"  id="list[{{ ALIAS }}][buttons][single_edit]" {{ list.buttons.single_edit?'checked' }} name="list[{{ ALIAS }}][buttons][single_edit]"  />
                         <b>Show "edit" button for each row</b>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="lists[{{ ALIAS }}][delete_btn]"  {{ list.buttons.single_delete?'checked' }} name="lists[{{ ALIAS }}][delete_btn]"  />
+                        <input type="checkbox" value="1"  id="list[{{ ALIAS }}][buttons][single_delete]"  {{ list.buttons.single_delete?'checked' }} name="list[{{ ALIAS }}][buttons][single_delete]"  />
                         <b>Show "delete" button for each row</b>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="lists[{{ ALIAS }}][mass_delete_btn]"  {{ list.buttons.mass_delete?'checked' }} name="lists[{{ ALIAS }}][mass_delete_btn]"  />
+                        <input type="checkbox" value="1"  id="list[{{ ALIAS }}][buttons][mass_delete]"  {{ list.buttons.mass_delete?'checked' }} name="list[{{ ALIAS }}][buttons][mass_delete]"  />
                         <b>Show "Bulk delete" button</b>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="lists[{{ ALIAS }}][customize_cols]" {{ list.columns.customize_columns?'checked' }}name="lists[{{ ALIAS }}][customize_cols]"  />
+                        <input type="checkbox" value="1"  id="list[{{ ALIAS }}][buttons][customize_columns]" {{ list.columns.customize_columns?'checked' }}name="list[{{ ALIAS }}][buttons][customize_columns]"  />
                         <b>Allow show/hide columns</b>
                     </label>
                 </div>
@@ -78,27 +83,27 @@
 
                 <hr>
 
-                <h3>Filter fields</h3>
-                <table class="table table-bordered table-striped"  id="{{ ALIAS }}f_container"  style="max-width: 1200px">
-                    {% for f in wizard.getTableColumns(table) %}
-                        {% if f != 'id' %}
-                            <tr data-rel="{{ f }}">
-                                <td style="width: 200px;"><b>{{ f }}</b></td>
-                                <td style="width: 250px;"><label>
-                                        <select name="filters[{{ ALIAS }}][{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-list="{{ ALIAS }}" data-action="wizard_add_filter_field"  style="display:inline; width:250px;"  >
-                                            <option value="">Choose field type</option>
-                                            {% for k,v in wizard.getAvailableFilterTypes(f) %}
-                                                <option value="{{ k }}">{{ v }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </label></td>
-                                <td id="{{ ALIAS }}_f_container_{{ f }}"></td>
-                                <td style="width: 80px;"><div id="{{ ALIAS }}_f_cancel_{{ f }}" style="display: none"><a href="#" data-click="crud_action" data-field="{{ f }}" data-list="{{ ALIAS }}" data-action="wizard_remove_filter_field" data-confirm="Remove this filter field?" class="label label-danger">
-                                            <i class="fa fa-trash-o"></i> Cancel</a></div></td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </table>
+                {#<h3>Filter fields</h3>#}
+                {#<table class="table table-bordered table-striped"  id="{{ ALIAS }}f_container"  style="max-width: 1200px">#}
+                    {#{% for f in wizard.getTableColumns(table) %}#}
+                        {#{% if f != 'id' %}#}
+                            {#<tr data-rel="{{ f }}">#}
+                                {#<td style="width: 200px;"><b>{{ f }}</b></td>#}
+                                {#<td style="width: 250px;"><label>#}
+                                        {#<select name="filters[{{ ALIAS }}][{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-list="{{ ALIAS }}" data-action="wizard_add_filter_field"  style="display:inline; width:250px;"  >#}
+                                            {#<option value="">Choose field type</option>#}
+                                            {#{% for k,v in wizard.getAvailableFilterTypes(f) %}#}
+                                                {#<option value="{{ k }}">{{ v }}</option>#}
+                                            {#{% endfor %}#}
+                                        {#</select>#}
+                                    {#</label></td>#}
+                                {#<td id="{{ ALIAS }}_f_container_{{ f }}"></td>#}
+                                {#<td style="width: 80px;"><div id="{{ ALIAS }}_f_cancel_{{ f }}" style="display: none"><a href="#" data-click="crud_action" data-field="{{ f }}" data-list="{{ ALIAS }}" data-action="wizard_remove_filter_field" data-confirm="Remove this filter field?" class="label label-danger">#}
+                                            {#<i class="fa fa-trash-o"></i> Cancel</a></div></td>#}
+                            {#</tr>#}
+                        {#{% endif %}#}
+                    {#{% endfor %}#}
+                {#</table>#}
 
             </div>
         </div>

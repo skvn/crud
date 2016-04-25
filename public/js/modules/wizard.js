@@ -39,6 +39,7 @@
                     $(list_html).appendTo('#lists_container');
 
                     adjust_step_height();
+                    $('#list_alias').css('display','inline');
 
                 } else {
                     alert('List alias "'+alias+'" already in use. Use another alias');
@@ -80,7 +81,8 @@
                 f_html = f_html.replace(new RegExp("_ALIAS_","g"),elem.data('rel'));
                 $('#f_container_'+elem.data('rel')).html(f_html);
                 $('#f_cancel_'+elem.data('rel')).show();
-                adjust_step_height()
+                adjust_step_height();
+
 
                 //$('<a href="#" style="display:none" data-click="crud_action" data-action="clone_fragment" data-skip_arr="1" data-fragment="tpl_f_'+type+'" data-container="f_container_'+elem.data('rel')+'"></a>').appendTo($('body')).click().remove();
 
@@ -116,24 +118,24 @@
 
             },
 
-            wizard_add_filter_field: function (elem) {
-                var type = elem.val();
-                var list = elem.data('list');
-                if (type == '')
-                {
-
-                    $('#'+list+'_f_cancel_'+elem.data('rel')).find('a').click();
-                    return;
-                }
-                var f_html  = $('#tpl_filter_'+type).html();
-                f_html = f_html.replace(new RegExp("_ALIAS_","g"),list);
-                f_html = f_html.replace(new RegExp("_F_","g"),elem.data('rel'));
-
-                $('#'+list+'_f_container_'+elem.data('rel')).html(f_html);
-                $('#'+list+'_f_cancel_'+elem.data('rel')).show();
-                adjust_step_height()
-
-            },
+            // wizard_add_filter_field: function (elem) {
+            //     var type = elem.val();
+            //     var list = elem.data('list');
+            //     if (type == '')
+            //     {
+            //
+            //         $('#'+list+'_f_cancel_'+elem.data('rel')).find('a').click();
+            //         return;
+            //     }
+            //     var f_html  = $('#tpl_filter_'+type).html();
+            //     f_html = f_html.replace(new RegExp("_ALIAS_","g"),list);
+            //     f_html = f_html.replace(new RegExp("_F_","g"),elem.data('rel'));
+            //
+            //     $('#'+list+'_f_container_'+elem.data('rel')).html(f_html);
+            //     $('#'+list+'_f_cancel_'+elem.data('rel')).show();
+            //     adjust_step_height()
+            //
+            // },
 
             // wizard_remove_field: function (elem)
             // {
@@ -308,6 +310,7 @@
                     });
 
                     if (list_rels.length) {
+                        $('span[data-rel=container]').show();
                         $('select[data-rel="list_relation"]').each(function () {
                             $(this).empty();
                             var html = '<option value="">Choose relation</option>';
@@ -316,6 +319,8 @@
                             }
                             $(this).html(html);
                         });
+                    } else {
+                        $('span[data-rel=container]').hide();
                     }
 
                 });
@@ -389,6 +394,8 @@
 
                 //switch to lists
 
+                fill_field_selects();
+
                 $('#lists_container').off('change', '*[data-list_col]');
 
                 $('#lists_container').on('change', '*[data-list_col]', function (){
@@ -448,6 +455,26 @@
             });
     }
 
+
+    function fill_field_selects()
+    {
+        var fields = [];
+        $('#f_container table[data-rel]').each ( function () {
+                fields.push($(this).data('rel'));
+            }
+        );
+
+        if (fields.length) {
+            $('select[data-rel="field_select"]').each(function () {
+                $(this).empty();
+                var html = '<option value="">Choose  field</option>';
+                for (var i = 0; i < fields.length; i++) {
+                    html += '<option value="' + fields[i] + '">' + fields[i] + '</option>';
+                }
+                $(this).html(html);
+            });
+        }
+    }
 
     function init_steps()
     {

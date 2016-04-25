@@ -61,6 +61,8 @@ class WizardController extends Controller {
 
             $proto = new CrudModelPrototype($this->request->all());
             $proto->record();
+//            print_r($_REQUEST);
+//            exit;
 
             
             return redirect(route('wizard_index'))->with(['error'=>$proto->error]);
