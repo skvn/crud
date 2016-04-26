@@ -56,25 +56,26 @@ class Filter {
                         $this->filters[$column_name] = $field_description;
                     }
                 }
-            } else {
-                foreach ($filters as $column_name=>$field_description) {
-                    if (is_array($field_description)) {
-                        $this->appendColumnDefaults($column_name, $field_description);
-                        $this->filters[$column_name] = $field_description;
-                    } else {
-                        if ($field_description = $this->initOneFilterColumn($column_name)) {
-                            $this->filters[$column_name] = $field_description;
-                        }   
-                    }
-                }
             }
+//            } else {
+//                foreach ($filters as $column_name=>$field_description) {
+//                    if (is_array($field_description)) {
+//                        $this->appendColumnDefaults($column_name, $field_description);
+//                        $this->filters[$column_name] = $field_description;
+//                    } else {
+//                        if ($field_description = $this->initOneFilterColumn($column_name)) {
+//                            $this->filters[$column_name] = $field_description;
+//                        }
+//                    }
+//                }
+//            }
 
         }
     }
 
     public function initOneFilterColumn($column_name)
     {
-        if ($field_description = $this->crudObj->config->getColumn($column_name, $this->getScope()))
+        if ($field_description = $this->crudObj->config->getColumn($column_name))
         {
             $field_description['required'] = 0;
             if ($field_description['type'] == \Skvn\Crud\CrudConfig::FIELD_SELECT)
