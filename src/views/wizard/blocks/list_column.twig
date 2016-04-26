@@ -4,11 +4,11 @@
         <tr>
             <td style="width:350px;" nowrap="nowrap">
 
-                <select class="form-control default_select" data-rel="field_select" data-list_col="data_col" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_col]" required>
+                <select data-value="{{ column.data }}" class="form-control default_select" data-rel="field_select" data-list_col="data_col" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_col]" required>
                     <option value="">Choose field</option>
-                    {#{% for f in wizard.getTableColumns(table) %}#}
-                        {#<option value="{{ f }}" {{ f == column.data?'selected' }}>{{ f }}</option>#}
-                    {#{% endfor %}#}
+                    {%  for f, fld in model.fields %}
+                        <option value="{{ f }}" {{ f == column.data?'selected' }}>{{ f }}</option>
+                    {% endfor %}
                 </select><br>
                 <b>Or</b><br>
                 <input type="text"  data-list_col="data" style="width:300px;" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][data]" placeholder="Enter model attribute name *" required >

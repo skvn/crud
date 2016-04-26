@@ -13,7 +13,7 @@
         #}
     </label></td>
 <td id="f_container_{{ f }}">
-    {%  if fld.type  and fld.type != 'file'%}
+    {%  if fld.type %}
         {%  set ALIAS = f %}
         {% include 'crud::wizard/blocks/fields/'~fld.type~'.twig' %}
     {% endif %}

@@ -104,7 +104,7 @@
             //var list_name = crud.crudObj.list_name ? crud.crudObj.list_name : 'index';
             var rowCallBack = crud.win.crudRowCallback ? crud.win.crudRowCallback : null;
             tbl.dataTable({
-                    searching: false,
+                    searching: tbl.data('searchable')?true:false,
                     processing: true,
                     serverSide: true,
                     ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope')}),

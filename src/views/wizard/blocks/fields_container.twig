@@ -5,7 +5,9 @@
 
             <div id="f_container">
             {%  for f, fld in model.fields %}
+                {%  if not fld.relation%}
                 {%  include  'crud::wizard/blocks/fields/field_row' %}
+                {% endif %}
             {% endfor %}
             </div>
             <hr />

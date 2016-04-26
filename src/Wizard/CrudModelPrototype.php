@@ -196,29 +196,40 @@ class CrudModelPrototype
     {
 
 
-        if (!empty($this->config_data['single_files']))
-        {
+        if (!empty($this->config_data['fields'])) {
 
-            foreach ($this->config_data['single_files'] as $fname =>$fdata)
-            {
-                if (!empty($fdata['use'])) {
-                    $this->addFileField(array_merge(['name' => $fname, 'multi' => 0], $fdata));
-                }
-
-            }
-        }
-
-        if (!empty($this->config_data['multi_files']))
-        {
-
-
-            foreach ($this->config_data['multi_files'] as $fdata)
-            {
-                if ($fdata && is_array($fdata)) {
-                    $this->addFileField(array_merge(['multi' => 1], $fdata));
+            foreach ($this->config_data['fields'] as $k => $f) {
+                if (!empty($f['type']) && ($f['type'] == Form::FIELD_FILE || $f['type'] == Form::FIELD_MULTI_FILE))
+                {
+                    $f['name'] = $k;
+                    $f['multi'] = ($f['type'] == Form::FIELD_MULTI_FILE?1:0);
+                    $this->addFileField($f);
                 }
             }
         }
+//        if (!empty($this->config_data['single_files']))
+//        {
+//
+//            foreach ($this->config_data['single_files'] as $fname =>$fdata)
+//            {
+//                if (!empty($fdata['use'])) {
+//
+//                }
+//
+//            }
+//        }
+//
+//        if (!empty($this->config_data['multi_files']))
+//        {
+//
+//
+//            foreach ($this->config_data['multi_files'] as $fdata)
+//            {
+//                if ($fdata && is_array($fdata)) {
+//                    $this->addFileField(array_merge(['multi' => 1], $fdata));
+//                }
+//            }
+//        }
     }
 
     /**

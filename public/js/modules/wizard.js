@@ -368,29 +368,29 @@
 
                 break;
 
+            // case 3:
+            //     //switch to files
+            //     $('#files_container').find('tr').show();
+            //     //exclude local keys
+            //     $('#r_container').find('select[data-attr=local_key]').each(function (){
+            //         if ($(this).val()) {
+            //             $('#files_container').find('tr[data-rel=' + $(this).val() + ']').hide();
+            //         }
+            //     });
+            //
+            //     //exclude existing fields
+            //     $('#f_container').find('select.ftype').each(function (){
+            //         if ($(this).val()) {
+            //             $('#files_container').find('tr[data-rel=' + $(this).data('rel') + ']').hide();
+            //         }
+            //     });
+            //
+            //     adjust_step_height()
+            //
+            //
+            //     break;
+
             case 3:
-                //switch to files
-                $('#files_container').find('tr').show();
-                //exclude local keys
-                $('#r_container').find('select[data-attr=local_key]').each(function (){
-                    if ($(this).val()) {
-                        $('#files_container').find('tr[data-rel=' + $(this).val() + ']').hide();
-                    }
-                });
-
-                //exclude existing fields
-                $('#f_container').find('select.ftype').each(function (){
-                    if ($(this).val()) {
-                        $('#files_container').find('tr[data-rel=' + $(this).data('rel') + ']').hide();
-                    }
-                });
-
-                adjust_step_height()
-
-
-                break;
-
-            case 4:
 
                 //switch to lists
 
@@ -466,12 +466,15 @@
 
         if (fields.length) {
             $('select[data-rel="field_select"]').each(function () {
+                var val = $(this).data('value');
+                console.log(val);
                 $(this).empty();
                 var html = '<option value="">Choose  field</option>';
                 for (var i = 0; i < fields.length; i++) {
                     html += '<option value="' + fields[i] + '">' + fields[i] + '</option>';
                 }
                 $(this).html(html);
+                $(this).val(val);
             });
         }
     }

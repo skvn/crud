@@ -46,3 +46,5 @@
 .CodeMirror {
   height: 450px;
 }
+
+.dataTables_filter {float:right !important;}
