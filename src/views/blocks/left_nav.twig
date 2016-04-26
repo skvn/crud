@@ -1,6 +1,6 @@
 <ul class="nav navbar-nav navbar-primary">
     {% for m in cmsHelper.getAdminMenu() %}
-    {%  if not m.kids %}
+    {%  if not m.kids and  m.route.name %}
     <li  {{ m.active?"class='active'"}}>
         <a href="{{ route(m.route.name,m.route.args) }}">{{ m.title }}</a>
     </li>
