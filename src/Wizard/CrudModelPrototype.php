@@ -399,6 +399,7 @@ class CrudModelPrototype
             foreach ($this->config_data['list'] as $alias=>$list)
             {
 
+                $searchable = 0;
                 //columns
                 if (!empty($list['columns']))
                 {
@@ -428,9 +429,16 @@ class CrudModelPrototype
                             $column['hint'] = ['default' => $column['hint']];
 
                         }
+                        if (!empty($column['searchable']))
+                        {
+                            $searchable = 1;
+                        }
+
+
 
                         $cols[] = $column;
                     }
+                    $this->config_data['list'][$alias]['searchable'] = $searchable;
                     $this->config_data['list'][$alias]['columns'] = $cols;
                 }
 
