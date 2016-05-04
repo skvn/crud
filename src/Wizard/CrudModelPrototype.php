@@ -542,9 +542,12 @@ class CrudModelPrototype
         //eval("\$arr = $val");
         //file_put_contents($this->config_path,"<?php \n return ".var_export($arr, 1).";");
         //file_put_contents($this->config_path,"<?php \n return ".$val.";");
+        //var_dump($this->config_data);
         $conf = json_encode($this->buildConfig(), JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES + JSON_UNESCAPED_UNICODE);
         $conf = str_replace(['{', '}'], ['[', ']'], $conf);
         $conf = str_replace('":', '" =>', $conf);
+        //var_dump($conf);
+        //exit;
         file_put_contents($this->config_path,"<?php \n return ".$conf.";");
 
     }//

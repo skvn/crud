@@ -196,7 +196,15 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
 
     public function getForm($prop='')
     {
-        $form =  $this->get('form');
+        $form = null;
+        if (!empty($this->scope))
+        {
+            $form = $this->getList("form");
+        }
+        if (!$form)
+        {
+            $form =  $this->get('form');
+        }
 
         $form_array = [];
         $fields = $this->getFields();
