@@ -107,7 +107,7 @@
                     searching: tbl.data('searchable')?true:false,
                     processing: true,
                     serverSide: true,
-                    ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope')}),
+                    ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), uri_params: tbl.data('list_uri_params')}),
                     //columns: crud_cols,
                     order: order,
                     columns: columns,

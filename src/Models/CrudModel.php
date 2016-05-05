@@ -766,7 +766,7 @@ class CrudModel extends Model {
 
     function isTree()
     {
-        return $this->config->get('tree');
+        return $this->config->get('tree') && !$this->config->get('use_list');
     }
 
     function getTitle()

@@ -5,7 +5,7 @@
     var settings = {
         model_edit_url: '/admin/crud/{model}/edit/{id}?scope={scope}',
         model_filter_url: '/admin/crud/{model}/filter/{scope}',
-        model_list_url: '/admin/crud/{model}/list/{scope}',
+        model_list_url: '/admin/crud/{model}/list/{scope}{uri_params}',
         model_delete_url: '/admin/crud/{model}/delete',
         model_move_tree_url: '/admin/crud/{model}/move_tree',
         model_tree_url: '/admin/crud/{model}/tree/{scope}',
@@ -55,7 +55,7 @@
                 var str = settings[key] || "";
                 for (var i in args)
                 {
-                    str = str.replace('{' + i + '}', args[i]);
+                    str = str.replace('{' + i + '}', args[i] || "");
                 }
                 return str;
             },
