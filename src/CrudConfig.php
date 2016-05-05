@@ -194,6 +194,25 @@ class CrudConfig implements JsonSerializable, ArrayAccess {
 
     }
 
+    function getTree($prop = '')
+    {
+        if (isset($this->config['tree']))
+        {
+            if (!empty($prop))
+            {
+                if (isset($this->config['tree'][$prop]))
+                {
+                    return $this->config['tree'][$prop];
+                }
+            }
+            else
+            {
+                return $this->config['tree'];
+            }
+        }
+        return false;
+    }
+
     public function getForm($prop='')
     {
         $form = null;

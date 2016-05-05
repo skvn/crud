@@ -1,4 +1,18 @@
-<table class="table table-striped table-bordered table-hover"  data-list_uri_params="?parent_id={{ input_get('parent_id') }}" data-list_table_ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-crud_table="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.config.scope }}" data-btn_edit="{{ crudObj.config.list.buttons.single_edit }}" data-btn_delete="{{ crudObj.config.list.buttons.single_delete }}" data-form_type="{{ crudObj.config.list.edit_tab?'tabs':'popup' }}" data-list_actions='{{ crudObj.config.jsonSerialize().list_actions |raw }}' data-searchable="{{ crudObj.config.list.searchable }}" >
+{% if crudObj.config.getTree('use_list') %}
+<ol class="breadcrumb">
+    {% for bc in crudObj.breadcrumbs %}
+        <li>
+            {% if loop.last %}
+                {{ bc.title }}
+            {% else %}
+                <a href="{{ bc.link }}">{{ bc.title }}</a>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ol>
+{% endif %}
+
+<table class="table table-striped table-bordered table-hover"  data-list_uri_params="{{ crudObj.flat_tree_uri_params }}"  data-list_table_ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-crud_table="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.config.scope }}" data-btn_edit="{{ crudObj.config.list.buttons.single_edit }}" data-btn_delete="{{ crudObj.config.list.buttons.single_delete }}" data-form_type="{{ crudObj.config.list.edit_tab?'tabs':'popup' }}" data-list_actions='{{ crudObj.config.jsonSerialize().list_actions |raw }}' data-searchable="{{ crudObj.config.list.searchable }}" >
     <thead>
     {% for c in crudObj.config.jsonSerialize().list.columns %}
         {% if not c.invisible %}
