@@ -5,13 +5,14 @@ use Skvn\Crud\CrudConfig;
 use Skvn\Crud\Exceptions\Exception as CrudException;
 use Skvn\Crud\Form\FieldFactory;
 use Skvn\Crud\Form\Form;
-use Skvn\Crud\Filter\FilterFactory;
+use Skvn\Crud\Traits\ModelListTrait;
 use Illuminate\Support\Collection ;
-use Illuminate\Foundation\Application as LaravelApplication;
 
 
 
-class CrudModel extends Model {
+class CrudModel extends Model
+{
+    use ModelListTrait;
 
     //use SoftDeletingTrait;
 
@@ -219,263 +220,7 @@ class CrudModel extends Model {
 
     }
 
-    function getListData($scope=null, $viewType='data_tables')
-    {
-        $skip = (int) $this->app['request']->get('start',0);
-        $take =  (int) $this->app['request']->get('length',0);
-        $order = $this->app['request']->get('order');
 
-        if (!empty($scope))
-        {
-            $this->config->setScope($scope);
-
-        }
-        $config_cols = $this->config->getList('columns');
-        $coll = $this->getListQuery($scope, $order);
-        if (!$this->isTree()) {
-
-            $coll = $this->applyQueryFilter($coll, $scope);
-            $coll = $this->paginateQuery($coll, $skip, $take);
-        }
-        //var_dump($coll->getQuery()->toSQL());
-        //var_dump($coll->getQuery()->getBindings());
-        $args = $this->app['request']->all();
-        $args['buttons'] = $this->config->getList('buttons');
-
-        return $this->app['skvn.crud']->prepareCollectionForView($coll, $args, $viewType, $config_cols);
-    }
-
-
-    /**
-     * DEPRECATED  use getListQuery instead
-     * @param null $scope
-     * @param null $order
-     * @return mixed
-     */
-    function getListCollection($scope=null, $order=null)
-    {
-        return $this->getListQuery($scope, $order);
-    }    
-    
-    
-    function getListQuery($scope=null, $order=null)
-    {
-       
-
-        if (!empty($scope))
-        {
-            $method = camel_case('get_' . $scope . '_list_collection');
-            $method_query = camel_case('get_' . $scope . '_list_query');
-        }
-
-
-        //define if need eager join
-        $listCols = $this->config->getList('columns');
-        $joins =[];
-        foreach ($listCols as $listCol) {
-
-            if ($relSpl = $this->resolveListRelation($listCol['data'])) {
-                $joins[$relSpl[0]] = function ($query) {
-                };
-
-            }
-        }
-
-        if (!empty($scope) && method_exists($this, $method))
-        {
-            return $this->$method($order, $joins);
-        }
-        else if (!empty($scope) && method_exists($this, $method_query))
-        {
-            return $this->$method_query($order, $joins);
-        }
-        else
-        {
-
-           return $this->getBasicListQuery($joins);
-
-        }
-    }//
-
-
-    function getBasicListQuery($joins)
-    {
-        $sort = $this->config->getList('sort');
-        
-        $basic = self::query();
-
-        if (count($joins))
-        {
-
-            $basic = $basic->with($joins);
-        }
-
-        if ($this->isTree())
-        {
-            $basic->orderBy($this->getColumnTreePath() , 'asc');
-            $basic->orderBy($this->getColumnTreeOrder(), 'asc');
-
-        } else {
-
-            if (!empty($sort)) {
-                foreach ($sort as $o => $v) {
-                    $basic->orderBy($o, $v);
-                }
-
-            }
-        }
-
-        return $basic;
-    }
-
-    protected  function paginateQuery($coll, $skip, $take)
-    {
-        $coll->cnt = $coll->count();
-        if ($take>0)
-        {
-            $coll = $coll->skip($skip)->take($take);
-
-        }
-
-        return $coll;
-    }
-
-    public  function applyQueryFilter($coll, $scope)
-    {
-        //$context = $this->purifyContext($context);
-        $this->initFilter($scope);
-
-        //$scope = $this->purifyContext($context);
-
-
-        if (!empty($scope)) {
-
-            $methodCond = camel_case('append_' . $scope . '_conditions');
-        }
-
-        $conditions = $this->filterObj->getConditions();
-        if (method_exists($this,$methodCond))
-        {
-            $conditions= $this->$methodCond($conditions);
-        } else {
-            $conditions = $this->appendConditions($conditions);
-        }
-
-
-        if (is_array($conditions)) {
-            $coll = $this->applyConditions($coll, $conditions);
-            $coll->cnt = $coll->count();
-        }
-
-
-        return $coll;
-
-    }//
-
-    public  function appendConditions($conditions)
-    {
-
-        return $conditions;
-    }
-
-    public function applyConditions($coll, $conditions)
-    {
-        $conditions = $this->preApplyConditions($coll,$conditions);
-
-        foreach ($conditions as $cond) {
-
-            if (empty($cond['join'])) {
-
-                if (!empty($cond['cond'])) {
-                    $coll = $this->applyFilterWhere($coll, $cond['cond']);
-                }
-            } else {
-                //use joins
-                $coll-> whereHas($cond['join'], function($query) use ($cond) {
-                    $query = $this->applyFilterWhere($query, $cond['cond']);
-                });
-            }
-
-        }
-
-        return $coll;
-    }//
-
-    public  function preApplyConditions($coll,$conditions)
-    {
-        return $conditions;
-    }
-
-    protected function applyFilterWhere($coll, $cond)
-    {
-        if (is_string($cond))
-        {
-            $coll->whereRaw($cond);
-        }
-        else if (is_array($cond[0]))
-        {
-            //OR in AND
-            $or_where = function ($query) use ($cond) {
-
-                foreach ($cond as $i=>$one_cond)
-                {
-                    list($col, $act, $val) = $one_cond;
-                    if ($i ==0)
-                    {
-                        $query = $this->applyFilterWhere($query,$one_cond);
-                    } else {
-                        $query = $this->applyFilterOrWhere($query,$one_cond);
-                    }
-
-                }
-            };
-            
-            $coll->where($or_where);
-
-        } else {
-
-            //simple and
-            list($col, $act, $val) = $cond;
-            switch (strtolower($act))
-            {
-                case 'in':
-                    $coll->whereIn($col, $val);
-                    break;
-
-                case 'between':
-                    $coll->whereBetween($col, $val);
-                    break;
-
-                default:
-                    $coll->where($col, $act, $val);
-                    break;
-            }
-        }
-
-        return $coll;
-    }//
-
-
-    protected function applyFilterOrWhere($coll, $cond)
-    {
-        list($col, $act, $val) = $cond;
-        switch (strtolower($act))
-        {
-            case 'in':
-                $coll->orWhereIn($col, $val);
-                break;
-
-            case 'between':
-                $coll->orWhereBetween($col, $val);
-                break;
-
-            default:
-                $coll->orWhere($col, $act, $val);
-                break;
-        }
-
-        return $coll;
-    }
 
     public function setCreatedAtAttribute($value)
     {
@@ -692,43 +437,6 @@ class CrudModel extends Model {
 //        return $this->getAttribute($column);
 //    }
 
-    public function initFilter(/*$scope = CrudConfig :: DEFAULT_SCOPE*/)
-    {
-
-        //$listOrContext = $this->purifyContext($listOrContext);
-//        if ($scope != CrudConfig :: T_LIST) {
-            //$this->config->setScope($scope);
-//        }
-
-        $filter =  FilterFactory::create($this, $this->config->getScope());
-        $this->setFilter($filter);
-    }
-
-    public function setFilter(\Skvn\Crud\Filter\Filter $filterObj)
-    {
-        $this->filterObj = $filterObj;
-        $this->filterObj->setModel($this);
-    }
-    public  function getFilter()
-    {
-        if (!$this->filterObj)
-        {
-            throw new \InvalidArgumentException("Filter object is not set");
-        }
-        return $this->filterObj;
-    }
-
-    public function getFilterColumns()
-    {
-        return $this->filterObj->filters;
-    }
-
-    public function fillFilter($scope, $input)
-    {
-        $this->initFilter($scope);
-
-        return $this->filterObj->fill($input, true);
-    }
 
     public function getForm($fillData=null, $forceNew=false)
     {
@@ -766,7 +474,7 @@ class CrudModel extends Model {
 
     function isTree()
     {
-        return $this->config->get('tree') && !$this->config->get('use_list');
+        return $this->config->get('tree') && !$this->config->get('tree')['use_list'];
     }
 
     function getTitle()
