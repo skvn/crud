@@ -78,7 +78,7 @@ class Filter {
         if ($field_description = $this->crudObj->config->getColumn($column_name))
         {
             $field_description['required'] = 0;
-            if ($field_description['type'] == \Skvn\Crud\CrudConfig::FIELD_SELECT)
+            if ($field_description['type'] == Form::FIELD_SELECT)
             {
                 $field_description['multiple'] = 1;
             }

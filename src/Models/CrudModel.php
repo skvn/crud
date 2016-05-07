@@ -48,9 +48,12 @@ class CrudModel extends Model
 
         if (empty($this->table))
         {
-            if (!$this->config->exists('table')) {
-                $this->table = snake_case($this->classShortName);
-            } else {
+            if (!$this->config->exists('table'))
+            {
+                $this->table = $this->classViewName;
+            }
+            else
+            {
                 $this->table = $this->config->get('table');
             }
         }

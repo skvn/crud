@@ -7,17 +7,6 @@ use Skvn\Crud\Exceptions\ConfigException;
 class CrudConfig implements JsonSerializable, ArrayAccess {
 
 
-    const FIELD_SELECT = 'select';
-    const FIELD_TEXT = 'text';
-    const FIELD_FILE = 'file';
-    const FIELD_CHECKBOX = 'checkbox';
-    const FIELD_MULTI_FILE = 'multi_file';
-    const FIELD_TEXTAREA = 'textarea';
-    const FIELD_DATE = 'date';
-    const FIELD_DATE_TIME = 'date_time';
-    const FIELD_RANGE = 'range';
-    const FIELD_DATE_RANGE = 'date_range';
-    const FIELD_NUMBER = 'number';
 
     const RELATION_BELONGS_TO_MANY = 'belongsToMany';
     const RELATION_BELONGS_TO = 'belongsTo';

@@ -65,6 +65,9 @@ class Form {
      */
     const FIELD_TAGS = 'tags';
 
+
+
+
     /**
      * @var
      */
@@ -114,7 +117,7 @@ class Form {
 
                     switch ($colConfig['type']) {
 
-                        case \Skvn\Crud\CrudConfig::FIELD_RANGE:
+                        case self::FIELD_RANGE:
 
                             if (!empty($data[$col]) && strpos($data[$col],'~') !== false)
                             {
@@ -143,7 +146,7 @@ class Form {
 
                             break;
 
-                        case \Skvn\Crud\CrudConfig::FIELD_DATE_RANGE:
+                        case self::FIELD_DATE_RANGE:
 
                             if (!empty($data[$col]) && strpos($data[$col],'~') !== false)
                             {
