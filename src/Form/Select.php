@@ -2,6 +2,7 @@
 
 
 use Skvn\Crud\Models\CrudModel;
+use Skvn\Crud\Models\CrudModelCollectionBuilder;
 
 class Select extends Field {
 
@@ -97,8 +98,9 @@ class Select extends Field {
         {
             if ($modelObj->confParam('tree'))
             {
-                $coll = $modelObj->getListCollection();
-                $collection = $modelObj->prepareCollectionForView($coll, null, 'tree_flattened');
+                $collection = CrudModelCollectionBuilder :: create($modelObj)->createCollection()->get();
+//                $coll = $modelObj->getListCollection();
+//                $collection = $modelObj->prepareCollectionForView($coll, null, 'tree_flattened');
             }
             else
             {

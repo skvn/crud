@@ -28,7 +28,7 @@ trait ModelRelationTrait
 
     }
 
-    protected function resolveListRelation($alias)
+    function resolveListRelation($alias)
     {
         if (strpos($alias,'::') !== false)
         {

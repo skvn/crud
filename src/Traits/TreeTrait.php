@@ -372,7 +372,7 @@ trait TreeTrait  {
             $coll = self::query();
             foreach ($where as $values)
             {
-                $coll = $this->applyFilterWhere($coll, $values);
+                $this->applyFilterWhere($coll, $values);
             }
             $coll = $coll->get();
         }
