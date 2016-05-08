@@ -2,7 +2,6 @@
 
 use Skvn\Crud\Form\FieldFactory;
 use Skvn\Crud\Exceptions\ConfigException;
-use Illuminate\Container\Container;
 
 
 trait ModelConfigTrait

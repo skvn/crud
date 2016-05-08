@@ -7,7 +7,7 @@ trait HistoryTrackTrait {
     protected  function onAfterSave()
     {
 
-        $track_cols = array_filter($this->config->getFields(), function ($item) { if (!empty($item['track'])) return true;});
+        $track_cols = array_filter($this->getFields(), function ($item) { if (!empty($item['track'])) return true;});
         $dirty = $this->getDirty();
         foreach ($dirty as $k=>$v)
         {

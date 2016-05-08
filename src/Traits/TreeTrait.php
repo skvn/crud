@@ -32,7 +32,7 @@ trait TreeTrait  {
 
     public function makeRoot()
     {
-        $title_f = ($this->config->get('title_field')?$this->config->get('title_field'):'title');
+        $title_f = ($this->confParam('title_field')?$this->confParam('title_field'):'title');
         $this->fill(array(
             $title_f => 'Верхний уровень',
             $this->columnTreePath => '.0.',
