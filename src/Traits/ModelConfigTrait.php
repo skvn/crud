@@ -2,6 +2,7 @@
 
 use Skvn\Crud\Form\FieldFactory;
 use Skvn\Crud\Exceptions\ConfigException;
+use Illuminate\Container\Container;
 
 
 trait ModelConfigTrait
@@ -488,6 +489,54 @@ trait ModelConfigTrait
     function isManyRelation($relation)
     {
         return in_array($relation, ['hasMany','belongsToMany', 'morphToMany', 'morphedByMany']);
+    }
+
+
+    function resolveView($view)
+    {
+        $hints = $this->app['view']->getFinder()->getHints();
+        $key = "crud." . $this->classViewName . "." . $this->getScope();
+        $source = isset($hints[$key]) ? $hints[$key] : [];
+        if (empty($source))
+        {
+            $target = [];
+            $add = [
+                '/crud',
+                '/crud/models',
+                '/crud/models/' . $this->classViewName,
+                '/crud/models/' . $this->classViewName . '/' . $this->getScope(),
+            ];
+            foreach ($this->app['config']['view.paths'] as $path)
+            {
+                if (isset($hints['crud']))
+                {
+                    foreach ($hints['crud'] as $entry)
+                    {
+                        if (!in_array($entry, $target))
+                        {
+                            $target[] = $entry;
+                        }
+                    }
+                }
+                if (!in_array($path, $target))
+                {
+                    $target[] = $path;
+                }
+                foreach ($add as $entry)
+                {
+                    $tpath = $path . $entry;
+                    if (!in_array($tpath, $source))
+                    {
+                        array_unshift($target, $tpath);
+                    }
+                }
+            }
+            if (!empty($target))
+            {
+                $this->app['view']->getFinder()->prependNamespace($key, $target);
+            }
+        }
+        return $key . "::" . $view;
     }
 
 

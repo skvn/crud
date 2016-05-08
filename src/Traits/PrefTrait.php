@@ -1,5 +1,7 @@
 <?php namespace Skvn\Crud\Traits;
 
+use Skvn\Crud\Models\CrudModel;
+
 trait PrefTrait
 {
     protected $__prefs = null;
@@ -38,7 +40,7 @@ trait PrefTrait
         }
         else
         {
-            $obj = $this->app['skvn.crud']->getModelInstance($this->app['request']->get('model'), $this->app['request']->get('scope'));
+            $obj = CrudModel :: createInstance($this->app['request']->get('model'), $this->app['request']->get('scope'));
 //            $model = 'App\Model\\' . studly_case(\Request :: get('model'));
 //            $obj = new $model();
 //            $obj->config->setScope(\Request :: get('scope'));

@@ -1,5 +1,6 @@
 <?php namespace Skvn\Crud\Form;
 
+use Skvn\Crud\Models\CrudModel;
 
 class Tags extends Field {
 
@@ -8,7 +9,7 @@ class Tags extends Field {
     {
         if (!$this->value)
         {
-            $class = app()['skvn.crud']->getModelClass($this->config['model']);
+            $class = CrudModel :: resolveClass($this->config['model']);
             $dummyModel = new $class();
             $ids = $this->form->crudObj->getRelationIds($this->getName());
             if (count($ids)) {
@@ -25,7 +26,7 @@ class Tags extends Field {
         if ($this->value) {
 
             $split = explode(',',$this->value);
-            $class = app()['skvn.crud']->getModelClass($this->config['model']);
+            $class = CrudModel :: resolveClass($this->config['model']);
             $dummyModel = new $class();
             $ids = [];
             foreach ($split as $title) {

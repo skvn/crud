@@ -76,69 +76,17 @@ class CrudHelper {
 
     function resolveModelView(CrudModel $model, $view)
     {
-        $hints = $this->app['view']->getFinder()->getHints();
-        $key = "crud." . $model->classViewName . "." . $model->getScope();
-        $source = isset($hints[$key]) ? $hints[$key] : [];
-        if (empty($source))
-        {
-            $target = [];
-            $add = [
-                '/crud',
-                '/crud/models',
-                '/crud/models/' . $model->classViewName,
-                '/crud/models/' . $model->classViewName . '/' . $model->getScope(),
-            ];
-            foreach ($this->app['config']['view.paths'] as $path)
-            {
-                if (isset($hints['crud']))
-                {
-                    foreach ($hints['crud'] as $entry)
-                    {
-                        if (!in_array($entry, $target))
-                        {
-                            $target[] = $entry;
-                        }
-                    }
-                }
-                if (!in_array($path, $target))
-                {
-                    $target[] = $path;
-                }
-                foreach ($add as $entry)
-                {
-                    $tpath = $path . $entry;
-                    if (!in_array($tpath, $source))
-                    {
-                        array_unshift($target, $tpath);
-                    }
-                }
-            }
-            if (!empty($target))
-            {
-                $this->app['view']->getFinder()->prependNamespace($key, $target);
-            }
-        }
-        return $key . "::" . $view;
+        return $model->resolveView($view);
     }
 
     function getModelClass($model)
     {
-        return $this->app['config']['crud_common.model_namespace'] . '\\' . studly_case($model);
+        return CrudModel :: resolveClass($model);
     }
 
     function getModelInstance($model, $scope = CrudModel :: DEFAULT_SCOPE, $id = null)
     {
-        $class = $this->getModelClass($model);
-        if (!empty($id))
-        {
-            $obj = $class::firstOrNew(['id'=>(int)$id]);
-        }
-        else
-        {
-            $obj = $this->app->make($class);
-        }
-        $obj->setScope($scope);
-        return $obj;
+        return CrudModel :: createInstance($model, $scope, $id);
     }
 
 }

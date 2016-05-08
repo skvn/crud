@@ -32,7 +32,7 @@ class CrudController extends Controller
 
     function crudIndex($model, $scope = CrudModel :: DEFAULT_SCOPE, $args = [])
     {
-        $obj = $this->helper->getModelInstance($model, $scope);
+        $obj = CrudModel :: createInstance($model, $scope);
 
         if (!$obj->checkAcl())
         {
@@ -41,7 +41,7 @@ class CrudController extends Controller
 
         $obj->initFilter();
 
-        $view = !empty($args['view']) ? $args['view'] : $this->helper->resolveModelView($obj, 'index');
+        $view = !empty($args['view']) ? $args['view'] : $obj->resolveView('index');
         return $this->app['view']->make($view, ['crudObj'=>$obj]);
 
     }//
@@ -49,7 +49,7 @@ class CrudController extends Controller
 
     function crudTree($model, $scope = CrudModel :: DEFAULT_SCOPE)
     {
-        $obj = $this->helper->getModelInstance($model, $scope);
+        $obj = CrudModel :: createInstance($model, $scope);
 
         if (!$obj->checkAcl())
         {
@@ -63,7 +63,7 @@ class CrudController extends Controller
              return $obj->getListData($scope,'tree');
 
         }
-        return $this->app['view']->make($this->helper->resolveModelView($obj,'tree'),['crudObj'=>$obj]);
+        return $this->app['view']->make($obj->resolveView('tree'),['crudObj'=>$obj]);
 
     }//
 
@@ -71,7 +71,7 @@ class CrudController extends Controller
 
     function crudAutocompleteList($model, $scope)
     {
-        $obj = $this->helper->getModelInstance($model, $scope);
+        $obj = CrudModel :: createInstance($model, $scope);
 
         if (!$obj->checkAcl())
         {
@@ -83,7 +83,7 @@ class CrudController extends Controller
 
     function crudList($model,$scope)
     {
-        $obj = $this->helper->getModelInstance($model, $scope);
+        $obj = CrudModel :: createInstance($model, $scope);
 
         if (!$obj->checkAcl())
         {
@@ -98,7 +98,7 @@ class CrudController extends Controller
     function crudEdit($model,$id)
     {
 
-        $obj = $this->helper->getModelInstance($model, $this->app['request']->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
+        $obj = CrudModel :: createInstance($model, $this->app['request']->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
         //$class = 'App\Model\\'.studly_case($model);
         //$obj = $class::firstOrNew(['id'=>(int)$id]);
         //$scope = \Input::get('scope', CrudModel :: DEFAULT_SCOPE);
@@ -122,7 +122,7 @@ class CrudController extends Controller
         }
         //return \View::make($this->crudHelper->resolveModelTemplate($model,$obj->config->get('tabs') ? 'edit_tabs' : 'edit'),['crudObj'=>$obj,'id'=>$id]);
         $edit_view = $obj->getListConfig('edit_tab')?'tab':'edit';
-        return $this->app['view']->make($this->helper->resolveModelView($obj,$edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$obj->getScope(), 'form_tabbed'=>$obj->getListConfig('form_tabbed')]);
+        return $this->app['view']->make($obj->resolveView($edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$obj->getScope(), 'form_tabbed'=>$obj->getListConfig('form_tabbed')]);
 
     }
 
@@ -130,7 +130,7 @@ class CrudController extends Controller
     {
 
         try {
-            $obj = $this->helper->getModelInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
+            $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
 //            $class = 'App\Model\\' .studly_case($model);
 //            $obj = $class::firstOrNew(['id'=>(int)$id]);
 
@@ -169,7 +169,7 @@ class CrudController extends Controller
     {
 
         try {
-            $obj = $this->helper->getModelInstance($model, $scope);
+            $obj = CrudModel :: createInstance($model, $scope);
 //            $obj = \App::make('App\Model\\'.studly_case($model));
 //            $obj->config->setScope($scope);
             $obj->fillFilter($scope,$this->app['request']->all());
@@ -191,10 +191,8 @@ class CrudController extends Controller
     function crudDelete($model)
     {
         try {
-            $class = $this->helper->getModelClass($model);
-            $obj = $this->helper->getModelInstance($model);
-//            $model = 'App\Model\\' . studly_case($model);
-//            $obj = \App::make($model);
+            $class = CrudModel :: resolveClass($model);
+            $obj = CrudModel :: createInstance($model);
 
             if (!$obj->checkAcl())
             {
@@ -221,7 +219,7 @@ class CrudController extends Controller
     {
 
         try {
-            $obj = $this->helper->getModelInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
+            $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
 
             if (!$obj->checkAcl())
             {
@@ -244,7 +242,7 @@ class CrudController extends Controller
         $parent_id = $this->app['request']->get('parent_id');
         $position = $this->app['request']->get('position');
 
-        $obj = $this->helper->getModelInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
+        $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
 
         if (!$obj->checkAcl())
         {

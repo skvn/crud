@@ -85,7 +85,7 @@ class Select extends Field {
 
     private function getModelOptions()
     {
-        $class = app()['skvn.crud']->getModelClass($this->config['model']);
+        $class = CrudModel :: resolveClass($this->config['model']);
 
         $modelObj = new $class();
         if (!empty($this->config['find']))

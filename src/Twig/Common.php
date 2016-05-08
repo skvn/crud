@@ -82,7 +82,7 @@ class Common extends Twig_Extension
 
     function modelView($view, $model)
     {
-        return $this->app->make('skvn.crud')->resolveModelView($model, $view);
+        return $model->resolveView($view);
     }
 
     public function getFilters()
