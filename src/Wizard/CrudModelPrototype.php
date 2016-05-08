@@ -129,7 +129,7 @@ class CrudModelPrototype
             ];
 
             //need to record pivot?
-            if ($rel['type'] == \Skvn\Crud\CrudConfig::RELATION_BELONGS_TO_MANY && $rel['pivot'] == '0')
+            if ($rel['type'] == \Skvn\Crud\Models\CrudModel::RELATION_BELONGS_TO_MANY && $rel['pivot'] == '0')
             {
 
                 $pdata = [];
@@ -148,7 +148,7 @@ class CrudModelPrototype
                 $rel_arr['pivot_self_key'] = $pdata['self_key'];
                 $rel_arr['pivot_foreign_key'] = $pdata['foreign_key'];
 
-            } else if ($rel['type'] == \Skvn\Crud\CrudConfig::RELATION_BELONGS_TO_MANY && $rel['pivot'] == '1')
+            } else if ($rel['type'] == \Skvn\Crud\Models\CrudModel::RELATION_BELONGS_TO_MANY && $rel['pivot'] == '1')
             {
                 $rel_arr['pivot_table'] = $rel['pivot_table'];
                 $rel_arr['pivot_self_key'] = $rel['pivot_self_key'];

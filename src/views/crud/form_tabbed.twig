@@ -1,9 +1,9 @@
-<form action="{{ route('crud_update',{'model':crudObj.config.get('class_name'),'id':id}) }}" method="post" enctype="multipart/form-data" role="form"  data_crud_scope="{{ crudObj.config.scope }}" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}" data-rel="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}_{{ id }}">
+<form action="{{ route('crud_update',{'model':crudObj.classViewName,'id':id}) }}" method="post" enctype="multipart/form-data" role="form"  data_crud_scope="{{ crudObj.scope }}" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}" data-rel="{{ crudObj.classViewName }}_{{ crudObj.scope }}_{{ id }}">
     <input type="hidden" id="tree_action" name="tree_action" value=""/>
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
     <ul class="nav nav-tabs">
         {% set active=0 %}
-        {% for tab_id,tab_info in crudObj.config.get('tabs') %}
+        {% for tab_id,tab_info in crudObj.confParam('tabs') %}
             {% if tab_info.acl|allowed('r') %}
                 <li class="{{ active == 0 ? 'active' }}"><a href="#{{ tab_id }}" data-toggle="tab">{{ tab_info.title }}</a></li>
                 {% set active = 1 %}
@@ -12,7 +12,7 @@
     </ul>
     <div class="tab-content">
         {% set active = 0 %}
-        {% for tab_id,tab_info in crudObj.config.get('tabs') %}
+        {% for tab_id,tab_info in crudObj.confParam('tabs') %}
             {% if tab_info.acl|allowed('r') %}
                 <div class="tab-pane {{ active == 0 ? 'active' }}" id="{{ tab_id }}">
                     <fieldset style="padding-bottom: 20px; padding-top: 20px;">
@@ -34,7 +34,7 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">{{ trans('crud::messages.cancel') }}</button>
-        {% if crudObj.config.get('acl')|allowed('u') %}
+        {% if crudObj.confParam('acl')|allowed('u') %}
             <button class="btn btn-success crud_submit" type="submit" data-close="1">{{ trans('crud::messages.save_close') }}</button>
             <button class="btn btn-primary crud_submit" type="submit" data-close="0">{{ trans('crud::messages.save') }}</button>
         {% endif %}

@@ -28,31 +28,33 @@ class Filter {
 
     public function fillFromStorage()
     {
-
         if ($this->session->has($this->getStorageKey()))
         {
-
             $this->fill($this->session->get($this->getStorageKey()));
 
-        } else
+        }
+        else
         {
-            $this->fill($this->crudObj->config->getListDefaultFilter());
+            $this->fill($this->crudObj->getListDefaultFilter());
         }
     }
 
     public function initFilterColumns()
     {
-        $filters = $this->crudObj->config->getFilter();
-        $this->defaults = $this->crudObj->config->getListDefaultFilter();
+        $filters = $this->crudObj->getFilterConfig();
+        $this->defaults = $this->crudObj->getListDefaultFilter();
 
         if ($filters)
         {
             //SUPPORT FOR OLD STYLE 
             //when filter field is described in 'fields'
             // and filter contains only field names
-            if (isset($filters[0])) {
-                foreach ($filters as $column_name) {
-                    if ($field_description = $this->initOneFilterColumn($column_name)) {
+            if (isset($filters[0]))
+            {
+                foreach ($filters as $column_name)
+                {
+                    if ($field_description = $this->initOneFilterColumn($column_name))
+                    {
                         $this->filters[$column_name] = $field_description;
                     }
                 }
@@ -75,7 +77,7 @@ class Filter {
 
     public function initOneFilterColumn($column_name)
     {
-        if ($field_description = $this->crudObj->config->getColumn($column_name))
+        if ($field_description = $this->crudObj->getColumn($column_name))
         {
             $field_description['required'] = 0;
             if ($field_description['type'] == Form::FIELD_SELECT)
@@ -87,7 +89,6 @@ class Filter {
 
             return $field_description;
         }
-
     }
     
     private function appendColumnDefaults($column_name, $field_description)
@@ -107,47 +108,31 @@ class Filter {
 
     public function fill($input, $andStore=false)
     {
-
         $storeData = [];
         if ($this->filters  && is_array($this->filters ))
         {
-
-
             $form = $this->getForm($input, true);
-
-            foreach ($this->filters as $k => $filterCol) {
-
-
-//                if (array_key_exists($k, $input)) {
-
+            foreach ($this->filters as $k => $filterCol)
+            {
                 $value = $form->fields[$k]->getValue();
                 $storeData[$k] = $value;
                 $this->filters[$k]['value'] = $value;
-
-
-//                } else {
-//                    $this->filters[$k]['value'] = null;
-//                }
             }
         }
 
-
-        if ($andStore) {
+        if ($andStore)
+        {
             $this->store($storeData);
         }
-
     }
 
     public function store($data)
     {
-
-
         $this->session->put($this->getStorageKey(),$data);
     }
 
     public function getStorageKey()
     {
-
         return 'crud_filter_'.$this->getScope();
     }
 
@@ -155,7 +140,8 @@ class Filter {
     {
         if ($this->filters)
         {
-            if (!$this->form || $renew) {
+            if (!$this->form || $renew)
+            {
                 $this->form = new Form($this->crudObj, $this->filters, $fillData);
             }
         }
@@ -166,16 +152,15 @@ class Filter {
     public function getConditions()
     {
         $filters = [];
-        if ($this->filters) {
+        if ($this->filters)
+        {
             $form = $this->getForm();
-            foreach ($form->fields as $field) {
+            foreach ($form->fields as $field)
+            {
                 $filters[$field->getName()] = $field->getFilterCondition();
             }
-
-
         }
         return $filters;
-
     }
 
 }

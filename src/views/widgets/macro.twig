@@ -1,20 +1,20 @@
 {% macro table(crudObj, scope) %}
 
     {% if scope %}
-        {{ crudObj.config.setScope(scope) }}
+        {{ crudObj.setScope(scope) }}
     {% endif %}
 
-    {%  if  crudObj.config.list.edit_tab %}
-        <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.config.scope }}">
+    {%  if  crudObj.getListConfig('edit_tab') %}
+        <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.scope }}">
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}"> <i class="fa fa-list"></i> List</a></li>
-                <li style="display: none" data-edit_tab_tpl="1"><div class="sk-spinner sk-spinner-pulse"></div><a style="display: none" data-toggle="tab"  href="#tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}"> <i class="fa fa-edit"></i>[ID]&nbsp;&nbsp;&nbsp;<span class="text-danger" data-confirm="Закрыть?" data-click="crud_event" data-event="crud.cancel_edit" data-rel="[REL]" title="Закрыть" style="cursor:pointer"><i class="fa fa-times"></i></span></a></li>
+                <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}"> <i class="fa fa-list"></i> List</a></li>
+                <li style="display: none" data-edit_tab_tpl="1"><div class="sk-spinner sk-spinner-pulse"></div><a style="display: none" data-toggle="tab"  href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}"> <i class="fa fa-edit"></i>[ID]&nbsp;&nbsp;&nbsp;<span class="text-danger" data-confirm="Закрыть?" data-click="crud_event" data-event="crud.cancel_edit" data-rel="[REL]" title="Закрыть" style="cursor:pointer"><i class="fa fa-times"></i></span></a></li>
 
 
             </ul>
 
             <div class="tab-content">
-                <div id="tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" class="tab-pane active">
+                <div id="tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}" class="tab-pane active">
                     <div class="panel-body">
                         {% include "widgets/blocks/tbl_head.twig"|model_view(crudObj) %}
                         {% include "widgets/blocks/tbl_table.twig"|model_view(crudObj) %}
@@ -41,7 +41,7 @@
                     <div class="panel-heading"><a data-toggle="collapse" href="#filter_panel_{{ crudObj.classViewName }}_{{ scope }}"><i class="icon fa fa-filter"></i> {{ trans('crud::messages.filter_list') }}</a></div>
                     <div class="panel-body collapse" id="filter_panel_{{ crudObj.classViewName }}_{{ scope }}">
                         <div class="col-lg-12">
-                        <form id="crud_filter_form"  data-crud_model="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.config.scope }}">
+                        <form id="crud_filter_form"  data-crud_model="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.scope }}">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
                             {% include "widgets/blocks/tbl_filter.twig"|model_view(crudObj) %}
                             <div class="modal-footer">
@@ -59,20 +59,20 @@
 
 {% macro tree(crudObj, scope) %}
     {% if scope %}
-        {{ crudObj.config.setScope(scope) }}
+        {{ crudObj.setScope(scope) }}
     {% endif %}
 
-    {%  if  crudObj.config.list.edit_tab %}
-        <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.config.scope }}">
+    {%  if  crudObj.getListConfig('edit_tab') %}
+        <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.scope }}">
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}"> <i class="fa fa-list"></i></a></li>
-                <li style="display: none" data-edit_tab_tpl="1"><div class="sk-spinner sk-spinner-pulse"></div><a style="display: none" data-toggle="tab"  href="#tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}"> <i class="fa fa-edit"></i>[ID]&nbsp;&nbsp;&nbsp;<span class="text-danger" data-confirm="Закрыть?" data-click="crud_event" data-event="crud.cancel_edit" data-rel="[REL]" title="Закрыть" style="cursor:pointer"><i class="fa fa-times"></i></span></a></li>
+                <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}"> <i class="fa fa-list"></i></a></li>
+                <li style="display: none" data-edit_tab_tpl="1"><div class="sk-spinner sk-spinner-pulse"></div><a style="display: none" data-toggle="tab"  href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}"> <i class="fa fa-edit"></i>[ID]&nbsp;&nbsp;&nbsp;<span class="text-danger" data-confirm="Закрыть?" data-click="crud_event" data-event="crud.cancel_edit" data-rel="[REL]" title="Закрыть" style="cursor:pointer"><i class="fa fa-times"></i></span></a></li>
 
 
             </ul>
 
             <div class="tab-content">
-                <div id="tab-{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" class="tab-pane active">
+                <div id="tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}" class="tab-pane active">
                     <div class="panel-body">
                         {% include "widgets/blocks/tree.twig"|model_view(crudObj) %}
                     </div>

@@ -6,21 +6,19 @@ class Range extends Field {
 
     function getValueFrom()
     {
-        if (!empty($this->value)) {
+        if (!empty($this->value))
+        {
             return explode('~',$this->value)[0];
         }
     }
 
-
     function getValueTo()
     {
-
         if (!empty($this->value))
         {
             $spl = explode('~',$this->value);
             if (isset($spl[1]))
             {
-
                 return $spl[1];
             }
         }
@@ -28,7 +26,8 @@ class Range extends Field {
 
     function getDefaultFrom()
     {
-        if (!empty($this->config['default'])) {
+        if (!empty($this->config['default']))
+        {
             return explode('~',$this->config['default'])[0];
         }
     }
@@ -56,11 +55,13 @@ class Range extends Field {
             if ($split[0] != '' && $split[1] != '')
             {
                 return ['cond' => [$col, 'BETWEEN', $split]];
-
-            } elseif ($split[0] != ''){
+            }
+            elseif ($split[0] != '')
+            {
                 return ['cond' => [$col, '>=', $split[0]]];
             }
-            elseif ($split[1] != ''){
+            elseif ($split[1] != '')
+            {
                 return ['cond' => [$col, '=<', $split[1]]];
             }
         }

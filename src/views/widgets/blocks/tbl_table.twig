@@ -1,4 +1,4 @@
-{% if crudObj.config.getTree('use_list') %}
+{% if crudObj.getTreeConfig('use_list') %}
 <ol class="breadcrumb">
     {% for bc in crudObj.breadcrumbs %}
         <li>
@@ -12,9 +12,10 @@
 </ol>
 {% endif %}
 
-<table class="table table-striped table-bordered table-hover"  data-list_uri_params="{{ crudObj.flat_tree_uri_params }}"  data-list_table_ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-crud_table="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.config.scope }}" data-btn_edit="{{ crudObj.config.list.buttons.single_edit }}" data-btn_delete="{{ crudObj.config.list.buttons.single_delete }}" data-form_type="{{ crudObj.config.list.edit_tab?'tabs':'popup' }}" data-list_actions='{{ crudObj.config.jsonSerialize().list_actions |raw }}' data-searchable="{{ crudObj.config.list.searchable }}" >
+
+<table class="table table-striped table-bordered table-hover"  data-list_uri_params="{{ crudObj.flat_tree_uri_params }}"  data-list_table_ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-crud_table="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.scope }}" data-btn_edit="{{ crudObj.getListConfig('buttons.single_edit') }}" data-btn_delete="{{ crudObj.getListConfig('buttons.single_delete') }}" data-form_type="{{ crudObj.getListConfig('edit_tab')?'tabs':'popup' }}" data-list_actions='{{ crudObj.getListConfig('list_actions')|json_encode|raw }}' data-searchable="{{ crudObj.getListConfig('searchable') }}" >
     <thead>
-    {% for c in crudObj.config.jsonSerialize().list.columns %}
+    {% for c in crudObj.getListConfig('columns') %}
         {% if not c.invisible %}
         <th {% if c.width %} width="{{ c.width }}" {% endif %} data-list_ctype="{{ c.ctype }}" data-list_orderable="{{ c.orderable }}" data-list_data="{{ c.data }}" data-list_name="{{ c.name }}" {%  if  c.default_order %} data-default_order="{{ c.default_order}}"{% endif %} >{{ c.title }} {% if c.hint %}{{ config_get('crud_tooltip.pattern')|replace({'%s': c.hint.index, '%t': c.hint.default})|raw }}{% endif %}</th>
         {% endif %}

@@ -1,5 +1,7 @@
 <?php namespace Skvn\Crud\Form;
 
+use Skvn\Crud\Exceptions\ConfigException;
+
 
 class Field
 {
@@ -10,7 +12,7 @@ class Field
     public $name;
     protected $uniqid;
 
-    function __construct(\Skvn\Crud\Form\Form $form,$config )
+    function __construct(Form $form,$config )
     {
         $this->config = $config;
         $this->form = $form;
@@ -18,7 +20,7 @@ class Field
 
         if (!$this->validateConfig())
         {
-            throw new \Exception('Column '.$this->name.' is not well described');
+            throw new ConfigException('Column '.$this->name.' is not well described');
         }
 
 

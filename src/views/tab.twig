@@ -1,5 +1,5 @@
 {% set COL_WIDTH = 6 %}
-<div id="tab_{{ crudObj.classViewName }}_{{ crudObj.config.scope }}_{{ id }}" class="tab-pane" data-edit_tab="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}_{{ id }}">
+<div id="tab_{{ crudObj.classViewName }}_{{ crudObj.scope }}_{{ id }}" class="tab-pane" data-edit_tab="{{ crudObj.classViewName }}_{{ crudObj.scope }}_{{ id }}">
 <div class="tab-panel" style="margin-top: 20px;">
 {% if form_tabbed %}
   {% include 'crud::crud/form_tabbed.twig' %}

@@ -1,7 +1,7 @@
 {% extends "crud::page.twig" %}
 {% import "crud::widgets/macro.twig" as widgets%}
-{%  set TITLE =crudObj.config.getList('title')  %}
-{%  set DESCRIPTION =crudObj.config.getList('description')  %}
+{%  set TITLE =crudObj.getListConfig('title')  %}
+{%  set DESCRIPTION =crudObj.getListConfig('description')  %}
 
 {% block content %}
 
@@ -31,7 +31,7 @@
         {#<li><a href="#">Home</a></li>#}
         {#<li>Basic</li>#}
     {#</ol>#}
-    <h1>{{ TITLE }} <a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.config.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> {{ trans('crud::messages.add') }} {{ crudObj.config.get('ent_name') }}</a></h1>
+    <h1>{{ TITLE }} <a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> {{ trans('crud::messages.add') }} {{ crudObj.confParam('ent_name') }}</a></h1>
 
 {% endblock %}
 

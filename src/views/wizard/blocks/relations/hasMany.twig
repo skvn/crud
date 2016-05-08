@@ -1,5 +1,5 @@
-<div data-relation="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_MANY') }}" {% if ADD_REL %} data-added="1" {%  else  %}id="tpl_rel_{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_MANY') }}" style="display: none" {% endif %}>
-<input type="hidden" name="relations[{{NUM}}][type]" data-attr="type" value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_MANY') }}" />
+<div data-relation="{{ constant('\\Skvn\\Crud\\Models\\CrudModel::RELATION_HAS_MANY') }}" {% if ADD_REL %} data-added="1" {%  else  %}id="tpl_rel_{{ constant('\\Skvn\\Crud\\Models\\CrudModel::RELATION_HAS_MANY') }}" style="display: none" {% endif %}>
+<input type="hidden" name="relations[{{NUM}}][type]" data-attr="type" value="{{ constant('\\Skvn\\Crud\\Models\\CrudModel::RELATION_HAS_MANY') }}" />
 <table class="table table-condensed table-striped">
     <tr>
         {% include 'crud::wizard/blocks/relations/choose_relation_title' %}

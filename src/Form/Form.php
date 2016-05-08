@@ -102,93 +102,75 @@ class Form {
                 {
                     $colConfig['column'] = $col;
                 }
-
                 $colConfig['name'] = $col;
-
                 $this->fields[$col] = FieldFactory::create($this, $colConfig);
-//                if (empty($colConfig['hidden'])) {
-//                    $this->visibleFields[$col] = $this->fields[$col];
-//                }
-
-                //set default
-
-
-                if ($data) {
-
-                    switch ($colConfig['type']) {
-
+                if ($data)
+                {
+                    switch ($colConfig['type'])
+                    {
                         case self::FIELD_RANGE:
 
                             if (!empty($data[$col]) && strpos($data[$col],'~') !== false)
                             {
-
                                 $this->fields[$col]->setValue($data[$col]);
 
-                            } else {
-
-                                if (isset($data[$col . '_from']) || isset ($data[$col . '_to'])) {
-
+                            }
+                            else
+                            {
+                                if (isset($data[$col . '_from']) || isset ($data[$col . '_to']))
+                                {
                                     $from = 0;
                                     $to = 0;
-
-                                    if (isset($data[$col . '_from'])) {
+                                    if (isset($data[$col . '_from']))
+                                    {
                                         $from = $data[$col . '_from'];
                                     }
-
-                                    if (isset($data[$col . '_to'])) {
+                                    if (isset($data[$col . '_to']))
+                                    {
                                         $to = $data[$col . '_to'];
                                     }
-
-
                                     $this->fields[$col]->setValue($from . '~' . $to);
                                 }
                             }
-
                             break;
-
                         case self::FIELD_DATE_RANGE:
-
                             if (!empty($data[$col]) && strpos($data[$col],'~') !== false)
                             {
-
                                 $this->fields[$col]->setValue($data[$col]);
-
-                            } else {
-
-                                if (isset($data[$col . '_from']) || isset ($data[$col . '_to'])) {
-
+                            }
+                            else
+                            {
+                                if (isset($data[$col . '_from']) || isset ($data[$col . '_to']))
+                                {
                                     $from = 0;
                                     $to = '';
-                                    if (isset($data[$col . '_from'])) {
+                                    if (isset($data[$col . '_from']))
+                                    {
                                         $from = strtotime($data[$col . '_from']);
                                     }
-
-                                    if (isset($data[$col . '_to'])) {
+                                    if (isset($data[$col . '_to']))
+                                    {
                                         $to = strtotime($data[$col . '_to']);
                                     }
-
                                     $this->fields[$col]->setValue($from . '~' . $to);
                                 }
-
                             }
-
                             break;
-
                         default:
-
-                            if (isset($data[$col])) {
+                            if (isset($data[$col]))
+                            {
                                 $this->fields[$col]->setValue($data[$col]);
                             }
-
                             break;
                     }
-                } else {
-
-                    if (isset($colConfig['value'])) {
+                }
+                else
+                {
+                    if (isset($colConfig['value']))
+                    {
                         $this->fields[$col]->setValue($colConfig['value']);
                     }
                 }
-
             }
         }
 
@@ -223,19 +205,28 @@ class Form {
     {
         return [
             self::FIELD_TEXT => 'Text input',
-
             self::FIELD_RANGE => 'Number range',
-
             self::FIELD_DATE_RANGE => 'Date range',
-
             self::FIELD_SELECT => 'Select',
             self::FIELD_CHECKBOX => 'Checkbox',
             //self::FIELD_FILE => 'File',
             //self::FIELD_MULTI_FILE => 'Multiple files',
-
-
         ];
     }//
+
+    static  function getAvailableRelationFieldTypes($multiple)
+    {
+        $ret =  [
+            Form::FIELD_SELECT => 'Select',
+        ];
+        if ($multiple)
+        {
+            $ret[Form::FIELD_TAGS] = 'Tags';
+        }
+
+        return $ret;
+    }
+
 
 
 } 

@@ -22,10 +22,10 @@
 
                         <select class="form-control default_select" id="rtype" style="display:inline; width:250px;"  >
                             <option value="">Choose relation type</option>
-                            <option value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_MANY') }}">Has many</option>
-                            <option value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_HAS_ONE') }}">Has one</option>
-                            <option value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO') }}">Belongs to</option>
-                            <option value="{{ constant('\\Skvn\\Crud\\CrudConfig::RELATION_BELONGS_TO_MANY') }}">Belongs to many</option>
+                            <option value="{{ constant('\\Skvn\\Crud\\Models\\CrudModel::RELATION_HAS_MANY') }}">Has many</option>
+                            <option value="{{ constant('\\Skvn\\Crud\\Models\\CrudModel::RELATION_HAS_ONE') }}">Has one</option>
+                            <option value="{{ constant('\\Skvn\\Crud\\Models\\CrudModel::RELATION_BELONGS_TO') }}">Belongs to</option>
+                            <option value="{{ constant('\\Skvn\\Crud\\Models\\CrudModel::RELATION_BELONGS_TO_MANY') }}">Belongs to many</option>
                         </select>
                         <a href="#" class="btn btn-success"  data-click="crud_action" data-action="wizard_add_relation" ><i class="fa fa-plus"></i> Add</a>
                     </label>

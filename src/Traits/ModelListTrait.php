@@ -1,6 +1,8 @@
 <?php namespace Skvn\Crud\Traits;
 
 use Skvn\Crud\Filter\FilterFactory;
+use Skvn\Crud\Exceptions\Exception as CrudException;
+use Skvn\Crud\Filter\Filter;
 
 trait ModelListTrait
 {
@@ -13,20 +15,19 @@ trait ModelListTrait
 
         if (!empty($scope))
         {
-            $this->config->setScope($scope);
-
+            $this->setScope($scope);
         }
-        $config_cols = $this->config->getList('columns');
+        $config_cols = $this->getListConfig('columns');
         $coll = $this->getListQuery($scope, $order);
-        if (!$this->isTree()) {
-
+        if (!$this->isTree())
+        {
             $coll = $this->applyQueryFilter($coll, $scope);
             $coll = $this->paginateQuery($coll, $skip, $take);
         }
         //var_dump($coll->getQuery()->toSQL());
         //var_dump($coll->getQuery()->getBindings());
         $args = $this->app['request']->all();
-        $args['buttons'] = $this->config->getList('buttons');
+        $args['buttons'] = $this->getListConfig('buttons');
 
         return $this->prepareCollectionForView($coll, $args, $viewType, $config_cols);
     }
@@ -46,24 +47,20 @@ trait ModelListTrait
 
     function getListQuery($scope=null, $order=null)
     {
-
-
         if (!empty($scope))
         {
             $method = camel_case('get_' . $scope . '_list_collection');
             $method_query = camel_case('get_' . $scope . '_list_query');
         }
-
-
         //define if need eager join
-        $listCols = $this->config->getList('columns');
+        $listCols = $this->getListConfig('columns');
         $joins =[];
-        foreach ($listCols as $listCol) {
-
-            if ($relSpl = $this->resolveListRelation($listCol['data'])) {
+        foreach ($listCols as $listCol)
+        {
+            if ($relSpl = $this->resolveListRelation($listCol['data']))
+            {
                 $joins[$relSpl[0]] = function ($query) {
                 };
-
             }
         }
 
@@ -77,22 +74,18 @@ trait ModelListTrait
         }
         else
         {
-
             return $this->getBasicListQuery($joins);
-
         }
     }//
 
 
     function getBasicListQuery($joins)
     {
-        $sort = $this->config->getList('sort');
-
+        $sort = $this->getListConfig('sort');
         $basic = self::query();
 
         if (count($joins))
         {
-
             $basic = $basic->with($joins);
         }
 
@@ -100,14 +93,15 @@ trait ModelListTrait
         {
             $basic->orderBy($this->getColumnTreePath() , 'asc');
             $basic->orderBy($this->getColumnTreeOrder(), 'asc');
-
-        } else {
-
-            if (!empty($sort)) {
-                foreach ($sort as $o => $v) {
+        }
+        else
+        {
+            if (!empty($sort))
+            {
+                foreach ($sort as $o => $v)
+                {
                     $basic->orderBy($o, $v);
                 }
-
             }
         }
 
@@ -120,7 +114,6 @@ trait ModelListTrait
         if ($take>0)
         {
             $coll = $coll->skip($skip)->take($take);
-
         }
 
         return $coll;
@@ -128,27 +121,23 @@ trait ModelListTrait
 
     public  function applyQueryFilter($coll, $scope)
     {
-        //$context = $this->purifyContext($context);
         $this->initFilter($scope);
-
-        //$scope = $this->purifyContext($context);
-
-
-        if (!empty($scope)) {
-
+        if (!empty($scope))
+        {
             $methodCond = camel_case('append_' . $scope . '_conditions');
         }
-
         $conditions = $this->filterObj->getConditions();
         if (method_exists($this,$methodCond))
         {
             $conditions= $this->$methodCond($conditions);
-        } else {
+        }
+        else
+        {
             $conditions = $this->appendConditions($conditions);
         }
 
-
-        if (is_array($conditions)) {
+        if (is_array($conditions))
+        {
             $coll = $this->applyConditions($coll, $conditions);
             $coll->cnt = $coll->count();
         }
@@ -160,7 +149,6 @@ trait ModelListTrait
 
     public  function appendConditions($conditions)
     {
-
         return $conditions;
     }
 
@@ -168,20 +156,22 @@ trait ModelListTrait
     {
         $conditions = $this->preApplyConditions($coll,$conditions);
 
-        foreach ($conditions as $cond) {
-
-            if (empty($cond['join'])) {
-
-                if (!empty($cond['cond'])) {
+        foreach ($conditions as $cond)
+        {
+            if (empty($cond['join']))
+            {
+                if (!empty($cond['cond']))
+                {
                     $coll = $this->applyFilterWhere($coll, $cond['cond']);
                 }
-            } else {
+            }
+            else
+            {
                 //use joins
                 $coll-> whereHas($cond['join'], function($query) use ($cond) {
                     $query = $this->applyFilterWhere($query, $cond['cond']);
                 });
             }
-
         }
 
         return $coll;
@@ -209,17 +199,17 @@ trait ModelListTrait
                     if ($i ==0)
                     {
                         $query = $this->applyFilterWhere($query,$one_cond);
-                    } else {
+                    }
+                    else
+                    {
                         $query = $this->applyFilterOrWhere($query,$one_cond);
                     }
-
                 }
             };
-
             $coll->where($or_where);
-
-        } else {
-
+        }
+        else
+        {
             //simple and
             list($col, $act, $val) = $cond;
             switch (strtolower($act))
@@ -264,23 +254,20 @@ trait ModelListTrait
     }
 
 
-    public function initFilter(/*$scope = CrudConfig :: DEFAULT_SCOPE*/)
+    public function initFilter()
     {
 
-        //$listOrContext = $this->purifyContext($listOrContext);
-//        if ($scope != CrudConfig :: T_LIST) {
-        //$this->config->setScope($scope);
-//        }
 
-        $filter =  FilterFactory::create($this, $this->config->getScope());
+        $filter =  FilterFactory::create($this, $this->getScope());
         $this->setFilter($filter);
     }
 
-    public function setFilter(\Skvn\Crud\Filter\Filter $filterObj)
+    public function setFilter(Filter $filterObj)
     {
         $this->filterObj = $filterObj;
         $this->filterObj->setModel($this);
     }
+
     public  function getFilter()
     {
         if (!$this->filterObj)
@@ -326,15 +313,15 @@ trait ModelListTrait
 
     public  function prepareCollectionForDT($coll, $args, $config_cols)
     {
-
-
         $columns = $args['columns'];
 
         if (!empty($args['order']))
         {
             $order = $args['order'];
-            if (is_array($order)) {
-                foreach ($order as $oc) {
+            if (is_array($order))
+            {
+                foreach ($order as $oc)
+                {
                     $coll->orderBy(!empty($columns[$oc['column']]['name']) ? $columns[$oc['column']]['name'] : $columns[$oc['column']]['data'], $oc['dir']);
                 }
             }
@@ -342,10 +329,11 @@ trait ModelListTrait
 
         $data = [];
 
-
-        if ($coll->cnt) {
+        if ($coll->cnt)
+        {
             $total = $coll->cnt;
-        } else
+        }
+        else
         {
             $total = 0;
         }
@@ -356,14 +344,10 @@ trait ModelListTrait
         foreach ($coll as $obj)
         {
             $row = [];
-
             foreach ($columns as $col)
             {
-
                 $row[$col['data']] = '';
                 $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
-
-
             }
             foreach ($config_cols as $col)
             {
@@ -385,22 +369,16 @@ trait ModelListTrait
 
     public  function prepareCollectionForTree($coll, $args, $columns)
     {
-
         $data = $coll->get();
         $ret = [];
         foreach ($data as $row)
         {
-
             $text = $row->getTitle();
-
-
             if (!empty($columns))
             {
                 foreach ($columns as $col)
                 {
-
                     $text .= " <span class=\"badge\">".$row->getDescribedColumnValue($col['data'])."</span>";
-
                 }
             }
             if (!empty($args['buttons']['single_edit']))
@@ -411,15 +389,11 @@ trait ModelListTrait
             {
                 $text .= "&nbsp;&nbsp;<a class=\"text-danger\" data-confirm=\"".trans('crud::messages.really_delete')."?\" data-id=\"".$row->id."\" data-click=\"crud_event\" data-event=\"crud.delete_tree_element\" ><i class=\"fa fa-trash-o\"> </i></a>";
             }
-
             $node = [
                 'id'=>$row->id,
                 'text'=>$text,
                 'parent'=>($row->getAttribute($row->getColumnTreePid())==0?'#':$row->getAttribute($row->getColumnTreePid())),
-
-
             ];
-
             $ret[] = $node;
         }
 
@@ -428,7 +402,6 @@ trait ModelListTrait
 
     public   function prepareCollectionForTreeFlat($coll, $args)
     {
-
         return $coll->get();
 //        $ret = [];
 //        foreach ($coll as $root)
@@ -437,8 +410,35 @@ trait ModelListTrait
 //        }
 //
 //        return $ret;
-
     }
+
+    function getAutocompleteList($query)
+    {
+        if (empty($this->config['title_field']))
+        {
+            throw new CrudException('Unable to init AutocompleteList: title_field is not configured');
+        }
+
+        if (!empty($query))
+        {
+            return self::where($this->config['title_field'], 'LIKE', $query . '%')
+                ->pluck($this->config['title_field']);
+        }
+
+        return [];
+    }
+
+    function getListDefaultFilter()
+    {
+        if (!empty($this->config['list'][$this->scope]['filter_default']))
+        {
+            return $this->config['list'][$this->scope]['filter_default'];
+        }
+
+        return [];
+    }
+
+
 
 
 }

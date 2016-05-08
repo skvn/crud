@@ -1,6 +1,5 @@
 <?php namespace Skvn\Crud\Helper;
 
-use Skvn\Crud\CrudConfig;
 use Skvn\Crud\Models\CrudModel;
 
 class CrudHelper {
@@ -12,9 +11,6 @@ class CrudHelper {
     {
         $this->app = $app;
     }
-
-
-
 
     private function flattenKids(& $tree, $node )
     {
@@ -28,8 +24,6 @@ class CrudHelper {
         }
 
     }
-
-
 
 //    public  function prepareCollectionRaw($coll, $columns)
 //    {
@@ -83,7 +77,7 @@ class CrudHelper {
     function resolveModelView(CrudModel $model, $view)
     {
         $hints = $this->app['view']->getFinder()->getHints();
-        $key = "crud." . $model->classViewName . "." . $model->config->getScope();
+        $key = "crud." . $model->classViewName . "." . $model->getScope();
         $source = isset($hints[$key]) ? $hints[$key] : [];
         if (empty($source))
         {
@@ -92,7 +86,7 @@ class CrudHelper {
                 '/crud',
                 '/crud/models',
                 '/crud/models/' . $model->classViewName,
-                '/crud/models/' . $model->classViewName . '/' . $model->config->getScope(),
+                '/crud/models/' . $model->classViewName . '/' . $model->getScope(),
             ];
             foreach ($this->app['config']['view.paths'] as $path)
             {
@@ -132,7 +126,7 @@ class CrudHelper {
         return $this->app['config']['crud_common.model_namespace'] . '\\' . studly_case($model);
     }
 
-    function getModelInstance($model, $scope = CrudConfig :: DEFAULT_SCOPE, $id = null)
+    function getModelInstance($model, $scope = CrudModel :: DEFAULT_SCOPE, $id = null)
     {
         $class = $this->getModelClass($model);
         if (!empty($id))
@@ -143,7 +137,7 @@ class CrudHelper {
         {
             $obj = $this->app->make($class);
         }
-        $obj->config->setScope($scope);
+        $obj->setScope($scope);
         return $obj;
     }
 

@@ -1,11 +1,11 @@
-<div class="modal-dialog  {% if crudObj.config.get('dialog_class') %} {{ crudObj.config.get('dialog_class') }} {% endif %}" {{ crudObj.config.get('dialog_width') ? ('style="width: '~crudObj.config.get('dialog_width')~'px;"')|raw }}>
+<div class="modal-dialog  {% if crudObj.confParam('dialog_class') %} {{ crudObj.confParam('dialog_class') }} {% endif %}" {{ crudObj.confParam('dialog_width') ? ('style="width: '~crudObj.confParam('dialog_width')~'px;"')|raw }}>
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Данные {{ crudObj.config.get('ent_name_r') }}</h4>
+            <h4 class="modal-title">Данные {{ crudObj.confParam('ent_name_r') }}</h4>
         </div>
 
-        <div class="modal-body" data-crud_model="{{ crudObj.config.get('class_name') }}" data-crud_id="{{ id }}">
+        <div class="modal-body" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}">
             
         </div>
     </div>

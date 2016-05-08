@@ -102,6 +102,7 @@ class Common extends Twig_Extension
             new Twig_SimpleFunction('snake_case', 'snake_case'),
             new Twig_SimpleFunction('camel_case', 'camel_case'),
             new Twig_SimpleFunction('studly_case', 'studly_case'),
+            new Twig_SimpleFunction('crud_dump', function ($v) {return '<pre>' . print_r($v, true) . '</pre>';}, ['is_safe' => ["html"]]),
 
         ];
     }

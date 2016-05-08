@@ -10,6 +10,7 @@ class FieldFactory
     {
 
         $type = 'Skvn\Crud\Form\\'.studly_case($config['type']);
+        //$type = studly_case($config['type']);
         return new $type($form, $config);
     }
 

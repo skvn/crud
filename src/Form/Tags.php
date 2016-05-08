@@ -1,8 +1,6 @@
 <?php namespace Skvn\Crud\Form;
 
 
-use Skvn\Crud\CrudConfig;
-
 class Tags extends Field {
 
 
@@ -15,7 +13,7 @@ class Tags extends Field {
             $ids = $this->form->crudObj->getRelationIds($this->getName());
             if (count($ids)) {
                 $collection = $class::find($ids);
-                $this->value = $collection->pluck($dummyModel->config->get('title_field'));
+                $this->value = $collection->pluck($dummyModel->confParam('title_field'));
             }
         }
 
@@ -32,7 +30,7 @@ class Tags extends Field {
             $ids = [];
             foreach ($split as $title) {
                 $title = trim($title);
-                $obj = $class::firstOrCreate([$dummyModel->config->get('title_field') => $title]);
+                $obj = $class::firstOrCreate([$dummyModel->confParam('title_field') => $title]);
                 $ids[] = $obj->id;
             }
 

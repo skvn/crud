@@ -1,6 +1,5 @@
 <?php namespace Skvn\Crud\Wizard;
 
-use Skvn\Crud\CrudConfig;
 use Skvn\Crud\Form\Form;
 
 
@@ -329,7 +328,7 @@ class Wizard
      */
     function getAvailableRelationFieldTypes($multiple=false)
     {
-        return CrudConfig::getAvailableRelationFieldTypes($multiple);
+        return Form::getAvailableRelationFieldTypes($multiple);
     }
 
     /**

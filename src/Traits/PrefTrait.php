@@ -5,12 +5,12 @@ trait PrefTrait
     protected $__prefs = null;
 
 
-    function crudPrefFilterTableColumns($columns, $config)
+    function crudPrefFilterTableColumns($columns, $model)
     {
         $cols = array();
         foreach ($columns as $column)
         {
-            if (!empty($column['ctype']) || $config->isColumnVisible($column['data']))
+            if (!empty($column['ctype']) || $model->isColumnVisible($column['data']))
             {
                 $cols[] = $column;
             }
@@ -52,7 +52,7 @@ trait PrefTrait
         {
             throw new \Exception("Model for preferences not found");
         }
-        return $data['model'] . "::" . (empty($data['scope']) ? \Skvn\Crud\CrudConfig :: DEFAULT_SCOPE : $data['scope']);
+        return $data['model'] . "::" . (empty($data['scope']) ? \Skvn\Crud\Models\CrudModel :: DEFAULT_SCOPE : $data['scope']);
     }
 
     protected function crudPrefGet($type, $scope)

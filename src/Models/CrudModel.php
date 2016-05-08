@@ -1,30 +1,38 @@
 <?php namespace Skvn\Crud\Models;
 
 use \Illuminate\Database\Eloquent\Model;
-use Skvn\Crud\CrudConfig;
-use Skvn\Crud\Exceptions\Exception as CrudException;
-use Skvn\Crud\Form\FieldFactory;
 use Skvn\Crud\Form\Form;
 use Skvn\Crud\Traits\ModelListTrait;
+use Skvn\Crud\Traits\ModelConfigTrait;
+use Skvn\Crud\Traits\ModelRelationTrait;
 use Illuminate\Support\Collection ;
+use Illuminate\Container\Container;
+
 
 
 
 class CrudModel extends Model
 {
     use ModelListTrait;
+    use ModelConfigTrait;
+    use ModelRelationTrait;
 
     //use SoftDeletingTrait;
 
-    protected $app;
+    const RELATION_BELONGS_TO_MANY = 'belongsToMany';
+    const RELATION_BELONGS_TO = 'belongsTo';
+    const RELATION_HAS_MANY = 'hasMany';
+    const RELATION_HAS_ONE = 'hasOne';
 
-    public $config;
+    const DEFAULT_SCOPE = 'default';
+
+
+
+
+    protected $app;
     protected $dirtyRelations = [];
-    public $classShortName;
-    public $classViewName;
     protected $filterObj;
     protected $form;
-    protected $crudRelations;
     protected $codeColumn = 'id';
 
     protected $errors;
@@ -33,43 +41,14 @@ class CrudModel extends Model
     protected $validator;
     protected $form_fields_collection;
 
-    /* Flag for tracking created_by  and updated_by */
-    protected $track_authors = false;
 
 
 
     public function __construct(array $attributes = array(), $validator = null)
     {
-        $this->app = app();
+        $this->app = Container :: getInstance();
 
-        $this->classShortName = class_basename($this);
-        $this->classViewName = snake_case($this->classShortName);
-        $this->config = new CrudConfig($this);
-
-        if (empty($this->table))
-        {
-            if (!$this->config->exists('table'))
-            {
-                $this->table = $this->classViewName;
-            }
-            else
-            {
-                $this->table = $this->config->get('table');
-            }
-        }
-
-        if ($this->config->exists('timestamps'))
-        {
-            $this->timestamps = $this->config->get('timestamps');
-        }
-
-        if ($this->config->exists('authors'))
-        {
-            $this->track_authors = $this->config->get('authors');
-        }
-
-        $this->fillable = $this->config->getFillable();
-        $this->crudRelations = $this->config->getCrudRelations();
+        $this->initConfig();
 
         if ($this->isTree())
         {
@@ -158,21 +137,24 @@ class CrudModel extends Model
 
     protected  function onBeforeSave()
     {
-        if ($this->validate()) {
+        if ($this->validate())
+        {
             $dirty = $this->getDirty();
 
             //process dirty attributes
-            if (count($dirty)) {
+            if (count($dirty))
+            {
                 $this->getForm($dirty, true);
-                if (!empty($this->form->fields) && is_array($this->form->fields)) {
-                    foreach ($dirty as $k => $v) {
-
-                        if (isset($this->form->fields[$k])) {
-
+                if (!empty($this->form->fields) && is_array($this->form->fields))
+                {
+                    foreach ($dirty as $k => $v)
+                    {
+                        if (isset($this->form->fields[$k]))
+                        {
                             $field = $this->form->fields[$k];
                             $val = $field->getValueForDb();
-                            if ($val !== $v) {
-
+                            if ($val !== $v)
+                            {
                                 $this->setAttribute($k, $val);
                             }
                         }
@@ -196,21 +178,24 @@ class CrudModel extends Model
         return $this->saveRelations();
     }
 
+    function getApp()
+    {
+        return $this->app;
+    }
+
 
 
     public function fillFromRequest(array $attributes)
     {
-
-
-
-        foreach ($attributes as $k=>$v) {
-            if (array_key_exists($k,$this->config->getProcessableRelations()))
+        foreach ($attributes as $k=>$v)
+        {
+            if (array_key_exists($k, $this->processableRelations))
             {
                 $this->dirtyRelations[$k] = $v;
             }
         }
 
-        foreach ($this->config->getProcessableRelations() as $k=>$v)
+        foreach ($this->processableRelations as $k=>$v)
         {
             if (!array_key_exists($k,$attributes))
             {
@@ -218,9 +203,7 @@ class CrudModel extends Model
             }
         }
 
-
         return parent::fill($attributes);
-
     }
 
 
@@ -228,14 +211,17 @@ class CrudModel extends Model
     public function setCreatedAtAttribute($value)
     {
 
-        $type = $this->config->get('timestamps_type');
-        if (!$type || $type == 'int') {
-            if (is_object($value)) {
+        $type = $this->confParam('timestamps_type');
+        if (!$type || $type == 'int')
+        {
+            if (is_object($value))
+            {
                 $value = $value->timestamp;
-            } else {
+            }
+            else
+            {
                 $value = strtotime($value);
             }
-
         }
 
         $this->attributes['created_at'] = $value;
@@ -243,12 +229,15 @@ class CrudModel extends Model
 
     public function setUpdatedAtAttribute($value)
     {
-
-        $type = $this->config->get('timestamps_type');
-        if (!$type || $type == 'int') {
-            if (is_object($value)) {
+        $type = $this->confParam('timestamps_type');
+        if (!$type || $type == 'int')
+        {
+            if (is_object($value))
+            {
                 $value = $value->timestamp;
-            } else {
+            }
+            else
+            {
                 $value = strtotime($value);
             }
         }
@@ -257,30 +246,20 @@ class CrudModel extends Model
     }
 
 
-
-//
-//    public function scopeSelect($query, $title = 'Select') {
-//        $selectVals[''] = $title;
-//        $selectVals += $this->lists($this->config->get('title_field'), 'id');
-//        return $selectVals;
-//    }
-
     /**
      *  Save relations
      */
 
     public function saveRelations()
     {
+        $formConf = $this->getFields();
 
-
-        $formConf = $this->config->getFields();
-
-        if ($this->dirtyRelations  && is_array($this->dirtyRelations )) {
-
+        if ($this->dirtyRelations  && is_array($this->dirtyRelations ))
+        {
             $form = $this->getForm($this->dirtyRelations, true);
 
-            foreach ($this->dirtyRelations as $k => $v) {
-
+            foreach ($this->dirtyRelations as $k => $v)
+            {
                 if (!empty($form->fields[$k]))
                 {
                     $v = $form->fields[$k]->getValueForDb();
@@ -288,17 +267,17 @@ class CrudModel extends Model
 
                 switch ($this->config->getCrudRelations()[$k]) {
 
-                    case 'hasOne':
+                    case self :: RELATION_HAS_ONE:
                         $class = $this->app['skvn.crud']->getModelClass($formConf[$k]['model']);
                         $relObj = $class::find($v);
                         $relObj->setAttribute($formConf[$k]['ref_column'], $this->id);
                         $relObj->save();
                     break;
 
-                    case 'hasMany':
+                    case self :: RELATION_HAS_MANY:
                         $class = $this->app['skvn.crud']->getModelClass($formConf[$k]['model']);
-                        //$class = '\App\Model\\' . $formConf[$k]['model'];
-                        if (is_array($v)) {
+                        if (is_array($v))
+                        {
                             $oldIds = $this->$k()->lists('id');
                             foreach ($v as $id) {
 
@@ -307,17 +286,22 @@ class CrudModel extends Model
                             }
                             $toUnlink = array_diff($oldIds, $v);
 
-                        } else {
+                        }
+                        else
+                        {
                             $toUnlink = $this->$k()->lists('id');
-
                         }
 
-                        if ($toUnlink && is_array($toUnlink)) {
-                            foreach ($toUnlink as $id) {
-                                if (!empty($formConf[$k]['ref_column'])) {
+                        if ($toUnlink && is_array($toUnlink))
+                        {
+                            foreach ($toUnlink as $id)
+                            {
+                                if (!empty($formConf[$k]['ref_column']))
+                                {
                                     $col = $formConf[$k]['ref_column'];
-                                } else {
-
+                                }
+                                else
+                                {
                                     $col = snake_case($this->classShortName . 'Id');
                                 }
                                 $obj = $class::find($id);
@@ -327,12 +311,13 @@ class CrudModel extends Model
                         }
 
                         break;
-                    case 'belongsToMany':
-
-                        if (is_array($v)) {
-
+                    case self :: RELATION_BELONGS_TO_MANY:
+                        if (is_array($v))
+                        {
                             $this->$k()->sync($v);
-                        } else {
+                        }
+                        else
+                        {
                             $this->$k()->sync([]);
                         }
                         //$this->load($k);
@@ -348,10 +333,10 @@ class CrudModel extends Model
 
     public function __call($method, $parameters)
     {
-        if (array_key_exists($method, $this->config->getCrudRelations()))
+        if (array_key_exists($method, $this->crudRelations))
         {
-            $relType =  $this->config->getCrudRelations()[$method];
-            $relAttributes = $this->config->getColumn($method);
+            $relType =  $this->crudRelations[$method];
+            $relAttributes = $this-getColumn($method);
 
             return $this->createCrudRelation($relType, $relAttributes, $method);
 
@@ -361,21 +346,19 @@ class CrudModel extends Model
 
     private function createCrudRelation($relType, $relAttributes, $method)
     {
-
-
         switch ($relType)
         {
-            case \Skvn\Crud\CrudConfig::RELATION_BELONGS_TO:
+            case self::RELATION_BELONGS_TO:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],$relAttributes['column_index'], null, $method);
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $relAttributes['column_index'], null, $method);
             break;
 
-            case \Skvn\Crud\CrudConfig::RELATION_HAS_ONE:
+            case self::RELATION_HAS_ONE:
                 $ref_col = (!empty($relAttributes['ref_column'])?$relAttributes['ref_column']:null);
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']),  $ref_col);
                 break;
 
-            case \Skvn\Crud\CrudConfig::RELATION_BELONGS_TO_MANY:
+            case self::RELATION_BELONGS_TO_MANY:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],null, null, null, $method);
                 $pivot_table = (!empty($relAttributes['pivot_table'])?$relAttributes['pivot_table']:null);
                 $pivot_self_column = (!empty($relAttributes['pivot_self_key'])?$relAttributes['pivot_self_key']:null);
@@ -383,7 +366,7 @@ class CrudModel extends Model
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $pivot_table, $pivot_self_column, $pivot_foreign_column, $method);
                 break;
 
-            case \Skvn\Crud\CrudConfig::RELATION_HAS_MANY:
+            case self::RELATION_HAS_MANY:
                 $ref_col = (!empty($relAttributes['ref_column'])?$relAttributes['ref_column']:null);
                 return $this->$relType($this->app['skvn.crud']->getModelClass($relAttributes['model']), $ref_col );
                 break;
@@ -398,12 +381,10 @@ class CrudModel extends Model
     }
     public function getAttribute($key)
     {
-
-
-        if (array_key_exists($key, $this->config->getCrudRelations()))
+        if (array_key_exists($key, $this->crudRelations))
         {
-
-            if ( ! array_key_exists($key, $this->relations)) {
+            if ( ! array_key_exists($key, $this->relations))
+            {
                 $camelKey = camel_case($key);
 
                 return $this->getRelationshipFromMethod($key, $camelKey);
@@ -430,23 +411,12 @@ class CrudModel extends Model
         return $data;
     }
 
-//    public function getInputValue($column, $value=null)
-//    {
-//        if ($value)
-//        {
-//            return $value;
-//        }
-//
-//        return $this->getAttribute($column);
-//    }
-
-
     public function getForm($fillData=null, $forceNew=false)
     {
         if ($forceNew ||  !$this->form)
         {
 
-            $this->form = new Form($this,$this->config->getForm(), $fillData);
+            $this->form = new Form($this,$this->getFormConfig(), $fillData);
         }
 
         return $this->form;
@@ -454,99 +424,35 @@ class CrudModel extends Model
 
     public function getFieldsObjects($fillData=null)
     {
-        if (!$this->form_fields_collection) {
-            $form = new Form($this, $this->config->getFields(), $fillData);
+        if (!$this->form_fields_collection)
+        {
+            $form = new Form($this, $this->getFields(), $fillData);
             $this->form_fields_collection = $form->fields;
         }
 
         return $this->form_fields_collection;
-
-    }
-
-//    protected  function purifyContext($context)
-//    {
-//
-//        if (strpos($context, ':') !== false)
-//        {
-//
-//            $context = str_replace($this->classShortName.':','',$context);
-//
-//        }
-//        return $context;
-//    }
-
-    function isTree()
-    {
-        return $this->config->get('tree') && !$this->config->get('tree')['use_list'];
     }
 
     function getTitle()
     {
-        $title = ($this->config->get('title_field')?$this->config->get('title_field'):'title');
-        return $this->getAttribute($title);
+        $param = $this->confParam('title_field', 'title');
+        return $this->getAttribute($param);
     }
 
-    /**
-     * returns value by a config style declaration
-     * @param $col
-     *
-     */
-    function getDescribedColumnValue($col)
-    {
-
-
-        if ($relSpl = $this->resolveListRelation($col))
-        {
-
-            $rel = $relSpl[0];
-            $attr = $relSpl[1];
-
-            return $this->$rel->$attr;
-            
-
-        } else {
-            if ($this->__isset($col)) {
-                $form_config = $this->config->getFields($col);
-                if ($form_config && !empty($form_config['type']))
-                {
-                    $form_config['name'] = $col;
-                    $field = FieldFactory::create($this->getForm(), $form_config);
-                    return $field->getValueForList();
-                }
-                return $this->$col;
-            } else {
-                $meth = camel_case('get_' . $col);
-                if (method_exists($this, $meth)) {
-                    return $this->$meth();
-                }
-            }
-        }
-    }
 
     function checkAcl($access = "")
     {
-
-        if (!$this->config->get('acl'))
+        if (empty($this->config['acl']))
         {
             return true;
         }
-        return $this->app['skvn.cms']->checkAcl($this->config->get('acl'), $access);
+        return $this->app['skvn.cms']->checkAcl($this->config['acl'], $access);
     }
 
     function getInternalCodeAttribute()
     {
         return $this->attributes[$this->codeColumn];
     }
-
-    private function resolveListRelation($alias)
-    {
-        if (strpos($alias,'::') !== false)
-        {
-            return explode('::',$alias);
-        }
-        return false;
-    }
-
 
 
     public function validate()
@@ -579,24 +485,26 @@ class CrudModel extends Model
     }
 
 
-    function attrModelName()
-    {
-        return snake_case($this->classShortName);
-    }
+//    function offsetExists($offset)
+//    {
+//        return parent :: offsetExists($offset);
+//    }
+//
+//    function offsetGet($offset)
+//    {
+//        return parent :: offsetGet($offset);
+//    }
 
-    function getAutocompleteList($query)
+    public function __get($key)
     {
-        if (!$this->config->get('title_field'))
+        //FIXME: backward compability
+        if ($key == "config")
         {
-            throw new CrudException('Unable to init AutocompleteList: title_field is not configured');
+            return $this->objectifyConfig();
         }
-
-        if (!empty($query)) {
-            return self::where($this->config->get('title_field'), 'LIKE', $query . '%')
-                ->pluck($this->config->get('title_field'));
-        }
-
-        return [];
+        return parent :: __get($key);
     }
+
+
 
 }

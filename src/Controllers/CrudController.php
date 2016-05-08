@@ -5,7 +5,7 @@ use League\Flysystem\Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Skvn\Crud\Models\CrudNotify as Notify;
-use Skvn\Crud\CrudConfig;
+use Skvn\Crud\Models\CrudModel;
 
 class CrudController extends Controller
 {
@@ -30,7 +30,7 @@ class CrudController extends Controller
     }
 
 
-    function crudIndex($model, $scope = CrudConfig :: DEFAULT_SCOPE, $args = [])
+    function crudIndex($model, $scope = CrudModel :: DEFAULT_SCOPE, $args = [])
     {
         $obj = $this->helper->getModelInstance($model, $scope);
 
@@ -47,7 +47,7 @@ class CrudController extends Controller
     }//
 
 
-    function crudTree($model, $scope = CrudConfig :: DEFAULT_SCOPE)
+    function crudTree($model, $scope = CrudModel :: DEFAULT_SCOPE)
     {
         $obj = $this->helper->getModelInstance($model, $scope);
 
@@ -98,10 +98,10 @@ class CrudController extends Controller
     function crudEdit($model,$id)
     {
 
-        $obj = $this->helper->getModelInstance($model, $this->app['request']->get('scope', CrudConfig :: DEFAULT_SCOPE), $id);
+        $obj = $this->helper->getModelInstance($model, $this->app['request']->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
         //$class = 'App\Model\\'.studly_case($model);
         //$obj = $class::firstOrNew(['id'=>(int)$id]);
-        //$scope = \Input::get('scope', CrudConfig :: DEFAULT_SCOPE);
+        //$scope = \Input::get('scope', CrudModel :: DEFAULT_SCOPE);
         //$obj->config->setScope($scope);
 
 
@@ -121,8 +121,8 @@ class CrudController extends Controller
             }
         }
         //return \View::make($this->crudHelper->resolveModelTemplate($model,$obj->config->get('tabs') ? 'edit_tabs' : 'edit'),['crudObj'=>$obj,'id'=>$id]);
-        $edit_view = $obj->config->getList('edit_tab')?'tab':'edit';
-        return $this->app['view']->make($this->helper->resolveModelView($obj,$edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$obj->config->getScope(), 'form_tabbed'=>$obj->config->getList('form_tabbed')]);
+        $edit_view = $obj->getListConfig('edit_tab')?'tab':'edit';
+        return $this->app['view']->make($this->helper->resolveModelView($obj,$edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$obj->getScope(), 'form_tabbed'=>$obj->getListConfig('form_tabbed')]);
 
     }
 
@@ -130,7 +130,7 @@ class CrudController extends Controller
     {
 
         try {
-            $obj = $this->helper->getModelInstance($model, CrudConfig :: DEFAULT_SCOPE, $id);
+            $obj = $this->helper->getModelInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
 //            $class = 'App\Model\\' .studly_case($model);
 //            $obj = $class::firstOrNew(['id'=>(int)$id]);
 
@@ -221,7 +221,7 @@ class CrudController extends Controller
     {
 
         try {
-            $obj = $this->helper->getModelInstance($model, CrudConfig :: DEFAULT_SCOPE, $id);
+            $obj = $this->helper->getModelInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
 
             if (!$obj->checkAcl())
             {
@@ -244,7 +244,7 @@ class CrudController extends Controller
         $parent_id = $this->app['request']->get('parent_id');
         $position = $this->app['request']->get('position');
 
-        $obj = $this->helper->getModelInstance($model, CrudConfig :: DEFAULT_SCOPE, $id);
+        $obj = $this->helper->getModelInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
 
         if (!$obj->checkAcl())
         {
