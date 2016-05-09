@@ -100,77 +100,15 @@ trait ModelConfigTrait
             $this->track_authors = $this->config['authors'];
         }
 
-        //FIXME
-        //Back compability. Should be removed after projects update
-//        $obj = $this;
-//        $this->config['jsonSerialize()'] = ['dasdad' => 'dasdas'];
-//        $this->config['jsonSerialize1'] = function() use ($obj){
-//            $c = [];
-//            $c['list'] = $obj->getListConfig();
-//            if (!empty($c['list']['multiselect']))
-//            {
-//                array_unshift($c['list']['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
-//            }
-//            if (!empty($c['list']['buttons']['single_edit'])
-//                || !empty($c['list']['buttons']['single_delete'])
-//                || !empty($c['list']['list_actions'])
-//
-//            )
-//            {
-//                $c['list']['columns'][] = [ "data"=>"actions", "orderable"=>false,'title'=>'  ', 'width'=>50, 'ctype'=>'actions'];
-//            }
-//
-//            foreach($c['list']['columns'] as $k=>$col)
-//            {
-//                if (empty($col['title']))
-//                {
-//                    $cdesc = $obj->getColumn($col['data']);
-//                    if (!empty($cdesc['title']))
-//                    {
-//                        $c['list']['columns'][$k]['title'] = $cdesc['title'];
-//                    }
-//                }
-//                if (!empty($col['hint']) && empty($col['hint']['index']))
-//                {
-//                    $c['list']['columns'][$k]['hint']['index'] = $obj->classViewName.'_'.$obj->scope.'_'.$col['data'];
-//                }
-//                if (!empty($col['acl']) && !$obj->getApp()['skvn.cms']->checkAcl($col['acl'], 'r'))
-//                {
-//                    unset($c['list']['columns'][$k]);
-//                }
-//            }
-//            $c['filter'] = $obj->getFilter();
-//            if ($obj->getApp()['auth']->check())
-//            {
-//                $user = $obj->getApp()['auth']->user();
-//                if ($user instanceof \Skvn\Crud\Contracts\PrefSubject)
-//                {
-//                    $cols = $user->crudPrefFilterTableColumns($c['list']['columns'], $obj);
-//                    foreach($c['list']['columns'] as $col)
-//                    {
-//                        if (!empty($col['invisible']))
-//                        {
-//                            $cols[] = $col;
-//                        }
-//                    }
-//                    $c['list']['columns'] = $cols;
-//                }
-//            }
-//
-//            if (!empty($c['list']['list_actions']))
-//            {
-//                $c['list_actions'] = json_encode($c['list']['list_actions']);
-//            }
-//            else
-//            {
-//                $c['list_actions'] = "";
-//            }
-//
-//
-//            $c['list_name'] = $obj->getListName();
-//            $c['scope'] = $obj->scope;
-//            return $c;
-//        };
+        if ($this->isTree())
+        {
+            $this->fillable[] = $this->columnTreePid;
+            $this->fillable[] = $this->columnTreeOrder;
+            $this->fillable[] = $this->columnTreePath ;
+            $this->fillable[] = $this->columnTreeDepth;
+        }
+
+
     }
 
     function objectifyConfig()
