@@ -271,7 +271,7 @@ class CrudModel extends Model
         if (array_key_exists($method, $this->crudRelations))
         {
             $relType =  $this->crudRelations[$method];
-            $relAttributes = $this-getColumn($method);
+            $relAttributes = $this->getColumn($method);
 
             return $this->createCrudRelation($relType, $relAttributes, $method);
 

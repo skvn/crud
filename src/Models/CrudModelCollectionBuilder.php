@@ -83,6 +83,11 @@ class CrudModelCollectionBuilder
         return $this;
     }
 
+    function getCollection()
+    {
+        return $this->collection;
+    }
+
     function createBasicListQuery($joins)
     {
         $sort = $this->model->getListConfig('sort');
@@ -147,14 +152,14 @@ class CrudModelCollectionBuilder
             {
                 if (!empty($cond['cond']))
                 {
-                    $this->applyFilterWhere($this->collection, $cond['cond']);
+                    $this->applyFilterWhere($cond['cond']);
                 }
             }
             else
             {
                 //use joins
                 $this->collection->whereHas($cond['join'], function($query) use ($cond) {
-                    $query = $this->applyFilterWhere($query, $cond['cond']);
+                    $this->applyFilterWhere($cond['cond']);
                 });
             }
         }
@@ -162,11 +167,11 @@ class CrudModelCollectionBuilder
         return $this;
     }//
 
-    function applyFilterWhere($coll, $cond)
+    function applyFilterWhere($cond)
     {
         if (is_string($cond))
         {
-            $coll->whereRaw($cond);
+            $this->collection->whereRaw($cond);
         }
         else if (is_array($cond[0]))
         {
@@ -177,15 +182,15 @@ class CrudModelCollectionBuilder
                     list($col, $act, $val) = $one_cond;
                     if ($i ==0)
                     {
-                        $query = $this->applyFilterWhere($query,$one_cond);
+                        $this->applyFilterWhere($one_cond);
                     }
                     else
                     {
-                        $query = $this->applyFilterOrWhere($query,$one_cond);
+                        $this->applyFilterOrWhere($one_cond);
                     }
                 }
             };
-            $coll->where($or_where);
+            $this->collection->where($or_where);
         }
         else
         {
@@ -194,37 +199,39 @@ class CrudModelCollectionBuilder
             switch (strtolower($act))
             {
                 case 'in':
-                    $coll->whereIn($col, $val);
+                    $this->collection->whereIn($col, $val);
                     break;
 
                 case 'between':
-                    $coll->whereBetween($col, $val);
+                    $this->collection->whereBetween($col, $val);
                     break;
 
                 default:
-                    $coll->where($col, $act, $val);
+                    $this->collection->where($col, $act, $val);
                     break;
             }
         }
+        return $this;
     }//
 
-    function applyFilterOrWhere($coll, $cond)
+    function applyFilterOrWhere($cond)
     {
         list($col, $act, $val) = $cond;
         switch (strtolower($act))
         {
             case 'in':
-                $coll->orWhereIn($col, $val);
+                $this->collection->orWhereIn($col, $val);
                 break;
 
             case 'between':
-                $coll->orWhereBetween($col, $val);
+                $this->collection->orWhereBetween($col, $val);
                 break;
 
             default:
-                $coll->orWhere($col, $act, $val);
+                $this->collection->orWhere($col, $act, $val);
                 break;
         }
+        return $this;
     }
 
     function paginate($skip, $take)

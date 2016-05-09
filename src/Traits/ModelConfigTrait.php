@@ -267,28 +267,68 @@ trait ModelConfigTrait
 
         if (strpos($prop,'.') === false)
         {
-            $cols = $this->confParam('list.' . $this->scope);
-            if (!empty($cols['multiselect']))
+            $conf = $this->confParam('list.' . $this->scope);
+            if (!empty($conf['multiselect']))
             {
-                array_unshift($cols['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
+                array_unshift($conf['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
             }
-            if (!empty($cols['buttons']['single_edit'])
-                || !empty($cols['buttons']['single_delete'])
-                || !empty($cols['list_actions'])
+            if (!empty($conf['buttons']['single_edit'])
+                || !empty($conf['buttons']['single_delete'])
+                || !empty($conf['list_actions'])
 
             )
             {
-                $cols['columns'][] = [ "data"=>"actions", "orderable"=>false,'title'=>'  ', 'width'=>50, 'ctype'=>'actions'];
+                $conf['columns'][] = [ "data"=>"actions", "orderable"=>false,'title'=>'  ', 'width'=>50, 'ctype'=>'actions'];
             }
+
+            foreach($conf['columns'] as $k=>$col)
+            {
+
+                if (empty($col['title']))
+                {
+                    $cdesc = $this->getColumn($col['data']);
+                    if (!empty($cdesc['title'])) {
+                        $conf['columns'][$k]['title'] = $cdesc['title'];
+                    }
+                }
+                if (!empty($col['hint']) && empty($col['hint']['index']))
+                {
+                    $conf['columns'][$k]['hint']['index'] = $this->classViewName.'_'.$this->scope.'_'.$col['data'];
+                }
+                if (!empty($col['acl']) && !$this->app['skvn.cms']->checkAcl($col['acl'], 'r'))
+                {
+                    unset($conf['columns'][$k]);
+                }
+            }
+
+            if ($this->app['auth']->check())
+            {
+                $user = $this->app['auth']->user();
+                if ($user instanceof \Skvn\Crud\Contracts\PrefSubject)
+                {
+                    $cols = $user->crudPrefFilterTableColumns($conf['columns'], $this);
+                    foreach($conf['columns'] as $col)
+                    {
+                        if (!empty($col['invisible']))
+                        {
+                            $cols[] = $col;
+                        }
+                    }
+                    $conf['columns'] = $cols;
+                }
+            }
+
+
+
             if (empty($prop))
             {
-                return $cols;
+                return $conf;
             }
             else
             {
-                if (isset($cols[$prop]))
+                if (isset($conf[$prop]))
                 {
-                    return $cols[$prop];
+                    return $conf[$prop];
                 }
             }
         }

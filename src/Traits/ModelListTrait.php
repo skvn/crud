@@ -59,10 +59,10 @@ trait ModelListTrait
     }
 
 
-    function applyFilterWhere($coll, $cond)
-    {
-        return CrudModelCollectionBuilder :: create($this)->applyFilterWhere($coll, $cond);
-    }
+//    function applyFilterWhere($coll, $cond)
+//    {
+//        return CrudModelCollectionBuilder :: create($this)->applyFilterWhere($coll, $cond);
+//    }
 
 
 
