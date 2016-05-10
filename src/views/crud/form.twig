@@ -1,4 +1,4 @@
-<form action="{{ route('crud_update',{'model':crudObj.classViewName,'id':id}) }}" method="post" enctype="multipart/form-data" role="form"  data-crud_scope="{{ crudObj.scope }}" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}" data-rel="{{ crudObj.view_ref }}" class="form-horizontal">
+<form action="{{ route('crud_update',{'model':crudObj.classViewName,'id':id}) }}" method="post" enctype="multipart/form-data" role="form"  data-crud_scope="{{ crudObj.scope }}" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}" data-rel="{{ crudObj.view_ref }}" class="">
     <input type="hidden" id="tree_action" name="tree_action" value=""/>
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
 
@@ -9,7 +9,7 @@
 
 
 
-        <div class="col-md-10 col-md-offset-2 modal-footer" style="margin-bottom: 30px; margin-top: 30px; text-align: left">
+        <div class="col-md-10 modal-footer" style="margin-bottom: 30px; margin-top: 30px; text-align: left">
         <button type="button" class="btn btn-default" data-click="crud_event" data-event="crud.cancel_edit" data-rel="{{ crudObj.view_ref }}">{{ trans('crud::messages.cancel') }}</button>
         {% if crudObj.confParam('acl')|allowed('u') %}
             <button class="btn btn-success" type="submit" data-close="1">{{ trans('crud::messages.save_close') }}</button>
