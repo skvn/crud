@@ -10,7 +10,7 @@
 
 
         <div class="col-md-10 col-md-offset-2 modal-footer" style="margin-bottom: 30px; margin-top: 30px; text-align: left">
-        <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" data-click="crud_event" data-event="crud.cancel_edit" data-rel="{{ crudObj.classViewName }}_{{ crudObj.scope }}_{{ id }}">{{ trans('crud::messages.cancel') }}</button>
+        <button type="button" class="btn btn-default" data-click="crud_event" data-event="crud.cancel_edit" data-rel="{{ crudObj.view_ref }}">{{ trans('crud::messages.cancel') }}</button>
         {% if crudObj.confParam('acl')|allowed('u') %}
             <button class="btn btn-success crud_submit" type="submit" data-close="1">{{ trans('crud::messages.save_close') }}</button>
             <button class="btn btn-primary crud_submit" type="submit" data-close="0">{{ trans('crud::messages.save') }}</button>

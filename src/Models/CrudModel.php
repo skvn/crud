@@ -395,5 +395,10 @@ class CrudModel extends Model
         return parent :: __get($key);
     }
 
+    function getViewRefAttribute()
+    {
+        return $this->classViewName . "_" . $this->scope . "_" . $this->id;
+    }
+
 
 }
