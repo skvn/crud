@@ -352,6 +352,10 @@ class CrudModelCollectionBuilder
 
             foreach ($columns as $col)
             {
+                if ($col['data'] == "actions")
+                {
+                    continue;
+                }
                 $row[$col['data']] = '';
                 $row[$col['data']] = strip_tags(preg_replace('#\<sup.+</sup>#Us', '', $obj->getDescribedColumnValue($col['data'])));
 
