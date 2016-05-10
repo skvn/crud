@@ -13,7 +13,7 @@ class Tags extends Field {
             $dummyModel = new $class();
             $ids = $this->form->crudObj->getRelationIds($this->getName());
             if (count($ids)) {
-                $collection = $class::find($ids);
+                $collection = $class::findMany($ids);
                 $this->value = $collection->pluck($dummyModel->confParam('title_field'));
             }
         }
