@@ -18,20 +18,11 @@
 
             //submit
             $('input[type=submit],button[type=submit]', $form).on('click', function () {
-
-
                 var frm = $(this).parents("form:first");
-                var attrs = ['close', 'reload'];
-                for (var i =0; i<attrs.length; i++)
-                {
-                    if ($(this).data(attrs[i]) != undefined)
-                    {
-                        frm.data(attrs[i], $(this).data(attrs[i]));
-                    }
-                }
-
-
+                prepare_form(frm, $(this));
             });
+
+
             $form.bootstrapValidator({
                 live: 'enabled',
                 trigger: null
@@ -220,7 +211,7 @@
             if (data.ref)
             {
 
-                data.table = $('*[data-list_table_ref='+data.ref+']').first();
+                data.table = $('*[data-list_table_ref='+data.ref+']');
             }
 
 
@@ -233,21 +224,30 @@
                 crud.init_modal(model, data.id, {scope: data.table.data('crud_scope'), rargs:data.rargs?data.rargs:{}});
             }
         });
+
         $(crud.doc).on('click', '.crud_submit', function (e)
         {
             e.preventDefault();
             var frm = $(this).parents("form:first");
-            var attrs = ['close', 'reload'];
-            for (var i =0; i<attrs.length; i++)
-            {
-                if ($(this).data(attrs[i]) != undefined)
-                {
-                    frm.data(attrs[i], $(this).data(attrs[i]));
-                }
-            }
+            prepare_form(frm, $(this));
             frm.submit();
 
         });
+    }
+
+
+
+    function prepare_form(frm, elem)
+    {
+        var attrs = ['close', 'reload'];
+        for (var i =0; i<attrs.length; i++)
+        {
+            if (elem.data(attrs[i]) != undefined)
+            {
+                frm.data(attrs[i], elem.data(attrs[i]));
+            }
+        }
+
     }
 
 
