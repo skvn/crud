@@ -397,7 +397,9 @@ class CrudModel extends Model
 
     function getViewRefAttribute()
     {
-        return $this->classViewName . "_" . $this->scope . "_" . $this->id;
+        $id = ($this->id?$this->id:-1);
+
+        return $this->classViewName . "_" . $this->scope . "_" . $id;
     }
 
 
