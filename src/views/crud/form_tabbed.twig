@@ -1,3 +1,4 @@
+{% set COL_WIDTH=12 %}
 <form action="{{ route('crud_update',{'model':crudObj.classViewName,'id':id}) }}" method="post" enctype="multipart/form-data" role="form"  data_crud_scope="{{ crudObj.scope }}" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}" data-rel="{{ crudObj.classViewName }}_{{ crudObj.scope }}_{{ id }}">
     <input type="hidden" id="tree_action" name="tree_action" value=""/>
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
@@ -23,6 +24,9 @@
                                 {% else %}
                                     {% include 'crud::crud/fields/line_wrap.twig' %}
                                 {% endif %}
+                                {#
+                                {% include 'crud::crud/fields/line_wrap.twig' %}
+                                #}
                             {% endif %}
                         {% endfor %}
                     </fieldset>
