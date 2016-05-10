@@ -342,6 +342,32 @@ class CrudModelCollectionBuilder
 
     }
 
+    public  function fetchRaw($columns)
+    {
+
+        $data = [];
+        foreach ($this->collection->get() as $obj)
+        {
+            $row = [];
+
+            foreach ($columns as $col)
+            {
+                $row[$col['data']] = '';
+                $row[$col['data']] = strip_tags(preg_replace('#\<sup.+</sup>#Us', '', $this->model->getDescribedColumnValue($col['data'])));
+
+            }
+            $data[] = $row;
+        }
+
+        return $data;
+    }//
+
+    function count()
+    {
+        return $this->collection->count();
+    }
+
+
 
 
 
