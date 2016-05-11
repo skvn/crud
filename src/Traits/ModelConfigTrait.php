@@ -268,6 +268,14 @@ trait ModelConfigTrait
         if (strpos($prop,'.') === false)
         {
             $conf = $this->confParam('list.' . $this->scope);
+            if (empty($conf))
+            {
+                $conf = [];
+            }
+            if (empty($conf['columns']))
+            {
+                $conf['columns'] = [];
+            }
             if (!empty($conf['multiselect']))
             {
                 array_unshift($conf['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
