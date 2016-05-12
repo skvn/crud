@@ -6,7 +6,6 @@ use Skvn\Crud\Traits\ModelListTrait;
 use Skvn\Crud\Traits\ModelConfigTrait;
 use Skvn\Crud\Traits\ModelRelationTrait;
 use Skvn\Crud\Traits\ModelFilterTrait;
-use Illuminate\Support\Collection ;
 use Illuminate\Container\Container;
 
 
