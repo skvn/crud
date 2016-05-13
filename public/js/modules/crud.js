@@ -115,10 +115,11 @@
 
                 var rel = model+'_'+scope+'_'+id;
                 var id_label = (parseInt(id)<0)? 'Новая запись': id;
-                $tpl_tab.find('a').html($tpl_tab.find('a').html().replace('[ID]','['+id_label+']').replace('[REL]', rel));
+                $tpl_tab.find('a').html($tpl_tab.find('a').html().replace("[ID]",'['+id_label+']').replace('[REL]', rel));
                 $tpl_tab.appendTo($tab_cont.find('ul.nav-tabs').first())
                     .show()
                     .find('a').first()
+                    .data('id', id).attr('data-id', id)
                     .attr('href','#tab_'+rel);
 
                 var rargs = args.rargs?args.rargs:{};
@@ -710,6 +711,9 @@
         $("table[data-crud_table]").crud_list();
         $("div[data-crud_tree]").crud_tree();
         $("form[data-crud_form=ajax]").crud_form();
+        $(crud.doc).on("shown.bs.tab", "a[data-toggle=tab]", function(e){
+            crud.loc.hash = $(e.target).data('id');
+        });
     });
 
 

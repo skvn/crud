@@ -131,7 +131,16 @@
                 //crud.trigger('crud.edit_element', {el:$(this).find('td').first()});
                 crud.trigger('crud.edit_element', { id: $('td:first', $(this)).data('id'), table: tbl})
                 //crud.init_modal($(this).find('td').first().data('id'));
-            })
+            });
+            if (tbl.data('form_type') == 'tabs')
+            {
+                var id = crud.loc.hash.substr(1);
+                var model = tbl.data('crud_table') ? tbl.data('crud_table') : tbl.data('crud_tree');
+                if (!isNaN(id))
+                {
+                    crud.init_edit_tab(model, id, {table: tbl, scope: tbl.data('crud_scope')});
+                }
+            }
         }
     });
 
