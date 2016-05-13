@@ -301,6 +301,7 @@
                 $(this).val($(this).data('default'));
             });
 
+
             crud.toggle_form_progress($form);
             crud.init_form_progress($form);
             $form.ajaxSubmit(

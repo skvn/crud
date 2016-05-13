@@ -11,6 +11,7 @@ class CrudModelCollectionBuilder
     protected $columns;
     protected $collection;
     protected $params = [];
+    protected $search;
 
     function __construct(CrudModel $model)
     {
@@ -43,6 +44,12 @@ class CrudModelCollectionBuilder
     function setViewType($view_type)
     {
         $this->view_type = $view_type;
+        return $this;
+    }
+
+    function setSearch($search = "")
+    {
+        $this->search = $search;
         return $this;
     }
 
@@ -134,6 +141,22 @@ class CrudModelCollectionBuilder
         {
             $conditions = $this->model->appendConditions($conditions);
         }
+        if (!empty($this->search))
+        {
+            $c = [];
+            foreach ($this->model->getListConfig('columns') as $column)
+            {
+                if (!empty($column['searchable']))
+                {
+                    $c[] = [$column['data'], 'like', $this->search . '%'];
+                }
+            }
+            if (!empty($c))
+            {
+                $conditions[] = ['cond' => $c];
+            }
+        }
+        //\Log :: info($conditions, ['browsify' => 1]);
         if (is_array($conditions))
         {
             $this->applyConditions($conditions);
@@ -167,7 +190,7 @@ class CrudModelCollectionBuilder
         return $this;
     }//
 
-    function applyFilterWhere($cond)
+    function applyFilterWhere($cond, $q = null)
     {
         if (is_string($cond))
         {
@@ -182,11 +205,11 @@ class CrudModelCollectionBuilder
                     list($col, $act, $val) = $one_cond;
                     if ($i ==0)
                     {
-                        $this->applyFilterWhere($one_cond);
+                        $this->applyFilterWhere($one_cond, $query);
                     }
                     else
                     {
-                        $this->applyFilterOrWhere($one_cond);
+                        $this->applyFilterOrWhere($one_cond, $query);
                     }
                 }
             };
@@ -196,39 +219,41 @@ class CrudModelCollectionBuilder
         {
             //simple and
             list($col, $act, $val) = $cond;
+            $coll = is_null($q) ? $this->collection : $q;
             switch (strtolower($act))
             {
                 case 'in':
-                    $this->collection->whereIn($col, $val);
+                    $coll->whereIn($col, $val);
                     break;
 
                 case 'between':
-                    $this->collection->whereBetween($col, $val);
+                    $coll->whereBetween($col, $val);
                     break;
 
                 default:
-                    $this->collection->where($col, $act, $val);
+                    $coll->where($col, $act, $val);
                     break;
             }
         }
         return $this;
     }//
 
-    function applyFilterOrWhere($cond)
+    function applyFilterOrWhere($cond, $q = null)
     {
         list($col, $act, $val) = $cond;
+        $coll = is_null($q) ? $this->collection : $q;
         switch (strtolower($act))
         {
             case 'in':
-                $this->collection->orWhereIn($col, $val);
+                $coll->orWhereIn($col, $val);
                 break;
 
             case 'between':
-                $this->collection->orWhereBetween($col, $val);
+                $coll->orWhereBetween($col, $val);
                 break;
 
             default:
-                $this->collection->orWhere($col, $act, $val);
+                $coll->orWhere($col, $act, $val);
                 break;
         }
         return $this;
@@ -280,6 +305,7 @@ class CrudModelCollectionBuilder
         $total = !empty($this->collection->cnt) ? $this->collection->cnt : 0;
         $q = $this->collection->getQuery();
         $this->app['session']->set("current_query_info", ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
+        \Log :: info($this->collection->getQuery()->toSQL(), ['browsify' => true]);
         $rs = $this->collection->get();
 
         foreach ($rs as $obj)

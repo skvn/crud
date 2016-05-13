@@ -111,80 +111,80 @@ trait ModelConfigTrait
 
     }
 
-    function objectifyConfig()
-    {
-        $conf = new \Skvn\Crud\CrudConfig($this);
-        $c = $this->config;
-        $c['list'] = $this->getListConfig();
-
-        if (!empty($c['list']['multiselect']))
-        {
-            array_unshift($c['list']['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
-        }
-
-        if (!empty($c['list']['buttons']['single_edit'])
-            || !empty($c['list']['buttons']['single_delete'])
-            || !empty($c['list']['list_actions'])
-
-        )
-        {
-            $c['list']['columns'][] = [ "data"=>"actions", "orderable"=>false,'title'=>'  ', 'width'=>50, 'ctype'=>'actions'];
-        }
-
-        foreach($c['list']['columns'] as $k=>$col)
-        {
-            if (empty($col['title']))
-            {
-                $cdesc = $this->getColumn($col['data']);
-                if (!empty($cdesc['title'])) {
-                    $c['list']['columns'][$k]['title'] = $cdesc['title'];
-                }
-            }
-            if (!empty($col['hint']) && empty($col['hint']['index']))
-            {
-                $c['list']['columns'][$k]['hint']['index'] = $this->classViewName.'_'.$this->scope.'_'.$col['data'];
-            }
-            if (!empty($col['acl']) && !$this->app['skvn.cms']->checkAcl($col['acl'], 'r'))
-            {
-                unset($c['list']['columns'][$k]);
-            }
-        }
-        //$c['filter'] = $this->getFilter();
-        if ($this->app['auth']->check())
-        {
-            $user = $this->app['auth']->user();
-            if ($user instanceof \Skvn\Crud\Contracts\PrefSubject)
-            {
-                $cols = $user->crudPrefFilterTableColumns($c['list']['columns'], $this);
-                foreach($c['list']['columns'] as $col)
-                {
-                    if (!empty($col['invisible']))
-                    {
-                        $cols[] = $col;
-                    }
-                }
-                $c['list']['columns'] = $cols;
-            }
-        }
-
-        if (!empty($c['list']['list_actions'])) {
-//            $actions = [];
-//            foreach ($this->config['list']['list_actions'] as $action) {
-//                $actions[] = $action['title'].'|'.$action['command'].(isset($action['class'])?'|'.$action['class']:'');
+//    function objectifyConfig()
+//    {
+//        $conf = new \Skvn\Crud\CrudConfig($this);
+//        $c = $this->config;
+//        $c['list'] = $this->getListConfig();
+//
+//        if (!empty($c['list']['multiselect']))
+//        {
+//            array_unshift($c['list']['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
+//        }
+//
+//        if (!empty($c['list']['buttons']['single_edit'])
+//            || !empty($c['list']['buttons']['single_delete'])
+//            || !empty($c['list']['list_actions'])
+//
+//        )
+//        {
+//            $c['list']['columns'][] = [ "data"=>"actions", "orderable"=>false,'title'=>'  ', 'width'=>50, 'ctype'=>'actions'];
+//        }
+//
+//        foreach($c['list']['columns'] as $k=>$col)
+//        {
+//            if (empty($col['title']))
+//            {
+//                $cdesc = $this->getColumn($col['data']);
+//                if (!empty($cdesc['title'])) {
+//                    $c['list']['columns'][$k]['title'] = $cdesc['title'];
+//                }
 //            }
-//            $this->config['list_actions'] = implode(',',$actions);
-            $c['list_actions'] = json_encode($c['list']['list_actions']);
-        } else {
-            $c['list_actions'] = "";
-        }
-
-
-        $c['list_name'] = $this->getListName();
-        $c['scope'] = $this->scope;
-        $conf->setConfig($c);
-        return $conf;
-
-    }
+//            if (!empty($col['hint']) && empty($col['hint']['index']))
+//            {
+//                $c['list']['columns'][$k]['hint']['index'] = $this->classViewName.'_'.$this->scope.'_'.$col['data'];
+//            }
+//            if (!empty($col['acl']) && !$this->app['skvn.cms']->checkAcl($col['acl'], 'r'))
+//            {
+//                unset($c['list']['columns'][$k]);
+//            }
+//        }
+//        //$c['filter'] = $this->getFilter();
+//        if ($this->app['auth']->check())
+//        {
+//            $user = $this->app['auth']->user();
+//            if ($user instanceof \Skvn\Crud\Contracts\PrefSubject)
+//            {
+//                $cols = $user->crudPrefFilterTableColumns($c['list']['columns'], $this);
+//                foreach($c['list']['columns'] as $col)
+//                {
+//                    if (!empty($col['invisible']))
+//                    {
+//                        $cols[] = $col;
+//                    }
+//                }
+//                $c['list']['columns'] = $cols;
+//            }
+//        }
+//
+//        if (!empty($c['list']['list_actions'])) {
+////            $actions = [];
+////            foreach ($this->config['list']['list_actions'] as $action) {
+////                $actions[] = $action['title'].'|'.$action['command'].(isset($action['class'])?'|'.$action['class']:'');
+////            }
+////            $this->config['list_actions'] = implode(',',$actions);
+//            $c['list_actions'] = json_encode($c['list']['list_actions']);
+//        } else {
+//            $c['list_actions'] = "";
+//        }
+//
+//
+//        $c['list_name'] = $this->getListName();
+//        $c['scope'] = $this->scope;
+//        $conf->setConfig($c);
+//        return $conf;
+//
+//    }
 
     public function getFields($prop='')
     {
@@ -434,8 +434,22 @@ trait ModelConfigTrait
 
     public function getFilterConfig($prop='')
     {
-        $form = $this->confParam('list.' . $this->scope . '.filter');
+        //$form = $this->confParam('list.' . $this->scope . '.filter');
+        //FIXME: backward compability
+        $form = $this->getListConfig("filters");
+        if (empty($form))
+        {
+            $form = [];
+            foreach ($this->getListConfig("columns") as $column)
+            {
+                if (!empty($column['filterable']))
+                {
+                    $form[] = $column['data'];
+                }
+            }
+        }
 
+        //FIXME: WTF ?
         if (empty($prop))
         {
             return $form;

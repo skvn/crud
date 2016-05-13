@@ -2,7 +2,6 @@
 
 use \Illuminate\Database\Eloquent\Model;
 use Skvn\Crud\Form\Form;
-use Skvn\Crud\Traits\ModelListTrait;
 use Skvn\Crud\Traits\ModelConfigTrait;
 use Skvn\Crud\Traits\ModelRelationTrait;
 use Skvn\Crud\Traits\ModelFilterTrait;
@@ -13,7 +12,6 @@ use Illuminate\Container\Container;
 
 class CrudModel extends Model
 {
-    use ModelListTrait;
     use ModelConfigTrait;
     use ModelRelationTrait;
     use ModelFilterTrait;
@@ -386,11 +384,10 @@ class CrudModel extends Model
 
     public function __get($key)
     {
-        //FIXME: backward compability
-        if ($key == "config")
-        {
-            return $this->objectifyConfig();
-        }
+//        if ($key == "config")
+//        {
+//            return $this->objectifyConfig();
+//        }
         return parent :: __get($key);
     }
 
@@ -400,6 +397,25 @@ class CrudModel extends Model
 
         return $this->classViewName . "_" . $this->scope . "_" . $id;
     }
+
+    function getListData($scope=null, $viewType='data_tables')
+    {
+        $skip = (int) $this->app['request']->get('start',0);
+        $take =  (int) $this->app['request']->get('length',0);
+        $order = $this->app['request']->get('order');
+        $search = $this->app['request']->get('search');
+
+        return CrudModelCollectionBuilder :: create($this, $viewType)
+            ->createCollection($order)
+            ->setSearch(!empty($search['value']) ? $search['value'] : '')
+            ->applyQueryFilter()
+            ->paginate($skip, $take)
+            ->setParams($this->app['request']->all())
+            ->fetch();
+
+    }
+
+
 
 
 }

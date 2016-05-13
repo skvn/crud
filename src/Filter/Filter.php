@@ -9,12 +9,11 @@ class Filter {
 
 
     public $filters;
-    protected $model, $crudObj,$scope, $form, $session, $defaults;
+    protected $model, $crudObj,$form, $session, $defaults;
 
-    public function __construct(CrudModel $model, $scope)
+    public function __construct(CrudModel $model)
     {
         $this->session = app()['session'];
-        $this->scope = $scope;
         $this->setModel($model);
     }
 
@@ -101,11 +100,6 @@ class Filter {
         return $field_description;
     }
 
-    public function getScope()
-    {
-        return $this->scope;
-    }
-
     public function fill($input, $andStore=false)
     {
         $storeData = [];
@@ -133,7 +127,7 @@ class Filter {
 
     public function getStorageKey()
     {
-        return 'crud_filter_'.$this->getScope();
+        return 'crud_filter_'.$this->crudObj->classViewName . "_" . $this->crudObj->scope;
     }
 
     public function getForm($fillData=null, $renew=false)
