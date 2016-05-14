@@ -7,49 +7,58 @@ class CrudModelCollectionBuilder
 {
     protected $model;
     protected $app;
-    protected $view_type;
     protected $columns;
     protected $collection;
     protected $params = [];
-    protected $search;
 
-    function __construct(CrudModel $model)
+    function __construct(CrudModel $model, $args = [])
     {
         $this->app = Container :: getInstance();
         $this->model = $model;
         $this->columns = $this->model->getListConfig('columns');
+        $this->params = $args;
         $this->params['buttons'] = $this->model->getListConfig('buttons');
+        $this->params['sort'] = $this->model->getListConfig('sort');
     }
 
-    static function create(CrudModel $model, $view_type = null)
+    static function create(CrudModel $model, $args = [])
     {
-        $obj = new self($model);
-        if (!empty($view_type))
-        {
-            $obj->setViewType($view_type);
-        }
+        $obj = new self($model, $args);
+//        if (!empty($args))
+//        {
+//            $obj->setViewType($view_type);
+//        }
+        $obj->createCollection();
         return $obj;
     }
 
-    static function createDataTables(CrudModel $model)
+    static function createDataTables(CrudModel $model, $args = [])
     {
-        return self :: create($model, "data_tables");
+        $args['view_type'] = "data_tables";
+        return self :: create($model, $args);
     }
 
-    static function createTree(CrudModel $model)
+    static function createTree(CrudModel $model, $args = [])
     {
-        return self :: create($model, "tree");
+        $args['view_type'] = "tree";
+        return self :: create($model, $args);
+    }
+
+    static function createQuery(CrudModel $model, $args = [])
+    {
+        $args['raw'] = true;
+        return self :: create($model, $args);
     }
 
     function setViewType($view_type)
     {
-        $this->view_type = $view_type;
+        $this->params['view_type'] = $view_type;
         return $this;
     }
 
     function setSearch($search = "")
     {
-        $this->search = $search;
+        $this->params['search'] = $search;
         return $this;
     }
 
@@ -59,8 +68,13 @@ class CrudModelCollectionBuilder
         return $this;
     }
 
-    function createCollection($order = null)
+    function createCollection()
     {
+        if (!empty($this->params['raw']))
+        {
+            $this->collection = $this->model->newQuery();
+            return $this;
+        }
         $scope = $this->model->getScope();
         if (!empty($scope))
         {
@@ -77,11 +91,11 @@ class CrudModelCollectionBuilder
         }
         if (method_exists($this->model, $method))
         {
-            $this->collection = $this->model->$method($order, $joins);
+            $this->collection = $this->model->$method($joins);
         }
         else if (method_exists($this->model, $method_query))
         {
-            $this->collection = $this->model->$method_query($order, $joins);
+            $this->collection = $this->model->$method_query($joins);
         }
         else
         {
@@ -95,9 +109,8 @@ class CrudModelCollectionBuilder
         return $this->collection;
     }
 
-    function createBasicListQuery($joins)
+    function createBasicListQuery($joins = [])
     {
-        $sort = $this->model->getListConfig('sort');
         $basic = $this->model->newQuery();
 
         if (count($joins))
@@ -112,9 +125,9 @@ class CrudModelCollectionBuilder
         }
         else
         {
-            if (!empty($sort))
+            if (!empty($this->params['sort']))
             {
-                foreach ($sort as $o => $v)
+                foreach ($this->params['sort'] as $o => $v)
                 {
                     $basic->orderBy($o, $v);
                 }
@@ -141,14 +154,15 @@ class CrudModelCollectionBuilder
         {
             $conditions = $this->model->appendConditions($conditions);
         }
-        if (!empty($this->search))
+        \Log :: info($this->params, ['browsify' => true]);
+        if (!empty($this->params['search']))
         {
             $c = [];
-            foreach ($this->model->getListConfig('columns') as $column)
+            foreach ($this->columns as $column)
             {
                 if (!empty($column['searchable']))
                 {
-                    $c[] = [$column['data'], 'like', $this->search . '%'];
+                    $c[] = [$column['data'], 'like', $this->params['search'] . '%'];
                 }
             }
             if (!empty($c))
@@ -272,7 +286,7 @@ class CrudModelCollectionBuilder
 
     function fetch()
     {
-        switch ($this->view_type)
+        switch ($this->params['view_type'])
         {
             case 'data_tables':
                 return $this->fetchDataTables();

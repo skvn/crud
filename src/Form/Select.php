@@ -120,7 +120,7 @@ class Select extends Field {
         {
             if ($modelObj->confParam('tree'))
             {
-                $collection = CrudModelCollectionBuilder :: create($modelObj)->createCollection()->fetch();
+                $collection = CrudModelCollectionBuilder :: create($modelObj)->fetch();
 //                $coll = $modelObj->getListCollection();
 //                $collection = $modelObj->prepareCollectionForView($coll, null, 'tree_flattened');
             }

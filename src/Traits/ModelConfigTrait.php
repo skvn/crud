@@ -112,10 +112,14 @@ trait ModelConfigTrait
 
         if ($this->isTree())
         {
-            $this->fillable[] = $this->columnTreePid;
-            $this->fillable[] = $this->columnTreeOrder;
-            $this->fillable[] = $this->columnTreePath ;
-            $this->fillable[] = $this->columnTreeDepth;
+//            $this->fillable[] = $this->columnTreePid;
+//            $this->fillable[] = $this->columnTreeOrder;
+//            $this->fillable[] = $this->columnTreePath ;
+//            $this->fillable[] = $this->columnTreeDepth;
+            $this->fillable[] = $this->config['tree']['pid_column'];
+            $this->fillable[] = $this->config['tree']['order_column'];
+            $this->fillable[] = $this->config['tree']['path_column'] ;
+            $this->fillable[] = $this->config['tree']['depth_column'];
         }
 
 

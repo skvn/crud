@@ -416,15 +416,13 @@ class CrudModel extends Model
     {
         $skip = (int) $this->app['request']->get('start',0);
         $take =  (int) $this->app['request']->get('length',0);
-        $order = $this->app['request']->get('order');
-        $search = $this->app['request']->get('search');
+        $params = $this->app['request']->all();
+        $params['view_type'] = $viewType;
+        $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
 
-        return CrudModelCollectionBuilder :: create($this, $viewType)
-            ->createCollection($order)
-            ->setSearch(!empty($search['value']) ? $search['value'] : '')
+        return CrudModelCollectionBuilder :: create($this, $params)
             ->applyQueryFilter()
             ->paginate($skip, $take)
-            ->setParams($this->app['request']->all())
             ->fetch();
 
     }

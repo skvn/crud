@@ -42,7 +42,7 @@ class {{ model.name }}Base extends CrudModel{
     /* @param $order  Sort order from the request
     /* @param $joins  array  Array of joins to use in with($joins); Eloquent method
     */
-    public function   {{ camel_case("get_"~alias~"_list_query") }}($order, $joins) {
+    public function   {{ camel_case("get_"~alias~"_list_query") }}($joins) {
             return  $this->getBasicListQuery($joins);
      }
     {% endfor %}

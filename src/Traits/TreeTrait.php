@@ -21,10 +21,10 @@ Page::find(2)->getTreeDepth()
 
 trait TreeTrait  {
 
-    protected $columnTreePid = 'tree_pid';
-    protected $columnTreeOrder = 'tree_order';
-    protected $columnTreePath = 'tree_path';
-    protected $columnTreeDepth = 'tree_depth';
+    //protected $columnTreePid = 'tree_pid';
+    //protected $columnTreeOrder = 'tree_order';
+    //protected $columnTreePath = 'tree_path';
+    //protected $columnTreeDepth = 'tree_depth';
 
     protected $parents;
 
@@ -35,10 +35,10 @@ trait TreeTrait  {
         $title_f = ($this->confParam('title_field')?$this->confParam('title_field'):'title');
         $this->fill(array(
             $title_f => 'Верхний уровень',
-            $this->columnTreePath => '.0.',
-            $this->columnTreePid => 0,
-            $this->columnTreeDepth => 0,
-            $this->columnTreeOrder => (static::allRoot()->max($this->columnTreeOrder) + 1)
+            $this->getColumnTreePath() => '.0.',
+            $this->getColumnTreePid() => 0,
+            $this->getColumnTreeDepth() => 0,
+            $this->getColumnTreeOrder() => (static::allRoot()->max($this->getColumnTreeOrder()) + 1)
         ));
 
         $this->save();
@@ -176,7 +176,7 @@ trait TreeTrait  {
 
     public function sibling()
     {
-        return $this->newQuery()->where($this->columnTreePid, '=', $this->getTreePid());
+        return $this->newQuery()->where($this->getColumnTreePid(), '=', $this->getTreePid());
     }
 
     public function children($depth=0)
@@ -185,16 +185,16 @@ trait TreeTrait  {
 
         if ($depth==1)
         {
-            $query->where($this->columnTreePid, '=', $this->getKey());
+            $query->where($this->getColumnTreePid(), '=', $this->getKey());
         }
         else
         {
-            $query->where($this->columnTreePath, 'like', $this->getTreePath().$this->getKey().'.%');
+            $query->where($this->getColumnTreePath(), 'like', $this->getTreePath().$this->getKey().'.%');
         }
 
         if ($depth)
         {
-            $query->where($this->columnTreeDepth, '<=', $this->getTreeDepth() + $depth);
+            $query->where($this->getColumnTreeDepth(), '<=', $this->getTreeDepth() + $depth);
         }
 
         return $query;
@@ -256,65 +256,69 @@ trait TreeTrait  {
 
     public function getTreePid()
     {
-        return $this->getAttribute($this->columnTreePid);
+        return $this->getAttribute($this->getColumnTreePid());
     }
 
     public function getTreeOrder()
     {
-        return $this->getAttribute($this->columnTreeOrder);
+        return $this->getAttribute($this->getColumnTreeOrder());
     }
 
     public function getTreePath()
     {
-        return $this->getAttribute($this->columnTreePath);
+        return $this->getAttribute($this->getColumnTreePath());
     }
 
     public function getTreeDepth()
     {
-        return $this->getAttribute($this->columnTreeDepth);
+        return $this->getAttribute($this->getColumnTreeDepth());
     }
 
 
 
     public function getColumnTreePid()
     {
-        return $this->columnTreePid;
+        return $this->getTreeConfig("pid_column");
+        //return $this->columnTreePid;
     }
 
     public function getColumnTreeOrder()
     {
-        return $this->columnTreeOrder;
+        return $this->getTreeConfig("order_column");
+        //return $this->columnTreeOrder;
     }
 
     public function getColumnTreePath()
     {
-        return $this->columnTreePath;
+        return $this->getTreeConfig("path_column");
+        //return $this->columnTreePath;
     }
 
     public function getColumnTreeDepth()
     {
-        return $this->columnTreeDepth;
+        return $this->getTreeConfig("depth_column");
+        //return $this->columnTreeDepth;
     }
 
-    public function setColumnTreePid($name)
-    {
-        $this->columnTreePid = $name;
-    }
-
-    public function setColumnTreeOrder($name)
-    {
-        $this->columnTreeOrder = $name;
-    }
-
-    public function setColumnTreePath($name)
-    {
-        $this->columnTreePath = $name;
-    }
-
-    public function setColumnTreeDepth($name)
-    {
-        $this->columnTreeDepth = $name;
-    }
+//    public function setColumnTreePid($name)
+//    {
+//        $this->columnTreePid = $name;
+//    }
+//
+//    public function setColumnTreeOrder($name)
+//    {
+//        $this->columnTreeOrder = $name;
+//    }
+//
+//    public function setColumnTreePath($name)
+//    {
+//        $this->columnTreePath = $name;
+//    }
+//
+//    public function setColumnTreeDepth($name)
+//    {
+//        $this->columnTreeDepth = $name;
+//    }
 
 
     protected function processSiblingOf($sibling, $op)
