@@ -32,16 +32,16 @@ class DateTime extends Field {
     /**
      * @return array
      */
-//    function getFilterCondition()
-//    {
-//
-//        if (!empty($this->value)) {
-//            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
-//            return ['cond' => [$col, 'LIKE', '%' . $this->value . '%']];
-//        }
-//
-//
-//    }
+    function getFilterCondition()
+    {
+        return false;
+        if (!empty($this->value)) {
+            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
+            return ['cond' => [$col, 'LIKE', '%' . $this->value . '%']];
+        }
+
+
+    }
 
     function getValueForList()
     {

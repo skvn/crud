@@ -136,7 +136,7 @@
             {
                 var id = crud.loc.hash.substr(1);
                 var model = tbl.data('crud_table') ? tbl.data('crud_table') : tbl.data('crud_tree');
-                if (!isNaN(id))
+                if (!isNaN(id) && id)
                 {
                     crud.init_edit_tab(model, id, {table: tbl, scope: tbl.data('crud_scope')});
                 }

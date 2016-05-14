@@ -3,11 +3,11 @@
 use Skvn\Crud\Exceptions\ConfigException;
 
 
-class Field
+abstract class Field
 {
 
     public $config;
-    protected $value;
+    protected $value = null;
     protected $form;
     public $name;
     protected $uniqid;
@@ -24,6 +24,11 @@ class Field
         }
 
 
+    }
+
+    function getFilterCondition()
+    {
+        return false;
     }
 
     function  getUniqueId()

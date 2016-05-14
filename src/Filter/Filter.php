@@ -151,7 +151,11 @@ class Filter {
             $form = $this->getForm();
             foreach ($form->fields as $field)
             {
-                $filters[$field->getName()] = $field->getFilterCondition();
+                $c = $field->getFilterCondition();
+                if ($c)
+                {
+                    $filters[$field->getName()] = $c;
+                }
             }
         }
         return $filters;

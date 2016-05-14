@@ -7,6 +7,32 @@ use Skvn\Crud\Models\CrudModelCollectionBuilder;
 class Select extends Field {
 
 
+    function getValue()
+    {
+        if (is_null($this->value))
+        {
+            if (!in_array($this->getName(), $this->form->crudObj->getHidden()))
+            {
+                $this->value = $this->form->crudObj->getAttribute($this->getName());
+            }
+        }
+
+        return $this->value;
+    }
+
+    function getValueForList()
+    {
+        $v = $this->getValue();
+        if (!empty($this->config['select_options']))
+        {
+            if (isset($this->config['select_options'][$v]))
+            {
+                return is_array($this->config['select_options'][$v]) ? $this->config['select_options'][$v]['caption'] : $this->config['select_options'][$v];
+            }
+        }
+        return $v;
+    }
+
 
     public function getOptions($empty_option=null)
     {
@@ -38,27 +64,10 @@ class Select extends Field {
                 $this->config['select_options'] = $this->form->crudObj->getAttribute($this->config['select_options']);
             }
 
-            foreach ($this->config['select_options'] as $k=>$v)
+            foreach ($this->config['select_options'] as $k => $v)
             {
-                $selected = 0;
-                if ($this->value)
-                {
-                    if (is_array($this->value))
-                    {
-                        if (in_array($k, $this->value))
-                        {
-                            $selected = 1;
-                        }
-                    }
-                    else
-                    {
-                        if ($this->value == $k)
-                        {
-                            $selected = 1;
-                        }
-                    }
-                }
-                $opts[] = ['value'=>$k, 'text'=>$v,'selected'=>$selected];
+                $txt = is_array($v) ? $v['caption'] : $v;
+                $opts[] = ['value' => $k, 'text' => $txt, 'selected' => $this->isSelected($k)];
             }
 
         }
@@ -72,7 +81,7 @@ class Select extends Field {
             $opts = [];
             foreach ($this->form->crudObj->{$this->config['method_options']}() as $k => $v)
             {
-                $opts[] = ['value' => $k, 'text' => $v, 'selected' => is_array($this->value) && in_array($k, $this->value) || !is_array($this->value) && $this->value == $k];
+                $opts[] = ['value' => $k, 'text' => $v, 'selected' => $this->isSelected($k)];
             }
         }
         else
@@ -82,6 +91,19 @@ class Select extends Field {
 
         return array_merge($options, $opts);
 
+    }
+
+    private function isSelected($idx)
+    {
+        if (is_null($this->value))
+        {
+            return false;
+        }
+        if (is_array($this->value))
+        {
+            return in_array($idx, $this->value);
+        }
+        return $idx == $this->value;
     }
 
     private function getModelOptions()
@@ -154,24 +176,6 @@ class Select extends Field {
         $data = [];
         foreach ($collection as $o)
         {
-            $selected = 0;
-            if ($this->value)
-            {
-                if (is_array($this->value))
-                {
-                    if (in_array($o->id, $this->value))
-                    {
-                        $selected = 1;
-                    }
-                }
-                else
-                {
-                    if ($this->value == $o->id)
-                    {
-                        $selected = 1;
-                    }
-                }
-            }
             if (count($dataCols))
             {
                 foreach ($dataCols as $col)
@@ -179,7 +183,7 @@ class Select extends Field {
                     $data[$col] = $o->getDescribedColumnValue($col);
                 }
             }
-            $option = ['value' => $o->id, 'text' =>$o->internal_code.'. '.  $o->title, 'selected' => $selected,'data'=>$data];
+            $option = ['value' => $o->id, 'text' =>$o->internal_code.'. '.  $o->title, 'selected' => $this->isSelected($o->id),'data'=>$data];
             $grVal = $o->getDescribedColumnValue($groupBy);
             if (empty($options[$grVal]))
             {
@@ -204,24 +208,6 @@ class Select extends Field {
         $options = [];
         foreach ($collection as $o)
         {
-            $selected = 0;
-            if ($this->value)
-            {
-                if (is_array($this->value))
-                {
-                    if (in_array($o->id, $this->value))
-                    {
-                        $selected = 1;
-                    }
-                }
-                else
-                {
-                    if ($this->value == $o->id)
-                    {
-                        $selected = 1;
-                    }
-                }
-            }
             $pref = '';
             if ($isTree)
             {
@@ -231,7 +217,7 @@ class Select extends Field {
                     $pref .= $o->internal_code . '. ';
                 }
             }
-            $options[] = ['value' => $o->id, 'text' => $pref . $o->getTitle(), 'selected' => $selected];
+            $options[] = ['value' => $o->id, 'text' => $pref . $o->getTitle(), 'selected' => $this->isSelected($o->id)];
         }
         return $options;
     }

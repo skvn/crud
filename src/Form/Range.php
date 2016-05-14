@@ -1,22 +1,35 @@
 <?php namespace Skvn\Crud\Form;
 
 
-class Range extends Field {
+class Range extends Field
+{
+
+    function getValue()
+    {
+        if (is_null($this->value))
+        {
+            if (!empty($this->config['fields']))
+            {
+                $this->value = $this->form->crudObj->getAttribute($this->config['fields'][0]) . "~" . $this->form->crudObj->getAttribute($this->config['fields'][1]);
+            }
+        }
+        return $this->value;
+    }
 
 
     function getValueFrom()
     {
-        if (!empty($this->value))
+        if ($this->getValue())
         {
-            return explode('~',$this->value)[0];
+            return explode('~',$this->getValue())[0];
         }
     }
 
     function getValueTo()
     {
-        if (!empty($this->value))
+        if ($this->getValue())
         {
-            $spl = explode('~',$this->value);
+            $spl = explode('~',$this->getValue());
             if (isset($spl[1]))
             {
                 return $spl[1];
@@ -68,4 +81,23 @@ class Range extends Field {
 
 
     }
+
+    function getFromFieldName()
+    {
+        if (!empty($this->config['fields']))
+        {
+            return $this->config['fields'][0];
+        }
+        return $this->name . "_from";
+    }
+
+    function getToFieldName()
+    {
+        if (!empty($this->config['fields']))
+        {
+            return $this->config['fields'][1];
+        }
+        return $this->name . "_to";
+    }
+
 } 

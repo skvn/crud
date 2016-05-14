@@ -11,43 +11,64 @@ class Date extends Field {
 
     function getValue()
     {
-        if (!$this->value)
+        if (is_null($this->value))
         {
             $this->value = $this->form->crudObj->getAttribute($this->getName());
             if (!$this->value)
             {
-                if (empty($this->config['db_type']) ||$this->config['db_type'] == 'int' ) {
+                if ($this->isInt())
+                {
                     $this->value = time();
-                } else {
+                }
+                else
+                {
                     $this->value = (new \DateTime('now'));
                 }
-
             }
-
         }
 
         return $this->value;
     }
 
+    function getValueForList()
+    {
+        $v = $this->getValue();
+        if ($this->isInt())
+        {
+            return date($this->config['format'], $v);
+        }
+
+        return $v;
+    }
+
+    private function isInt()
+    {
+        return (empty($this->config['db_type']) ||$this->config['db_type'] == 'int');
+    }
+
+
     /**
      * @return array
      */
-//    function getFilterCondition()
-//    {
-//
-//        if (!empty($this->value)) {
-//            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
-//            return ['cond' => [$col, 'LIKE', '%' . $this->value . '%']];
-//        }
-//
-//
-//    }
+    function getFilterCondition()
+    {
+        return false;
+        if (!empty($this->value)) {
+            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
+            return ['cond' => [$col, 'LIKE', '%' . $this->value . '%']];
+        }
+
+
+    }
 
     function  getValueForDb()
     {
-        if (empty($this->config['db_type']) ||$this->config['db_type'] == 'int' ) {
-            return strtotime($this->getValue() . ' 23:59');
-        } else {
+        if ($this->isInt())
+        {
+            return strtotime($this->getValue() . ' 14:23');
+        }
+        else
+        {
             return date('Y-m-d',strtotime($this->getValue()));
         }
     }
