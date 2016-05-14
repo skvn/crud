@@ -6,7 +6,7 @@ class Text extends Field {
 
     function getValue()
     {
-        if (!$this->value)
+        if (is_null($this->value))
         {
             if (!in_array($this->getName(), $this->form->crudObj->getHidden()))
             {

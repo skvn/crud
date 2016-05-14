@@ -16,4 +16,9 @@ class File extends Field {
 
         return $this->value;
     }
+
+    function getFilterCondition()
+    {
+        return false;
+    }
 } 

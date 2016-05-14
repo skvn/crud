@@ -712,7 +712,10 @@
         $("div[data-crud_tree]").crud_tree();
         $("form[data-crud_form=ajax]").crud_form();
         $(crud.doc).on("shown.bs.tab", "a[data-toggle=tab]", function(e){
-            crud.loc.hash = $(e.target).data('id');
+            if ($(e.target).data('id'))
+            {
+                crud.loc.hash = $(e.target).data('id');
+            }
         });
     });
 
