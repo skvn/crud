@@ -19,14 +19,7 @@
                     <fieldset style="padding-bottom: 20px; padding-top: 20px;">
                         {% for input in  crudObj.getForm().fields %}
                             {% if input.config.tab == tab_id %}
-                                {% if input.config.type=='checkbox' %}
-                                    {% include 'crud::crud/fields/line_wrap_compact.twig' %}
-                                {% else %}
                                     {% include 'crud::crud/fields/line_wrap.twig' %}
-                                {% endif %}
-                                {#
-                                {% include 'crud::crud/fields/line_wrap.twig' %}
-                                #}
                             {% endif %}
                         {% endfor %}
                     </fieldset>

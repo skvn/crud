@@ -30,6 +30,7 @@
     <form id="form"  class="wizard-big" method="post">
         <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
         <input type="hidden" name="table" value="{{ table }}" />
+        <input type="hidden" name="acl" value="{{ model.acl }}" />
         <h1>General</h1>
         <fieldset>
 

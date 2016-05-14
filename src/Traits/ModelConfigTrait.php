@@ -202,15 +202,32 @@ trait ModelConfigTrait
         }
     }
 
-    public function confParam($key, $default = null)
+    /**
+     * @param $key
+     * @param null $default
+     * @param bool $use_scope
+     * @return mixed
+     *
+     * Get config param. If $use_scope === true, look first in list.CURRENT_SCOPE
+     *
+     */
+    public function confParam($key, $default = null, $use_scope=false)
     {
-        if (strpos($key,'.') === false)
-        {
-            return (!empty($this->config[$key]) ? $this->config[$key] : $default);
-        }
-        else
-        {
-            return $this->app['config']->get('crud.crud_'.$this->getTable().'.'.$key, $default);
+        if (!$use_scope) {
+            if (strpos($key, '.') === false) {
+                return (!empty($this->config[$key]) ? $this->config[$key] : $default);
+            } else {
+                return $this->app['config']->get('crud.crud_' . $this->getTable() . '.' . $key, $default);
+            }
+        } else {
+
+            $original_key = $key;
+            $key = $key.'.list.'.$this->scope;
+            $val = $this->app['config']->get('crud.crud_' . $this->getTable() . '.' . $key, null);
+            if (is_null($val))
+            {
+                return $this->confParam($original_key, $default, false);
+            }
         }
     }
 
@@ -232,33 +249,50 @@ trait ModelConfigTrait
     public function getFormConfig($prop='')
     {
         $form = null;
-        if (!empty($this->scope))
-        {
-            $form = $this->getListConfig("form");
-        }
-        if (!$form)
-        {
-            $form =  $this->confParam('form');
-        }
+        $form =  $this->confParam('form');
+        $tabbed = $this->confParam('form_tabbed');
+
+//        if (!empty($this->scope))
+//        {
+//            $form = $this->getListConfig("form");
+//        }
+//        if (!$form)
+//        {
+//            $form =  $this->confParam('form');
+//        }
 
         $form_array = [];
         $fields = $this->getFields();
 
         if (is_array($form))
         {
-            foreach ($form as $fname)
+            if ($tabbed)
             {
-                $form_array[$fname] = $fields[$fname];
+                foreach ($form as $tab_alias=>$field_set) {
+                    foreach ($field_set as $fname)
+                    {
+                        $form_array[$fname] = $fields[$fname];
+                        $form_array[$fname]['tab'] = $tab_alias;
+                    }
+
+                }
+
+            } else {
+
+                foreach ($form as $fname) {
+                    $form_array[$fname] = $fields[$fname];
+                }
             }
 
-            if (empty($prop))
-            {
-                return $form_array;
-            }
-            else
-            {
-                return $form_array[$prop];
-            }
+        }
+
+        if (empty($prop))
+        {
+            return $form_array;
+        }
+        else
+        {
+            return $form_array[$prop];
         }
     }
 
