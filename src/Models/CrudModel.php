@@ -217,6 +217,20 @@ class CrudModel extends Model
             }
         }
 
+        foreach ($this->config['fields'] as $col_idx => $col)
+        {
+            if (!empty($col['fields']))
+            {
+                foreach ($col['fields'] as $f)
+                {
+                    if (!empty($attributes[$f]))
+                    {
+                        $attributes[$f] = $this->getForm()->fields[$col_idx]->prepareValue($attributes[$f]);
+                    }
+                }
+            }
+        }
+
         return parent::fill($attributes);
     }
 

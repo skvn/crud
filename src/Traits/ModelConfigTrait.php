@@ -73,7 +73,17 @@ trait ModelConfigTrait
                     }
                     else
                     {
-                        $this->fillable[] = $name;
+                        if (!empty($col['fields']))
+                        {
+                            foreach ($col['fields'] as $f)
+                            {
+                                $this->fillable[] = $f;
+                            }
+                        }
+                        else
+                        {
+                            $this->fillable[] = $name;
+                        }
                     }
                 }
             }
