@@ -1,6 +1,7 @@
 <?php namespace {{ model.namespace }}\Crud;
 
 use Skvn\Crud\Models\CrudModel;
+use Skvn\Crud\Models\CrudModelCollectionBuilder;
 {%  if model.attaches %}use Skvn\Crud\Traits\AttachmentTrait;
 use Skvn\Crud\Models\CrudFile;
 {% endif %}
@@ -42,8 +43,8 @@ class {{ model.name }}Base extends CrudModel{
     /* @param $order  Sort order from the request
     /* @param $joins  array  Array of joins to use in with($joins); Eloquent method
     */
-    public function   {{ camel_case("get_"~alias~"_list_query") }}($joins) {
-            return  $this->getBasicListQuery($joins);
+    public function   {{ camel_case("get_"~alias~"_list_query") }}($joins = []) {
+            return CrudModelCollectionBuilder :: createEmpty($this)->createBasicListQuery($joins);
      }
     {% endfor %}
 

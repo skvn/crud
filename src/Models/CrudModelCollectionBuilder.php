@@ -50,6 +50,12 @@ class CrudModelCollectionBuilder
         return self :: create($model, $args);
     }
 
+    static function createEmpty(CrudModel $model, $args = [])
+    {
+        $obj = new self($model, $args);
+        return $obj;
+    }
+
     function setViewType($view_type)
     {
         $this->params['view_type'] = $view_type;
@@ -137,7 +143,7 @@ class CrudModelCollectionBuilder
         return $basic;
     }
 
-    function applyQueryFilter()
+    function applyContextFilter()
     {
         if ($this->model->isTree())
         {
@@ -154,7 +160,6 @@ class CrudModelCollectionBuilder
         {
             $conditions = $this->model->appendConditions($conditions);
         }
-        \Log :: info($this->params, ['browsify' => true]);
         if (!empty($this->params['search']))
         {
             $c = [];

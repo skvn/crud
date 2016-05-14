@@ -3,6 +3,7 @@
 
 use Skvn\Crud\Filter\FilterFactory;
 use Skvn\Crud\Filter\Filter;
+use Skvn\Crud\Models\CrudModelCollectionBuilder;
 
 
 trait ModelFilterTrait
@@ -63,11 +64,6 @@ trait ModelFilterTrait
         }
 
         return [];
-    }
-
-    function getBasicListQuery($joins)
-    {
-        return CrudModelCollectionBuilder :: create($this)->createBasicListQuery($joins);
     }
 
     function getAutocompleteList($query)

@@ -421,7 +421,7 @@ class CrudModel extends Model
         $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
 
         return CrudModelCollectionBuilder :: create($this, $params)
-            ->applyQueryFilter()
+            ->applyContextFilter()
             ->paginate($skip, $take)
             ->fetch();
 
