@@ -5,9 +5,10 @@
     "gulp-concat": "^2.6.0"
   },
   "dependencies": {
+    "bower": "^1.7.9",
     "gulp-clean-css": "^2.0.3",
     "gulp-less": "^3.0.5",
-    "gulp-uglify": "^1.5.3",
-    "laravel-elixir": "^4.0.0"
+    "gulp-uglify": "^1.5.3"
+
   }
 }
