@@ -84,6 +84,11 @@ abstract class Field
         return true;
     }
 
+    function prepareValueForDb($value)
+    {
+        return $value;
+    }
+
 
 
 } 
