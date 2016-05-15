@@ -199,6 +199,7 @@
                 $("html, body").animate({ scrollTop: 0 }, "slow");
 
             } else {
+                //alert('hide');
                 $('form[data-rel='+data.rel+']').parents(".modal:first").modal('hide');
             }
 

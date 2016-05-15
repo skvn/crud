@@ -29,7 +29,6 @@ class CrudModel extends Model
 
 
     protected $app;
-    protected $dirtyRelations = [];
     protected $form;
     protected $codeColumn = 'id';
 
@@ -313,11 +312,11 @@ class CrudModel extends Model
         return parent::getAttribute($key);
     }
 
-    public function setAttribute($key, $value)
-    {
-        //var_dump("setAttribute");
-        return parent :: setAttribute($key, $value);
-    }
+//    public function setAttribute($key, $value)
+//    {
+//        //var_dump("setAttribute");
+//        return parent :: setAttribute($key, $value);
+//    }
 
 
 
@@ -405,14 +404,10 @@ class CrudModel extends Model
 //        return parent :: offsetGet($offset);
 //    }
 
-    public function __get($key)
-    {
-//        if ($key == "config")
-//        {
-//            return $this->objectifyConfig();
-//        }
-        return parent :: __get($key);
-    }
+//    public function __get($key)
+//    {
+//        return parent :: __get($key);
+//    }
 
     function getViewRefAttribute()
     {
@@ -421,20 +416,6 @@ class CrudModel extends Model
         return $this->classViewName . "_" . $this->scope . "_" . $id;
     }
 
-    function getListData($scope=null, $viewType='data_tables')
-    {
-        $skip = (int) $this->app['request']->get('start',0);
-        $take =  (int) $this->app['request']->get('length',0);
-        $params = $this->app['request']->all();
-        $params['view_type'] = $viewType;
-        $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
-
-        return CrudModelCollectionBuilder :: create($this, $params)
-            ->applyContextFilter()
-            ->paginate($skip, $take)
-            ->fetch();
-
-    }
 
 
 

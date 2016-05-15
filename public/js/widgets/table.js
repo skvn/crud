@@ -30,7 +30,14 @@
                     else
                     {
                         col.fnCreatedCell = function(td, cellData, rowData, row, col){
-                            $(td).data('id',cellData);
+                            if (rowData['id'])
+                            {
+                                $(td).data('id',rowData['id']).attr('data-id', rowData['id']);
+                            }
+                            else
+                            {
+                                $(td).data('id',cellData).attr('data-id', cellData);
+                            }
                         }
                     }
                 }

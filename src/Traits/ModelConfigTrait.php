@@ -12,8 +12,6 @@ trait ModelConfigTrait
     public $classViewName;
     public $scope = "default";
 
-    protected $crudRelations = [];
-    protected $processableRelations = [];
     protected $list_prefs = null;
 
     /* Flag for tracking created_by  and updated_by */
@@ -29,17 +27,17 @@ trait ModelConfigTrait
         if (!empty($this->config['fields']))
         {
             $form = !empty($this->config['form']) ? $this->flatFields($this->config['form'], !empty($this->config['form_tabbed'])) : [];
-            foreach ($this->config['fields'] as $name=>  $col)
+            foreach ($this->config['fields'] as $name => $col)
             {
 
                 if (!empty($col['hint_default']) && !empty($col['hint']) &&  $col['hint'] === 'auto')
                 {
-                    $col['hint'] = $this->classShortName.'_fields_'.$name;
+                    $this->config['fields'][$name]['hint'] = $this->classShortName.'_fields_'.$name;
                 }
                 //fill relations
                 if (isset($col['relation']))
                 {
-                    $rel_name = $this->getRelationNameByColumnName($name);
+                    $rel_name = !empty($this->config['fields'][$name]['relation_name']) ? $this->config['fields'][$name]['relation_name'] : $name;
                     $this->crudRelations[$rel_name] = $col['relation'];
                 }
 
@@ -53,20 +51,12 @@ trait ModelConfigTrait
 
         if (empty($this->table))
         {
-            if (!isset($this->config['table']))
-            {
-                $this->table = $this->classViewName;
-            }
-            else
-            {
-                $this->table = $this->config['table'];
-            }
+            $this->table = isset($this->config['table']) ? $this->config['table'] : $this->classViewName;
         }
         if (isset($this->config['timestamps']))
         {
             $this->timestamps = $this->config['timestamps'];
         }
-
         if (isset($this->config['authors']))
         {
             $this->track_authors = $this->config['authors'];
@@ -337,6 +327,10 @@ trait ModelConfigTrait
             {
                 array_unshift($conf['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
             }
+            else
+            {
+                array_unshift($conf['columns'],[ "data"=> "id","orderable"=>false, 'invisible'=>true]);
+            }
             if (!empty($conf['buttons']['single_edit'])
                 || !empty($conf['buttons']['single_delete'])
                 || !empty($conf['list_actions'])
@@ -379,10 +373,10 @@ trait ModelConfigTrait
                             $cols[] = $col;
                         }
                     }
+                    $conf['all_columns'] = $conf['columns'];
                     $conf['columns'] = $cols;
                 }
             }
-
 
 
             if (empty($prop))

@@ -21,9 +21,9 @@ Route::group($adm_route_params, function() {
     Route::post('crud/{model}/{id}/command/{command_name}',         array('as' => 'crud_command',               'uses' => 'CrudController@crudCommand'));
     Route::any('util/crud/table_columns',                           array('as' => 'crud_table_columns',         'uses' => 'CrudController@crudTableColumns'));
 
-//    Route::get('util/tooltip/fetch',                                    array(                                       'uses' => 'CrudController@crudTooltipFetch'));
+    Route::get('util/tooltip/fetch',                                array(                                      'uses' => 'CrudController@crudTooltipFetch'));
 //    Route::get('util/notify/fetch',                                     array(                                       'uses' => 'CrudController@crudNotifyFetch'));
-//    Route::post('util/tooltip/update',                                  array(                                       'uses' => 'CrudController@crudTooltipUpdate'));
+    Route::post('util/tooltip/update',                              array(                                      'uses' => 'CrudController@crudTooltipUpdate'));
 
 
 

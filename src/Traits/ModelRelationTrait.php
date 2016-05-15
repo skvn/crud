@@ -3,6 +3,11 @@
 
 trait ModelRelationTrait
 {
+
+    protected $dirtyRelations = [];
+    protected $crudRelations = [];
+    protected $processableRelations = [];
+
     public function saveRelations()
     {
         $formConf = $this->getFields();
@@ -121,16 +126,6 @@ trait ModelRelationTrait
     }
 
 
-    function getRelationNameByColumnName($colName)
-    {
-        $col = $this->getFields($colName);
-        if (!empty($col['relation_name']))
-        {
-            return $col['relation_name'];
-        }
-
-        return $colName;
-    }//
 
     protected   function resolveColumnByRelationName($col, $scope='fields')
     {

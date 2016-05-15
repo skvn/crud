@@ -6,9 +6,13 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Skvn\Crud\Models\CrudNotify as Notify;
 use Skvn\Crud\Models\CrudModel;
+use Skvn\Crud\Models\CrudModelCollectionBuilder;
+use Skvn\Crud\Traits\TooltipTrait;
 
 class CrudController extends Controller
 {
+    use TooltipTrait;
+
     protected $app,$auth, $helper, $cmsHelper,  $request;
 
 
@@ -60,7 +64,11 @@ class CrudController extends Controller
 
         if ($this->app['request']->ajax())
         {
-             return $obj->getListData($scope,'tree');
+            $params = $this->app['request']->all();
+            $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
+            return CrudModelCollectionBuilder :: createTree($obj, $params)
+                ->applyContextFilter()
+                ->fetch();
 
         }
         return $this->app['view']->make($obj->resolveView('tree'),['crudObj'=>$obj]);
@@ -90,9 +98,15 @@ class CrudController extends Controller
             return \Response('Access denied',403);
         }
 
-        return $obj->getListData($scope,'data_tables');
+        $skip = (int) $this->app['request']->get('start',0);
+        $take =  (int) $this->app['request']->get('length',0);
+        $params = $this->app['request']->all();
+        $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
 
-
+        return CrudModelCollectionBuilder :: createDataTables($obj, $params)
+            ->applyContextFilter()
+            ->paginate($skip, $take)
+            ->fetch();
     }//
 
     function crudEdit($model,$id)
@@ -130,7 +144,7 @@ class CrudController extends Controller
     {
 
         try {
-            $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
+            $obj = CrudModel :: createInstance($model, $this->app['request']->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
 //            $class = 'App\Model\\' .studly_case($model);
 //            $obj = $class::firstOrNew(['id'=>(int)$id]);
 

@@ -1,6 +1,7 @@
 {% set COL_WIDTH=12 %}
 <form action="{{ route('crud_update',{'model':crudObj.classViewName,'id':id}) }}" method="post" enctype="multipart/form-data" role="form"  data-crud_scope="{{ crudObj.scope }}" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}" data-rel="{{ crudObj.view_ref }}">
     <input type="hidden" id="tree_action" name="tree_action" value=""/>
+    <input type="hidden" name="scope" value="{{ crudObj.scope }}"/>
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
     <ul class="nav nav-tabs">
         {% set active=0 %}

@@ -10,8 +10,11 @@
         var frm = $('#tooltip_edit');
         var idx = $('input[name=tt_index]', frm).val();
         var txt = $('textarea[name=tt_text]', frm).val();
-        $('*[data-crud_tooltip_id='+idx+']').data('original-title', txt).attr('data-original-title', txt);
-        _tips[idx] = txt;
+        if (idx)
+        {
+            $('*[data-crud_tooltip_id='+idx+']').data('original-title', txt).attr('data-original-title', txt);
+            _tips[idx] = txt;
+        }
     });
 
     crud.bind('page.start', function(){
