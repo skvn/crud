@@ -52,7 +52,7 @@ A plain form is just a list of fields that should be displayed in the UI. The ex
 
 A tabbed form is more complex interface. 
 
-The main idea is to split a large form into logical steps, using [Bootstrap tabs](!http://getbootstrap.com/javascript/#tabs)
+The main idea is to split a large form into logical parts, using [Bootstrap tabs](!http://getbootstrap.com/javascript/#tabs)
 
 You can define the tabs and a set of fields to show on each tab.
 
