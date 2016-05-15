@@ -30,7 +30,7 @@ class DateRange extends Range {
         }
     }
 
-    function prepareValue($value)
+    function prepareValueForDb($value)
     {
         return strtotime($value . ' 14:23');
     }

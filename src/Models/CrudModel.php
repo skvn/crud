@@ -225,7 +225,7 @@ class CrudModel extends Model
                 {
                     if (!empty($attributes[$f]))
                     {
-                        $attributes[$f] = $this->getForm()->fields[$col_idx]->prepareValue($attributes[$f]);
+                        $attributes[$f] = $this->getForm()->fields[$col_idx]->prepareValueForDb($attributes[$f]);
                     }
                 }
             }
@@ -279,6 +279,7 @@ class CrudModel extends Model
 
     public function __call($method, $parameters)
     {
+        //var_dump("__call");
         if (array_key_exists($method, $this->crudRelations))
         {
             $relType =  $this->crudRelations[$method];
@@ -292,6 +293,7 @@ class CrudModel extends Model
 
     public function getAttribute($key)
     {
+        //var_dump("getAttribute");
         if (array_key_exists($key, $this->crudRelations))
         {
             if ( ! array_key_exists($key, $this->relations))
@@ -310,6 +312,13 @@ class CrudModel extends Model
 
         return parent::getAttribute($key);
     }
+
+    public function setAttribute($key, $value)
+    {
+        //var_dump("setAttribute");
+        return parent :: setAttribute($key, $value);
+    }
+
 
 
     public function getForm($fillData=null, $forceNew=false)
@@ -416,15 +425,13 @@ class CrudModel extends Model
     {
         $skip = (int) $this->app['request']->get('start',0);
         $take =  (int) $this->app['request']->get('length',0);
-        $order = $this->app['request']->get('order');
-        $search = $this->app['request']->get('search');
+        $params = $this->app['request']->all();
+        $params['view_type'] = $viewType;
+        $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
 
-        return CrudModelCollectionBuilder :: create($this, $viewType)
-            ->createCollection($order)
-            ->setSearch(!empty($search['value']) ? $search['value'] : '')
-            ->applyQueryFilter()
+        return CrudModelCollectionBuilder :: create($this, $params)
+            ->applyContextFilter()
             ->paginate($skip, $take)
-            ->setParams($this->app['request']->all())
             ->fetch();
 
     }
