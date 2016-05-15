@@ -4,7 +4,7 @@ Form describes the set of the fields used to build the form interface.
 
 Form can be a plain one level list array, as well as a multidimensional array for a tabbed interface.
 
-In case of tabbed interface, `form_tabbed` config property should be set to `true`  value. Also a `tabs` array should be defined. The tabbed form is described [below](#tabbed_form_definition)
+In case of tabbed interface, `form_tabbed` config property should be set to `true`. Also a `tabs` array should be defined. The tabbed form is described [below](#tabbed_form_definition)
 
 <a name="form_definition"></a>
 ## Form definition
