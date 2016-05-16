@@ -19,6 +19,10 @@ class CrudModelCollectionBuilder
         $this->params = $args;
         $this->params['buttons'] = $this->model->getListConfig('buttons');
         $this->params['sort'] = $this->model->getListConfig('sort');
+        if (!isset($this->params['view_type']))
+        {
+            $this->params['view_type'] = "";
+        }
     }
 
     static function create(CrudModel $model, $args = [])

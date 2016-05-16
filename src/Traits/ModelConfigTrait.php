@@ -314,7 +314,7 @@ trait ModelConfigTrait
 
         if (strpos($prop,'.') === false)
         {
-            $conf = $this->confParam('list.' . $this->scope);
+            $conf = $this->confParam('list.' . $this->scope, null, false);
             if (empty($conf))
             {
                 $conf = [];
@@ -377,7 +377,6 @@ trait ModelConfigTrait
                     $conf['columns'] = $cols;
                 }
             }
-
 
             if (empty($prop))
             {
@@ -501,7 +500,7 @@ trait ModelConfigTrait
     {
         //$form = $this->confParam('list.' . $this->scope . '.filter');
         //FIXME: backward compability
-        $form = $this->getListConfig("filters");
+        $form = $this->getListConfig("filter");
         if (empty($form))
         {
             $form = [];
