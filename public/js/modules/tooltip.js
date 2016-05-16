@@ -64,7 +64,7 @@
         });
         if (remote.length)
         {
-            $.get("/util/tooltip/fetch", {ids: remote}, function(res){
+            $.get("/admin/util/tooltip/fetch", {ids: remote}, function(res){
                 if (!res['tips'])
                 {
                     return;

@@ -711,6 +711,7 @@
         $("table[data-crud_table]").crud_list();
         $("div[data-crud_tree]").crud_tree();
         $("form[data-crud_form=ajax]").crud_form();
+        $('[data-toggle="tooltip"]').tooltip({container: 'body'});
         $(crud.doc).on("shown.bs.tab", "a[data-toggle=tab]", function(e){
             if ($(e.target).data('id'))
             {
