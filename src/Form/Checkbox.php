@@ -8,7 +8,7 @@ class Checkbox extends Field {
     {
         if ($this->value === null)
         {
-            $this->value = $this->form->crudObj->getAttribute($this->getName());
+            $this->value = $this->model->getAttribute($this->getName());
         }
 
         return $this->value;

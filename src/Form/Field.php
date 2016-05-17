@@ -1,6 +1,7 @@
 <?php namespace Skvn\Crud\Form;
 
 use Skvn\Crud\Exceptions\ConfigException;
+use Skvn\Crud\Models\CrudModel;
 
 
 class Field
@@ -8,14 +9,14 @@ class Field
 
     public $config;
     protected $value = null;
-    protected $form;
+    protected $model;
     public $name;
     protected $uniqid;
 
-    function __construct(Form $form,$config )
+    function __construct(CrudModel $model, $config)
     {
         $this->config = $config;
-        $this->form = $form;
+        $this->model = $model;
         $this->name = $config['name'];
 
         if (!$this->validateConfig())
@@ -26,11 +27,11 @@ class Field
 
     }
 
-    public static  function create($form, $config)
+    public static  function create(CrudModel $model, $config)
     {
         $type = 'Skvn\Crud\Form\\'.studly_case($config['type']);
         //$type = studly_case($config['type']);
-        return new $type($form, $config);
+        return new $type($model, $config);
     }
 
 

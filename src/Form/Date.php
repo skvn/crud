@@ -13,7 +13,7 @@ class Date extends Field {
     {
         if (is_null($this->value))
         {
-            $this->value = $this->form->crudObj->getAttribute($this->getName());
+            $this->value = $this->model->getAttribute($this->getName());
             if (!$this->value)
             {
                 if ($this->isInt())

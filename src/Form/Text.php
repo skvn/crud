@@ -8,9 +8,9 @@ class Text extends Field {
     {
         if (is_null($this->value))
         {
-            if (!in_array($this->getName(), $this->form->crudObj->getHidden()))
+            if (!in_array($this->getName(), $this->model->getHidden()))
             {
-                $this->value = $this->form->crudObj->getAttribute($this->getName());
+                $this->value = $this->model->getAttribute($this->getName());
             }
         }
 

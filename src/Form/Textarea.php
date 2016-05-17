@@ -8,7 +8,7 @@ class TextArea extends Field {
     {
         if (!$this->value)
         {
-            $this->value = $this->form->crudObj->getAttribute($this->getName());
+            $this->value = $this->model->getAttribute($this->getName());
         }
 
         return $this->value;

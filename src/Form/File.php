@@ -8,9 +8,9 @@ class File extends Field {
     {
         if (!$this->value)
         {
-            if ($this->form->crudObj->getAttribute($this->getName()))
+            if ($this->model->getAttribute($this->getName()))
             {
-                $this->value = $this->form->crudObj->getAttach($this->getName());
+                $this->value = $this->model->getAttach($this->getName());
             }
         }
 

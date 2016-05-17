@@ -6,7 +6,7 @@ class MultiFile extends Field {
 
     function getExisting()
     {
-        return $this->form->crudObj->getAttach($this->getName());
+        return $this->model->getAttach($this->getName());
     }
 
 

@@ -10,7 +10,7 @@ class Range extends Field
         {
             if (!empty($this->config['fields']))
             {
-                $this->value = $this->form->crudObj->getAttribute($this->config['fields'][0]) . "~" . $this->form->crudObj->getAttribute($this->config['fields'][1]);
+                $this->value = $this->model->getAttribute($this->config['fields'][0]) . "~" . $this->model->getAttribute($this->config['fields'][1]);
             }
         }
         return $this->value;

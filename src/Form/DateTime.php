@@ -13,7 +13,7 @@ class DateTime extends Field {
     {
         if (!$this->value)
         {
-            $this->value = $this->form->crudObj->getAttribute($this->getName());
+            $this->value = $this->model->getAttribute($this->getName());
             if (!$this->value)
             {
                 if (empty($this->config['db_type']) ||$this->config['db_type'] == 'int' ) {

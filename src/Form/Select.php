@@ -11,9 +11,9 @@ class Select extends Field {
     {
         if (is_null($this->value))
         {
-            if (!in_array($this->getName(), $this->form->crudObj->getHidden()))
+            if (!in_array($this->getName(), $this->model->getHidden()))
             {
-                $this->value = $this->form->crudObj->getAttribute($this->getName());
+                $this->value = $this->model->getAttribute($this->getName());
             }
         }
 
@@ -43,9 +43,9 @@ class Select extends Field {
             {
                 if (!empty($this->config['relation'])
                     &&
-                    $this->form->crudObj->isManyRelation($this->config['relation']))
+                    $this->model->isManyRelation($this->config['relation']))
                 {
-                    $this->value = $this->form->crudObj->getRelationIds($this->getName());
+                    $this->value = $this->model->getRelationIds($this->getName());
                 }
                 else if (!empty($this->config['relation'])
                     && $this->config['relation'] == CrudModel::RELATION_HAS_ONE)
@@ -55,13 +55,13 @@ class Select extends Field {
                 }
                 else
                 {
-                    $this->value = $this->form->crudObj->getAttribute($this->getName());
+                    $this->value = $this->model->getAttribute($this->getName());
                 }
             }
             $opts = [];
             if (!is_array($this->config['select_options']))
             {
-                $this->config['select_options'] = $this->form->crudObj->getAttribute($this->config['select_options']);
+                $this->config['select_options'] = $this->model->getAttribute($this->config['select_options']);
             }
 
             foreach ($this->config['select_options'] as $k => $v)
@@ -77,9 +77,9 @@ class Select extends Field {
         }
         elseif (!empty($this->config['method_options']))
         {
-            $this->value = $this->form->crudObj->getAttribute($this->getName());
+            $this->value = $this->model->getAttribute($this->getName());
             $opts = [];
-            foreach ($this->form->crudObj->{$this->config['method_options']}() as $k => $v)
+            foreach ($this->model->{$this->config['method_options']}() as $k => $v)
             {
                 $opts[] = ['value' => $k, 'text' => $v, 'selected' => $this->isSelected($k)];
             }
@@ -133,19 +133,19 @@ class Select extends Field {
 
         if (!$this->value)
         {
-            if (!empty($this->config['relation']) && $this->form->crudObj->isManyRelation($this->config['relation']))
+            if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
             {
-                $this->value = $this->form->crudObj->getRelationIds($this->getName());
+                $this->value = $this->model->getRelationIds($this->getName());
             }
             else if (!empty($this->config['relation'])
                 && $this->config['relation'] == CrudModel::RELATION_HAS_ONE)
             {
                 $relation = $this->getName();
-                $this->value = $this->form->crudObj->$relation->id;
+                $this->value = $this->model->$relation->id;
             }
             else
             {
-                $this->value = $this->form->crudObj->getAttribute($this->getName());
+                $this->value = $this->model->getAttribute($this->getName());
             }
         }
 
@@ -235,7 +235,7 @@ class Select extends Field {
             return;
         }
         $join = null;
-        if (!empty($this->config['relation']) && $this->form->crudObj->isManyRelation($this->config['relation']))
+        if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
         {
             $join = $this->name;
             $col = snake_case(class_basename($this->config['model'])).'_id';

@@ -103,7 +103,7 @@ class Form {
                     $colConfig['column'] = $col;
                 }
                 $colConfig['name'] = $col;
-                $this->fields[$col] = Field::create($this, $colConfig);
+                $this->fields[$col] = Field::create($crudObj, $colConfig);
                 if ($data)
                 {
                     switch ($colConfig['type'])

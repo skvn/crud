@@ -438,7 +438,7 @@ trait ModelConfigTrait
                 if ($form_config && !empty($form_config['type']))
                 {
                     $form_config['name'] = $col;
-                    $field = Field::create($this->getForm(), $form_config);
+                    $field = Field::create($this, $form_config);
                     return $field->getValueForList();
                 }
                 return $this->$col;
