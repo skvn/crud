@@ -94,6 +94,7 @@
                 if ($('#field_new').val())
                 {
                     fname = $('#field_new').val();
+
                 } else if ($('#field_existing').val())
                 {
                     fname = $('#field_existing').val();
@@ -108,6 +109,7 @@
                 {
                     $.get('/admin/crud_setup/get_field_row/'+fname, function (res) {
 
+                        $('#field_existing option[value='+fname+']').remove();
                         $('#field_existing').val('');
                         $('#field_new').val('');
                         $('#f_container').append(res);

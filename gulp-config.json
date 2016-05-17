@@ -13,6 +13,7 @@
 
           "resources/bower_components/patternfly/dist/css/patternfly.css",
           "resources/bower_components/patternfly/dist/css/patternfly-additions.css",
+          "resources/bower_components/datatables/media/css/dataTables.bootstrap.min.css",
           "resources/bower_components/simplemde/dist/simplemde.min.css",
           "resources/bower_components/summernote/dist/summernote.css",
           "resources/bower_components/tagmanager/tagmanager.css",

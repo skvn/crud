@@ -287,7 +287,7 @@ class CrudModelPrototype
             foreach ($this->config_data['fields'] as $k=> $f)
             {
 
-                if (!isset($this->column_types[$k]))
+                if (!isset($this->column_types[$k]) && empty($f['relation']))
                 {
                     $this->add_fields[$k] = $f; 
                 }
@@ -475,21 +475,21 @@ class CrudModelPrototype
     private function prepareConfigData()
     {
 
-//        if (!empty($this->config_data['fields']))
-//        {
-//            $form_fields = [];
-//            foreach ($this->config_data['fields'] as $key=>$f)
-//            {
-//
-//                if (isset($f['editable']) && $f['editable'] )
-//                {
-//                    $form_fields[] = $key;
-//                }
-//
-//            }
-//
-//            $this->config_data['form_fields'] = $form_fields;
-//        }
+        if (!empty($this->config_data['fields']))
+        {
+            $form_fields = [];
+            foreach ($this->config_data['fields'] as $key=>$f)
+            {
+
+                if (isset($f['editable']) && $f['editable'] )
+                {
+                    $form_fields[] = $key;
+                }
+
+            }
+
+            $this->config_data['form'] = $form_fields;
+        }
 
         //track timestamps?
         if (isset($this->column_types['created_at']) && isset($this->column_types['updated_at']))
@@ -719,11 +719,14 @@ class CrudModelPrototype
         {
             $migrator = new Migrator();
             $columns = [];
+
             foreach ($this->add_fields as $fname=>$fdesc)
             {
-                $dbtype = $migrator->getColumDbTypeByEditType($fdesc['type']);
-                if (!empty($dbtype)) {
-                    $columns[$fname] = $dbtype;
+                if (!empty($fdesc['type'])) {
+                    $dbtype = $migrator->getColumDbTypeByEditType($fdesc['type']);
+                    if (!empty($dbtype)) {
+                        $columns[$fname] = $dbtype;
+                    }
                 }
             }
 

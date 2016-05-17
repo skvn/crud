@@ -6,7 +6,7 @@
             <h4 class="modal-title">{{ trans('crud::messages.edit') }} {{ crudObj.confParam('ent_name_r') }}</h4>
         </div>
 
-        <div class="modal-body">
+        <div class="modal-body row">
             {% if form_tabbed %}
                     {% include 'crud::crud/form_tabbed.twig' %}
                 {% else %}
