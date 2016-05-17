@@ -200,7 +200,7 @@ class Select extends Field {
         if ($modelObj->confParam('tree'))
         {
             $isTree = true;
-            $levelCol = $modelObj->getTreeConfig('level_column');
+            $levelCol = $modelObj->getTreeConfig('depth_column');
         }
         else
         {
