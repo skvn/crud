@@ -53,6 +53,7 @@ trait ModelConfigTrait
         {
             $this->table = isset($this->config['table']) ? $this->config['table'] : $this->classViewName;
         }
+
         if (isset($this->config['timestamps']))
         {
             $this->timestamps = $this->config['timestamps'];
