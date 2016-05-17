@@ -7,6 +7,7 @@ use Skvn\Crud\Form\Form;
 class Filter {
 
 
+    static  $instances = [];
 
     public $filters;
     protected $model, $crudObj,$form, $session, $defaults;
@@ -16,6 +17,19 @@ class Filter {
         $this->session = app()['session'];
         $this->setModel($model);
     }
+
+    public static  function create(CrudModel $model, $scope)
+    {
+        $key = $model->classShortName . "_" . $scope;
+        //$context = implode(':',$context_params);
+        if (empty(self :: $instances[$key]))
+        {
+            $instances[$key] =  new Filter($model, $scope);
+        }
+
+        return $instances[$key];
+    }
+
 
     public function setModel(CrudModel $crudObj)
     {

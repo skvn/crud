@@ -3,7 +3,7 @@
 use Skvn\Crud\Exceptions\ConfigException;
 
 
-abstract class Field
+class Field
 {
 
     public $config;
@@ -25,6 +25,14 @@ abstract class Field
 
 
     }
+
+    public static  function create($form, $config)
+    {
+        $type = 'Skvn\Crud\Form\\'.studly_case($config['type']);
+        //$type = studly_case($config['type']);
+        return new $type($form, $config);
+    }
+
 
     function getFilterCondition()
     {

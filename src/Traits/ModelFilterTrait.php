@@ -1,9 +1,7 @@
 <?php namespace Skvn\Crud\Traits;
 
 
-use Skvn\Crud\Filter\FilterFactory;
 use Skvn\Crud\Filter\Filter;
-use Skvn\Crud\Models\CrudModelCollectionBuilder;
 
 
 trait ModelFilterTrait
@@ -24,7 +22,7 @@ trait ModelFilterTrait
 
     public function initFilter()
     {
-        $filter =  FilterFactory::create($this, $this->getScope());
+        $filter =  Filter::create($this, $this->getScope());
         $this->setFilter($filter);
     }
 
