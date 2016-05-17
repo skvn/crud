@@ -409,7 +409,8 @@
                             ['fontsize', ['fontsize']],
                             ['color', ['color']],
                             ['para', ['ul', 'ol', 'paragraph']],
-                            ['insert', ['picture', 'link', 'video', 'table']]
+                            ['insert', ['picture', 'link', 'video', 'table', 'hr', 'anchor']],
+                            ['misc', ['codeview']]
 
                         ],
                         onpaste: function (e) {
