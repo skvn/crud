@@ -345,6 +345,10 @@ class CrudModelCollectionBuilder
                 {
                     $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
                 }
+                if (isset($row[$col['data']]) && !empty($col['format']))
+                {
+                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format']);
+                }
             }
             $data[] = $row;
         }

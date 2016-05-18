@@ -215,6 +215,11 @@ trait ModelConfigTrait
         return $prop ? (isset($form[$prop]) ? $form[$prop] : null) : $form;
     }
 
+    function getField($name)
+    {
+        return $this->getFields($name);
+    }
+
     /**
      * @param $key
      * @param null $default
@@ -423,36 +428,47 @@ trait ModelConfigTrait
         return !empty($this->config['tree']) && !$this->getTreeConfig('use_list');
     }
 
-    function getDescribedColumnValue($col)
+    function getDescribedColumnValue($col, $format = false)
     {
+        $value = null;
         if ($relSpl = $this->resolveListRelation($col))
         {
             $rel = $relSpl[0];
             $attr = $relSpl[1];
-            return $this->$rel->$attr;
+            $value = $this->$rel->$attr;
         }
         else
         {
             if ($this->__isset($col))
             {
-                $form_config = $this->getFields($col);
+                $form_config = $this->getField($col);
                 if ($form_config && !empty($form_config['type']))
                 {
                     $form_config['name'] = $col;
                     $field = Field::create($this, $form_config);
-                    return $field->getValueForList();
+                    $value = $field->getValueForList();
                 }
-                return $this->$col;
+                $value = $this->$col;
             }
-            else
+            //FIXME
+//            else
+//            {
+//                $meth = camel_case('get_' . $col);
+//                if (method_exists($this, $meth))
+//                {
+//                    return $this->$meth();
+//                }
+//            }
+        }
+        if (!empty($format))
+        {
+            $method = "crudFormatValue" . camel_case($format);
+            if (method_exists($this, $method))
             {
-                $meth = camel_case('get_' . $col);
-                if (method_exists($this, $meth))
-                {
-                    return $this->$meth();
-                }
+                $value = $this->$method($value);
             }
         }
+        return $value;
     }
 
 

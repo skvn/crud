@@ -416,7 +416,59 @@ class CrudModel extends Model
         return $this->classViewName . "_" . $this->scope . "_" . $id;
     }
 
+    protected function crudFormatValue($pattern, $args = [])
+    {
+        return vsprintf($pattern, $args);
+    }
 
+    /**
+     * add id to value
+     *
+     * @param $val
+     * @param array $args
+     * @return string
+     */
+    function crudFormatValueId($val, $args = [])
+    {
+        return $this->crudFormatValue('%s [%s]', [$val, $this->id]);
+    }
+
+    /**
+     * boldifify value
+     *
+     * @param $val
+     * @param array $args
+     * @return string
+     */
+    function crudFormatValueBold($val, $args = [])
+    {
+        return $this->crudFormatValue('<strong>%s</strong>', [$val]);
+    }
+
+    function getAvailFormatters()
+    {
+        $flist = [];
+        $cls = new \ReflectionClass($this);
+        $mlist = $cls->getMethods(\ReflectionMethod :: IS_PUBLIC);
+        foreach ($mlist as $m)
+        {
+            if (preg_match("#crudFormatValue([a-zA-Z]+)#", $m->name, $matches))
+            {
+                $desc = "";
+                $c = $m->getDocComment();
+                if (!empty($c))
+                {
+                    $docLines = preg_split('~\R~u', $c);
+                    if (isset($docLines[1]))
+                    {
+                        $desc = trim($docLines[1], "\t *");
+                    }
+                }
+                $flist[] = ['name' => snake_case($matches[1]), 'method' => $m->name, 'description' => $desc];
+            }
+        }
+        return $flist;
+    }
 
 
 
