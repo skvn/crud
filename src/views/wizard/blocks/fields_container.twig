@@ -1,3 +1,4 @@
+{% import "crud::wizard/macro.twig" as wiz_macros%}
 <fieldset>
     <div class="panel panel-default">
         <div class="panel-body">
@@ -5,15 +6,36 @@
 
             <div id="f_container">
             {% set used_fields = [] %}
+
+            {%  if model.form_tabbed %}
+                {%  for tab_alias, fields in model.form %}
+                    {% set tab = model.tabs[tab_alias] %}
+                    {%  include  'crud::wizard/blocks/fields/tab' %}
+                    {%  for f  in fields %}
+                        {% set fld = model.fields[f]  %}
+                        {%  if not fld.relation%}
+                            {% set used_fields = used_fields|merge([f]) %}
+                            {%  include  'crud::wizard/blocks/fields/field_row' %}
+                        {% endif %}
+                    {% endfor %}
+
+
+                {% endfor %}
+            {%  else  %}
+
             {%  for f, fld in model.fields %}
                 {%  if not fld.relation%}
                     {% set used_fields = used_fields|merge([f]) %}
                 {%  include  'crud::wizard/blocks/fields/field_row' %}
                 {% endif %}
             {% endfor %}
+
+            {% endif %}
             </div>
             <hr />
+
             <label>
+                <h4>New field</h4>
                 <select class="form-control default_select" id="field_existing" style="display:inline; width:250px;"  >
                     <option value="">Choose existing database table field</option>
                     {% for f in wizard.getTableColumns(table) %}
@@ -24,6 +46,13 @@
                 </select>
                 Or add a  one <input type="text" style="display:inline; width:150px;" id="field_new" />
                 <a href="#" class="btn btn-success"  data-click="crud_action" data-action="wizard_add_field_row" ><i class="fa fa-plus"></i> Add</a>
+            </label>
+
+            <hr />
+            <label>
+                <h4>New tab {{ wiz_macros.help('Config/Form#tabbed_form_definition') }}</h4>
+                Add tab <input type="text" style="display:inline; width:150px;" id="tab_new" />
+                <a href="#" class="btn btn-success"  data-click="crud_action" data-action="wizard_add_form_tab" ><i class="fa fa-plus"></i> Add</a>
             </label>
 
         </div>

@@ -475,6 +475,8 @@ class CrudModelPrototype
     private function prepareConfigData()
     {
 
+        //form
+
         if (!empty($this->config_data['fields']))
         {
             $form_fields = [];
@@ -488,7 +490,29 @@ class CrudModelPrototype
 
             }
 
-            $this->config_data['form'] = $form_fields;
+            if (empty($this->config_data['form_tabs'])) {
+
+                $this->config_data['form'] = $form_fields;
+
+            } else {
+
+                $this->config_data['form'] = [];
+                $form_tabs = json_decode($this->config_data['form_tabs'], true);
+                unset($this->config_data['form_tabs']);
+                $tabs = [];
+                foreach ($form_tabs as $i=>$tab)
+                {
+                    if (!empty($tab['alias']))
+                    {
+                        $alias = $tab['alias'];
+                    } else {
+                        $alias = 'tab_'.$i;
+                    }
+                    $tabs[$alias] = ['title'=>$tab['title']];
+                    $this->config_data['form'][$alias] = $tab['fields'];
+                }
+                $this->config_data['tabs'] = $tabs;
+            }
         }
 
         //track timestamps?
@@ -658,6 +682,13 @@ class CrudModelPrototype
         if (!empty($this->config_data['form'])) {
             $conf['form'] = $this->config_data['form'];
         }
+
+        if (!empty($this->config_data['tabs'])) {
+            $conf['tabs'] = $this->config_data['tabs'];
+            $conf['form_tabbed'] = 1;
+        }
+
+
 
         $conf['fields'] = [];
 

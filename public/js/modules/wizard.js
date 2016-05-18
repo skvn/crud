@@ -119,6 +119,15 @@
 
 
             },
+            
+            wizard_add_form_tab: function (elem) {
+
+                if ($('#tab_new').val()) {
+
+                    $('<div class="alert alert-info" data-form_tab="1"><span class="pficon pficon-info"></span> '+$('#tab_new').val()+'</div>').appendTo($('#f_container'));
+                    $('#tab_new').val('');
+                }
+            },
 
             // wizard_add_filter_field: function (elem) {
             //     var type = elem.val();
@@ -536,7 +545,46 @@
                        $('<input type="hidden" name="'+$(this).attr('name')+'" value="0" />').appendTo(form);
                    }
                 });
-                form.submit();
+
+                var tabs = $('#f_container').find('div[data-form_tab]');
+                var tabs_arr = [];
+                var was_error = false;
+                if (tabs.length)
+                {
+                    var first_child = $('#f_container').children().get(0);
+                    if (!$(first_child).data('form_tab'))
+                    {
+                        was_error = true;
+                        alert("If you are using tabs. The form should start with a one.\nPlease drag the first tab to the very top of the form fields list");
+                        return false;
+                    }
+                    tabs.each(function () {
+                        var tab = {};
+                        tab.title = $.trim($(this).text());
+                        if ($(this).data('alias'))
+                        {
+                            tab.alias = $(this).data('alias');
+                        }
+                        var tab_fields = $(this).nextUntil('div[data-form_tab]','table');
+                        if (tab_fields.length)
+                        {
+                            tab.fields = tab_fields.map(function (){if ($(this).data('rel')){return $(this).data('rel')}}).toArray();
+                        } else {
+                            alert('Tab '+tab.title+' contains no fields');
+                            was_error = true;
+                        }
+                        tabs_arr.push(tab);
+                    });
+
+                    if (!was_error)
+                    {
+                        $('<textarea name="form_tabs">'+JSON.stringify(tabs_arr)+'</textarea>').appendTo(form);
+                    }
+                }
+
+                if (!was_error) {
+                    form.submit();
+                }
             }
         }).validate({
             errorPlacement: function (error, element)
