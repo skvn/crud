@@ -29,16 +29,15 @@ trait AttachmentTrait {
     }
 
 
-    public static function boot()
+//    public static function boot()
+//    {
+//        //parent::boot();
+//        static::bootAttach();
+//    }
+
+
+    public static function bootAttachmentTrait()
     {
-        //parent::boot();
-        static::bootAttach();
-    }
-
-
-    public static function bootAttach()
-    {
-
 
         static::deleting(function($instance) {
             foreach($instance->attachedFiles as $attachedFile) {

@@ -9,12 +9,12 @@ use Skvn\Crud\Models\CrudFile;
 
 class {{ model.name }}Base extends CrudModel{
 
-{% if model.traits %}
+{#% if model.traits %}
     use  {{ model.traits|join(', ') }} {
         {%  if model.attaches %}AttachmentTrait::boot as attachBoot;{% endif %}
         {% if model.inline_img %}InlineImgTrait::boot as inlineImgBoot;{% endif %}
     }
-{% endif %}
+{% endif %#}
 
 
 	protected $table = '{{ model.table }}';
@@ -22,6 +22,7 @@ class {{ model.name }}Base extends CrudModel{
 	public $timestamps = false;
 	{% endif %}
 
+    {% if model.attaches or model.inline_img %}
 	public function __construct(array $attributes = array())
 	{
 	    {% for a in model.attaches %}
@@ -32,6 +33,7 @@ class {{ model.name }}Base extends CrudModel{
         {% endif %}
         parent::__construct($attributes);
     }//
+    {% endif %}
 
 
     //LISTS data providers
@@ -48,6 +50,7 @@ class {{ model.name }}Base extends CrudModel{
      }
     {% endfor %}
 
+    {#
     public static function boot()
     {
         {%  if model.attaches %}self::attachBoot();
@@ -56,6 +59,7 @@ class {{ model.name }}Base extends CrudModel{
         {% endif %}
         parent::boot();
     }
+    #}
 
     {% for a in model.attaches %}
     {% if a.multi == '1' %}

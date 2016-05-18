@@ -37,7 +37,7 @@ trait InlineImgTrait {
     /**
      * Laravel model boot
      */
-    public static function boot()
+    public static function bootInlineImgTrait()
     {
 
 
