@@ -1,7 +1,9 @@
 <table class="table table-bordered table-striped"   data-rel="{{ f }}"  style="max-width: 1200px;">
 <tr data-rel="{{ f }}">
 <td style="width: 200px;"><b>{{ f }}</b></td>
+{% if not fld.relation %}
 <td style="width: 250px;"><label>
+
 
         <select name="fields[{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-action="wizard_add_field"  style="display:inline; width:250px;"  >
             <option value="">Choose field type</option>
@@ -17,9 +19,12 @@
         {%  set ALIAS = f %}
         {% include 'crud::wizard/blocks/fields/'~fld.type~'.twig' %}
     {% endif %}
-
 </td>
 <td style="width: 80px;"><div id="f_cancel_{{ f }}" {%  if not fld.type  or fld.type == 'file'%}style="display: none"{% endif %}><a href="#" data-click="crud_action" data-field="{{ f }}" data-action="wizard_remove_parent" data-parent="table" data-confirm="Remove this editable field?" class="label label-danger">
             <i class="fa fa-trash-o"></i> Cancel</a></div></td>
+{%  else  %}
+    <td>Relation [{{ fld.type }}]</td>
+{% endif %}
+
 </tr>
 </table>

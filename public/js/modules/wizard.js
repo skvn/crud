@@ -124,8 +124,9 @@
 
                 if ($('#tab_new').val()) {
 
-                    $('<div class="alert alert-info" data-form_tab="1"><span class="pficon pficon-info"></span> '+$('#tab_new').val()+'</div>').appendTo($('#f_container'));
+                    $('<div class="alert alert-info" data-form_tab="1"><span><span class="pficon pficon-info"></span> '+$('#tab_new').val()+'</span> <div class="pull-right"><a href="#" data-click="crud_action"  data-action="wizard_remove_parent" data-parent="div.alert" data-confirm="Remove tab?" class="label label-danger"><i class="fa fa-trash-o"></i> Remove</a></div></div>').appendTo($('#f_container'));
                     $('#tab_new').val('');
+                    adjust_step_height();
                 }
             },
 
@@ -560,7 +561,7 @@
                     }
                     tabs.each(function () {
                         var tab = {};
-                        tab.title = $.trim($(this).text());
+                        tab.title = $.trim($(this).find('span').text());
                         if ($(this).data('alias'))
                         {
                             tab.alias = $(this).data('alias');

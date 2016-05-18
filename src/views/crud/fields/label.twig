@@ -1,0 +1,5 @@
+<label  for="{{ input.name }}">{{ input.config.title|raw }} {{ input.config.required ? '<span class="asterix"> * </span>' }}
+    {% if input.config.hint %}
+        {{ input.config.hint|tooltip(input.config.hint_default) }}
+    {% endif %}
+</label>

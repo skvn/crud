@@ -1,5 +1,10 @@
+{% include 'crud::crud/fields/label.twig' %}
+<div class="row">
+<div class="col-md-2">
 <div class="date input-daterange input-group"   data-date-format="{{ input.config.jsformat }}">
     <input type="text" class="input-sm form-control" name="{{ input.getFromFieldName() }}" value="{{ input.getValueFrom() }}" data-default="{{ input.getDefaultFrom() }}"/>
     <span class="input-group-addon">{{ trans('crud::messages.to') }}</span>
     <input type="text" class="input-sm form-control" name="{{ input.getToFieldName() }}" value="{{ input.getValueTo()}}"  data-default="{{ input.getDefaultTo() }}" />
+</div>
+</div>
 </div>

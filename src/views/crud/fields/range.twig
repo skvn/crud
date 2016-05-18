@@ -1,3 +1,4 @@
+{% include 'crud::crud/fields/label.twig' %}
 <div class="form-inline">
     от <input class="form-control" style="width: 70px;" name="{{ input.getFromFieldName() }}" min="0"  type="number" step="1" value="{{ input.getValueFrom() }}" data-default="{{ input.getDefaultFrom() }}">
     до <input class="form-control" style="width: 70px;"  name="{{ input.getToFieldName() }}" min="0"  type="number" step="1" value="{{ input.getValueTo() }}"  data-default="{{ input.getDefaultTo() }}">

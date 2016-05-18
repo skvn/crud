@@ -3,7 +3,6 @@
     <input type="hidden" name="scope" value="{{ crudObj.scope }}" />
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
 
-
         {% for input in  crudObj.getForm().fields %}
                 {% include 'crud::crud/fields/line_wrap.twig' %}
         {% endfor %}

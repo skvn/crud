@@ -13,21 +13,18 @@
                     {%  include  'crud::wizard/blocks/fields/tab' %}
                     {%  for f  in fields %}
                         {% set fld = model.fields[f]  %}
-                        {%  if not fld.relation%}
                             {% set used_fields = used_fields|merge([f]) %}
                             {%  include  'crud::wizard/blocks/fields/field_row' %}
-                        {% endif %}
                     {% endfor %}
 
 
                 {% endfor %}
+
             {%  else  %}
 
             {%  for f, fld in model.fields %}
-                {%  if not fld.relation%}
                     {% set used_fields = used_fields|merge([f]) %}
-                {%  include  'crud::wizard/blocks/fields/field_row' %}
-                {% endif %}
+                    {%  include  'crud::wizard/blocks/fields/field_row' %}
             {% endfor %}
 
             {% endif %}

@@ -136,7 +136,7 @@ class CrudController extends Controller
         }
         //return \View::make($this->crudHelper->resolveModelTemplate($model,$obj->config->get('tabs') ? 'edit_tabs' : 'edit'),['crudObj'=>$obj,'id'=>$id]);
         $edit_view = $obj->getListConfig('edit_tab')?'tab':'edit';
-        return $this->app['view']->make($obj->resolveView($edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$obj->getScope(), 'form_tabbed'=>$obj->getListConfig('form_tabbed')]);
+        return $this->app['view']->make($obj->resolveView($edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$obj->getScope(), 'form_tabbed'=>$obj->confParam('form_tabbed')]);
 
     }
 
