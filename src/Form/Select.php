@@ -3,6 +3,7 @@
 
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Models\CrudModelCollectionBuilder;
+use Illuminate\Support\Collection;
 
 class Select extends Field {
 
@@ -89,6 +90,7 @@ class Select extends Field {
             $opts = array();
         }
 
+        
         return array_merge($options, $opts);
 
     }
@@ -103,6 +105,13 @@ class Select extends Field {
         {
             return in_array($idx, $this->value);
         }
+
+        if (is_object($this->value) && ($this->value instanceof Collection))
+        {
+            $val = $this->value->toArray();
+            return in_array($idx, $val);
+        }
+
         return $idx == $this->value;
     }
 

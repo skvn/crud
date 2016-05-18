@@ -9,17 +9,14 @@ use Skvn\Crud\Models\CrudFile;
 
 class {{ model.name }}Base extends CrudModel{
 
-{#% if model.traits %}
-    use  {{ model.traits|join(', ') }} {
-        {%  if model.attaches %}AttachmentTrait::boot as attachBoot;{% endif %}
-        {% if model.inline_img %}InlineImgTrait::boot as inlineImgBoot;{% endif %}
-    }
-{% endif %#}
+{% if model.traits %}
+    use  {{ model.traits|join(', ') }} ;
+{% endif %}
 
 
-	protected $table = '{{ model.table }}';
+    protected $table = '{{ model.table }}';
 	{%  if not  model.timestamps  %}
-	public $timestamps = false;
+    public $timestamps = false;
 	{% endif %}
 
     {% if model.attaches or model.inline_img %}
