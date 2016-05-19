@@ -3,10 +3,11 @@
 
 use Skvn\Crud\Handlers\AttachmentHandler;
 use Skvn\Crud\Models\CrudFile;
+use Skvn\Crud\Form\Form;
 use Illuminate\Database\Eloquent\Model;
 
 
-trait AttachmentTrait {
+trait ModelAttachmentTrait {
 
 
 
@@ -21,24 +22,30 @@ trait AttachmentTrait {
         return $this->attachedFiles;
     }
 
+    protected function initConfig()
+    {
+        parent :: initConfig();
+        if (!empty($this->config['fields']))
+        {
+            foreach ($this->config['fields'] as $name => $field)
+            {
+                if (!empty($field['type']) && $field['type'] == Form :: FIELD_FILE)
+                {
+                    $this->setAttach($name, $field);
+                }
+            }
+        }
+    }
+
 
     public function setAttach($name, array $options = [])
     {
-
         $this->attachedFiles[$name] = AttachmentHandler::create($this, $name, $options);
     }
 
 
-//    public static function boot()
-//    {
-//        //parent::boot();
-//        static::bootAttach();
-//    }
-
-
-    public static function bootAttachmentTrait()
+    public static function bootModelAttachmentTrait()
     {
-
         static::deleting(function($instance) {
             foreach($instance->attachedFiles as $attachedFile) {
                 $attachedFile->deleteAll(false);
@@ -46,8 +53,9 @@ trait AttachmentTrait {
         });
 
         static::saved(function(Model $instance) {
-
+                var_dump('x');
             if ($instance->processAttaches) {
+                var_dump('y');
                 foreach ($instance->processAttaches as $k => $v) {
                     $attachedFile = $instance->attachedFiles[$k];
                     if ($instance->attachSource == 'request') {
@@ -59,24 +67,14 @@ trait AttachmentTrait {
                     }
                 }
             }
-
-
-
         });
-
-
-
     }
 
 
     public function setAttribute($key, $value)
     {
-
-
-
         if (array_key_exists($key, $this->attachedFiles) )
         {
-
             //don't delete  when file is not altered
             if ($value === '')
             {
@@ -89,15 +87,10 @@ trait AttachmentTrait {
                 && (!$value instanceof \Illuminate\Database\Eloquent\Collection)
             )
             {
-
                 $this->processAttaches[$key] = $value;
                 return;
             }
-
-
         }
-
-
         parent::setAttribute($key, $value);
     }
 
