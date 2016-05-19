@@ -2,7 +2,7 @@
 
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Models\CrudModelCollectionBuilder;
-{%  if model.attaches %}use Skvn\Crud\Traits\AttachmentTrait;
+{%  if model.attaches %}use Skvn\Crud\Traits\ModelAttachmentTrait;
 use Skvn\Crud\Models\CrudFile;
 {% endif %}
 {% if model.inline_img %}use Skvn\Crud\Traits\InlineImgTrait;{% endif %}
@@ -22,9 +22,6 @@ class {{ model.name }}Base extends CrudModel{
     {% if model.attaches or model.inline_img %}
 	public function __construct(array $attributes = array())
 	{
-	    {% for a in model.attaches %}
-        $this->setAttach('{{ a.column }}',['multi'=>{{ a.multi }}]);
-        {% endfor %}
         {% if model.inline_img %}
         $this->setInlineImgCols({{ model.inline_img|json_encode|raw }});
         {% endif %}
