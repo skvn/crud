@@ -35,7 +35,7 @@ class {{ model.name }}Base extends CrudModel{
 
     //LISTS data providers
 
-    {%  for alias, list in model.lists %}
+    {%  for alias, list in model.list %}
     /**
     /* Query generation for "{{ list.title }}" list
     /* Override this method to change the dataset
