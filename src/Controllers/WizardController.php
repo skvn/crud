@@ -24,21 +24,12 @@ class WizardController extends Controller {
         $this->cmsHelper = $this->app->make('skvn.cms');
 
         $this->wizard = new Wizard();
-        if (!$this->wizard->checkConfigDir())
-        {
-            view()->share('alert', 'Config directory "'.$this->wizard->config_dir_path.'" is not writable');
-        }
 
-        if (!$this->wizard->checkModelsDir())
+        $alert = $this->wizard->getCheckAlert();
+        if ($alert)
         {
-            view()->share('alert', 'Models directory "'.$this->wizard->model_dir_path.'" is not writable');
+            view()->share('alert', $alert);
         }
-
-        if (!$this->wizard->checkMigrationsDir())
-        {
-            view()->share('alert', 'Migrations directory "'.base_path() . '/database/migrations" is not writable');
-        }
-
 
         \View::share('cmsHelper', $this->cmsHelper);
         \View::share('wizard', $this->wizard);
@@ -80,6 +71,12 @@ class WizardController extends Controller {
                 $proto->record();
                 return redirect()->route('wizard_model',[$table]);
             }
+        }
+
+        $alert = $this->wizard->getCheckAlert($model);
+        if ($alert)
+        {
+            view()->share('alert', $alert);
         }
 
         return view('crud::wizard/model', ['table'=>$table,'model'=>$model]);

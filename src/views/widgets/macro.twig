@@ -3,8 +3,8 @@
     {%  if  crudObj.getListConfig('edit_tab') %}
         <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.scope }}">
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-id="list"> <i class="fa fa-list"></i> List</a></li>
-                <li style="display: none" data-edit_tab_tpl="1"><div class="sk-spinner sk-spinner-pulse"></div><a style="display: none" data-toggle="tab"  data-id="" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}"> <i class="fa fa-edit"></i>[ID]&nbsp;&nbsp;&nbsp;<span class="text-danger" data-confirm="Закрыть?" data-click="crud_event" data-event="crud.cancel_edit" data-rel="[REL]" title="Закрыть" style="cursor:pointer"><i class="fa fa-times"></i></span></a></li>
+                <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-id="list"> <i class="fa fa-list"></i> {{ trans('crud::messages.list') }}</a></li>
+                <li style="display: none" data-edit_tab_tpl="1"><div class="sk-spinner sk-spinner-pulse"></div><a style="display: none" data-toggle="tab"  data-id="" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}"> <i class="fa fa-edit"></i>[ID]&nbsp;&nbsp;&nbsp;<span class="text-danger" data-confirm=" {{ trans('crud::messages.close') }}?" data-click="crud_event" data-event="crud.cancel_edit" data-rel="[REL]" title=" {{ trans('crud::messages.close') }}" style="cursor:pointer"><i class="fa fa-times"></i></span></a></li>
 
 
             </ul>
@@ -62,7 +62,7 @@
         <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.scope }}">
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}"> <i class="fa fa-list"></i></a></li>
-                <li style="display: none" data-edit_tab_tpl="1"><div class="sk-spinner sk-spinner-pulse"></div><a style="display: none" data-toggle="tab"  href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}"> <i class="fa fa-edit"></i>[ID]&nbsp;&nbsp;&nbsp;<span class="text-danger" data-confirm="Закрыть?" data-click="crud_event" data-event="crud.cancel_edit" data-rel="[REL]" title="Закрыть" style="cursor:pointer"><i class="fa fa-times"></i></span></a></li>
+                <li style="display: none" data-edit_tab_tpl="1"><div class="sk-spinner sk-spinner-pulse"></div><a style="display: none" data-toggle="tab"  href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}"> <i class="fa fa-edit"></i>[ID]&nbsp;&nbsp;&nbsp;<span class="text-danger" data-confirm=" {{ trans('crud::messages.close') }}?" data-click="crud_event" data-event="crud.cancel_edit" data-rel="[REL]" title=" {{ trans('crud::messages.close') }}" style="cursor:pointer"><i class="fa fa-times"></i></span></a></li>
 
 
             </ul>

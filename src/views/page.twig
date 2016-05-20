@@ -36,7 +36,12 @@
             <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="/">
-            {{ config.app_title }}
+            {% if config.app_logo %}
+                <img src="{{ config.app_logo }}" alt="{{ config.app_title }}" height="30" />
+                {% else  %}
+                    {{ config.app_title }}
+            {% endif %}
+
         </a>
     </div>
     <div class="collapse navbar-collapse navbar-collapse-1">
@@ -74,6 +79,7 @@
 <script src="{{ 'js/widgets/table.js'|asset }}"></script>
 <script src="{{ 'js/widgets/form.js'|asset }}"></script>
 <script src="{{ 'js/widgets/tree.js'|asset }}"></script>
+<script src="{{ 'js/widgets/tree_control.js'|asset }}"></script>
 <script src="{{ 'js/modules/tooltip.js'|asset }}"></script>
 {#<script src="{{ 'js/modules/notify.js'|asset }}"></script>#}
 

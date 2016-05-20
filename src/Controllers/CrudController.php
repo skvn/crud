@@ -37,12 +37,6 @@ class CrudController extends Controller
     function crudIndex($model, $scope = CrudModel :: DEFAULT_SCOPE, $args = [])
     {
         $obj = CrudModel :: createInstance($model, $scope);
-
-        if (!$obj->checkAcl())
-        {
-            return \Response('Access denied',403);
-        }
-
         $obj->initFilter();
 
         $view = !empty($args['view']) ? $args['view'] : $obj->resolveView('index');
@@ -54,11 +48,6 @@ class CrudController extends Controller
     function crudTree($model, $scope = CrudModel :: DEFAULT_SCOPE)
     {
         $obj = CrudModel :: createInstance($model, $scope);
-
-        if (!$obj->checkAcl())
-        {
-            return \Response('Access denied',403);
-        }
 
         $obj->initFilter();
 
@@ -80,23 +69,12 @@ class CrudController extends Controller
     function crudAutocompleteList($model, $scope)
     {
         $obj = CrudModel :: createInstance($model, $scope);
-
-        if (!$obj->checkAcl())
-        {
-            return \Response('Access denied',403);
-        }
-
         return $obj->getAutocompleteList(\Request::get('q'));
     }
 
     function crudList($model,$scope)
     {
         $obj = CrudModel :: createInstance($model, $scope);
-
-        if (!$obj->checkAcl())
-        {
-            return \Response('Access denied',403);
-        }
 
         $skip = (int) $this->app['request']->get('start',0);
         $take =  (int) $this->app['request']->get('length',0);
@@ -113,17 +91,6 @@ class CrudController extends Controller
     {
 
         $obj = CrudModel :: createInstance($model, $this->app['request']->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
-        //$class = 'App\Model\\'.studly_case($model);
-        //$obj = $class::firstOrNew(['id'=>(int)$id]);
-        //$scope = \Input::get('scope', CrudModel :: DEFAULT_SCOPE);
-        //$obj->config->setScope($scope);
-
-
-        if (!$obj->checkAcl())
-        {
-            return \Response('Access denied',403);
-        }
-
         $req = $this->app['request']->all();
 
         foreach ($req as $k=>$v)
@@ -134,7 +101,7 @@ class CrudController extends Controller
                 $obj->setAttribute($k,$v);
             }
         }
-        //return \View::make($this->crudHelper->resolveModelTemplate($model,$obj->config->get('tabs') ? 'edit_tabs' : 'edit'),['crudObj'=>$obj,'id'=>$id]);
+
         $edit_view = $obj->getListConfig('edit_tab')?'tab':'edit';
         return $this->app['view']->make($obj->resolveView($edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$obj->getScope(), 'form_tabbed'=>$obj->confParam('form_tabbed')]);
 
@@ -145,14 +112,6 @@ class CrudController extends Controller
 
         try {
             $obj = CrudModel :: createInstance($model, $this->app['request']->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
-//            $class = 'App\Model\\' .studly_case($model);
-//            $obj = $class::firstOrNew(['id'=>(int)$id]);
-
-            if (!$obj->checkAcl('u'))
-            {
-                return \Response('Access denied',403);
-            }
-
 
             if ($obj->isTree())
             {
@@ -184,14 +143,8 @@ class CrudController extends Controller
 
         try {
             $obj = CrudModel :: createInstance($model, $scope);
-//            $obj = \App::make('App\Model\\'.studly_case($model));
-//            $obj->config->setScope($scope);
-            $obj->fillFilter($scope,$this->app['request']->all());
 
-            if (!$obj->checkAcl())
-            {
-                return \Response('Access denied',403);
-            }
+            $obj->fillFilter($scope,$this->app['request']->all());
 
             return ['success'=>true,'crud_model'=>$obj->classShortName,'scope'=>$scope];
 
@@ -206,12 +159,6 @@ class CrudController extends Controller
     {
         try {
             $class = CrudModel :: resolveClass($model);
-            $obj = CrudModel :: createInstance($model);
-
-            if (!$obj->checkAcl())
-            {
-                return \Response('Access denied',403);
-            }
 
             $ids = $this->app['request']->get('ids');
             if (is_array($ids))
@@ -235,10 +182,6 @@ class CrudController extends Controller
         try {
             $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
 
-            if (!$obj->checkAcl())
-            {
-                return \Response('Access denied',403);
-            }
             $command = camel_case($command);
             $ret = $obj->$command($this->app['request']->all());
 
@@ -257,11 +200,6 @@ class CrudController extends Controller
         $position = $this->app['request']->get('position');
 
         $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
-
-        if (!$obj->checkAcl())
-        {
-            return \Response('Access denied',403);
-        }
 
         $res = $obj->moveTreeAction($parent_id,$position);
         if ($res === true)
@@ -301,6 +239,14 @@ class CrudController extends Controller
 
     }
 
+
+    function crudTreeOptions($model)
+    {
+        $obj = CrudModel :: createInstance($model,CrudModel :: DEFAULT_SCOPE, $this->request->get('id'));
+        $fObj = $obj->getForm()->getFieldByName($this->request->get('field'));
+        return $fObj->getOptions();
+
+    }
 
 
 }

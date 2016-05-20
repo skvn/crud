@@ -77,8 +77,72 @@ class Wizard
         $this->model_dir_path = app_path($folder);
     }
 
+
     /**
-     * @return bool Check if config directory is writable
+     * Run all checks
+     *
+     */
+    public  function getCheckAlert($model=null)
+    {
+        if (!$this->checkConfigDir())
+        {
+           return 'Config directory "'.$this->config_dir_path.'" is not writable';
+        }
+
+        if (!$this->checkConfigDir())
+        {
+             return 'Config directory "'.$this->config_dir_path.'" is not writable';
+        }
+
+        if (!$this->checkModelsDir())
+        {
+            return 'Models directory "'.$this->model_dir_path.'" is not writable';
+        }
+
+        if (!$this->checkMigrationsDir())
+        {
+            return 'Migrations directory "'.base_path() . '/database/migrations" is not writable';
+        }
+
+        if ($model) {
+            if (!$this->checkUnsupportedConfig($model)) {
+                return 'Model config contains data which is not supported yet by the Wizard';
+            }
+        }
+
+
+
+    }
+
+
+    /**
+     * Check for unsupported strcutures in config
+     *
+     * @param $model
+     * @return bool
+     */
+
+    public function checkUnsupportedConfig($model)
+    {
+        if (!empty($model['list']))
+        {
+            foreach ($model['list'] as $list_alias=>$list_arr)
+            {
+                if (isset($list_arr['form']) || isset($list_arr['tabs']))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Check if config directory is writable
+     *
+     * @return bool
      */
 
     public  function checkConfigDir()
@@ -89,7 +153,8 @@ class Wizard
     }//
 
     /**
-     * @return bool Check if models directory is writable
+     * Check if models directory is writable
+     * @return bool
      */
 
     public  function checkModelsDir()
@@ -450,6 +515,15 @@ class Wizard
         return $ret;
     }
 
+    /**
+     * Define if field type is date/date-time
+     *
+     * @param $type string Field type
+     */
+    public  function isDateField($type)
+    {
+        return in_array($type, [Form::FIELD_DATE_RANGE, Form::FIELD_DATE, Form::FIELD_DATE_TIME]);
+    }
 
 
 }
