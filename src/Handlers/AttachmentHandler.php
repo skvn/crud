@@ -3,6 +3,8 @@
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
 use Skvn\Crud\Models\CrudFile;
+use Skvn\Crud\Models\CrudModel;
+use Illuminate\Container\Container;
 
 
 class AttachmentHandler {
@@ -15,32 +17,31 @@ class AttachmentHandler {
     protected $multi = false;
     protected $currentInstanceId;
     protected $processedIds = [];
+    protected $app;
+    protected $options = [];
 
     public function __construct($parentInstance,$propName, $options=[])
     {
+        $this->app = Container :: getInstance();
         $this->parentInstance = $parentInstance;
         $this->parentPropName = $propName;
+        $this->options = $options;
         if (isset($options['multi']))
         {
             $this->multi = $options['multi'];
         }
-
-
     }
+
     public static function create($parentInstance, $propName, $options=[])
     {
         return new self($parentInstance,$propName, $options);
     }
 
-
-
     public function setUploadedFile($uploadedFile)
     {
-
         $files = [];
         if (is_array($uploadedFile))
         {
-
             foreach($uploadedFile as $k=>$f)
             {
                 if ($f instanceof UploadedFile) {
@@ -52,22 +53,17 @@ class AttachmentHandler {
         }
         else if ($uploadedFile instanceof UploadedFile)
         {
-
-
             $files[] = $this->processUploadedFile($uploadedFile);
         }
 
         $this->save($files);
-
     }
 
     public function setFsFile($file)
     {
-
         $files = [];
         if (is_array($file))
         {
-
             foreach($file as $k=>$f)
             {
                 if ($f instanceof File) {
@@ -79,62 +75,90 @@ class AttachmentHandler {
         }
         else if ($file instanceof File)
         {
-
-
             $files[] = $this->processFsFile($file);
         }
 
         $this->save($files);
-
     }
 
     protected  function processUploadedTitle($key)
     {
-        $titles = \Request::get($this->parentPropName.'_title');
+        $titles = $this->app['request']->get($this->parentPropName.'_title');
         if (!empty($titles[$key]))
         {
             return $titles[$key];
         }
     }
+
     protected function processUploadedFile(UploadedFile $uploadedFile)
     {
-
-
-        $ret = self::generateFdata($uploadedFile);
-        $name = uniqid();
-        $uploadedFile->move(\Config::get('attach.root'),$name);
-        $ret['originalPath'] = \Config::get('attach.root').DIRECTORY_SEPARATOR.$name;
-
-        return $ret;
+        return $this->storeTmpFile($uploadedFile);
+//        $ret = self::generateFdata($uploadedFile);
+//        $name = str_replace(".", "_", uniqid(!empty($this->options['prefix']) ? $this->options['prefix'] : "attach", true));
+//        $target = $this->app['config']->get("attach.root") . DIRECTORY_SEPARATOR . "tmp";
+////        if (!empty($this->options['path']))
+////        {
+////            $target .= DIRECTORY_SEPARATOR . $this->options['path'];
+////        }
+//        if (!file_exists($target))
+//        {
+//            $this->app['files']->makeDirectory($target, 0755, true, true);
+//        }
+//        //$target .= "/" . $name;
+//        //$uploadedFile->move(\Config::get('attach.root'),$name);
+//        $uploadedFile->move($target, $name);
+//        //$ret['originalPath'] = \Config::get('attach.root').DIRECTORY_SEPARATOR.$name;
+//        $ret['originalPath'] = $target.DIRECTORY_SEPARATOR.$name;
+//
+//        return $ret;
 
     }
 
     protected function processFsFile(File $file)
     {
+        return $this->storeTmpFile($file);
+//        $ret = self::generateFdata($file);
+//        $name = uniqid();
+//        $target = $this->app['config']->get('attach.root') . DIRECTORY_SEPARATOR . 'tmp';
+//        if (!file_exists($target))
+//        {
+//            $this->app['files']->makeDirectory($target, 0755, true, true);
+//        }
+//        $file->move($target, $name);
+//        $ret['originalPath'] = $target.DIRECTORY_SEPARATOR.$name;
+//
+//        return $ret;
+    }
 
-
-        $ret = self::generateFdata($file);
-        $name = uniqid();
-        $file->move(\Config::get('attach.root'),$name);
-        $ret['originalPath'] = \Config::get('attach.root').DIRECTORY_SEPARATOR.$name;
-
+    protected function storeTmpFile($file)
+    {
+        $class = $this->getFileClass();
+        $instance = new $class();
+        $instance->setAttachOptions($this->options);
+        //$ret = self::generateFdata($file);
+        $ret = $instance->attachCreateFileInfo($file);
+        $name = str_replace(".", "_", uniqid('tmp', true));
+        $target = $this->app['config']->get("attach.root") . DIRECTORY_SEPARATOR . "tmp";
+        if (!file_exists($target))
+        {
+            $this->app['files']->makeDirectory($target, 0755, true, true);
+        }
+        $file->move($target, $name);
+        $ret['originalPath'] = $target.DIRECTORY_SEPARATOR.$name;
+        $ret['fileObj'] = new File($ret['originalPath']);
         return $ret;
-
     }
 
 
     function save($files)
     {
-
         $this->initSelfInstance();
-
         $prop = $this->parentPropName;
-
         if ($this->multi)
         {
-
             $ids = $this->parentInstance->$prop->lists('id')->all();
         }
+        $class = $this->getFileClass();
 
         foreach ($files as $k=> $file)
         {
@@ -142,28 +166,13 @@ class AttachmentHandler {
             {
                 $instance = $this->selfInstance;
             } else {
-                $instance = CrudFile::findOrNew($k);
+                $instance = $class::findOrNew($k);
             }
-            if (!empty($file['originalPath'])) {
-
-
-                if ($instance->path) {
-                    if (file_exists($instance->path)) {
-                        unlink($instance->path);
-                    }
-                }
-
-                $newDest = self::generateSaveFilename($file);
-                \File::makeDirectory(dirname($newDest), 0755, true, true);
-                \File::move($file['originalPath'], $newDest);
-
-                $instance->fill(['file_name' => $file['originalName'],
-                    'mime_type' => $file['originalMime'],
-                    'file_size' => $file['originalSize'],
-                    'title' => (!empty($file['title'])?$file['title']:''),
-                    'path' => $newDest
-                ]);
-                $instance->save();
+            if (!empty($file['originalPath']))
+            {
+                $this->options['instance_id'] = $this->parentInstance->id;
+                $instance->setAttachOptions($this->options);
+                $instance->attachStoreFile($file);
 
                 if (!$this->multi) {
                    // $this->parentInstance->setAttribute($this->parentPropName, $instance->id);
@@ -171,28 +180,20 @@ class AttachmentHandler {
 
                     $this->parentInstance->nullifyAttachQueue();
                     $this->parentInstance->update([$this->parentPropName=>$instance->id]);
-
-
                 } else {
                     if (!in_array($instance->id,$ids))
                     {
                         $ids[] =  $instance->id;
                     }
-
                 }
-
             }
-
         }
 
         if ($this->multi) {
             if (count($ids)) {
                 $this->parentInstance->$prop()->sync($ids);
-
             }
         }
-
-
     }
 
     function deleteAll($parentSave = true)
@@ -222,36 +223,31 @@ class AttachmentHandler {
 
     function deleteSingleInstance($instance)
     {
-
-        if ($instance->path)
-        {
-            if (file_exists($instance->path))
-            {
-                unlink($instance->path);
-            }
-        }
-
+//        if ($instance->path)
+//        {
+//            if (file_exists($instance->getFilePath()))
+//            {
+//                unlink($instance->getFilePath());
+//            }
+//        }
         $instance->delete();
-
     }
 
 
     function initSelfInstance()
     {
+        $class = $this->getFileClass();
         $prop = $this->parentPropName;
         if (!$this->multi)
         {
             if (!$this->selfInstance)
             {
-
-                $this->selfInstance = CrudFile::findOrNew($this->parentInstance->$prop);
+                $this->selfInstance = $class::findOrNew($this->parentInstance->$prop);
+                $this->selfInstance->setAttachOptions($this->options);
             }
         } else {
-
-            $this->selfInstance = CrudFile::findOrNew($this->currentInstanceId);
-
+            $this->selfInstance = $class::findOrNew($this->currentInstanceId);
         }
-
     }
 
     public function getInstanceOrCollection()
@@ -268,38 +264,41 @@ class AttachmentHandler {
     }
 
 
-    static  function generateFdata($file)
-    {
-        $fdata = [];
-        if ($file instanceof UploadedFile)
-        {
-            $fdata['originalName'] =   $file->getClientOriginalName();
-            $fdata['originalExt']  = $file->getClientOriginalExtension();
-            $fdata['originalMime'] =  $file->getClientMimeType();
-
-        } else {
-            $fdata['originalName'] = $file->getBasename();
-            $fdata['originalExt'] = $file->getExtension();
-            $fdata['originalMime'] = $file->getMimeType();
-
-        }
-        $fdata['originalSize'] = $file->getSize();
-
-        return $fdata;
-    }
-    static function  generateSaveFilename($file)
-    {
-
-        $md5 = md5($file['originalName']);
-        $level1 = substr($md5,0,2);
-        $level2 = substr($md5,2,2);
-        return  join(DIRECTORY_SEPARATOR,array(\Config::get('attach.root'),$level1,$level2,uniqid().'.'.$file['originalExt']));
-
-    }
+//    static  function generateFdata($file)
+//    {
+//        $fdata = [];
+//        if ($file instanceof UploadedFile)
+//        {
+//            $fdata['originalName'] =   $file->getClientOriginalName();
+//            $fdata['originalExt']  = $file->getClientOriginalExtension();
+//            $fdata['originalMime'] =  $file->getClientMimeType();
+//
+//        } else {
+//            $fdata['originalName'] = $file->getBasename();
+//            $fdata['originalExt'] = $file->getExtension();
+//            $fdata['originalMime'] = $file->getMimeType();
+//
+//        }
+//        $fdata['originalSize'] = $file->getSize();
+//        $fdata['fileObj'] = $file;
+//
+//        return $fdata;
+//    }
+//    static function  generateSaveFilename($file)
+//    {
+//
+//        $md5 = md5($file['originalName']);
+//        $level1 = substr($md5,0,2);
+//        $level2 = substr($md5,2,2);
+//        return  join(DIRECTORY_SEPARATOR,array(\Config::get('attach.root'),$level1,$level2,uniqid().'.'.$file['originalExt']));
+//
+//    }
 
     public function processTitles()
     {
-        $titles = \Request::get($this->parentPropName.'_title');
+        $class = $this->getFileClass();
+
+        $titles = $this->app['request']->get($this->parentPropName.'_title');
         if ($titles && is_array($titles))
         {
             foreach ($titles as $k=>$v)
@@ -307,12 +306,17 @@ class AttachmentHandler {
                 if ($k>0 && !in_array($k,$this->processedIds))
                 {
 
-                    $obj = CrudFile::find($k);
+                    $obj = $class::find($k);
 
                     $obj->update(['title'=>$v]);
                 }
             }
         }
+    }
+
+    protected function getFileClass()
+    {
+        return !empty($this->options['model']) ? CrudModel :: resolveClass($this->options['model']) : CrudFile :: class;
     }
 
 

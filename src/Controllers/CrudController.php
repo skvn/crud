@@ -172,7 +172,7 @@ class CrudController extends Controller
         } catch( \Exception $e)
         {
 
-//            var_dump($e)
+            var_dump($e->getTraceAsString());
             return ['success'=>false, 'error'=>$e->getMessage(),'trace' => $e->getTraceAsString()];
         }
 

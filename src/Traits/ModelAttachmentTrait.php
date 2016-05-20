@@ -29,7 +29,7 @@ trait ModelAttachmentTrait {
         {
             foreach ($this->config['fields'] as $name => $field)
             {
-                if (!empty($field['type']) && $field['type'] == Form :: FIELD_FILE)
+                if (!empty($field['type']) && in_array($field['type'], [Form :: FIELD_FILE]))
                 {
                     $this->setAttach($name, $field);
                 }
@@ -40,6 +40,7 @@ trait ModelAttachmentTrait {
 
     public function setAttach($name, array $options = [])
     {
+        $options['instance_id'] = $this->id;
         $this->attachedFiles[$name] = AttachmentHandler::create($this, $name, $options);
     }
 
@@ -53,13 +54,10 @@ trait ModelAttachmentTrait {
         });
 
         static::saved(function(Model $instance) {
-                var_dump('x');
             if ($instance->processAttaches) {
-                var_dump('y');
                 foreach ($instance->processAttaches as $k => $v) {
                     $attachedFile = $instance->attachedFiles[$k];
                     if ($instance->attachSource == 'request') {
-
                         $attachedFile->setUploadedFile($v);
                         $attachedFile->processTitles();
                     } else if ($instance->attachSource == 'fs') {
@@ -104,10 +102,11 @@ trait ModelAttachmentTrait {
     {
         if (!empty($args['field']) && empty($args['id']))
         {
+            $deleted = $this->getAttach($args['field'])->delete();
             //$attrValue = $this->getAttribute($args['field']);
             $this->setAttribute($args['field'],0);
             $this->save();
-            return $this->getAttach($args['field'])->delete();
+            return $deleted;
 
         }
 

@@ -242,10 +242,10 @@ class CrudModelPrototype
         {
             $this->config_data['traits'] = [];
         }
-        if (!in_array('AttachmentTrait', $this->config_data['traits']))
+        if (!in_array('ModelAttachmentTrait', $this->config_data['traits']))
         {
             $this->config_data['attaches'] = [];
-            $this->config_data['traits'][] = 'AttachmentTrait';
+            $this->config_data['traits'][] = 'ModelAttachmentTrait';
         }
 
         if ($data['multi'])
