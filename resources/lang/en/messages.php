@@ -27,6 +27,8 @@ return [
     'filter_list' => 'List filter',
 	'settings' => 'Settings',
 	'toggle_nav' => 'Toggle navigation',
+	'list' => 'List',
+	'close' => 'Close'
 
 
 

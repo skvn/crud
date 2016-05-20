@@ -9,6 +9,7 @@
         model_delete_url: '/admin/crud/{model}/delete',
         model_move_tree_url: '/admin/crud/{model}/move_tree',
         model_tree_url: '/admin/crud/{model}/tree/{scope}',
+        model_tree_options_url: '/admin/crud/{model}/tree_options?id={id}&field={field}',
         model_autocomplete_url: '/admin/crud/{model}/autocomplete/{scope}',
         model_command_url: '/admin/crud/{model}/{id}/command/{command}?scope={scope}',
 
@@ -245,6 +246,16 @@
                 });
             },
 
+            init_widgets: function ($form)
+            {
+                $("*[data-widget]").each(function () {
+
+                    var wname = $(this).data('widget');
+                    $(this)[wname]();
+                });
+            },
+
+            //TODO remake to a widget
             init_tag_inputs: function ($form)
             {
                 var self = this;

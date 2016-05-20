@@ -14,6 +14,7 @@
             crud.init_date_pickers($form);
             crud.init_html_editors($form);
             crud.init_ichecks($form);
+            crud.init_widgets($form);
             //$('input[type=text]:first', $form).focus();
 
             //submit

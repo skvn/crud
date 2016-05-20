@@ -65,6 +65,11 @@ class Form {
      */
     const FIELD_TAGS = 'tags';
 
+    /**
+     *
+     */
+    const FIELD_TREE = 'tree';
+
 
 
 
@@ -188,6 +193,7 @@ class Form {
             self::FIELD_TEXTAREA => 'Textarea',
             self::FIELD_DATE => 'Date',
             self::FIELD_DATE_TIME => 'Date + Time',
+            self::FIELD_DATE_RANGE => 'Date range',
             self::FIELD_SELECT => 'Select',
             self::FIELD_CHECKBOX => 'Checkbox',
             self::FIELD_FILE => 'File',
@@ -227,6 +233,17 @@ class Form {
         return $ret;
     }
 
+
+    /**
+     * Return One field object by it's field name
+     *
+     * @param $fieldName
+     * @return array
+     */
+    public function getFieldByName($fieldName)
+    {
+       return isset($this->fields[$fieldName])?$this->fields[$fieldName]:null;
+    }
 
 
 } 

@@ -159,6 +159,19 @@
             //
             // },
 
+            wizard_adjust_prop_name: function (elem)
+            {
+                var parent_table = elem.parents('table[data-rel]').first();
+                console.log(parent_table);
+                var new_name = elem.val();
+                if (parent_table.length)
+                {
+                    parent_table.attr('data-rel', new_name);
+                    parent_table.data('rel', new_name);
+                    parent_table.find('tr:first').attr('data-rel', new_name).data('rel', new_name).find('td:first').html('<b>'+new_name+'</b>');
+                }
+            },
+
             wizard_remove_parent: function (elem)
             {
                 if (elem.data('parent'))

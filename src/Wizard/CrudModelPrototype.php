@@ -280,6 +280,7 @@ class CrudModelPrototype
     {
 
         $this->config_data['form_fields'] = [];
+        $fields_to_delete = [];
 
         if (!empty($this->config_data['fields']))
         {
@@ -291,29 +292,34 @@ class CrudModelPrototype
                 {
                     $this->add_fields[$k] = $f; 
                 }
-                
+
+
                 if (!empty($f['type']))
                 {
                     $this->config_data['fields'][$k]['editable'] = 1;
                     $this->config_data['form_fields'][] = $k;
                 }
-                //process date
-                if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE)
+
+                //process date range
+                if (!empty($f['type']) && $this->wizard->isDateField($f['type']))
                 {
                     $formats = $this->wizard->getAvailableDateFormats();
                     $this->config_data['fields'][$k]['format'] = $formats[$f['format']]['php'];
                     $this->config_data['fields'][$k]['jsformat'] = $formats[$f['format']]['js'];
-                    $this->config_data['fields'][$k]['db_type'] = $this->column_types[$k];
 
-                }
+                    if (in_array($f['type'], [Form::FIELD_DATE, Form::FIELD_DATE_TIME]))
+                    {
+                        $this->config_data['fields'][$k]['db_type'] = $this->column_types[$k];
+                    } elseif ($f['type'] == Form::FIELD_DATE_RANGE)
+                    {
+                        $this->config_data['fields'][$k]['db_type'] = $this->column_types[$f['fields'][0]];
 
-                //process date time
-                if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE_TIME)
-                {
-                    $formats = $this->wizard->getAvailableDateTimeFormats();
-                    $this->config_data['fields'][$k]['format'] = $formats[$f['format']]['php'];
-                    $this->config_data['fields'][$k]['jsformat'] = $formats[$f['format']]['js'];
-                    $this->config_data['fields'][$k]['db_type'] = $this->column_types[$k];
+                        if ($f['property_name'] != $k) {
+                            $fld = $this->config_data['fields'][$k];
+                            $this->config_data['fields'][$f['property_name']] = $fld;
+                            $fields_to_delete[] = $k;
+                        }
+                    }
 
                 }
 
@@ -334,10 +340,15 @@ class CrudModelPrototype
 
                 }
 
-
             }
 
-
+            if (count($fields_to_delete))
+            {
+                foreach ($fields_to_delete as $k)
+                {
+                    unset($this->config_data['fields'][$k]);
+                }
+            }
 
 
         }
@@ -771,7 +782,7 @@ class CrudModelPrototype
         }
     }//
 
-
+    
     /**
      *  run artisan migrate
      */

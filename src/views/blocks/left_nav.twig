@@ -2,15 +2,15 @@
     {% for m in cmsHelper.getAdminMenu() %}
     {%  if not m.kids and  m.route.name %}
     <li  {{ m.active?"class='active'"}}>
-        <a href="{{ route(m.route.name,m.route.args) }}">{{ m.title }}</a>
+       <a href="{{ route(m.route.name,m.route.args) }}">{{ (m.icon_class?'<i class="'~m.icon_class~'"></i> ')|raw }} {{ m.title }}</a>
     </li>
     {%  else  %}
         <li  class="menu-item  dropdown  {{ m.active?"active"}}">
             {%  if m.route.name %}
-            <a href="{{ route(m.route.name,m.route.args) }}"  class="dropdown-toggle" data-toggle="dropdown">{{ m.title }}
+             <a href="{{ route(m.route.name,m.route.args) }}"  class="dropdown-toggle" data-toggle="dropdown">{{ (m.icon_class?'<i class="'~m.icon_class~'"></i> ')|raw }} {{ m.title }}
             <b class="caret"></b></a>
             {% else  %}
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ m.title }} <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ (m.icon_class?'<i class="'~m.icon_class~'"></i> ')|raw }}{{ m.title }} <b class="caret"></b></a>
             {% endif %}
             <ul class="dropdown-menu">
                 {%  for kid in m.kids %}
