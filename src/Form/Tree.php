@@ -31,7 +31,18 @@ class Tree extends Field {
         if (!empty($this->config['find']))
         {
             $method = $this->config['find'];
-            return $modelObj->$method($this->getValue());
+            $val = $this->getValue();
+            if (!is_array($val))
+            {
+                if ($val instanceof Collection)
+                {
+                    $val = $val->toArray();
+                } elseif (is_scalar($val))
+                {
+                    $val = [$val];
+                }
+            }
+            return $modelObj->$method($val);
         }
 
         if (!empty($this->config['model']))
