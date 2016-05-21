@@ -121,7 +121,7 @@ trait ModelAttachedTrait {
         {
             return '/'.str_replace($this->app['config']->get('attach.root'), $symlink,$this->path);
         }
-        return \URL::route('download_attach',array('id' => $this->id, 'filename'=>urlencode($this->file_name)));
+        return $this->app['url']->route('download_attach',array('id' => $this->id, 'filename'=>urlencode($this->file_name), 'model' => $this->classViewName));
     }
 
 
