@@ -73,7 +73,7 @@ class CrudModel extends Model
         }
         else
         {
-            $obj = new $class;
+            $obj = new $class();
 //            $app = Container :: getInstance();
 //            $obj = $app->make($class);
         }

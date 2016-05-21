@@ -1,16 +1,12 @@
 <?php namespace Skvn\Crud\Traits;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 
 
 trait ModelAttachedTrait {
 
-    protected $attach_options = [];
 
-    function setAttachOptions($opts)
-    {
-        $this->attach_options = $opts;
-    }
 
     public static function bootModelAttachedTrait()
     {
@@ -22,7 +18,7 @@ trait ModelAttachedTrait {
         });
     }
 
-    function attachStoreFile($fileInfo)
+    function attachStoreFile($fileInfo, $args = [])
     {
         if ($this->path) {
             if (file_exists($this->attachGetPath()))
@@ -30,7 +26,8 @@ trait ModelAttachedTrait {
                 unlink($this->attachGetPath());
             }
         }
-        $newDest = $this->attachCreateFilename($fileInfo);
+        $newPath = $this->attachCreateFilename($fileInfo, $args);
+        $newDest = $this->app['config']->get('attach.root') . DIRECTORY_SEPARATOR . $newPath;
         $this->app['files']->makeDirectory(dirname($newDest), 0755, true, true);
         //$this->app['files']->move($fileInfo['originalPath'], $newDest);
         $fileInfo['fileObj']->move(dirname($newDest), basename($newDest));
@@ -39,7 +36,7 @@ trait ModelAttachedTrait {
             'mime_type' => $fileInfo['originalMime'],
             'file_size' => $fileInfo['originalSize'],
             'title' => (!empty($fileInfo['title']) ? $fileInfo['title'] : ''),
-            'path' => basename($newDest)
+            'path' => $newPath
         ]);
         $this->save();
     }
@@ -51,38 +48,47 @@ trait ModelAttachedTrait {
         {
             return $path;
         }
-        $fileInfo = [
-            'originalName' => $this->file_name,
-            'filename' => $this->path
-        ];
-        $path = $this->attachCreateFilename($fileInfo);
-        //var_dump($path);
-        //var_dump($this->attach_options);
-        return $path;
+        return $this->app['config']->get('attach.root') . DIRECTORY_SEPARATOR . $this->path;
+//        $fileInfo = [
+//            'originalName' => $this->file_name,
+//            'filename' => $this->path
+//        ];
+//        $path = $this->attachCreateFilename($fileInfo);
+//        //var_dump($path);
+//        //var_dump($this->attach_options);
+//        return $path;
     }
 
-    function  attachCreateFilename($fileInfo)
+    function attachStoreTmpFile($file)
+    {
+        $ret = $this->attachCreateFileInfo($file);
+        $name = str_replace(".", "_", uniqid('tmp', true));
+        $target = $this->app['config']->get("attach.root") . DIRECTORY_SEPARATOR . "tmp";
+        if (!file_exists($target))
+        {
+            $this->app['files']->makeDirectory($target, 0755, true, true);
+        }
+        $file->move($target, $name);
+        $ret['originalPath'] = $target.DIRECTORY_SEPARATOR.$name;
+        $ret['fileObj'] = new File($ret['originalPath']);
+        return $ret;
+
+    }
+
+    private function  attachCreateFilename($fileInfo, $args = [])
     {
         $parts = [];
-        $parts[] = $this->app['config']->get('attach.root');
-        $path = !empty($this->attach_options['path']) ? $this->attach_options['path'] : '%l1/%l2';
+        $path = !empty($args['path']) ? $args['path'] : '%l1/%l2';
         $md5 = md5($fileInfo['originalName']);
         $path = str_replace('%l1', substr($md5,0,2), $path);
         $path = str_replace('%l2', substr($md5,2,2), $path);
-        if(!empty($this->attach_options['instance_id']))
+        if(!empty($args['instance_id']))
         {
-            $path = str_replace('%i3', str_pad($this->attach_options['instance_id'] % 1000, 3, '0', STR_PAD_LEFT), $path);
-            $path = str_replace('%id', $this->attach_options['instance_id'], $path);
+            $path = str_replace('%i3', str_pad($args['instance_id'] % 1000, 3, '0', STR_PAD_LEFT), $path);
+            $path = str_replace('%id', $args['instance_id'], $path);
         }
         $parts[] = $path;
-        if (!empty($fileInfo['filename']))
-        {
-            $parts[] = $fileInfo['filename'];
-        }
-        else
-        {
-            $parts[] = str_replace(".", "_", uniqid(!empty($this->attach_options['prefix']) ? $this->attach_options['prefix'] : 'img', true)) . "." . $fileInfo['originalExt'];
-        }
+        $parts[] = str_replace(".", "_", uniqid(!empty($args['prefix']) ? $args['prefix'] : 'img', true)) . "." . $fileInfo['originalExt'];
 
         return implode(DIRECTORY_SEPARATOR, $parts);
     }

@@ -39,7 +39,6 @@ trait ModelAttachmentTrait {
 
     public function setAttach($name, array $options = [])
     {
-        $options['instance_id'] = $this->id;
         $this->attachedFiles[$name] = AttachmentHandler::create($this, $name, $options);
     }
 
@@ -111,16 +110,12 @@ trait ModelAttachmentTrait {
             $this->setAttribute($args['field'],0);
             $this->save();
             return $deleted;
-
         }
-
         else if (!empty($args['field']) && !empty($args['id']))
         {
              CrudFile::destroy([$args['id']]);
              $meth = $args['field'];
              $this->$meth()->detach($args['id']);
-
-
         }
     }
 
@@ -136,7 +131,6 @@ trait ModelAttachmentTrait {
                 foreach ($inst as $file) {
                     $ret[] = ['value'=>$file->getAttribute('download_link'),'text'=>$file->getAttribute('title')];
                 }
-
             } else {
                 //$ret[] = ['value'=>$inst->getAttribute('download_link'),'text'=>$inst->getAttribute('title')];
             }

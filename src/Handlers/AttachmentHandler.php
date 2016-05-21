@@ -92,7 +92,7 @@ class AttachmentHandler {
 
     protected function processUploadedFile(UploadedFile $uploadedFile)
     {
-        return $this->storeTmpFile($uploadedFile);
+        return $this->createAttachInstance()->attachStoreTmpFile($uploadedFile);
 //        $ret = self::generateFdata($uploadedFile);
 //        $name = str_replace(".", "_", uniqid(!empty($this->options['prefix']) ? $this->options['prefix'] : "attach", true));
 //        $target = $this->app['config']->get("attach.root") . DIRECTORY_SEPARATOR . "tmp";
@@ -116,7 +116,7 @@ class AttachmentHandler {
 
     protected function processFsFile(File $file)
     {
-        return $this->storeTmpFile($file);
+        return $this->createAttachInstance()->attachStoreTmpFile($file);
 //        $ret = self::generateFdata($file);
 //        $name = uniqid();
 //        $target = $this->app['config']->get('attach.root') . DIRECTORY_SEPARATOR . 'tmp';
@@ -130,24 +130,26 @@ class AttachmentHandler {
 //        return $ret;
     }
 
-    protected function storeTmpFile($file)
-    {
-        $class = $this->getFileClass();
-        $instance = new $class();
-        $instance->setAttachOptions($this->options);
+//    protected function storeTmpFile($file)
+//    {
+//        $instance = $this->createAttachInstance();
+//        return $instance->attachStoreTmpFile($file);
+//        $class = $this->getFileClass();
+//        $instance = new $class();
+//        $instance->setAttachOptions($this->options);
         //$ret = self::generateFdata($file);
-        $ret = $instance->attachCreateFileInfo($file);
-        $name = str_replace(".", "_", uniqid('tmp', true));
-        $target = $this->app['config']->get("attach.root") . DIRECTORY_SEPARATOR . "tmp";
-        if (!file_exists($target))
-        {
-            $this->app['files']->makeDirectory($target, 0755, true, true);
-        }
-        $file->move($target, $name);
-        $ret['originalPath'] = $target.DIRECTORY_SEPARATOR.$name;
-        $ret['fileObj'] = new File($ret['originalPath']);
-        return $ret;
-    }
+//        $ret = $instance->attachCreateFileInfo($file);
+//        $name = str_replace(".", "_", uniqid('tmp', true));
+//        $target = $this->app['config']->get("attach.root") . DIRECTORY_SEPARATOR . "tmp";
+//        if (!file_exists($target))
+//        {
+//            $this->app['files']->makeDirectory($target, 0755, true, true);
+//        }
+//        $file->move($target, $name);
+//        $ret['originalPath'] = $target.DIRECTORY_SEPARATOR.$name;
+//        $ret['fileObj'] = new File($ret['originalPath']);
+//        return $ret;
+//    }
 
 
     function save($files)
@@ -158,21 +160,24 @@ class AttachmentHandler {
         {
             $ids = $this->parentInstance->$prop->lists('id')->all();
         }
-        $class = $this->getFileClass();
+        //$class = $this->getFileClass();
 
         foreach ($files as $k=> $file)
         {
             if (!$this->multi)
             {
                 $instance = $this->selfInstance;
-            } else {
-                $instance = $class::findOrNew($k);
+            }
+            else
+            {
+                $instance = $this->createAttachInstance($k);
+                //$instance = $class::findOrNew($k);
             }
             if (!empty($file['originalPath']))
             {
-                $this->options['instance_id'] = $this->parentInstance->id;
-                $instance->setAttachOptions($this->options);
-                $instance->attachStoreFile($file);
+                //$this->options['instance_id'] = $this->parentInstance->id;
+                //$instance->setAttachOptions($this->options);
+                $instance->attachStoreFile($file, array_merge($this->options, ['instance_id' => $this->parentInstance->id]));
 
                 if (!$this->multi) {
                    // $this->parentInstance->setAttribute($this->parentPropName, $instance->id);
@@ -236,17 +241,18 @@ class AttachmentHandler {
 
     function initSelfInstance()
     {
-        $class = $this->getFileClass();
         $prop = $this->parentPropName;
         if (!$this->multi)
         {
             if (!$this->selfInstance)
             {
-                $this->selfInstance = $class::findOrNew($this->parentInstance->$prop);
-                $this->selfInstance->setAttachOptions($this->options);
+                $this->selfInstance = $this->createAttachInstance($this->parentInstance->$prop);
+                //$this->selfInstance = $class::findOrNew($this->parentInstance->$prop);
+                //$this->selfInstance->setAttachOptions($this->options);
             }
         } else {
-            $this->selfInstance = $class::findOrNew($this->currentInstanceId);
+            $this->selfInstance = $this->createAttachInstance($this->currentInstanceId);
+            //$this->selfInstance = $class::findOrNew($this->currentInstanceId);
         }
     }
 
@@ -296,7 +302,7 @@ class AttachmentHandler {
 
     public function processTitles()
     {
-        $class = $this->getFileClass();
+        //$class = $this->getFileClass();
 
         $titles = $this->app['request']->get($this->parentPropName.'_title');
         if ($titles && is_array($titles))
@@ -305,8 +311,8 @@ class AttachmentHandler {
             {
                 if ($k>0 && !in_array($k,$this->processedIds))
                 {
-
-                    $obj = $class::find($k);
+                    $obj = $this->createAttachInstance($k, true);
+                    //$obj = $class::find($k);
 
                     $obj->update(['title'=>$v]);
                 }
@@ -314,9 +320,30 @@ class AttachmentHandler {
         }
     }
 
-    protected function getFileClass()
+//    protected function getFileClass()
+//    {
+//        return !empty($this->options['model']) ? CrudModel :: resolveClass($this->options['model']) : CrudFile :: class;
+//    }
+
+    protected function createAttachInstance($id = null, $exists = false)
     {
-        return !empty($this->options['model']) ? CrudModel :: resolveClass($this->options['model']) : CrudFile :: class;
+        $class = !empty($this->options['model']) ? CrudModel :: resolveClass($this->options['model']) : CrudFile :: class;
+        if (is_null($id))
+        {
+            $instance = new $class();
+        }
+        else
+        {
+            if ($exists)
+            {
+                $instance = $class :: find($id);
+            }
+            else
+            {
+                $instance = $class :: findOrNew($id);
+            }
+        }
+        return $instance;
     }
 
 
