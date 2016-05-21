@@ -333,7 +333,7 @@ class CrudModelPrototype
                         {
                             $this->config_data['traits'] = [];
                         }
-                        $this->config_data['traits'][] = 'InlineImgTrait';
+                        $this->config_data['traits'][] = 'ModelInlineImgTrait';
                     }
 
                     $this->config_data['inline_img'][] = $k;

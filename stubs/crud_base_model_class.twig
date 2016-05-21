@@ -5,7 +5,7 @@ use Skvn\Crud\Models\CrudModelCollectionBuilder;
 {%  if model.attaches %}use Skvn\Crud\Traits\ModelAttachmentTrait;
 use Skvn\Crud\Models\CrudFile;
 {% endif %}
-{% if model.inline_img %}use Skvn\Crud\Traits\InlineImgTrait;{% endif %}
+{% if model.inline_img %}use Skvn\Crud\Traits\ModelInlineImgTrait;{% endif %}
 
 class {{ model.name }}Base extends CrudModel{
 
@@ -13,21 +13,6 @@ class {{ model.name }}Base extends CrudModel{
     use  {{ model.traits|join(', ') }} ;
 {% endif %}
 
-
-    protected $table = '{{ model.table }}';
-	{%  if not  model.timestamps  %}
-    public $timestamps = false;
-	{% endif %}
-
-    {% if model.attaches or model.inline_img %}
-	public function __construct(array $attributes = array())
-	{
-        {% if model.inline_img %}
-        $this->setInlineImgCols({{ model.inline_img|json_encode|raw }});
-        {% endif %}
-        parent::__construct($attributes);
-    }//
-    {% endif %}
 
 
     //LISTS data providers
