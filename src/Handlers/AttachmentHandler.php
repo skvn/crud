@@ -112,7 +112,6 @@ class AttachmentHandler {
     protected function processFsFile(File $file)
     {
 
-
         $ret = self::generateFdata($file);
         $name = uniqid();
         $file->move(\Config::get('attach.root'),$name);
