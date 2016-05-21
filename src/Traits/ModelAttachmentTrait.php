@@ -22,9 +22,8 @@ trait ModelAttachmentTrait {
         return $this->attachedFiles;
     }
 
-    protected function initConfig()
+    function attachAppendConfig()
     {
-        parent :: initConfig();
         if (!empty($this->config['fields']))
         {
             foreach ($this->config['fields'] as $name => $field)
@@ -47,6 +46,11 @@ trait ModelAttachmentTrait {
 
     public static function bootModelAttachmentTrait()
     {
+
+        static::registerPostconstruct(function($instance){
+            $instance->attachAppendConfig();
+        });
+
         static::deleting(function($instance) {
             foreach($instance->attachedFiles as $attachedFile) {
                 $attachedFile->deleteAll(false);

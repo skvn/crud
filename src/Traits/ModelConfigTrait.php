@@ -18,6 +18,14 @@ trait ModelConfigTrait
     protected $track_authors = false;
 
 
+    public static function bootModelConfigTrait()
+    {
+        static::registerPreconstruct(function($instance){
+            $instance->initConfig();
+        });
+    }
+
+
     protected function initConfig()
     {
         $this->classShortName = class_basename($this);
