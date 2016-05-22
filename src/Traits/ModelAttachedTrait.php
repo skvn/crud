@@ -75,7 +75,7 @@ trait ModelAttachedTrait {
 
     }
 
-    private function  attachCreateFilename($fileInfo, $args = [])
+    public function  attachCreateFilename($fileInfo, $args = [])
     {
         $parts = [];
         $path = !empty($args['path']) ? $args['path'] : '%l1/%l2';
@@ -92,6 +92,7 @@ trait ModelAttachedTrait {
 
         return implode(DIRECTORY_SEPARATOR, $parts);
     }
+
 
     function attachCreateFileInfo($file)
     {
