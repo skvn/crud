@@ -9,7 +9,7 @@ class ServiceProvider extends LServiceProvider {
     public function boot()
     {
 
-
+        $this->app['db']->setFetchMode(\PDO :: FETCH_ASSOC);
         //Messages
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'crud');
 

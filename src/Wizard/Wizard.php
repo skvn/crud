@@ -188,12 +188,12 @@ class Wizard
         foreach ($tables as $table)
         {
 
-            if (strpos($table->table_name,'crud_') !==0 && strpos($table->table_name,'crud_file') === false)
+            if (strpos($table['table_name'],'crud_') !==0 && strpos($table['table_name'],'crud_file') === false)
             {
-                if ($for_index && in_array($table->table_name, $this->skip_tables))   {
+                if ($for_index && in_array($table['table_name'], $this->skip_tables))   {
                         continue;
                 }
-                $arr[] = $table->table_name;
+                $arr[] = $table['table_name'];
             }
 
         }
@@ -265,7 +265,7 @@ class Wizard
             $cols =  $this->app['db']->select('SELECT  COLUMN_NAME, DATA_TYPE FROM   information_schema.COLUMNS WHERE   TABLE_SCHEMA = ? AND TABLE_NAME=?', [env('DB_DATABASE'),$table]);
             foreach ($cols as $col)
             {
-                $this->table_column_types[$table][$col->COLUMN_NAME] = $col->DATA_TYPE;
+                $this->table_column_types[$table][$col['COLUMN_NAME']] = $col['DATA_TYPE'];
             }
 
         }
