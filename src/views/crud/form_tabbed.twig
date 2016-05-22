@@ -1,3 +1,14 @@
+<style>
+    a[name] {
+        width: 12px;
+        line-height: 6px;
+        overflow: hidden;
+        padding-left: 12px;
+        background-image: url('/images/anchor_symbol.gif');
+        background-position: bottom;
+        background-repeat: no-repeat;
+    }
+</style>
 {% set COL_WIDTH=12 %}
 <form action="{{ route('crud_update',{'model':crudObj.classViewName,'id':id}) }}" method="post" enctype="multipart/form-data" role="form"  data-crud_scope="{{ crudObj.scope }}" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}" data-rel="{{ crudObj.view_ref }}">
     <input type="hidden" id="tree_action" name="tree_action" value=""/>

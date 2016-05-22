@@ -409,20 +409,20 @@
 
                 }
                 //summernote
+                //alert($.summernote.options.modules);
+                //console.log($.summernote.options.modules);
                 if ($coll_sum.length) {
                     $coll_sum.summernote({
                         //FIXME
                         lang: 'ru-RU',
                         toolbar: [
-
                             ['style', ['style', 'bold', 'italic', 'underline', 'clear']],
                             ['font', ['strikethrough', 'superscript', 'subscript']],
                             ['fontsize', ['fontsize']],
                             ['color', ['color']],
                             ['para', ['ul', 'ol', 'paragraph']],
-                            ['insert', ['picture', 'link', 'video', 'table', 'hr', 'anchor']],
-                            ['misc', ['codeview']]
-
+                            ['insert', ['picture', 'link', 'anchor', 'video', 'table', 'hr']],
+                            ['misc', ['codeview', 'typo']]
                         ],
                         onpaste: function (e) {
                             var thisNote = $(this);
@@ -436,9 +436,12 @@
                                 //the function is called before the text is really pasted.
                                 updatePastedText(thisNote);
                             }, 10);
-
-
                         },
+                        modules: $.extend($.summernote.options.modules, {anchorDialog: getAnchorDialog()}),
+                        buttons: {anchor: getAnchorButton(), typo: getTypoButton()},
+                        //modules: {
+                            //AnchorDialog: getAnchorDialog()
+                        //},
                         height: 500, linksArray: this.win.crudAttachOptions
                     });
                 }
@@ -731,6 +734,212 @@
             }
         });
     });
+
+    function getAnchorDialog()
+    {
+        var AnchorDialog = function (context) {
+            var self = this;
+            var ui = $.summernote.ui;
+
+            var $editor = context.layoutInfo.editor;
+            var options = context.options;
+            var lang = options.langInfo;
+
+            this.initialize = function () {
+                var $container = options.dialogsInBody ? $(document.body) : $editor;
+
+                var body = '<div class="form-group">' +
+                    '<label>Имя якоря</label>' +
+                    '<input class="note-anchor-name form-control" type="text" />' +
+                    '</div>';
+                var footer = '<button href="#" class="btn btn-primary note-anchor-btn disabled" disabled>Вставить</button>';
+
+                this.$dialog = ui.dialog({
+                    className: 'anchor-dialog',
+                    title: 'Вставить якорь',
+                    fade: options.dialogsFade,
+                    body: body,
+                    footer: footer
+                }).render().appendTo($container);
+            };
+
+            this.destroy = function () {
+                ui.hideDialog(this.$dialog);
+                this.$dialog.remove();
+            };
+
+            this.showAnchorDialog = function (ancInfo) {
+                return $.Deferred(function (deferred) {
+                    var $ancName = self.$dialog.find('.note-anchor-name'),
+                        $ancBtn = self.$dialog.find('.note-anchor-btn');
+
+                    ui.onDialogShown(self.$dialog, function () {
+                        context.triggerEvent('dialog.shown');
+
+                        $ancName.val(ancInfo.name);
+
+                        $ancName.on('input', function () {
+                            ui.toggleBtn($ancBtn, $ancName.val());
+                            // if linktext was modified by keyup,
+                            // stop cloning text from linkUrl
+                            ancInfo.name = $ancName.val();
+                        });
+
+                        $ancBtn.one('click', function (event) {
+                            event.preventDefault();
+
+                            deferred.resolve({
+                                range: ancInfo.range,
+                                name: $ancName.val()
+                            });
+                            self.$dialog.modal('hide');
+                        });
+                    });
+
+                    ui.onDialogHidden(self.$dialog, function () {
+                        // detach events
+                        $ancName.off('input keypress');
+                        $ancBtn.off('click');
+
+                        if (deferred.state() === 'pending') {
+                            deferred.reject();
+                        }
+                    });
+
+                    ui.showDialog(self.$dialog);
+                }).promise();
+            };
+
+            /**
+             * @param {Object} layoutInfo
+             */
+            this.show = function () {
+                //var ancInfo = context.invoke('editor.getLinkInfo');
+                var ancInfo = getAnchorInfo(context);
+
+                context.invoke('editor.saveRange');
+                this.showAnchorDialog(ancInfo).then(function (ancInfo) {
+                    context.invoke('editor.restoreRange');
+                    //context.invoke('editor.createAnchor', ancInfo);
+                    createAnchor(context, ancInfo);
+                }).fail(function () {
+                    context.invoke('editor.restoreRange');
+                });
+            };
+            //context.memo('help.anchorDialog.show', options.langInfo.help['anchorDialog.show']);
+        };
+
+        return AnchorDialog;
+    }
+
+    function createAnchor(context, ancInfo)
+    {
+        var ancName = ancInfo.name;
+        var rng = ancInfo.range || context.invoke('editor.createRange');
+        //var isTextChanged = rng.toString() !== linkText;
+
+        //if (options.onCreateLink) {
+        //    linkUrl = options.onCreateLink(linkUrl);
+        //}
+
+        //console.log(rng);
+
+        var anchors = [rng.insertNode($('<A name="'+ancName+'"></A>')[0])];
+        //var anchor = rng.insertNode($('<A name="'+ancName+'"></A>')[0]);
+        //if (isTextChanged) {
+        //    rng = rng.deleteContents();
+        //    var anchor = rng.insertNode($('<A>' + linkText + '</A>')[0]);
+        //    anchors.push(anchor);
+        //} else {
+        //    anchors = style.styleNodes(rng, {
+        //        nodeName: 'A',
+        //        expandClosestSibling: true,
+        //        onlyPartialContains: true
+        //    });
+        //}
+
+        //$.each(anchors, function (idx, anchor) {
+        //    $(anchor).attr('href', linkUrl);
+        //    if (isNewWindow) {
+        //        $(anchor).attr('target', '_blank');
+        //    } else {
+        //        $(anchor).removeAttr('target');
+        //    }
+        //});
+
+        return rng.select();
+
+        //var startRange = range.createFromNodeBefore(list.head(anchors));
+        //var startPoint = startRange.getStartPoint();
+        //var endRange = range.createFromNodeAfter(list.last(anchors));
+        //var endPoint = endRange.getEndPoint();
+        //
+        //range.create(
+        //    startPoint.node,
+        //    startPoint.offset,
+        //    endPoint.node,
+        //    endPoint.offset
+        //).select();
+    }
+
+    function getAnchorInfo(context)
+    {
+        var checkAnc = function (node) {return node && node.nodeName.toUpperCase() === 'A'};
+        var rng = context.invoke('editor.createRange').expand(checkAnc);
+
+        // Get the first anchor on range(for edit).
+        var $anchor = $(rng.nodes(checkAnc)[0]);
+
+        return {
+            range: rng,
+            name: $anchor.length ? $anchor.attr('name') : ''
+        };
+    }
+
+    function getAnchorButton()
+    {
+        var AnchorButton = function (context) {
+            var ui = $.summernote.ui;
+
+            // create button
+            var button = ui.button({
+                contents: '<i class="fa fa-anchor"/>',
+                tooltip: 'Якорь',
+                click: function () {
+                    // invoke insertText method with 'hello' on editor module.
+                    context.invoke('anchorDialog.show');
+                    //context.createInvokeHandler('anchorDialog.show')
+                }
+            });
+
+            return button.render();   // return button as jquery object
+        }
+        return AnchorButton;
+    }
+
+    function getTypoButton()
+    {
+        var TypoButton = function (context) {
+            var ui = $.summernote.ui;
+
+            // create button
+            var button = ui.button({
+                contents: '<i class="fa fa-check"/>',
+                tooltip: 'Типограф',
+                click: function () {
+                    if (confirm('Содержимое будет модифицировано. Продолжить ?'))
+                    {
+                        $.post('/typo/check', {content: context.code()}, function(res){
+                            context.code(res);
+                        });
+                    }
+                }
+            });
+
+            return button.render();   // return button as jquery object
+        }
+        return TypoButton;
+    }
 
 
 

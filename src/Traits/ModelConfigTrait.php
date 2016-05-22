@@ -454,7 +454,10 @@ trait ModelConfigTrait
                     $field = Field::create($this, $form_config);
                     $value = $field->getValueForList();
                 }
-                $value = $this->$col;
+                else
+                {
+                    $value = $this->$col;
+                }
             }
             //FIXME
 //            else
