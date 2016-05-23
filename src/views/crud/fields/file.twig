@@ -7,7 +7,7 @@
 {% if input.getValue() %}
 <div class="col-md-4">
     <a class="label label-primary" href="{{ input.getValue().getAttribute('download_link') }}" target="_blank"><i class="fa fa-paperclip"></i> {{ input.getValue().getAttribute('file_name') }} ({{ input.getValue().getAttribute('file_size')|readable_filesize}})</a><br />
-    <a class="label label-danger" href="/admin/crud/{{ crudObj.classViewName }}/{{ crudObj.id }}/command/delete_single_attach" data-confirm="{{ trans('crud::messages.really_delete') }}?" data-args='{"field":"{{ input.name }}" }' data-callback="elem.parent().remove();" data-click="crud_action" data-action="crud_command"><i class="fa fa-times-circle"></i> {{ trans('crud::messages.delete') }} {{ trans('crud::messages.file') }}</a>
+    <a class="label label-danger" href="{{ route('crud_command', {'model': crudObj.classViewName, 'id': crudObj.id, 'command_name': 'delete_single_attach'}) }}" data-confirm="{{ trans('crud::messages.really_delete') }}?" data-args='{"field":"{{ input.name }}" }' data-callback="elem.parent().remove();" data-click="crud_action" data-action="crud_command"><i class="fa fa-times-circle"></i> {{ trans('crud::messages.delete') }} {{ trans('crud::messages.file') }}</a>
 </div>
 {% endif %}
 </div>

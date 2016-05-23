@@ -4,19 +4,26 @@ use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
 use Skvn\Crud\Models\CrudFile;
+use Skvn\Crud\Models\CrudModel;
 
 
 class CrudAttachController extends Controller {
 
 
-    public function download($id)
+    public function download($model, $id)
     {
-
-        $attachObj = CrudFile::findOrFail($id);
-        if (file_exists($attachObj->path))
+        if ($model == "CrudFile")
+        {
+            $attachObj = CrudFile::findOrFail($id);
+        }
+        else
+        {
+            $attachObj = CrudModel :: createInstance($model, null, $id);
+        }
+        if (file_exists($attachObj->attachGetPath()))
         {
 
-            $fp = fopen($attachObj->path,"rb");
+            $fp = fopen($attachObj->attachGetPath(),"rb");
             if (strpos($attachObj->mime_type,'image') !== false )
             {
                 header("Content-Type: ".$attachObj->mime_type);

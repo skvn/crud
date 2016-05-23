@@ -2,6 +2,7 @@
 
 use \Illuminate\Database\Eloquent\Model;
 use Skvn\Crud\Form\Form;
+use Skvn\Crud\Traits\ModelInjectTrait;
 use Skvn\Crud\Traits\ModelConfigTrait;
 use Skvn\Crud\Traits\ModelRelationTrait;
 use Skvn\Crud\Traits\ModelFilterTrait;
@@ -12,11 +13,13 @@ use Illuminate\Container\Container;
 
 class CrudModel extends Model
 {
+    use ModelInjectTrait;
     use ModelConfigTrait;
     use ModelRelationTrait;
     use ModelFilterTrait;
 
     //use SoftDeletingTrait;
+
 
     const RELATION_BELONGS_TO_MANY = 'belongsToMany';
     const RELATION_BELONGS_TO = 'belongsTo';
@@ -44,11 +47,12 @@ class CrudModel extends Model
     public function __construct(array $attributes = array(), $validator = null)
     {
         $this->app = Container :: getInstance();
-
-        $this->initConfig();
-
-
+        $this->bootIfNotBooted();
+        $this->preconstruct();
+        //$this->initConfig();
         parent::__construct($attributes);
+        $this->postconstruct();
+
 
         $this->validator = $validator ?: $this->app['validator'];
 
@@ -62,15 +66,16 @@ class CrudModel extends Model
 
     static function createInstance($model, $scope = self :: DEFAULT_SCOPE, $id = null)
     {
-        $class = self :: resolveClass($model);
+        $class = static :: resolveClass($model);
         if (!empty($id))
         {
             $obj = $class::firstOrNew(['id'=>(int)$id]);
         }
         else
         {
-            $app = Container :: getInstance();
-            $obj = $app->make($class);
+            $obj = new $class();
+//            $app = Container :: getInstance();
+//            $obj = $app->make($class);
         }
         $obj->setScope($scope);
         return $obj;
