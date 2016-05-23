@@ -30,7 +30,9 @@
                             <th>Model name</th>
                             <th width="200">Actions</th>
                         </tr>
+                        {% set pivot_tables = wizard.getAllPivotTables() %}
                         {% for table in tables %}
+                            {% if table not in pivot_tables %}
                                 <tr>
 
                                     <td>{{ table }}</td>
@@ -66,6 +68,7 @@
                                     </td>
 
                                 </tr>
+                          {% endif %}
                         {% endfor %}
                     </table>
                     {% if not wizard.modelsDefined() %}

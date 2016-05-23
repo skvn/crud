@@ -504,6 +504,27 @@ class Wizard
 
     }//
 
+    function getAllPivotTables()
+    {
+        $tables = [];
+        $configs = $this->getCrudConfigs();
+        foreach ($configs as $conf)
+        {
+
+            $rels = $this->getModelRelations($conf['table']);
+            foreach ($rels as $relation)
+            {
+                if (!empty($relation['pivot_table']))
+                {
+                    $tables[] = $relation['pivot_table'];
+                }
+            }
+
+        }
+
+        return $tables;
+    }//
+
     function getAllLists()
     {
         $ret = [];

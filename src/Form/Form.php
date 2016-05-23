@@ -228,6 +228,7 @@ class Form {
         if ($multiple)
         {
             $ret[Form::FIELD_TAGS] = 'Tags';
+            $ret[Form::FIELD_TREE] = 'Tree';
         }
 
         return $ret;
