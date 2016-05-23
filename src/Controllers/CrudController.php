@@ -263,5 +263,31 @@ class CrudController extends Controller
         return $remoteTypograf->processText($html);
     }
 
+    function typoCheck2()
+    {
+        $html = $this->app['request']->get('content');
+        $fp = fsockopen('www.typograf.ru',80,$errno, $errstr, 30 );
+
+        $data = 'text='.urlencode($html).'&chr=UTF-8';
+
+        if ($fp) {
+            fputs($fp, "POST /webservice/ HTTP/1.1\n");
+            fputs($fp, "Host: www.typograf.ru\n");
+            fputs($fp, "Content-type: application/x-www-form-urlencoded\n");
+            fputs($fp, "Content-length: " . strlen($data) . "\n");
+            fputs($fp, "User-Agent: PHP Script\n");
+            fputs($fp, "Connection: close\n\n");
+            fputs($fp, $data);
+            while(fgets($fp,2048) != "\r\n" && !feof($fp));
+            $buf = "";
+            while(!feof($fp)) $buf .= fread($fp,2048);
+            fclose($fp);
+            return $buf;
+        }
+        else
+        {
+            return $html;
+        }
+    }
 
 }

@@ -429,7 +429,7 @@
                             ['color', ['color']],
                             ['para', ['ul', 'ol', 'paragraph']],
                             ['insert', ['picture', 'link', 'anchor', 'video', 'table', 'hr']],
-                            ['misc', ['codeview', 'typo']]
+                            ['misc', ['codeview', 'typo', 'typo2']]
                         ],
                         onpaste: function (e) {
                             var thisNote = $(this);
@@ -445,7 +445,7 @@
                             }, 10);
                         },
                         modules: $.extend($.summernote.options.modules, {anchorDialog: getAnchorDialog()}),
-                        buttons: {anchor: getAnchorButton(), typo: getTypoButton()},
+                        buttons: {anchor: getAnchorButton(), typo: getTypoButton(), typo2: getTypoButton2()},
                         //modules: {
                             //AnchorDialog: getAnchorDialog()
                         //},
@@ -932,7 +932,7 @@
             // create button
             var button = ui.button({
                 contents: '<i class="fa fa-check"/>',
-                tooltip: 'Типограф',
+                tooltip: 'Типограф (typograf.artlebedev.ru)',
                 click: function () {
                     if (confirm('Содержимое будет модифицировано. Продолжить ?'))
                     {
@@ -948,6 +948,29 @@
         return TypoButton;
     }
 
+    function getTypoButton2()
+    {
+        var TypoButton2 = function (context) {
+            var ui = $.summernote.ui;
+
+            // create button
+            var button = ui.button({
+                contents: '<i class="fa fa-check"/>',
+                tooltip: 'Типограф (www.typograf.ru)',
+                click: function () {
+                    if (confirm('Содержимое будет модифицировано. Продолжить ?'))
+                    {
+                        $.post('/typo/check2', {content: context.code()}, function(res){
+                            context.code(res);
+                        });
+                    }
+                }
+            });
+
+            return button.render();   // return button as jquery object
+        }
+        return TypoButton2;
+    }
 
 
 })(window, document, location, console, jQuery);

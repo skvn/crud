@@ -45,6 +45,7 @@ Route::group($adm_route_params, function() {
 Route::group(array('namespace' => 'Skvn\Crud\Controllers'), function() {
     Route::get('attach/{model}/{id}/{filename}',                    array('as' => 'download_attach',            'uses' => 'CrudAttachController@download'));
     Route::post('typo/check',                                       array(                                      'uses' => 'CrudController@typoCheck'));
+    Route::post('typo/check2',                                      array(                                      'uses' => 'CrudController@typoCheck2'));
 });
 
 
