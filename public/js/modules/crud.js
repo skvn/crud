@@ -948,6 +948,7 @@
         return TypoButton;
     }
 
+
     function getTypoButton2()
     {
         var TypoButton2 = function (context) {
