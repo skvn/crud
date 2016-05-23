@@ -1,13 +1,14 @@
 <?php namespace Skvn\Crud\Traits;
 
+use Skvn\Crud\Form\Form;
 
 /**
- * Class InlineImgTrait
+ * Class ModelInlineImgTrait
  * Provides process inline images functionality
  * @package Skvn\Crud
  * @author Vitaly Nikolenko <vit@webstandart.ru>
  */
-trait InlineImgTrait {
+trait ModelInlineImgTrait {
 
 
     /**
@@ -20,15 +21,19 @@ trait InlineImgTrait {
     protected $maxWidth = 2000;
 
 
-    /**
-     * @param $cols Set columns that should be processed
-     */
-    public function setInlineImgCols($cols)
-    {
 
-        if (!is_array($cols))
+    protected function appendInlineImgConfig()
+    {
+        $cols = [];
+        if (!empty($this->config['fields']))
         {
-            $cols = [$cols];
+            foreach ($this->config['fields'] as $name => $field)
+            {
+                if (!empty($field['type']) && in_array($field['type'], [Form :: FIELD_TEXTAREA]) && !empty($field['editor']))
+                {
+                    $cols[] = $name;
+                }
+            }
         }
         $this->inlimgCols = $cols;
     }
@@ -37,24 +42,17 @@ trait InlineImgTrait {
     /**
      * Laravel model boot
      */
-    public static function bootInlineImgTrait()
+    public static function bootModelInlineImgTrait()
     {
-
-
+        static::registerPostconstruct(function($instance){
+            $instance->appendInlineImgConfig();
+        });
         static::saving(function($instance) {
-
-
             foreach ($instance->inlimgCols as $attr)
             {
                 $instance->setAttribute($attr, $instance->processInlineImgs($instance->getAttribute($attr)));
             }
-
-
-
         });
-
-
-
     }
 
 
@@ -107,14 +105,9 @@ trait InlineImgTrait {
                     $img->save($this->getInlineImgPath($filename));
 
                     $text = str_replace($src, $this->getInlineImgUrl($filename), $text);
-
-
                 }
             }
         }
-
-
-
         return $text;
     }
 

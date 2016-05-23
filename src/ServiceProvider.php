@@ -9,7 +9,6 @@ class ServiceProvider extends LServiceProvider {
     public function boot()
     {
 
-
         //Messages
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'crud');
 

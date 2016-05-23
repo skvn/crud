@@ -248,5 +248,20 @@ class CrudController extends Controller
 
     }
 
+    function typoCheck()
+    {
+        $html = $this->app['request']->get('content');
+        $remoteTypograf = new \Skvn\Crud\Helper\RemoteTypograf();
+
+        $remoteTypograf->htmlEntities();
+        $remoteTypograf->br(false);
+        $remoteTypograf->p(true);
+        $remoteTypograf->nobr(3);
+        $remoteTypograf->quotA ('laquo raquo');
+        $remoteTypograf->quotB ('bdquo ldquo');
+
+        return $remoteTypograf->processText($html);
+    }
+
 
 }

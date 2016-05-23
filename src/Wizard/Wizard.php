@@ -84,10 +84,10 @@ class Wizard
      */
     public  function getCheckAlert($model=null)
     {
-        if (!$this->checkConfigDir())
-        {
-           return 'Config directory "'.$this->config_dir_path.'" is not writable';
-        }
+//        if (!$this->checkConfigDir())
+//        {
+//           return 'Config directory "'.$this->config_dir_path.'" is not writable';
+//        }
 
         if (!$this->checkConfigDir())
         {
@@ -182,18 +182,19 @@ class Wizard
     function getTables($for_index = false)
     {
 
+        $this->app['db']->setFetchMode(\PDO :: FETCH_ASSOC);
         $tables = $this->app['db']->select('SELECT  table_name FROM   information_schema.tables WHERE   table_type = \'BASE TABLE\' AND   table_schema=?', [env('DB_DATABASE')]);
         $arr = [];
 
         foreach ($tables as $table)
         {
 
-            if (strpos($table->table_name,'crud_') !==0 && strpos($table->table_name,'crud_file') === false)
+            if (strpos($table['table_name'],'crud_') !==0 && strpos($table['table_name'],'crud_file') === false)
             {
-                if ($for_index && in_array($table->table_name, $this->skip_tables))   {
+                if ($for_index && in_array($table['table_name'], $this->skip_tables))   {
                         continue;
                 }
-                $arr[] = $table->table_name;
+                $arr[] = $table['table_name'];
             }
 
         }
@@ -208,6 +209,7 @@ class Wizard
             }
         }
 
+        $this->app['db']->setFetchMode($this->app['config']->get('database.fetch'));
 
         return array_merge($return, $arr);
 
@@ -261,13 +263,14 @@ class Wizard
     {
         if (!isset($this->table_column_types[$table]))
         {
+            $this->app['db']->setFetchMode(\PDO :: FETCH_ASSOC);
 
             $cols =  $this->app['db']->select('SELECT  COLUMN_NAME, DATA_TYPE FROM   information_schema.COLUMNS WHERE   TABLE_SCHEMA = ? AND TABLE_NAME=?', [env('DB_DATABASE'),$table]);
             foreach ($cols as $col)
             {
-                $this->table_column_types[$table][$col->COLUMN_NAME] = $col->DATA_TYPE;
+                $this->table_column_types[$table][$col['COLUMN_NAME']] = $col['DATA_TYPE'];
             }
-
+            $this->app['db']->setFetchMode($this->app['config']->get('database.fetch'));
         }
         return $this->table_column_types[$table];
     }

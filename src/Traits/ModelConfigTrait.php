@@ -30,7 +30,7 @@ trait ModelConfigTrait
     {
         $this->classShortName = class_basename($this);
         $this->classViewName = snake_case($this->classShortName);
-        $this->config = $this->app['config']->get('crud.crud_'.$this->getTable());
+        $this->config = $this->app['config']->get('crud.crud_'.(!empty($this->table) ? $this->table : $this->classViewName));
         $this->config['class_name'] = $this->classViewName;
         if (!empty($this->config['fields']))
         {
@@ -62,10 +62,8 @@ trait ModelConfigTrait
             $this->table = isset($this->config['table']) ? $this->config['table'] : $this->classViewName;
         }
 
-        if (isset($this->config['timestamps']))
-        {
-            $this->timestamps = $this->config['timestamps'];
-        }
+        $this->timestamps = isset($this->config['timestamps']) ? $this->config['timestamps'] : false;
+
         if (isset($this->config['authors']))
         {
             $this->track_authors = $this->config['authors'];
@@ -456,7 +454,10 @@ trait ModelConfigTrait
                     $field = Field::create($this, $form_config);
                     $value = $field->getValueForList();
                 }
-                $value = $this->$col;
+                else
+                {
+                    $value = $this->$col;
+                }
             }
             //FIXME
 //            else
