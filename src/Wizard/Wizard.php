@@ -84,10 +84,10 @@ class Wizard
      */
     public  function getCheckAlert($model=null)
     {
-        if (!$this->checkConfigDir())
-        {
-           return 'Config directory "'.$this->config_dir_path.'" is not writable';
-        }
+//        if (!$this->checkConfigDir())
+//        {
+//           return 'Config directory "'.$this->config_dir_path.'" is not writable';
+//        }
 
         if (!$this->checkConfigDir())
         {
