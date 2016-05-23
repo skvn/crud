@@ -9,18 +9,32 @@ class Tree extends Field {
 
     public  function  getValue()
     {
-        if ($this->model->isManyRelation($this->config['relation'])) {
-            return $this->model->getRelationIds($this->getName());
+
+        if (is_null($this->value)) {
+            if ($this->model->isManyRelation($this->config['relation'])) {
+                $this->value =  $this->model->getRelationIds($this->getName());
+            } else {
+                if ($this->config['relation'] == CrudModel::RELATION_HAS_ONE) {
+                    $relation = $this->getName();
+                    $this->value = $this->$relation->id;
+
+                } else {
+                    $this->value = $this->model->getAttribute($this->getName());
+                }
+            }
         }
-        if ($this->config['relation'] == CrudModel::RELATION_HAS_ONE)
+
+        return $this->value;
+
+    }
+
+    function  getValueForDb()
+    {
+        $val = $this->getValue();
+        if (is_string($val))
         {
-            $relation = $this->getName();
-            return $this->$relation->id;
-
-        } else {
-            return $this->model->getAttribute($this->getName());
+            return explode(',',$val);
         }
-
     }
 
     public function getOptions()
@@ -42,7 +56,7 @@ class Tree extends Field {
                     $val = [$val];
                 }
             }
-            return $modelObj->$method($val);
+            return $modelObj->$method($this->getName(),$val);
         }
 
         if (!empty($this->config['model']))
@@ -52,7 +66,7 @@ class Tree extends Field {
         }
         elseif (!empty($this->config['method_options']))
         {
-            return $this->model->{$this->config['method_options']}();
+            return $this->model->{$this->config['method_options']}($this->getName());
         }
 
     }

@@ -11,7 +11,6 @@ trait ModelRelationTrait
     public function saveRelations()
     {
         $formConf = $this->getFields();
-
         if ($this->dirtyRelations  && is_array($this->dirtyRelations ))
         {
             $form = $this->getForm($this->dirtyRelations, true);

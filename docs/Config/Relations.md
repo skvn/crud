@@ -24,7 +24,7 @@ It returns a json ready to use by [JSTree](!https://github.com/vakata/jstree) pl
 
 
 But, there are 2 other options for providing JSON:
-- Use `find` property in the field configuration array. In this case, the package would call a method provided in `find` property on the relation model. This method should accept an array of relation IDs as the only parameter.
+- Use `find` property in the field configuration array. In this case, the package would call a method provided in `find` property on the relation model. This accepts the property name as the first param, and an array of relation IDs as the second parameter.
 
 **Example:** Let's say we have an `Article` that is linked with `Category` as many-to-many (BelongsToMany) relation. The field config for such property would be:
 ```
@@ -44,7 +44,34 @@ But, there are 2 other options for providing JSON:
 
 According to this config, the options of the tree control for `categories` field should come from `getAsTree` method of the `Category` class.
 
-This method should accept one parameter, which is an array of `Category` IDs, already linked to the current `Article`. You should use these IDs to set `selected` attributes of the tree options.
+This method will va called with  two  parameter,  the fist one is the name of the field `categories`, you should use this parameter to name the  ids of the tree options: `categories-1`,`categories-12`, etc  ; and the second one  is an array of `Category` IDs, already linked to the current `Article`. You should use these IDs to set `selected` attributes of the tree options.
+
+**The example of the json data source** should look like this:\
+```
+[  
+   {  
+      "text":"First Level",
+      "id":"categories-1",
+      "parent":"#"
+   },
+   {  
+      "text":"Second-level",
+      "id":"categories-2",
+      "parent":"categories-1"
+   },
+   {  
+      "text":"Thirrd level",
+      "id":"categories-23",
+      "parent":"categories-2",
+      "state":{  
+         "selected":true
+      }
+   }   
+]   
+   
+```
+
+
 
 >You can read more about the JSON format for the tree control on the [plugin's documentation page](!https://github.com/vakata/jstree#the-required-json-format)
 

@@ -28,7 +28,8 @@ return [
 	'settings' => 'Settings',
 	'toggle_nav' => 'Toggle navigation',
 	'list' => 'List',
-	'close' => 'Close'
+	'close' => 'Close',
+	'search' => 'Search'
 
 
 

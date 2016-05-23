@@ -94,7 +94,7 @@
                         },
                         error: function(res){
                             crud.toggle_form_progress($form);
-                            if (res.responseJSON.error.message) {
+                            if (res.responseJSON && res.responseJSON.error && res.responseJSON.error.message) {
                                 alert(res.responseJSON.error.message)
                             } else {
                                 alert(i18n.say('error_sending_request'));

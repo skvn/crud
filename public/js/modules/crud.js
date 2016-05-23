@@ -173,6 +173,13 @@
             toggle_form_progress: function($form)
             {
                 $form.find('.modal-footer button, .modal-footer .progress').toggleClass('hide');
+                $form.find('.modal-footer button').each(function () {
+
+                   if (!$(this).hasClass('hide'))
+                   {
+                       $(this).removeAttr('disabled');
+                   }
+                });
             },
             init_date_pickers: function(container)
             {
