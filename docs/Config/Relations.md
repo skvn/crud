@@ -3,7 +3,64 @@
 <a name="editable"></a> 
 ## Editable relations. Relation form fields
  
- 
+
+<a name="select"></a> 
+### Select
+
+
+
+<a name="select_options_providers"></a>
+#### Options providers
+
+By default the options for the select form control are build with `CrudModelCollectionBuilder :: create($modelObject)->fetch` method. 
+It returns a collection, used to populate select options/
+
+
+But, there are 2 other options for providing custom data:
+
+- Use `find` property in the field configuration array. In this case, the package would call a method provided in the `find` property on the relation model. This method should return a collection of model instances.
+
+**Example:** Let's say we have an `Article` that is linked with `ArticleType` as many-to-many (BelongsToMany) relation. The field config for such property would be:
+```
+"types" => [
+            "relation" => "belongsToMany",
+            "title" => "Article types",
+            "model" => "ArticleType",
+            "relation_name" => "types",
+            "pivot_table" => "article_article_type",
+            "pivot_self_key" => "article_id",
+            "pivot_foreign_key" => "article_type_id",
+            "editable" => 1,
+            "type" => "select",
+            "find" => "getOnlyActive"
+        ],
+```   
+
+According to this config, the options of the select control for `types` field should come from `getOnlyActive` method of the `ArticleType` class.
+
+This method should return a [collection](!https://laravel.com/docs/5.2/eloquent-collections)
+
+- Use `method_options` attribute. If you define a `method_options` attribute in the field configuration array (or set it  via using Wizard). The package would look for the method name provided in this option on the `self` model. These method should  also return a collection.
+
+**Example:** Let's look at the same set of models.  We have an `Article` that is linked with `ArticleType` as many-to-many (BelongsToMany) relation. The field config is :
+```
+"types" => [
+            "relation" => "belongsToMany",
+            "title" => "Article types",
+            "model" => "ArticleType",
+            "relation_name" => "types",
+            "pivot_table" => "article_article_type",
+            "pivot_self_key" => "article_id",
+            "pivot_foreign_key" => "article_type_id",
+            "editable" => 1,
+            "type" => "select",
+            "method_options" => "getSuitableTypes"
+        ],
+```   
+
+According to this config, the options of the select control for `types` field should come from `getSuitableTypes` method of the self `Article` class. The method should return a [collection](!https://laravel.com/docs/5.2/eloquent-collections)
+
+
 <a name="tree"></a> 
 ### Tree
  
@@ -19,7 +76,7 @@ To do so set the control type to `tree` in the field configuration array.
 <a name="tree_options_providers"></a>
 #### Options providers
 
-By default the options for the the tree form control are build with `CrudModelCollectionBuilder :: createTree` method. 
+By default the options for the tree form control are build with `CrudModelCollectionBuilder :: createTree` method. 
 It returns a json ready to use by [JSTree](!https://github.com/vakata/jstree) plugin, which is used in the package.  
 
 

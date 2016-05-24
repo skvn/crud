@@ -2,7 +2,7 @@
 {% if input.config.editor %}
 <div style="height: 600px;">
 {% endif %}
-<textarea {{ input.config.rows ? ('rows="'~input.config.rows~'"')|raw }} class="form-control {{ input.config.editor ? 'html_editor' }}" data-editor_type="{{ input.config.editor_type?input.config.editor_type:'summernote' }}"    {{ input.config.required ? 'required' }} name="{{ input.name }}" id="{{ input.getUniqueId() }}"  >{{ input.getValue()}}</textarea>
+<textarea {{ input.config.rows ? ('rows="'~input.config.rows~'"')|raw }} class="form-control {{ input.config.editor ? 'html_editor' }}" data-editor_type="{{ input.config.editor_type?input.config.editor_type }}"    {{ input.config.required ? 'required' }} name="{{ input.name }}" id="{{ input.getUniqueId() }}"  >{{ input.getValue()}}</textarea>
 {% if input.config.editor %}
 </div>
 {% endif %}

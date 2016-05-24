@@ -421,13 +421,11 @@ class CrudModelPrototype
                         if (!empty($column['data_col']))
                         {
                             $column['data'] = $column['data_col'];
-                            unset($column['data_col']);
+
 
                         } else if (!empty($column['data_rel']))
                         {
                             $column['data'] = $column['data_rel'].'::'.$column['data_rel_attr'];
-                            unset($column['data_rel']);
-                            unset($column['data_rel_attr']);
                         }
 
                         if (empty($column['data'] ))
@@ -435,6 +433,15 @@ class CrudModelPrototype
                             continue;
                         }
 
+                        if (isset($column['data_rel'])) {
+                            unset($column['data_rel']);
+                        }
+                        if (isset($column['data_rel_attr'])) {
+                            unset($column['data_rel_attr']);
+                        }
+                        if (isset($column['data_col'])) {
+                            unset($column['data_col']);
+                        }
                         if (!empty($column['hint']))
                         {
                             $column['hint'] = ['default' => $column['hint']];
