@@ -113,7 +113,7 @@ trait ModelInlineImgTrait {
 
     protected function getInlineImgFilename($filename)
     {
-        return 'images/' . $this->table . '/' . $this->id . '/' . $filename;
+        return ($this->getFilesConfig($filename, "inline_path") ?: ('images/' . $this->table . '/' . $this->id)) . DIRECTORY_SEPARATOR . $filename;
     }
 
     protected function getInlineImgUrl($filename)
@@ -128,7 +128,7 @@ trait ModelInlineImgTrait {
 
     protected function generateInlineImgFilename($ext)
     {
-        return uniqid('img').'.'.$ext;
+        return str_replace(".", "-", uniqid($this->getFilesConfig('inline', 'prefix') ?: 'img', true)).'.'.$ext;
     }
 
 

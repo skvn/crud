@@ -78,16 +78,17 @@ trait ModelAttachedTrait {
     public function  attachCreateFilename($fileInfo, $args = [])
     {
         $parts = [];
-        $path = !empty($args['path']) ? $args['path'] : '%l1/%l2';
-        $md5 = md5($fileInfo['originalName']);
-        $path = str_replace('%l1', substr($md5,0,2), $path);
-        $path = str_replace('%l2', substr($md5,2,2), $path);
-        if(!empty($args['instance_id']))
-        {
-            $path = str_replace('%i3', str_pad($args['instance_id'] % 1000, 3, '0', STR_PAD_LEFT), $path);
-            $path = str_replace('%id', $args['instance_id'], $path);
-        }
-        $parts[] = $path;
+        $parts[] = $args['path'];
+//        $path = !empty($args['path']) ? $args['path'] : '%l1/%l2';
+//        $md5 = md5($fileInfo['originalName']);
+//        $path = str_replace('%l1', substr($md5,0,2), $path);
+//        $path = str_replace('%l2', substr($md5,2,2), $path);
+//        if(!empty($args['instance_id']))
+//        {
+//            $path = str_replace('%i3', str_pad($args['instance_id'] % 1000, 3, '0', STR_PAD_LEFT), $path);
+//            $path = str_replace('%id', $args['instance_id'], $path);
+//        }
+//        $parts[] = $path;
         $parts[] = str_replace(".", "_", uniqid(!empty($args['prefix']) ? $args['prefix'] : 'img', true)) . "." . $fileInfo['originalExt'];
 
         return implode(DIRECTORY_SEPARATOR, $parts);

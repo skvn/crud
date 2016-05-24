@@ -531,9 +531,12 @@
                 });
 
 
-                $form.find('textarea[data-editor_type=summernote]').each(function () {
-
-                    $(this).val($(this).summernote('code'));
+                $form.find('textarea[data-editor_type=summernote]').each(function ()
+                {
+                    if ($(this).hasClass("html_editor"))
+                    {
+                        $(this).val($(this).summernote('code'));
+                    }
                 })
             },
 

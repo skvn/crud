@@ -177,7 +177,8 @@ class AttachmentHandler {
             {
                 //$this->options['instance_id'] = $this->parentInstance->id;
                 //$instance->setAttachOptions($this->options);
-                $instance->attachStoreFile($file, array_merge($this->options, ['instance_id' => $this->parentInstance->id]));
+                //$instance->attachStoreFile($file, array_merge($this->options, ['instance_id' => $this->parentInstance->id]));
+                $instance->attachStoreFile($file, $this->parentInstance->getFilesConfig($file['originalName']));
 
                 if (!$this->multi) {
                    // $this->parentInstance->setAttribute($this->parentPropName, $instance->id);

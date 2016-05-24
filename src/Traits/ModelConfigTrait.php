@@ -17,6 +17,8 @@ trait ModelConfigTrait
     /* Flag for tracking created_by  and updated_by */
     protected $track_authors = false;
 
+    private $guessed_id = 0;
+
 
     public static function bootModelConfigTrait()
     {
@@ -80,6 +82,8 @@ trait ModelConfigTrait
             $this->fillable[] = $this->config['tree']['path_column'] ;
             $this->fillable[] = $this->config['tree']['depth_column'];
         }
+
+        $this->config['file_params'] = [];
 
 
     }
@@ -578,6 +582,48 @@ trait ModelConfigTrait
     function isManyRelation($relation)
     {
         return in_array($relation, ['hasMany','belongsToMany', 'morphToMany', 'morphedByMany']);
+    }
+
+    function guessNewKey()
+    {
+        if (empty($this->guessed_id))
+        {
+            $this->quessed_id = $this->app['db']->table($this->getTable())->max($this->getKeyName())+1;
+        }
+        return $this->guessed_id;
+    }
+
+    static function fileParams()
+    {
+        return [];
+    }
+
+    function getFilesConfig($name, $param = null)
+    {
+        if (!isset($this->config['file_params'][$name]))
+        {
+            $conf = static :: fileParams();
+            $conf['instance_id'] = $this->exists ? $this->getKey() : $this->guessNewKey();
+            if (empty($conf['path']))
+            {
+                $conf['path'] = "%l1" . DIRECTORY_SEPARATOR . "%l2";
+            }
+            $md5 = md5($name);
+            $conf['path'] = str_replace('%l1', substr($md5,0,2), $conf['path']);
+            $conf['path'] = str_replace('%l2', substr($md5,2,2), $conf['path']);
+            $conf['path'] = str_replace('%i3', str_pad($conf['instance_id'] % 1000, 3, '0', STR_PAD_LEFT), $conf['path']);
+            $conf['path'] = str_replace('%id', $conf['instance_id'], $conf['path']);
+            $this->config['file_params'][$name] = $conf;
+        }
+
+        if (!empty($param))
+        {
+            return isset($this->config['file_params'][$name][$param]) ? $this->config['file_params'][$name][$param] : false;
+        }
+        else
+        {
+            return $this->config['file_params'][$name];
+        }
     }
 
 
