@@ -150,7 +150,9 @@
                 var url = this.format_setting("model_edit_url", {model: model, id: id, scope:scope});
 
                 $('#crud_form').html('');
+                //alert($('#crud_form').is(':visible'));
                 if (!$('#crud_form').is(':visible')) {
+                    //alert('show');
                     $('#crud_form').modal('show');
                 }
                 var self = this;
@@ -162,9 +164,14 @@
                         $('#crud_form').modal('hide');
                         return;
                     }
+                    //if (!$('#crud_form').is(':visible')) {
+                    //    alert('show');
+                    //    $('#crud_form').modal('show');
+                    //}
 
                     $('#crud_form').find('form').first().crud_form();
                     self.trigger('crud.content_loaded', {cont: $('#crud_form')});
+                    //$('#crud_form').modal('show');
 
                 });
 

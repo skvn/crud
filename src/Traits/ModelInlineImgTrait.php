@@ -113,17 +113,27 @@ trait ModelInlineImgTrait {
 
     protected function getInlineImgFilename($filename)
     {
-        return ($this->getFilesConfig($filename, "inline_path") ?: ('images/' . $this->table . '/' . $this->id)) . DIRECTORY_SEPARATOR . $filename;
+        return $this->getFilesConfig($filename, "inline_path") . DIRECTORY_SEPARATOR . $filename;
+        //return ($this->getFilesConfig($filename, "inline_path") ?: ('images/' . $this->table . '/' . $this->id)) . DIRECTORY_SEPARATOR . $filename;
     }
 
     protected function getInlineImgUrl($filename)
     {
-        return '/' . $this->getInlineImgFilename($filename);
+        return $this->getFilesConfig($filename, "inline_url") . "/" .  $this->getInlineImgFilename($filename);
+//        if ($url = $this->getFilesConfig($filename, "inline_url"))
+//        {
+//        }
+//        return '/' . $this->getInlineImgFilename($filename);
     }
 
     protected function getInlineImgPath($filename)
     {
-        return public_path($this->getInlineImgFilename($filename));
+        return $this->getFilesConfig($filename, "inline_root") . DIRECTORY_SEPARATOR . $this->getInlineImgFilename($filename);
+//        if ($root = )
+//        {
+//            return $root . DIRECTORY_SEPARATOR . $this->getInlineImgFilename($filename);
+//        }
+//        return public_path($this->getInlineImgFilename($filename));
     }
 
     protected function generateInlineImgFilename($ext)

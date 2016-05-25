@@ -328,7 +328,8 @@ class AttachmentHandler {
 
     protected function createAttachInstance($id = null, $exists = false)
     {
-        $class = !empty($this->options['model']) ? CrudModel :: resolveClass($this->options['model']) : CrudFile :: class;
+        $class = $this->parentInstance->getFilesConfig("any", "class");
+        //$class = $this->parentInstance->getFilesConfig("any", "model") ? CrudModel :: resolveClass($this->parentInstance->getFilesConfig("any", "model")) : CrudFile :: class;
         if (is_null($id))
         {
             $instance = new $class();

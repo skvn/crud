@@ -2,6 +2,7 @@
 
 use Skvn\Crud\Form\Field;
 use Skvn\Crud\Exceptions\ConfigException;
+use Skvn\Crud\Models\CrudFile;
 
 
 trait ModelConfigTrait
@@ -588,7 +589,7 @@ trait ModelConfigTrait
     {
         if (empty($this->guessed_id))
         {
-            $this->quessed_id = $this->app['db']->table($this->getTable())->max($this->getKeyName())+1;
+            $this->guessed_id = $this->app['db']->table($this->getTable())->max($this->getKeyName())+1;
         }
         return $this->guessed_id;
     }
@@ -602,17 +603,32 @@ trait ModelConfigTrait
     {
         if (!isset($this->config['file_params'][$name]))
         {
-            $conf = static :: fileParams();
+            $conf = [
+                'path' => "%l1" . DIRECTORY_SEPARATOR . "%l2",
+                'inline_path' => "images" . DIRECTORY_SEPARATOR . "%tbl" . DIRECTORY_SEPARATOR . "%id",
+                'class' => CrudFile :: class,
+                'prefix' => "img",
+                'inline_url' => "",
+                'inline_root' => public_path(),
+                'table' => $this->getTable()
+            ];
+            $conf = array_merge($conf, static :: fileParams());
             $conf['instance_id'] = $this->exists ? $this->getKey() : $this->guessNewKey();
-            if (empty($conf['path']))
-            {
-                $conf['path'] = "%l1" . DIRECTORY_SEPARATOR . "%l2";
-            }
+            //$obj = new $conf['class']();
+            //$conf['table'] = $obj->getTable();
+
             $md5 = md5($name);
             $conf['path'] = str_replace('%l1', substr($md5,0,2), $conf['path']);
             $conf['path'] = str_replace('%l2', substr($md5,2,2), $conf['path']);
             $conf['path'] = str_replace('%i3', str_pad($conf['instance_id'] % 1000, 3, '0', STR_PAD_LEFT), $conf['path']);
             $conf['path'] = str_replace('%id', $conf['instance_id'], $conf['path']);
+            $conf['path'] = str_replace('%tbl', $conf['table'], $conf['path']);
+
+            $conf['inline_path'] = str_replace('%l1', substr($md5,0,2), $conf['inline_path']);
+            $conf['inline_path'] = str_replace('%l2', substr($md5,2,2), $conf['inline_path']);
+            $conf['inline_path'] = str_replace('%i3', str_pad($conf['instance_id'] % 1000, 3, '0', STR_PAD_LEFT), $conf['inline_path']);
+            $conf['inline_path'] = str_replace('%id', $conf['instance_id'], $conf['inline_path']);
+            $conf['inline_path'] = str_replace('%tbl', $conf['table'], $conf['inline_path']);
             $this->config['file_params'][$name] = $conf;
         }
 
