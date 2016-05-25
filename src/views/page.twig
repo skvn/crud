@@ -15,6 +15,14 @@
     <link href="{{ 'css/vendor.min.css'|asset }}" rel="stylesheet">
     <link href="{{ 'css/crud.css'|asset }}" rel="stylesheet">
 
+    <!-- ASSET CSS -->
+    {% if config_get('crud_common.assets.css') %}
+    {% for css in  config_get('crud_common.assets.css')%}
+    <link href="{{ css }}" rel="stylesheet">
+    {% endfor %}
+    {% endif %}
+
+
     {% block head %}{% endblock %}
 </head>
 {%  if session('error') %}
@@ -83,11 +91,17 @@
 <script src="{{ 'js/modules/tooltip.js'|asset }}"></script>
 {#<script src="{{ 'js/modules/notify.js'|asset }}"></script>#}
 
-<!-- PAGE UTILITY -->
-<script src="{{ 'js/app.js'|asset }}" ></script>
+<!-- ASSETS -->
+{% if config_get('crud_common.assets.js') %}
+{% for js in  config_get('crud_common.assets.js')%}
+<script src="{{ js }}" ></script>
+{% endfor %}
+{% endif %}
+
+
 
 <div id="crud_form" class="modal fade" aria-hidden="true"> </div>
-{% if config_get('crut_tooltip.acl')|allowed %}
+{% if config_get('crud_tooltip.acl')|allowed %}
     {% include "crud::blocks/tooltip_edit.twig" %}
 {% endif %}
 

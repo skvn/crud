@@ -75,8 +75,22 @@
 
                                 for (var i=0; i<actions.length; i++)
                                 {
-                                    var com_url = crud.format_setting("model_command_url", {command:actions[i]['command'],id:rowData.id, model:tbl.data('crud_table'), scope:tbl.data('crud_scope')} );
-                                    buttons += '<li><a href="'+com_url+'" data-click="crud_action" data-action="crud_command" >';
+
+
+                                    if (actions[i]['command'])
+                                    {
+                                        var com_url = crud.format_setting("model_command_url", {command:actions[i]['command'],id:rowData.id, model:tbl.data('crud_table'), scope:tbl.data('crud_scope')} );
+                                        buttons += '<li><a href="'+com_url+'" data-click="crud_action" data-action="crud_command" >';
+                                    } else if (actions[i]['event'])
+                                    {
+                                        buttons += '<li><a href="#" data-model="'+tbl.data('crud_table')+'" data-scope="'+tbl.data('crud_scope')+'" data-id="'+rowData.id+'" data-click="crud_event" data-event="'+actions[i]['event']+'" >';
+                                    }
+                                    else if (actions[i]['popup'])
+                                    {
+                                        buttons += '<li><a href="'+actions[i]['popup']+'" data-model="'+tbl.data('crud_table')+'" data-id="'+rowData.id+'" data-scope="'+tbl.data('crud_scope')+'" data-click="crud_popup" data-popup="'+actions[i]['popup_id']+'" data-event="'+actions[i]['event']+'" >';
+                                    }
+
+
                                     if (actions[i]['class'])
                                     {
                                         buttons += '<i class="'+actions[i]['class']+'"></i> ';

@@ -465,7 +465,8 @@ class CrudModelPrototype
                     $actions = [];
                     foreach ($list['list_actions'] as $action) {
 
-                        if (is_array($action)&& !empty($action['command']))
+                        if (is_array($action)&&
+                            (!empty($action['command']) || !empty($action['event'])  || !empty($action['popup'])))
                         {
                             $actions[] = $action;
                         }

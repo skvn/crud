@@ -1,5 +1,7 @@
 <?php namespace Skvn\Crud\Form;
 
+use Illuminate\Container\Container;
+
 
 /**
  * Class Form
@@ -181,6 +183,19 @@ class Form {
 
     }//
 
+
+    public function __toString()
+    {
+        $app = Container :: getInstance();
+        return $app['view']->make('crud::crud/form', ['crudObj'=>$this->crudObj])->render();
+    }
+
+    public function getFieldsAsHtml()
+    {
+        $app = Container :: getInstance();
+        return $app['view']->make('crud::crud/fields', ['crudObj'=>$this->crudObj])->render();
+    }
+
     /**
      * Get array of available edit types
      * @return array
@@ -243,7 +258,7 @@ class Form {
      */
     public function getFieldByName($fieldName)
     {
-       return isset($this->fields[$fieldName])?$this->fields[$fieldName]:null;
+        return $this->fields[$fieldName];
     }
 
 

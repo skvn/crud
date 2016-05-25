@@ -1,11 +1,12 @@
 <?php namespace Skvn\Crud\Models;
 
 use \Illuminate\Database\Eloquent\Model;
-use Skvn\Crud\Form\Form;
 use Skvn\Crud\Traits\ModelInjectTrait;
 use Skvn\Crud\Traits\ModelConfigTrait;
 use Skvn\Crud\Traits\ModelRelationTrait;
 use Skvn\Crud\Traits\ModelFilterTrait;
+use Skvn\Crud\Traits\ModelFormTrait;
+
 use Illuminate\Container\Container;
 
 
@@ -17,6 +18,7 @@ class CrudModel extends Model
     use ModelConfigTrait;
     use ModelRelationTrait;
     use ModelFilterTrait;
+    use ModelFormTrait;
 
     //use SoftDeletingTrait;
 
@@ -32,7 +34,7 @@ class CrudModel extends Model
 
 
     protected $app;
-    protected $form;
+    public $form;
     protected $codeColumn = 'id';
 
     protected $errors;
@@ -326,27 +328,6 @@ class CrudModel extends Model
 
 
 
-    public function getForm($fillData=null, $forceNew=false)
-    {
-        if ($forceNew ||  !$this->form)
-        {
-
-            $this->form = new Form($this,$this->getFormConfig(), $fillData);
-        }
-
-        return $this->form;
-    }
-
-    public function getFieldsObjects($fillData=null)
-    {
-        if (!$this->form_fields_collection)
-        {
-            $form = new Form($this, $this->getFields(), $fillData);
-            $this->form_fields_collection = $form->fields;
-        }
-
-        return $this->form_fields_collection;
-    }
 
     function getTitle()
     {
@@ -451,6 +432,11 @@ class CrudModel extends Model
         return $this->crudFormatValue('<strong>%s</strong>', [$val]);
     }
 
+    /**
+     * Get All available formatters
+     *
+     * @return array
+     */
     function getAvailFormatters()
     {
         $flist = [];

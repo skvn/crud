@@ -3,7 +3,7 @@
 {%  else  %}
 <div class="form-group " >
 
-    <div class="col-md-{{ COL_WIDTH }}">
+    <div class="col-md-{{ COL_WIDTH?COL_WIDTH:12 }}">
      {% include 'crud::crud/fields/'~input.config.type~'.twig' %}
     </div>
 

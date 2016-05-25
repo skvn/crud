@@ -8,9 +8,22 @@
         </div>
         <div class="form-group">
             <label>
-                Model method *  <input type="text" required class="form-control" value="{{ action.command }}"  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][command]">
+                Model method *  <input type="text"  class="form-control" value="{{ action.command }}"  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][command]">
             </label>
         </div>
+
+    <div class="form-group">
+        <label>
+            Or Crud Event *  <input type="text"  class="form-control" value="{{ action.event }}"  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][event]">
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label>
+            Or Modal URL *  <input type="text"  class="form-control" value="{{ action.popup }}"  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][popup]">
+            Popup ID:<input type="text"  class="form-control" value="{{ action.popup_id }}"  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][popup_id]">
+        </label>
+    </div>
 
     <div class="form-group">
         <label>

@@ -74,6 +74,22 @@
                     crud_actions[i] = actions[i];
                 }
             },
+            getHash: function (str, asString, seed){
+                /*jshint bitwise:false */
+                var i, l,
+                    hval = (seed === undefined) ? 0x811c9dc5 : seed;
+
+                for (i = 0, l = str.length; i < l; i++) {
+                    hval ^= str.charCodeAt(i);
+                    hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
+                }
+                if( asString ){
+                    // Convert to 8 digit hex string
+                    return ("0000000" + (hval >>> 0).toString(16)).substr(-8);
+                }
+                return hval >>> 0;
+            },
+
             cleanPastedHTML:  function (input) {
                 // 1. remove line breaks / Mso classes
                 var stringStripper = /(\n|\r| class=(")?Mso[a-zA-Z]+(")?)/g;
@@ -628,52 +644,65 @@
         },
         open_popup: function(elem)
         {
-            var popup = elem.data('popup');
-            if ($('#'+popup).length <= 0)
-            {
-                $('<div id="'+popup+'" style="display: none;"></div>').appendTo($(crud.doc.body));
+
+            var url = "";
+            if (elem.data('uri')){
+
+                url = elem.data('uri');
+            } else if (elem.attr('href')){
+
+                url = elem.attr('href');
             }
-            $.get(elem.data('uri'), $.extend({}, elem.data()), function(res){
-                $('#'+popup).replaceWith(res);
-                var w = $('#'+popup);
-                crud.trigger('crud.content_loaded', {cont: w});
-                w.modal({keyboard:false, show:true,backdrop:'static'});
-                if (elem.data('title'))
-                {
-                    $("h4", w).html(elem.data("title"));
-                }
-                if (elem.data('report'))
-                {
-                    $("input[name=type]", w).val(elem.data('report'))
-                }
-                if (elem.data('source'))
-                {
-                    $("input[name=source]", w).val(elem.data('source'))
-                }
-                if (crud_actions['onShow_'+popup])
-                {
-                    crud_actions['onShow_'+popup]($('#'+popup));
-                }
-                if (elem.data("onshow"))
-                {
-                    switch (elem.data("onshow"))
-                    {
-                        case 'pass_row_ids':
-                            var ids = [];
-                            $('table input[data-rel=row]').each(function ()
-                            {
-                                if ($(this).prop('checked'))
-                                {
-                                    ids.push($(this).attr('value'));
-                                }
-                            });
-                            $('input[name=row_ids]', w).val(ids.join(','));
-                            break;
+
+            var popup = elem.data('popup');
+
+            if (!popup) {
+                popup = crud.getHash(url, true);
+            }
+            // if ($('#' + popup).length <= 0) {
+            //     $('<div id="' + popup + '" style="display: none;"></div>').appendTo($(crud.doc.body));
+            // }
+            if (url != '' && url != '#') {
+
+                $.get(url, $.extend({}, elem.data()), function (res) {
+
+                    $new_content = $(res);
+                    $new_content.attr('id', popup).appendTo($(crud.doc.body));
+                    var w = $('#' + popup);
+
+                    crud.trigger('crud.content_loaded', {cont: w});
+                    w.modal({keyboard: false, show: true, backdrop: 'static'});
+                    if (elem.data('title')) {
+                        $("h4", w).html(elem.data("title"));
                     }
-                }
-                crud.init_ichecks(w);
-                $("form", w).crud_form();
-            });
+                    if (elem.data('report')) {
+                        $("input[name=type]", w).val(elem.data('report'))
+                    }
+                    if (elem.data('source')) {
+                        $("input[name=source]", w).val(elem.data('source'))
+                    }
+                    if (crud_actions['onShow_' + popup]) {
+                        crud_actions['onShow_' + popup]($('#' + popup));
+                    }
+                    if (elem.data("onshow")) {
+                        switch (elem.data("onshow")) {
+                            case 'pass_row_ids':
+                                var ids = [];
+                                $('table input[data-rel=row]').each(function () {
+                                    if ($(this).prop('checked')) {
+                                        ids.push($(this).attr('value'));
+                                    }
+                                });
+                                $('input[name=row_ids]', w).val(ids.join(','));
+                                break;
+                        }
+                    }
+                    crud.init_ichecks(w);
+                    $("form", w).crud_form();
+                });
+            } else {
+                alert('Crud popup url not defined!');
+            }
         }
 
     };
@@ -717,6 +746,10 @@
                 {
                     alert('Undefined action '+ el.data('action'));
                 }
+                break;
+
+            case 'crud_popup':
+                crud_actions.open_popup(el);
                 break;
 
             case 'crud_event':

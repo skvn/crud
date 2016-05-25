@@ -3,11 +3,7 @@
     <input type="hidden" name="scope" value="{{ crudObj.scope }}" />
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
 
-        {% for input in  crudObj.getForm().fields %}
-                {% include 'crud::crud/fields/line_wrap.twig' %}
-        {% endfor %}
-
-
+    {%  include 'crud::crud/fields.twig' %}
 
         <div class="col-md-10 modal-footer" style="margin-bottom: 30px; margin-top: 30px; text-align: left">
         <button type="button" class="btn btn-default" data-click="crud_event" data-event="crud.cancel_edit" data-rel="{{ crudObj.view_ref }}">{{ trans('crud::messages.cancel') }}</button>
