@@ -87,6 +87,8 @@ class Form {
      * @var
      */
     public $fields;
+
+    public $customProperties;
     //public $visibleFields;
 
     /**
@@ -95,10 +97,11 @@ class Form {
      * @param $config
      * @param null $data
      */
-    public function __construct($crudObj, $config, $data=null)
+    public function __construct($crudObj, $config, $data=null, $customProperties = [])
     {
         $this->crudObj = $crudObj;
         $this->config = $config;
+        $this->customProperties = $customProperties;
 
 
         if (is_array($this->config)) {

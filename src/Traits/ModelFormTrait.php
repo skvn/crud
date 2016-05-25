@@ -52,16 +52,17 @@ trait ModelFormTrait
     }
 
     
-    public function getForm($fillData=null, $forceNew=false)
+    public function getForm($config = [])
     {
-        if ($forceNew ||  !$this->form)
+        if (!empty($config['forceNew']) ||  !$this->form)
         {
-            $this->form = new Form($this,$this->getFormConfig(), $fillData);
+            $this->form = new Form($this,$this->getFormConfig(), !empty($config['fillData'])?$config['fillData']:null, $config);
         }
 
         return $this->form;
     }
 
+     
     public function getFieldsObjects($fillData=null)
     {
         if (!$this->form_fields_collection)

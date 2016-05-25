@@ -13,7 +13,7 @@ trait ModelRelationTrait
         $formConf = $this->getFields();
         if ($this->dirtyRelations  && is_array($this->dirtyRelations ))
         {
-            $form = $this->getForm($this->dirtyRelations, true);
+            $form = $this->getForm(['fillData'=>$this->dirtyRelations,'forceNew' => true]);
 
             foreach ($this->dirtyRelations as $k => $v)
             {

@@ -164,7 +164,7 @@ class CrudModel extends Model
             //process dirty attributes
             if (count($dirty))
             {
-                $this->getForm($dirty, true);
+                $this->getForm(['fillData'=>$dirty,'forceNew' => true]);
                 if (!empty($this->form->fields) && is_array($this->form->fields))
                 {
                     foreach ($dirty as $k => $v)
