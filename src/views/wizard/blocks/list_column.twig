@@ -46,6 +46,17 @@
                 </select>
             </td>
             <td  style="width:180px;">
+                <div>
+                    <label>
+                        Formatter
+                    <select class="form-control default_select" name="list[{{ ALIAS }}][columns][{{ NUM }}][format]" >
+                        <option value="">No formatter</option>
+                        {%  for f in wizard.getAvailableFormatters(table) %}
+                                <option value="{{ f.name }}" {{ f.name == column.format?'selected' }}>{{ f.name }} ({{ f.description }})</option>
+                        {% endfor %}
+                    </select>
+                    </label>
+                </div>
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" value="1" name="list[{{ ALIAS }}][columns][{{ NUM }}][invisible]" {{ column.invisible?'checked' }}  > Invisible
