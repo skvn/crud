@@ -547,8 +547,10 @@ trait ModelConfigTrait
             $replace = [
                 '%l1' => substr($md5,0,2),
                 '%l2' => substr($md5,2,2),
+                '%i1' => $conf['instance_id'] % 10,
                 '%i3' => str_pad($conf['instance_id'] % 1000, 3, '0', STR_PAD_LEFT),
                 '%id' => $conf['instance_id'],
+                '%i1' => $this->getParentInstanceId() % 10,
                 '%p3' => str_pad($this->getParentInstanceId() % 1000, 3, '0', STR_PAD_LEFT),
                 '%pid' => $this->getParentInstanceId(),
                 '%tbl' => $conf['table']
