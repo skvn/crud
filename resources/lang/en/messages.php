@@ -29,7 +29,10 @@ return [
 	'toggle_nav' => 'Toggle navigation',
 	'list' => 'List',
 	'close' => 'Close',
-	'search' => 'Search'
+	'search' => 'Search',
+	'yes' => 'Yes',
+	'no' => 'No'
+
 
 
 
