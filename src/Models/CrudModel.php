@@ -224,6 +224,7 @@ class CrudModel extends Model
             }
         }
 
+
         foreach ($this->config['fields'] as $col_idx => $col)
         {
             if (!empty($col['fields']))
@@ -237,7 +238,7 @@ class CrudModel extends Model
                 }
             }
         }
-
+        
         return parent::fill($attributes);
     }
 

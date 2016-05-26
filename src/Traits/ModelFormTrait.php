@@ -38,6 +38,15 @@ trait ModelFormTrait
         }
         $this->config['fields'][$fieldName] = $params + $fieldConfig;
         $this->config['form'][] = $fieldName;
+        $this->markFillable($fieldName);
+
+        if (!empty($fieldConfig['fields']))
+        {
+            foreach ($fieldConfig['fields'] as $f)
+            {
+                $this->markFillable($f);
+            }
+        }
     }
 
 

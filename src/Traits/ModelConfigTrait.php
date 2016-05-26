@@ -90,7 +90,13 @@ trait ModelConfigTrait
     }
 
 
-    private function markFillable($name, $col)
+    /**
+     * Mark field as fillable
+     *
+     * @param array $name
+     * @param $col
+     */
+    private function markFillable($name, $col=[])
     {
         if (isset($col['relation']) &&
             ($col['relation'] == 'belongsToMany' || $col['relation'] == 'hasMany' || $col['relation'] == 'hasOne')

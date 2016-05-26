@@ -667,7 +667,13 @@
                 $.get(url, $.extend({}, elem.data()), function (res) {
 
                     $new_content = $(res);
-                    $new_content.attr('id', popup).appendTo($(crud.doc.body));
+                    $new_content.attr('id', popup);
+                    if ($('#' + popup).length <= 0) {
+                        
+                        $new_content.appendTo($(crud.doc.body));
+                    } else {
+                        $('#' + popup).replaceWith($new_content);
+                    }
                     var w = $('#' + popup);
 
                     crud.trigger('crud.content_loaded', {cont: w});
