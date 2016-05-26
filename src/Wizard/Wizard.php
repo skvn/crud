@@ -124,9 +124,9 @@ class Wizard
 
     public function checkUnsupportedConfig($model)
     {
-        if (!empty($model['list']))
+        if (!empty($model['scopes']))
         {
-            foreach ($model['list'] as $list_alias=>$list_arr)
+            foreach ($model['scopes'] as $list_alias=>$list_arr)
             {
                 if (isset($list_arr['form']) || isset($list_arr['tabs']))
                 {

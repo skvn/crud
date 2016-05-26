@@ -63,8 +63,14 @@
                         <input type="text" class="form-control" id="ent_name" name="ent_name" value="{{ model.ent_name }}" required  />
                     </div>
                     <div class="form-group">
-                        <label for="title_field">Title field *</label>
-                        <input type="text" class="form-control" id="title_field" name="title_field" value="{{ model.title_field }}" required  />
+                        <label for="title_field">Title field</label>
+                        <select class="form-control default_select" id="title_field" name="title_field"  style="width:250px;"  >
+                            <option value="">Choose database table field</option>
+                            {% for f in wizard.getTableColumns(table) %}
+                                  <option value="{{ f }}" {{ model.title_field==f?'selected' }}>{{ f }}</option>
+                            {% endfor %}
+                        </select>
+
                         <div class="help-block">DB table field that serves as title or name of the entity</div>
                     </div>
 
@@ -150,9 +156,6 @@
     {% include 'crud::wizard/blocks/filter_fields' %}
 
     {# END TEMPLATES#}
-
-
-
 
 {% else %}
 

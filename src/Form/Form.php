@@ -93,9 +93,11 @@ class Form {
 
     /**
      * Form constructor.
+     * 
      * @param $crudObj
      * @param $config
      * @param null $data
+     * @param array $customProperties
      */
     public function __construct($crudObj, $config, $data=null, $customProperties = [])
     {

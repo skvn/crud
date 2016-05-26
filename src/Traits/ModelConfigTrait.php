@@ -144,81 +144,6 @@ trait ModelConfigTrait
         return $fields;
     }
 
-//    function objectifyConfig()
-//    {
-//        $conf = new \Skvn\Crud\CrudConfig($this);
-//        $c = $this->config;
-//        $c['list'] = $this->getListConfig();
-//
-//        if (!empty($c['list']['multiselect']))
-//        {
-//            array_unshift($c['list']['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
-//        }
-//
-//        if (!empty($c['list']['buttons']['single_edit'])
-//            || !empty($c['list']['buttons']['single_delete'])
-//            || !empty($c['list']['list_actions'])
-//
-//        )
-//        {
-//            $c['list']['columns'][] = [ "data"=>"actions", "orderable"=>false,'title'=>'  ', 'width'=>50, 'ctype'=>'actions'];
-//        }
-//
-//        foreach($c['list']['columns'] as $k=>$col)
-//        {
-//            if (empty($col['title']))
-//            {
-//                $cdesc = $this->getColumn($col['data']);
-//                if (!empty($cdesc['title'])) {
-//                    $c['list']['columns'][$k]['title'] = $cdesc['title'];
-//                }
-//            }
-//            if (!empty($col['hint']) && empty($col['hint']['index']))
-//            {
-//                $c['list']['columns'][$k]['hint']['index'] = $this->classViewName.'_'.$this->scope.'_'.$col['data'];
-//            }
-//            if (!empty($col['acl']) && !$this->app['skvn.cms']->checkAcl($col['acl'], 'r'))
-//            {
-//                unset($c['list']['columns'][$k]);
-//            }
-//        }
-//        //$c['filter'] = $this->getFilter();
-//        if ($this->app['auth']->check())
-//        {
-//            $user = $this->app['auth']->user();
-//            if ($user instanceof \Skvn\Crud\Contracts\PrefSubject)
-//            {
-//                $cols = $user->crudPrefFilterTableColumns($c['list']['columns'], $this);
-//                foreach($c['list']['columns'] as $col)
-//                {
-//                    if (!empty($col['invisible']))
-//                    {
-//                        $cols[] = $col;
-//                    }
-//                }
-//                $c['list']['columns'] = $cols;
-//            }
-//        }
-//
-//        if (!empty($c['list']['list_actions'])) {
-////            $actions = [];
-////            foreach ($this->config['list']['list_actions'] as $action) {
-////                $actions[] = $action['title'].'|'.$action['command'].(isset($action['class'])?'|'.$action['class']:'');
-////            }
-////            $this->config['list_actions'] = implode(',',$actions);
-//            $c['list_actions'] = json_encode($c['list']['list_actions']);
-//        } else {
-//            $c['list_actions'] = "";
-//        }
-//
-//
-//        $c['list_name'] = $this->getListName();
-//        $c['scope'] = $this->scope;
-//        $conf->setConfig($c);
-//        return $conf;
-//
-//    }
-
     public function getFields($prop='')
     {
         $form =  $this->confParam('fields');
@@ -251,7 +176,7 @@ trait ModelConfigTrait
         } else {
 
             $original_key = $key;
-            $key = 'list.' . $this->scope . '.' . $key;
+            $key = 'scopes.' . $this->scope . '.' . $key;
             $val = $this->app['config']->get('crud.crud_' . $this->getTable() . '.' . $key);
             if (is_null($val))
             {
@@ -281,16 +206,6 @@ trait ModelConfigTrait
         $form = null;
         $form =  $this->confParam('form');
         $tabbed = $this->confParam('form_tabbed');
-
-//        if (!empty($this->scope))
-//        {
-//            $form = $this->getListConfig("form");
-//        }
-//        if (!$form)
-//        {
-//            $form =  $this->confParam('form');
-//        }
-
         $form_array = [];
         $fields = $this->getFields();
 
@@ -331,22 +246,22 @@ trait ModelConfigTrait
 
         if (strpos($prop,'.') === false)
         {
-            $conf = $this->confParam('list.' . $this->scope, null, false);
+            $conf = $this->confParam('scopes.' . $this->scope, null, false);
             if (empty($conf))
             {
                 $conf = [];
             }
-            if (empty($conf['columns']))
+            if (empty($conf['list']))
             {
-                $conf['columns'] = [];
+                $conf['list'] = [];
             }
             if (!empty($conf['multiselect']))
             {
-                array_unshift($conf['columns'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
+                array_unshift($conf['list'],[ "data"=> "id","orderable"=>false,'title'=>'  ', 'width'=>30, 'ctype'=>'checkbox']);
             }
             else
             {
-                array_unshift($conf['columns'],[ "data"=> "id","orderable"=>false, 'invisible'=>true]);
+                array_unshift($conf['list'],[ "data"=> "id","orderable"=>false, 'invisible'=>true]);
             }
             if (!empty($conf['buttons']['single_edit'])
                 || !empty($conf['buttons']['single_delete'])
@@ -354,26 +269,26 @@ trait ModelConfigTrait
 
             )
             {
-                $conf['columns'][] = [ "data"=>"actions", "orderable"=>false,'title'=>'  ', 'width'=>50, 'ctype'=>'actions'];
+                $conf['list'][] = [ "data"=>"actions", "orderable"=>false,'title'=>'  ', 'width'=>50, 'ctype'=>'actions'];
             }
 
-            foreach($conf['columns'] as $k=>$col)
+            foreach($conf['list'] as $k=>$col)
             {
 
                 if (empty($col['title']))
                 {
                     $cdesc = $this->getColumn($col['data']);
                     if (!empty($cdesc['title'])) {
-                        $conf['columns'][$k]['title'] = $cdesc['title'];
+                        $conf['list'][$k]['title'] = $cdesc['title'];
                     }
                 }
                 if (!empty($col['hint']) && empty($col['hint']['index']))
                 {
-                    $conf['columns'][$k]['hint']['index'] = $this->classViewName.'_'.$this->scope.'_'.$col['data'];
+                    $conf['list'][$k]['hint']['index'] = $this->classViewName.'_'.$this->scope.'_'.$col['data'];
                 }
                 if (!empty($col['acl']) && !$this->app['skvn.cms']->checkAcl($col['acl'], 'r'))
                 {
-                    unset($conf['columns'][$k]);
+                    unset($conf['list'][$k]);
                 }
             }
 
@@ -382,16 +297,16 @@ trait ModelConfigTrait
                 $user = $this->app['auth']->user();
                 if ($user instanceof \Skvn\Crud\Contracts\PrefSubject)
                 {
-                    $cols = $user->crudPrefFilterTableColumns($conf['columns'], $this);
-                    foreach($conf['columns'] as $col)
+                    $cols = $user->crudPrefFilterTableColumns($conf['list'], $this);
+                    foreach($conf['list'] as $col)
                     {
                         if (!empty($col['invisible']))
                         {
                             $cols[] = $col;
                         }
                     }
-                    $conf['all_columns'] = $conf['columns'];
-                    $conf['columns'] = $cols;
+                    $conf['all_columns'] = $conf['list'];
+                    $conf['list'] = $cols;
                 }
             }
 
@@ -409,7 +324,7 @@ trait ModelConfigTrait
         }
         else
         {
-            return $this->app['config']->get('crud.crud_'.$this->getTable().'.list.'.$this->scope.'.'.$prop);
+            return $this->app['config']->get('crud.crud_'.$this->getTable().'.scopes.'.$this->scope.'.'.$prop);
         }
 
     }
@@ -496,14 +411,14 @@ trait ModelConfigTrait
         {
             $this->scope = $scope;
         }
-        if (!isset($this->config['list'][$this->scope]))
+        if (!isset($this->config['scopes'][$this->scope]))
         {
-            throw new ConfigException('Scope ' . $this->scope . ' for model ' . $this->config['class_name'] . ' not found');
+            $this->config['scopes'][$this->scope] = [];
         }
         $this->config['scope'] = $this->scope;
         if (!empty($this->config['fields']))
         {
-            $form = !empty($this->config['list'][$this->scope]['form']) ? $this->flatFields($this->config['list'][$this->scope]['form'], !empty($this->config['list'][$this->scope]['form_tabbed'])) : [];
+            $form = !empty($this->config['scopes'][$this->scope]['form']) ? $this->flatFields($this->config['scopes'][$this->scope]['form'], !empty($this->config['scopes'][$this->scope]['form_tabbed'])) : [];
             if (!empty($this->config['fields']))
             {
                 foreach ($this->config['fields'] as $name => $field)
@@ -535,7 +450,7 @@ trait ModelConfigTrait
         if (empty($form))
         {
             $form = [];
-            foreach ($this->getListConfig("columns") as $column)
+            foreach ($this->getListConfig("list") as $column)
             {
                 if (!empty($column['filterable']))
                 {

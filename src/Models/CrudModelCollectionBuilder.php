@@ -15,7 +15,7 @@ class CrudModelCollectionBuilder
     {
         $this->app = Container :: getInstance();
         $this->model = $model;
-        $this->columns = $this->model->getListConfig('columns');
+        $this->columns = $this->model->getListConfig('list');
         $this->params = $args;
         $this->params['buttons'] = $this->model->getListConfig('buttons');
         $this->params['sort'] = $this->model->getListConfig('sort');
@@ -23,6 +23,7 @@ class CrudModelCollectionBuilder
         {
             $this->params['view_type'] = "";
         }
+
     }
 
     static function create(CrudModel $model, $args = [])
@@ -311,6 +312,7 @@ class CrudModelCollectionBuilder
 
     function fetchDataTables()
     {
+        
         $columns = $this->params['columns'];
 
         if (!empty($this->params['order']))

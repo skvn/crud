@@ -457,7 +457,7 @@ class CrudModelPrototype
                         $cols[] = $column;
                     }
                     $this->config_data['list'][$alias]['searchable'] = $searchable;
-                    $this->config_data['list'][$alias]['columns'] = $cols;
+                    $this->config_data['list'][$alias]['list'] = $cols;
                 }
 
                 //actions
@@ -578,19 +578,10 @@ class CrudModelPrototype
     protected  function recordConfig()
     {
 
-        //var_dump($this->config_data);
-        //exit;
-        //$val = $this->app['view']->make('crud_wizard::crud_config', ['model'=>$this->config_data])->render();
-        //var_dump($val);
-        //eval("\$arr = $val");
-        //file_put_contents($this->config_path,"<?php \n return ".var_export($arr, 1).";");
-        //file_put_contents($this->config_path,"<?php \n return ".$val.";");
-        //var_dump($this->config_data);
+
         $conf = json_encode($this->buildConfig(), JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES + JSON_UNESCAPED_UNICODE);
         $conf = str_replace(['{', '}'], ['[', ']'], $conf);
         $conf = str_replace('":', '" =>', $conf);
-        //var_dump($conf);
-        //exit;
         file_put_contents($this->config_path,"<?php \n return ".$conf.";");
 
     }//
@@ -643,60 +634,8 @@ class CrudModelPrototype
 
         if (!empty($this->config_data['list']))
         {
-            $conf['list'] = $this->config_data['list'];
+            $conf['scopes'] = $this->config_data['list'];
         }
-//            $conf['list'] = [];
-//            foreach ($this->config_data['list'] as $alias => $ldata)
-//            {
-//                
-//                $list = [];
-//                $list['title'] = $ldata['title'];
-//                $list['description'] = $ldata['description'];
-//                if (!empty($ldata['multi_select'])) $list['multiselect'] = true;
-//                $list['columns'] = [];
-//                foreach ($ldata['columns'] as $col)
-//                {
-//                    if (!empty($col['data']))
-//                    {
-//                        $column = [
-//                            'data' => $col['data'],
-//                            'title' => $col['title'],
-//                            'orderable' => !empty($col['orderable'])
-//                        ];
-//                        if (!empty($col['hint'])) $column['hint'] = ['default' => $col['hint']];
-//                        if (!empty($col['orderable']) && !empty($col['default_order']))
-//                        {
-//                            $column['default_order'] = $col['default_order'];
-//                        }
-//                        if (!empty($col['searchable'])) $column['searchable'] = 1;
-//                        if (!empty($col['invisible'])) $column['invisible'] = 1;
-//                        if (!empty($col['width'])) $column['width'] = $col['width'];
-//                        $list['columns'][] = $column;
-//                    }
-//                }
-//                $list['filter'] = $ldata['filter'];
-//                if (!empty($ldata['actions']))
-//                {
-//                    $list['list_actions'] = $ldata['actions'];
-//                }
-//                if (!empty($ldata['use_tabs']))
-//                {
-//                    $list['edit_tab'] = 1;
-//                }
-//                if (!empty($ldata['use_tabbed_form']))
-//                {
-//                    $list['form_tabbed'] = 1;
-//                }
-//                $list['buttons'] = [];
-//
-//                if (!empty($ldata['edit_btn'])) $list['buttons']['single_edit'] = true;
-//                if (!empty($ldata['delete_btn'])) $list['buttons']['single_delete'] = true;
-//                if (!empty($ldata['mass_delete_btn'])) $list['buttons']['mass_delete'] = true;
-//                if (!empty($ldata['customize_cols'])) $list['buttons']['customize_columns'] = true;
-//
-//                $conf['list'][$alias] = $list;
-//            }
-//        }
 
         if (!empty($this->config_data['form'])) {
             $conf['form'] = $this->config_data['form'];

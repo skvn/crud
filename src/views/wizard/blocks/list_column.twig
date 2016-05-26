@@ -6,6 +6,7 @@
 
                 <select data-value="{{ column.data }}" class="form-control default_select" data-rel="field_select" data-list_col="data_col" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_col]" required>
                     <option value="">Choose field</option>
+                    {#<option value="id" {{ 'id' == column.data?'selected' }}>ID</option>#}
                     {%  for f, fld in model.fields %}
                         <option value="{{ f }}" {{ f == column.data?'selected' }}>{{ f }}</option>
                     {% endfor %}

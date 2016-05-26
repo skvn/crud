@@ -484,6 +484,7 @@
     function fill_field_selects()
     {
         var fields = [];
+
         $('#f_container table[data-rel]').each ( function () {
                 fields.push($(this).data('rel'));
             }
