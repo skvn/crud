@@ -12,19 +12,20 @@
                     {% endfor %}
                 </select><br>
                 <b>Or</b><br>
-                <input type="text"  data-list_col="data" style="width:300px;" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][data]" placeholder="Enter model attribute name *" required >
+                <input type="text" value="{{ column.data?wizard.resolveColDataProp(table,column.data) }}"  data-list_col="data" style="width:300px;" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][data]" placeholder="Enter model attribute name *" required >
                 <span data-rel="rel_container">
                 <b>Or</b><br>
+                {%  set res_rel = wizard.resolveColDataRelation(column.data) %}
                 <select class="form-control default_select"    data-list_col="data_rel" data-rel="list_relation" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_rel]" style="width: 200px; display: inline" required>
                     <option value="">Choose relation</option>
                     {%  for rel in wizard.getModelRelations(table) %}
                         {%  if rel.relation == 'belongsTo' or rel.relation == 'hasOne' %}
-                        <option value="{{ rel.relation_name }}">{{ rel.title }}</option>
+                        <option value="{{ rel.relation_name }}" {{ res_rel  and res_rel[0] == rel.relation_name?'selected' }}>{{ rel.title }}</option>
                         {% endif %}
                     {% endfor %}
                 </select>
                 </span>
-                <input type="text" data-list_col="data_rel" data-rel="list_relation_attr" style="width:130px; display: inline" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_rel_attr]" placeholder="Relation attribute"/>
+                <input type="text" data-list_col="data_rel" value="{{ res_rel[1] }}" data-rel="list_relation_attr" style="width:130px; display: inline" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_rel_attr]" placeholder="Relation attribute"/>
             </td>
             <td valign="top" style="width:150px;">
                 <input type="text" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][title]"  value="{{ column.title }}"  placeholder="Title *" required >

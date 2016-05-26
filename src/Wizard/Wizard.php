@@ -351,6 +351,7 @@ class Wizard
 
     /**
      * Get all crud configs
+     *
      * @return array
      */
     private function getCrudConfigs()
@@ -373,6 +374,7 @@ class Wizard
 
     /**
      * Get an array of available form field types
+     *
      * @return array
      */
     function getAvailableFieldTypes()
@@ -392,6 +394,7 @@ class Wizard
 
     /**
      * Get an array of available form field types for  relations
+     *
      * @return array
      */
     function getAvailableRelationFieldTypes($multiple=false)
@@ -401,6 +404,7 @@ class Wizard
 
     /**
      * Get an array of all columns for all crud-models
+     *
      * @return array
      */
     function getAllModelColumns()
@@ -547,6 +551,40 @@ class Wizard
     public  function isDateField($type)
     {
         return in_array($type, [Form::FIELD_DATE_RANGE, Form::FIELD_DATE, Form::FIELD_DATE_TIME]);
+    }
+
+    /**
+     * Return value if the list `data` property is a model attribute not a field name
+     *
+     * @param $table
+     * @param $data_alias
+     * @return string|null
+     */
+    public function resolveColDataProp($table, $data_alias)
+    {
+        $conf = $this->getModelConfig($table);
+        if ($conf && !empty($conf['fields']))
+        {
+            if (!key_exists($data_alias,$conf['fields']))
+            {
+                return $data_alias;
+            }
+        }
+    }
+
+    /**
+     * Return value if the list `data` property is a relation
+     *
+     * @param $table
+     * @param $data_alias
+     * @return array|null
+     */
+    public function resolveColDataRelation($data_alias)
+    {
+        if (strpos($data_alias,'::') !== false)
+        {
+            return explode('::', $data_alias);
+        }
     }
 
 
