@@ -52,7 +52,7 @@
 
                 <div class="form-group">
                     <label class="checkbox-inline">
-                        <input type="checkbox" value="1"  id="list[{{ ALIAS }}][buttons][customize_columns]" {{ list.columns.customize_columns?'checked' }}name="list[{{ ALIAS }}][buttons][customize_columns]"  />
+                        <input type="checkbox" value="1"  id="list[{{ ALIAS }}][buttons][customize_columns]" {{ list.list.customize_columns?'checked' }}name="list[{{ ALIAS }}][buttons][customize_columns]"  />
                         <b>Allow show/hide columns</b>
                     </label>
                 </div>
@@ -60,9 +60,9 @@
                 <h3>Columns</h3>
 
                     <div id="list_cols_{{ ALIAS }}">
-                        {%  if list.columns %}
+                        {%  if list.list %}
                             {%  set NUM =  0 %}
-                            {%  for column in list.columns %}
+                            {%  for column in list.list %}
                                 {% include 'crud::wizard/blocks/list_column.twig' %}
                                 {%  set NUM=(NUM+1)  %}
                             {% endfor %}

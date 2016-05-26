@@ -33,7 +33,7 @@
         <h1>General</h1>
         <fieldset>
 
-            <h2 style="margin-top: 0px;">General model settings</h2>
+            <h2 style="margin-top: 0px;">General Settings</h2>
             <div class="panel panel-default">
                 <div class="panel-body">
             <div class="row">
@@ -104,20 +104,20 @@
         <h1>Relations</h1>
         {% include 'crud::wizard/blocks/relations_container' %}
 
-        <h1>Form fields</h1>
+        <h1>Form Fields</h1>
         {% include 'crud::wizard/blocks/fields_container' %}
 
         {#<h1>Files</h1>#}
         {#{% include 'crud::wizard/blocks/files' %}#}
 
-        <h1>Model lists (scopes)</h1>
+        <h1>Model Scopes & Lists</h1>
         <fieldset>
 
             <div class="row">
                 <div class="col-lg-12"  >
                     <div id="lists_container">
-                        {%  if model.list %}
-                            {%  for ALIAS, list in  model.list%}
+                        {%  if model.scopes %}
+                            {%  for ALIAS, list in  model.scopes%}
                                 {% include 'crud::wizard/blocks/list' %}
                             {% endfor %}
                         {% endif %}

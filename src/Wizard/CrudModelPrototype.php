@@ -457,6 +457,7 @@ class CrudModelPrototype
                         $cols[] = $column;
                     }
                     $this->config_data['list'][$alias]['searchable'] = $searchable;
+                    unset($this->config_data['list'][$alias]['columns']);
                     $this->config_data['list'][$alias]['list'] = $cols;
                 }
 
