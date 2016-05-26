@@ -520,6 +520,11 @@ trait ModelConfigTrait
         return [];
     }
 
+    function getParentInstanceId()
+    {
+        return 0;
+    }
+
     function getFilesConfig($name, $param = null)
     {
         if (!isset($this->config['file_params'][$name]))
@@ -539,17 +544,25 @@ trait ModelConfigTrait
             //$conf['table'] = $obj->getTable();
 
             $md5 = md5($name);
-            $conf['path'] = str_replace('%l1', substr($md5,0,2), $conf['path']);
-            $conf['path'] = str_replace('%l2', substr($md5,2,2), $conf['path']);
-            $conf['path'] = str_replace('%i3', str_pad($conf['instance_id'] % 1000, 3, '0', STR_PAD_LEFT), $conf['path']);
-            $conf['path'] = str_replace('%id', $conf['instance_id'], $conf['path']);
-            $conf['path'] = str_replace('%tbl', $conf['table'], $conf['path']);
-
-            $conf['inline_path'] = str_replace('%l1', substr($md5,0,2), $conf['inline_path']);
-            $conf['inline_path'] = str_replace('%l2', substr($md5,2,2), $conf['inline_path']);
-            $conf['inline_path'] = str_replace('%i3', str_pad($conf['instance_id'] % 1000, 3, '0', STR_PAD_LEFT), $conf['inline_path']);
-            $conf['inline_path'] = str_replace('%id', $conf['instance_id'], $conf['inline_path']);
-            $conf['inline_path'] = str_replace('%tbl', $conf['table'], $conf['inline_path']);
+            $replace = [
+                '%l1' => substr($md5,0,2),
+                '%l2' => substr($md5,2,2),
+                '%i1' => $conf['instance_id'] % 10,
+                '%i3' => str_pad($conf['instance_id'] % 1000, 3, '0', STR_PAD_LEFT),
+                '%id' => $conf['instance_id'],
+                '%i1' => $this->getParentInstanceId() % 10,
+                '%p3' => str_pad($this->getParentInstanceId() % 1000, 3, '0', STR_PAD_LEFT),
+                '%pid' => $this->getParentInstanceId(),
+                '%tbl' => $conf['table']
+            ];
+            $to_replace = ['path', 'inline_path'];
+            foreach ($to_replace as $r)
+            {
+                foreach ($replace as $k => $v)
+                {
+                    $conf[$r] = str_replace($k, $v, $conf[$r]);
+                }
+            }
             $this->config['file_params'][$name] = $conf;
         }
 
