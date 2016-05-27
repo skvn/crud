@@ -238,7 +238,7 @@ class CrudModel extends Model
                 }
             }
         }
-        
+
         return parent::fill($attributes);
     }
 
@@ -422,7 +422,7 @@ class CrudModel extends Model
     }
 
     /**
-     * boldifify value
+     * Wrap value in <b>
      *
      * @param $val
      * @param array $args
@@ -431,6 +431,19 @@ class CrudModel extends Model
     function crudFormatValueBold($val, $args = [])
     {
         return $this->crudFormatValue('<strong>%s</strong>', [$val]);
+    }
+
+
+    /**
+     * Make an activity icon out of the boolean or 1/0 value
+     *
+     * @param $val
+     * @param array $args
+     * @return string
+     */
+    function crudFormatValueActivityIcon($val, $args = [])
+    {
+        return ( $val ? '<span class="text-succes"><i class="fa fa-check-square-o"></i> '.trans('crud::messages.yes').'</span>':'<span class="text-danger"><i class="fa fa-times-square-o"></i> '.trans('crud::messages.no').'</span>');
     }
 
     /**

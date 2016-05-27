@@ -1,6 +1,7 @@
 <?php namespace Skvn\Crud\Wizard;
 
 use Skvn\Crud\Form\Form;
+use Skvn\Crud\Models\CrudModel;
 
 
 /**
@@ -128,9 +129,16 @@ class Wizard
         {
             foreach ($model['scopes'] as $list_alias=>$list_arr)
             {
-                if (isset($list_arr['form']) || isset($list_arr['tabs']))
+                if (isset($list_arr['form']) || isset($list_arr['tabs']) )
                 {
                     return false;
+                }
+                foreach ($list_arr as $list_col)
+                {
+                    if (isset($list_col['format']))
+                    {
+                        return false;
+                    }
                 }
             }
         }
@@ -587,5 +595,18 @@ class Wizard
         }
     }
 
+
+    public function getAvailableFormatters($table)
+    {
+        $formatters = [];
+        $config = $this->getModelConfig($table);
+        if (!empty($config) && isset($config['name']))
+        {
+            $obj = CrudModel::createInstance($config['name']);
+            $formatters = $obj->getAvailFormatters();
+        }
+
+        return $formatters;
+    }
 
 }
