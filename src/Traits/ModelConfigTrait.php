@@ -550,7 +550,7 @@ trait ModelConfigTrait
                 '%i1' => $conf['instance_id'] % 10,
                 '%i3' => str_pad($conf['instance_id'] % 1000, 3, '0', STR_PAD_LEFT),
                 '%id' => $conf['instance_id'],
-                '%i1' => $this->getParentInstanceId() % 10,
+                '%p1' => $this->getParentInstanceId() % 10,
                 '%p3' => str_pad($this->getParentInstanceId() % 1000, 3, '0', STR_PAD_LEFT),
                 '%pid' => $this->getParentInstanceId(),
                 '%tbl' => $conf['table']
