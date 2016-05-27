@@ -313,9 +313,9 @@ class Wizard
 
         if (!isset($this->model_configs[$table_name]) || $force)
         {
-            if (file_exists(config_path('crud/crud_'.$table_name.'.php')))
+            if (file_exists(config_path('crud/'.$table_name.'.php')))
             {
-                $this->model_configs[$table_name] = $this->app['config']->get('crud.crud_'.$table_name);
+                $this->model_configs[$table_name] = $this->app['config']->get('crud.'.$table_name);
                 $this->model_configs[$table_name]['filters'] = [];
                 if (!empty($this->model_configs[$table_name]['list']))
                 {

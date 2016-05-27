@@ -33,7 +33,7 @@ trait ModelConfigTrait
     {
         $this->classShortName = class_basename($this);
         $this->classViewName = snake_case($this->classShortName);
-        $this->config = $this->app['config']->get('crud.crud_'.(!empty($this->table) ? $this->table : $this->classViewName));
+        $this->config = $this->app['config']->get('crud.'.(!empty($this->table) ? $this->table : $this->classViewName));
         $this->config['class_name'] = $this->classViewName;
         if (!empty($this->config['fields']))
         {
@@ -177,13 +177,13 @@ trait ModelConfigTrait
             if (strpos($key, '.') === false) {
                 return (!empty($this->config[$key]) ? $this->config[$key] : $default);
             } else {
-                return $this->app['config']->get('crud.crud_' . $this->getTable() . '.' . $key, $default);
+                return $this->app['config']->get('crud.' . $this->getTable() . '.' . $key, $default);
             }
         } else {
 
             $original_key = $key;
             $key = 'scopes.' . $this->scope . '.' . $key;
-            $val = $this->app['config']->get('crud.crud_' . $this->getTable() . '.' . $key);
+            $val = $this->app['config']->get('crud.' . $this->getTable() . '.' . $key);
             if (is_null($val))
             {
                 return $this->confParam($original_key, $default, false);
@@ -337,7 +337,7 @@ trait ModelConfigTrait
         }
         else
         {
-            return $this->app['config']->get('crud.crud_'.$this->getTable().'.scopes.'.$this->scope.'.'.$prop);
+            return $this->app['config']->get('crud.'.$this->getTable().'.scopes.'.$this->scope.'.'.$prop);
         }
 
     }
