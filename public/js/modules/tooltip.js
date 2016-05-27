@@ -61,6 +61,7 @@
                 bind_admin(prev);
                 bind_admin(e);
             }
+            c.tooltip({container: 'body'});
         });
         if (remote.length)
         {

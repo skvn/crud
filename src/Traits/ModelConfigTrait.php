@@ -292,6 +292,13 @@ trait ModelConfigTrait
                 {
                     $conf['list'][$k]['hint']['index'] = $this->classViewName.'_'.$this->scope.'_'.$col['data'];
                 }
+                if (empty($col['hint']) && !empty($col['hint_default']))
+                {
+                    $conf['list'][$k]['hint'] = [
+                        'index' => $this->classViewName.'_'.$this->scope.'_'.$col['data'],
+                        'default' => $col['hint_default']
+                    ];
+                }
                 if (!empty($col['acl']) && !$this->app['skvn.cms']->checkAcl($col['acl'], 'r'))
                 {
                     unset($conf['list'][$k]);
