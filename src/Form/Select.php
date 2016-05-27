@@ -37,42 +37,43 @@ class Select extends Field {
 
     public function getOptions($empty_option=null)
     {
-        $options = array();
-        if (!empty($this->config['select_options']))
-        {
-            if (!$this->value)
-            {
-                if (!empty($this->config['relation'])
-                    &&
-                    $this->model->isManyRelation($this->config['relation']))
-                {
-                    $this->value = $this->model->getRelationIds($this->getName());
-                }
-                else if (!empty($this->config['relation'])
-                    && $this->config['relation'] == CrudModel::RELATION_HAS_ONE)
-                {
-                    $relation = $this->getName();
-                    $this->value = $this->$relation->id;
-                }
-                else
-                {
-                    $this->value = $this->model->getAttribute($this->getName());
-                }
-            }
-            $opts = [];
-            if (!is_array($this->config['select_options']))
-            {
-                $this->config['select_options'] = $this->model->getAttribute($this->config['select_options']);
-            }
-
-            foreach ($this->config['select_options'] as $k => $v)
-            {
-                $txt = is_array($v) ? $v['caption'] : $v;
-                $opts[] = ['value' => $k, 'text' => $txt, 'selected' => $this->isSelected($k)];
-            }
-
-        }
-        else if (!empty($this->config['model']))
+        //$options = array();
+//        if (!empty($this->config['select_options']))
+//        {
+//            if (!$this->value)
+//            {
+//                if (!empty($this->config['relation'])
+//                    &&
+//                    $this->model->isManyRelation($this->config['relation']))
+//                {
+//                    $this->value = $this->model->getRelationIds($this->getName());
+//                }
+//                else if (!empty($this->config['relation'])
+//                    && $this->config['relation'] == CrudModel::RELATION_HAS_ONE)
+//                {
+//                    $relation = $this->getName();
+//                    $this->value = $this->$relation->id;
+//                }
+//                else
+//                {
+//                    $this->value = $this->model->getAttribute($this->getName());
+//                }
+//            }
+//            $opts = [];
+//            if (!is_array($this->config['select_options']))
+//            {
+//                $this->config['select_options'] = $this->model->getAttribute($this->config['select_options']);
+//            }
+//
+//            foreach ($this->config['select_options'] as $k => $v)
+//            {
+//                $txt = is_array($v) ? $v['caption'] : $v;
+//                $opts[] = ['value' => $k, 'text' => $txt];
+//            }
+//
+//        }
+        $opts = [];
+        if (!empty($this->config['model']))
         {
             $opts =  $this->getModelOptions();
         }
@@ -80,18 +81,36 @@ class Select extends Field {
         {
             $this->value = $this->model->getAttribute($this->getName());
             $opts = [];
-            foreach ($this->model->{$this->config['method_options']}() as $k => $v)
+            $method = $this->config['method_options'];
+            if (method_exists($this->model, $method))
             {
-                $opts[] = ['value' => $k, 'text' => $v, 'selected' => $this->isSelected($k)];
+                die('111');
+                foreach ($this->model->$method() as $k => $v)
+                {
+                    $opts[] = ['value' => $k, 'text' => $v];
+                }
+            }
+            else
+            {
+                $method = "selectOptions" . studly_case($this->config['method_options']);
+                if (method_exists($this->model, $method))
+                {
+                    $opts = $this->model->$method();
+                }
             }
         }
         else
         {
             $opts = array();
         }
+        foreach ($opts as $idx => $opt)
+        {
+            $opts[$idx]['selected'] = $this->isSelected($opt['value']);
+        }
 
         
-        return array_merge($options, $opts);
+        //return array_merge($options, $opts);
+        return $opts;
 
     }
 
