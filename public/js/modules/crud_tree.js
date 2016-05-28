@@ -7,7 +7,7 @@
         init_events();
     });
     crud.bind('crud.tree_ready', function(){
-        crud.init_ichecks();
+        //crud.init_ichecks();
     });
     crud.bind('crud.update', function(res){
         if (res.success)
@@ -59,7 +59,7 @@
             }
         });
 
-        crud.init_ichecks();
+        //crud.init_ichecks();
     }
 
 

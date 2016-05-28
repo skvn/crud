@@ -9,13 +9,14 @@
             var $form = this.element;
 
             //init controls
-            crud.init_selects($form);
-            crud.init_tag_inputs($form);
-            crud.init_date_pickers($form);
-            crud.init_html_editors($form);
-            crud.init_ichecks($form);
-            crud.init_widgets($form);
+            //crud.init_selects($form);
+            //crud.init_tag_inputs($form);
+            //crud.init_date_pickers($form);
+            //crud.init_html_editors($form);
+            //crud.init_ichecks($form);
+            //crud.init_widgets($form);
             //$('input[type=text]:first', $form).focus();
+            crud.trigger('form.init', {form: $form});
 
             //submit
             $('input[type=submit],button[type=submit]', $form).on('click', function () {
@@ -32,16 +33,18 @@
                 {
 
                     e.preventDefault();
-                    crud.toggle_editors_content($form);
-                    crud.toggle_form_progress($form);
-                    crud.init_form_progress($form);
+                    crud.trigger("form.before_submit", {form: $form});
+                    //crud.toggle_editors_content($form);
+                    //crud.toggle_form_progress($form);
+                    //crud.init_form_progress($form);
 
                     $form.ajaxSubmit({
                         type: $form.attr('method'),
                         url: $form.attr('action'),
                         dataType: 'json',
                         success: function(res){
-                            crud.toggle_form_progress($form);
+                            crud.trigger('form.after_submit', {form: $form})
+                            //crud.toggle_form_progress($form);
                             if (res.success)
                             {
 
@@ -65,7 +68,7 @@
 
                                     }
                                     $form.trigger('reset');
-                                    crud.reset_selects();
+                                    //crud.reset_selects();
                                 }
                                 else
                                 {
@@ -94,7 +97,8 @@
                             }
                         },
                         error: function(res){
-                            crud.toggle_form_progress($form);
+                            crud.trigger('form.error_submit', {form: $form});
+                            //crud.toggle_form_progress($form);
                             if (res.responseJSON && res.responseJSON.error && res.responseJSON.error.message) {
                                 alert(res.responseJSON.error.message)
                             } else {
@@ -236,6 +240,24 @@
             frm.submit();
 
         });
+
+        crud.bind("form.before_submit", function(data){
+            toggle_progress(data['form']);
+            init_progress(data['form']);
+        });
+        crud.bind("form.after_submit", function(data){
+            toggle_progress(data['form']);
+        });
+        crud.bind("form.error_submit", function(data){
+            toggle_progress(data['form']);
+        });
+        crud.bind("form.init", function(data){
+            $("*[data-widget]", data['form']).each(function () {
+
+                var wname = $(this).data('widget');
+                $(this)[wname]();
+            });
+        });
     }
 
 
@@ -251,6 +273,37 @@
             }
         }
 
+    }
+
+    function toggle_progress(elem)
+    {
+        $('.modal-footer button, .modal-footer .progress', elem).toggleClass('hide');
+        $('.modal-footer button', elem).each(function () {
+
+            if (!$(this).hasClass('hide'))
+            {
+                $(this).removeAttr('disabled');
+            }
+        });
+
+    }
+
+    function init_progress(elem)
+    {
+        var bar = $('.modal-footer .progress .progress-bar', elem);
+        bar.parent().removeClass('hide');
+        var current_perc = 0;
+        bar.css('width', (current_perc)+'%');
+        var perc = 99;
+        var progress = setInterval(function() {
+            if (current_perc>=perc) {
+                clearInterval(progress);
+            } else {
+                current_perc +=1;
+                bar.css('width', (current_perc)+'%');
+            }
+
+        }, 20);
     }
 
 

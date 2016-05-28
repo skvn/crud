@@ -90,31 +90,31 @@
                 return hval >>> 0;
             },
 
-            cleanPastedHTML:  function (input) {
-                // 1. remove line breaks / Mso classes
-                var stringStripper = /(\n|\r| class=(")?Mso[a-zA-Z]+(")?)/g;
-                var output = input.replace(stringStripper, ' ');
-                // 2. strip Word generated HTML comments
-                var commentSripper = new RegExp('<!--(.*?)-->','g');
-                var output = output.replace(commentSripper, '');
-                var tagStripper = new RegExp('<(/)*(meta|link|span|\\?xml:|st1:|o:|font)(.*?)>','gi');
-                // 3. remove tags leave content if any
-                output = output.replace(tagStripper, '');
-                // 4. Remove everything in between and including tags '<style(.)style(.)>'
-                var badTags = ['style', 'script','applet','embed','noframes','noscript'];
-
-                for (var i=0; i< badTags.length; i++) {
-                    tagStripper = new RegExp('<'+badTags[i]+'.*?'+badTags[i]+'(.*?)>', 'gi');
-                    output = output.replace(tagStripper, '');
-                }
-                // 5. remove attributes ' style="..."'
-                var badAttributes = ['style', 'start'];
-                for (var i=0; i< badAttributes.length; i++) {
-                    var attributeStripper = new RegExp(' ' + badAttributes[i] + '="(.*?)"','gi');
-                    output = output.replace(attributeStripper, '');
-                }
-                return output;
-            },
+            //cleanPastedHTML:  function (input) {
+            //    // 1. remove line breaks / Mso classes
+            //    var stringStripper = /(\n|\r| class=(")?Mso[a-zA-Z]+(")?)/g;
+            //    var output = input.replace(stringStripper, ' ');
+            //    // 2. strip Word generated HTML comments
+            //    var commentSripper = new RegExp('<!--(.*?)-->','g');
+            //    var output = output.replace(commentSripper, '');
+            //    var tagStripper = new RegExp('<(/)*(meta|link|span|\\?xml:|st1:|o:|font)(.*?)>','gi');
+            //    // 3. remove tags leave content if any
+            //    output = output.replace(tagStripper, '');
+            //    // 4. Remove everything in between and including tags '<style(.)style(.)>'
+            //    var badTags = ['style', 'script','applet','embed','noframes','noscript'];
+            //
+            //    for (var i=0; i< badTags.length; i++) {
+            //        tagStripper = new RegExp('<'+badTags[i]+'.*?'+badTags[i]+'(.*?)>', 'gi');
+            //        output = output.replace(tagStripper, '');
+            //    }
+            //    // 5. remove attributes ' style="..."'
+            //    var badAttributes = ['style', 'start'];
+            //    for (var i=0; i< badAttributes.length; i++) {
+            //        var attributeStripper = new RegExp(' ' + badAttributes[i] + '="(.*?)"','gi');
+            //        output = output.replace(attributeStripper, '');
+            //    }
+            //    return output;
+            //},
 
             init_edit_tab: function(model, id, args)
             {
@@ -193,375 +193,376 @@
 
 
             },
-            toggle_form_progress: function($form)
-            {
-                $form.find('.modal-footer button, .modal-footer .progress').toggleClass('hide');
-                $form.find('.modal-footer button').each(function () {
+            //toggle_form_progress: function($form)
+            //{
+            //    $form.find('.modal-footer button, .modal-footer .progress').toggleClass('hide');
+            //    $form.find('.modal-footer button').each(function () {
+            //
+            //       if (!$(this).hasClass('hide'))
+            //       {
+            //           $(this).removeAttr('disabled');
+            //       }
+            //    });
+            //},
+            //init_date_pickers: function(container)
+            //{
+            //    //date
+            //    if (container)
+            //    {
+            //        var $coll = $('.input-group.date', container);
+            //    } else {
+            //        var $coll = $('.input-group.date');
+            //    }
+            //    $coll.datepicker(
+            //        {
+            //            todayBtn: "linked",
+            //            keyboardNavigation: true,
+            //            forceParse: true,
+            //            calendarWeeks: true,
+            //            autoclose: true,
+            //            weekStart:1,
+            //            language: 'ru'
+            //    }).on('changeDate', function(e) {
+            //        // Revalidate the date field
+            //
+            //        $(this).parents('form').first().bootstrapValidator('revalidateField',$(this).find('input'));
+            //    });
+            //    //datetime
+            //    if (container)
+            //    {
+            //        var $coll = $('.input-group.date_time', container);
+            //    } else {
+            //        var $coll = $('.input-group.date_time');
+            //    }
+            //    $coll.each(function () {
+            //        $(this).val(moment($(this).val));
+            //        $(this).datetimepicker(
+            //            {
+            //                locale: "ru",
+            //                format: $(this).data('format')
+            //
+            //            }).on('dp.change', function(e) {
+            //            // Revalidate the date field
+            //            $(this).parents('form').first().bootstrapValidator('revalidateField',$(this).find('input'));
+            //        });
+            //    })
+            //
+            //},
+            //init_selects: function($form)
+            //{
+            //    function format(op) {
+            //
+            //        var text = op.text;
+            //        if ($(op.element).data('group'))
+            //        {
+            //            text += ' (<em>'+$(op.element).data('group')+'</em>)';
+            //        }
+            //        return text;
+            //
+            //    }
+            //
+            //    $form.each(function (){
+            //
+            //         $('select:not(.default_select)',$(this)).selectpicker({
+            //             liveSearch: true
+            //
+            //         });
+            //        //$('select:not(.default_select)',$(this)).select2(
+            //        //    {
+            //        //        allowClear: true,
+            //        //        formatSelection: format
+            //        //    });
+            //
+            //    });
+            //},
 
-                   if (!$(this).hasClass('hide'))
-                   {
-                       $(this).removeAttr('disabled');
-                   }
-                });
-            },
-            init_date_pickers: function(container)
-            {
-                //date
-                if (container)
-                {
-                    var $coll = $('.input-group.date', container);
-                } else {
-                    var $coll = $('.input-group.date');
-                }
-                $coll.datepicker(
-                    {
-                        todayBtn: "linked",
-                        keyboardNavigation: true,
-                        forceParse: true,
-                        calendarWeeks: true,
-                        autoclose: true,
-                        weekStart:1,
-                        language: 'ru'
-                }).on('changeDate', function(e) {
-                    // Revalidate the date field
-
-                    $(this).parents('form').first().bootstrapValidator('revalidateField',$(this).find('input'));
-                });
-                //datetime
-                if (container)
-                {
-                    var $coll = $('.input-group.date_time', container);
-                } else {
-                    var $coll = $('.input-group.date_time');
-                }
-                $coll.each(function () {
-                    $(this).val(moment($(this).val));
-                    $(this).datetimepicker(
-                        {
-                            locale: "ru",
-                            format: $(this).data('format')
-
-                        }).on('dp.change', function(e) {
-                        // Revalidate the date field
-                        $(this).parents('form').first().bootstrapValidator('revalidateField',$(this).find('input'));
-                    });
-                })
-
-            },
-            init_selects: function($form)
-            {
-                function format(op) {
-
-                    var text = op.text;
-                    if ($(op.element).data('group'))
-                    {
-                        text += ' (<em>'+$(op.element).data('group')+'</em>)';
-                    }
-                    return text;
-
-                }
-
-                $form.each(function (){
-
-                     $('select:not(.default_select)',$(this)).selectpicker({
-                         liveSearch: true
-
-                     });
-                    //$('select:not(.default_select)',$(this)).select2(
-                    //    {
-                    //        allowClear: true,
-                    //        formatSelection: format
-                    //    });
-
-                });
-            },
-
-            init_widgets: function ($form)
-            {
-                $("*[data-widget]").each(function () {
-
-                    var wname = $(this).data('widget');
-                    $(this)[wname]();
-                });
-            },
+            //init_widgets: function ($form)
+            //{
+            //    $("*[data-widget]").each(function () {
+            //
+            //        var wname = $(this).data('widget');
+            //        $(this)[wname]();
+            //    });
+            //},
 
             //TODO remake to a widget
-            init_tag_inputs: function ($form)
-            {
-                var self = this;
-                $form.each(function (){
+            //init_tag_inputs: function ($form)
+            //{
+            //    var self = this;
+            //    $form.each(function (){
+            //
+            //        var self_form = $(this);
+            //        $('.tagsinput',self_form).each(function () {
+            //
+            //            var scope = self_form.data('crud_scope');
+            //            var model = $(this).data('model');
+            //            var url = self.format_setting("model_autocomplete_url", {model: model, scope:scope});
+            //            var fid = $(this).attr('id');
+            //
+            //            var options = new Bloodhound({
+            //                datumTokenizer: function (datum) {
+            //                    return Bloodhound.tokenizers.whitespace(datum.name);
+            //                },
+            //                queryTokenizer: Bloodhound.tokenizers.whitespace,
+            //                limit: 5,
+            //                remote: {
+            //                    url: url,
+            //                    replace: function(url, query) {
+            //                        return url + "?q=" + query;
+            //                    }
+            //                }
+            //            });
+            //
+            //            options.initialize();
+            //            var tagApi = $(this).tagsManager({
+            //                hiddenTagListId: fid+'_hidden',
+            //                deleteTagsOnBackspace: false,
+            //                prefilled: $('#'+fid+'_hidden').val()
+            //            });
+            //            $('#'+fid).typeahead(null, {
+            //                minLength: 1, // send AJAX request only after user type in at least X characters
+            //                source: options.ttAdapter()
+            //            }).on('typeahead:selected', function (e, d) {
+            //                tagApi.tagsManager("pushTag", d);
+            //            });
+            //
+            //
+            //            //$(this).tagsinput(
+            //            //    {
+            //            //        typeahead: {
+            //            //            //source: function (query)
+            //            //            //{
+            //            //            //    alert(query);
+            //            //            //    return $.getJSON(url+'?q='+query);
+            //            //            //}
+            //            //            source: options.ttAdapter()
+            //            //    }
+            //            //});
+            //        });
+            //
+            //    });
+            //},
 
-                    var self_form = $(this);
-                    $('.tagsinput',self_form).each(function () {
-
-                        var scope = self_form.data('crud_scope');
-                        var model = $(this).data('model');
-                        var url = self.format_setting("model_autocomplete_url", {model: model, scope:scope});
-                        var fid = $(this).attr('id');
-
-                        var options = new Bloodhound({
-                            datumTokenizer: function (datum) {
-                                return Bloodhound.tokenizers.whitespace(datum.name);
-                            },
-                            queryTokenizer: Bloodhound.tokenizers.whitespace,
-                            limit: 5,
-                            remote: {
-                                url: url,
-                                replace: function(url, query) {
-                                    return url + "?q=" + query;
-                                }
-                            }
-                        });
-
-                        options.initialize();
-                        var tagApi = $(this).tagsManager({
-                            hiddenTagListId: fid+'_hidden',
-                            deleteTagsOnBackspace: false,
-                            prefilled: $('#'+fid+'_hidden').val()
-                        });
-                        $('#'+fid).typeahead(null, {
-                            minLength: 1, // send AJAX request only after user type in at least X characters
-                            source: options.ttAdapter()
-                        }).on('typeahead:selected', function (e, d) {
-                            tagApi.tagsManager("pushTag", d);
-                        });
-
-
-                        //$(this).tagsinput(
-                        //    {
-                        //        typeahead: {
-                        //            //source: function (query)
-                        //            //{
-                        //            //    alert(query);
-                        //            //    return $.getJSON(url+'?q='+query);
-                        //            //}
-                        //            source: options.ttAdapter()
-                        //    }
-                        //});
-                    });
-
-                });
-            },
-
-            reset_selects: function()
-            {
-                //$('#crud_form select').select2('val','');
-            },
-            init_form_progress: function($form)
-            {
-                var bar = $form.find('.modal-footer .progress .progress-bar');
-                this.start_progress_bar(bar);
-            },
-            start_progress_bar: function(bar)
-            {
-                bar.parent().removeClass('hide');
-                var current_perc = 0;
-                bar.css('width', (current_perc)+'%');
-                var perc = 99;
-                var progress = setInterval(function() {
-                    if (current_perc>=perc) {
-                        clearInterval(progress);
-                    } else {
-                        current_perc +=1;
-                        bar.css('width', (current_perc)+'%');
-                    }
-
-                }, 20);
-            },
-            stop_progress_bar: function(bar)
-            {
-                bar.parent().addClass('hide');
-            },
-            init_ichecks: function(cont)
-            {
-                $('.i-checks', cont).iCheck({
-                    checkboxClass: 'icheckbox_square',
-                    radioClass: 'iradio_square',
-                    increaseArea: '20%'
-                }).on('ifChanged', function ()
-                {
-
-                    var name = $(this).data('name');
-                    if (name) {
-                        var hidden = $(this).parents('form').first().find('input[name=' + name + ']');
-                        if (hidden.length) {
-                            if ($(this).prop('checked')) {
-                                hidden.val('1');
-                            } else {
-                                hidden.val('0');
-                            }
-                        }
-                    }
-                    var disabled = true;
-                    $(this).parents('table').find('tr td input.i-checks').each(function () {
-                        if ($(this).prop('checked'))
-                        {
-                            $(this).parents('tr').addClass('success');
-                            disabled = false;
-                            return;
-                        } else
-                        {
-                            $(this).parents('tr').removeClass('success');
-                        }
-                    });
-                    $('.crud_delete').attr('disabled', disabled);
-                    $('.crud_table_command').attr('disabled', disabled);
-                })
-            },
-            init_html_editors: function(container)
-            {
-                if (container)
-                {
-                    $coll_sum = $('.html_editor[data-editor_type="summernote"]', container);
-                    $coll_tmce = $('.html_editor[data-editor_type="tinymce"]', container);
-                    $coll_mde = $('.html_editor[data-editor_type="mde"]', container);
-
-                } else {
-                    $coll_sum = $('.html_editor[data-editor_type="summernote"]');
-                    $coll_tmce = $('.html_editor[data-editor_type="tinymce"]');
-                    $coll_mde = $('.html_editor[data-editor_type="mde"]');
-                }
-
-                if ($coll_mde.length) {
-
-                    simple_mdes = new Object();
-                    $coll_mde.each(function () {
-                        simple_mdes[this.id] = new SimpleMDE(
-                            {
-                                element: this,
-                                toolbar: ["heading","bold", "italic", "strikethrough", "|", "code","quote","|","unordered-list","ordered-list","|","link","image","table","|","clean-block","|","preview","guide"],
-                                spellChecker:false
-
-
-                            }
-                        );
-                    });
-
-                }
-                //summernote
-                //alert($.summernote.options.modules);
-                //console.log($.summernote.options.modules);
-                if ($coll_sum.length) {
-                    $coll_sum.summernote({
-                        //FIXME
-                        lang: 'ru-RU',
-                        toolbar: [
-                            ['style', ['style', 'bold', 'italic', 'underline', 'clear']],
-                            ['font', ['strikethrough', 'superscript', 'subscript']],
-                            ['fontsize', ['fontsize']],
-                            ['color', ['color']],
-                            ['para', ['ul', 'ol', 'paragraph']],
-                            ['insert', ['picture', 'link', 'anchor', 'video', 'table', 'hr']],
-                            ['misc', ['codeview', 'typo', 'typo2']]
-                        ],
-                        onpaste: function (e) {
-                            var thisNote = $(this);
-                            var updatePastedText = function (someNote) {
-                                var original = someNote.code();
-                                var cleaned = crud.cleanPastedHTML(original); //this is where to call whatever clean function you want. I have mine in a different file, called CleanPastedHTML.
-                                someNote.code('').html(cleaned); //this sets the displayed content editor to the cleaned pasted code.
-                            };
-                            setTimeout(function () {
-                                //this kinda sucks, but if you don't do a setTimeout,
-                                //the function is called before the text is really pasted.
-                                updatePastedText(thisNote);
-                            }, 10);
-                        },
-                        modules: $.extend($.summernote.options.modules, {anchorDialog: getAnchorDialog()}),
-                        buttons: {anchor: getAnchorButton(), typo: getTypoButton(), typo2: getTypoButton2()},
-                        //modules: {
-                            //AnchorDialog: getAnchorDialog()
-                        //},
-                        height: 500, linksArray: this.win.crudAttachOptions
-                    });
-                }
-
-                if ($coll_tmce.length)
-                {
-                    $coll_tmce.each(function () {
-
-                        if (container)
-                        {
-                            container.append($('<input type="hidden" name="_attach_to_link_" id="_attach_to_link_" />'))
-                        }
-                        tinymce.init({
-                            selector: '#'+$(this).attr('id'),
-                            height: 430,
-                            toolbar: "paste  | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | code",
-                            plugins: ["image", "link", "media", "code"] ,
-                            paste_as_text: true,
-                            automatic_uploads: false,
-                            relative_urls : false,
-                            remove_script_host : false,
-                            convert_urls : true,
-                            image_advtab: true,
-
-                            file_picker_callback: function(callback, value, meta) {
-                                if (!$('#tiny_file').length)
-                                {
-                                    $('<input type="file" class="input" name="tiny_file" id="tiny_file" style="display: none"/>').appendTo('body');
-
-                                    $('#tiny_file').on('change', function (event) {
-
-                                        $('.mce-widget.mce-btn.mce-primary.mce-first').css({left:'350px', width:'100px'}).find('button span').text('Loading...');
-                                        var formData = new FormData();
-                                        formData.append("file", this.files[0]);
-                                        $.ajax({
-                                            url : '/admin/crud/attach_upload',
-                                            type : 'POST',
-                                            data : formData,
-                                            processData: false,
-                                            contentType: false,
-                                            success : function(data) {
-                                                $('.mce-widget.mce-btn.mce-primary.mce-first').css({left:'411px', width:'50px'}).find('button span').text('Ok');
-
-                                                $('#_attach_to_link_').val($('#_attach_to_link_').val() + ' '+data.id);
-                                                if (meta.filetype == 'file') {
-                                                    callback(data.url);
-                                                }
-
-                                                // Provide image and alt text for the image dialog
-                                                if (meta.filetype == 'image') {
-                                                    callback(data.url, {width:data.width, height:data.height});
-                                                }
-                                            }
-                                        });
-                                    });
-
-                                }
-                                $('#tiny_file').trigger('click');
-
-
-
-
-                            },
-                            //FIXME
-                            language: i18n.say('locale_short')
-                        });
-
-                    })
-                }
-
-            },
-            toggle_editors_content: function($form)
-            {
-
-                $form.find('textarea[data-editor_type=mde]').each(function () {
-                    if (simple_mdes[this.id])
-                    {
-                        $(this).val(simple_mdes[this.id].value())
-                    }
-                });
-
-
-                $form.find('textarea[data-editor_type=summernote]').each(function ()
-                {
-                    if ($(this).hasClass("html_editor"))
-                    {
-                        $(this).val($(this).summernote('code'));
-                    }
-                })
-            },
+            //reset_selects: function()
+            //{
+            //    //$('#crud_form select').select2('val','');
+            //},
+            //init_form_progress: function($form)
+            //{
+            //    var bar = $form.find('.modal-footer .progress .progress-bar');
+            //    this.start_progress_bar(bar);
+            //},
+            //start_progress_bar: function(bar)
+            //{
+            //    bar.parent().removeClass('hide');
+            //    var current_perc = 0;
+            //    bar.css('width', (current_perc)+'%');
+            //    var perc = 99;
+            //    var progress = setInterval(function() {
+            //        if (current_perc>=perc) {
+            //            clearInterval(progress);
+            //        } else {
+            //            current_perc +=1;
+            //            bar.css('width', (current_perc)+'%');
+            //        }
+            //
+            //    }, 20);
+            //},
+            //stop_progress_bar: function(bar)
+            //{
+            //    bar.parent().addClass('hide');
+            //},
+            //init_ichecks: function(cont)
+            //{
+            //    return false;
+            //    $('.i-checks', cont).iCheck({
+            //        checkboxClass: 'icheckbox_square',
+            //        radioClass: 'iradio_square',
+            //        increaseArea: '20%'
+            //    }).on('ifChanged', function ()
+            //    {
+            //
+            //        var name = $(this).data('name');
+            //        if (name) {
+            //            var hidden = $(this).parents('form').first().find('input[name=' + name + ']');
+            //            if (hidden.length) {
+            //                if ($(this).prop('checked')) {
+            //                    hidden.val('1');
+            //                } else {
+            //                    hidden.val('0');
+            //                }
+            //            }
+            //        }
+            //        var disabled = true;
+            //        $(this).parents('table').find('tr td input.i-checks').each(function () {
+            //            if ($(this).prop('checked'))
+            //            {
+            //                $(this).parents('tr').addClass('success');
+            //                disabled = false;
+            //                return;
+            //            } else
+            //            {
+            //                $(this).parents('tr').removeClass('success');
+            //            }
+            //        });
+            //        $('.crud_delete').attr('disabled', disabled);
+            //        $('.crud_table_command').attr('disabled', disabled);
+            //    })
+            //},
+            //init_html_editors: function(container)
+            //{
+            //    if (container)
+            //    {
+            //        $coll_sum = $('.html_editor[data-editor_type="summernote"]', container);
+            //        $coll_tmce = $('.html_editor[data-editor_type="tinymce"]', container);
+            //        $coll_mde = $('.html_editor[data-editor_type="mde"]', container);
+            //
+            //    } else {
+            //        $coll_sum = $('.html_editor[data-editor_type="summernote"]');
+            //        $coll_tmce = $('.html_editor[data-editor_type="tinymce"]');
+            //        $coll_mde = $('.html_editor[data-editor_type="mde"]');
+            //    }
+            //
+            //    if ($coll_mde.length) {
+            //
+            //        simple_mdes = new Object();
+            //        $coll_mde.each(function () {
+            //            simple_mdes[this.id] = new SimpleMDE(
+            //                {
+            //                    element: this,
+            //                    toolbar: ["heading","bold", "italic", "strikethrough", "|", "code","quote","|","unordered-list","ordered-list","|","link","image","table","|","clean-block","|","preview","guide"],
+            //                    spellChecker:false
+            //
+            //
+            //                }
+            //            );
+            //        });
+            //
+            //    }
+            //    //summernote
+            //    //alert($.summernote.options.modules);
+            //    //console.log($.summernote.options.modules);
+            //    if ($coll_sum.length) {
+            //        $coll_sum.summernote({
+            //            //FIXME
+            //            lang: 'ru-RU',
+            //            toolbar: [
+            //                ['style', ['style', 'bold', 'italic', 'underline', 'clear']],
+            //                ['font', ['strikethrough', 'superscript', 'subscript']],
+            //                ['fontsize', ['fontsize']],
+            //                ['color', ['color']],
+            //                ['para', ['ul', 'ol', 'paragraph']],
+            //                ['insert', ['picture', 'link', 'anchor', 'video', 'table', 'hr']],
+            //                ['misc', ['codeview', 'typo', 'typo2']]
+            //            ],
+            //            onpaste: function (e) {
+            //                var thisNote = $(this);
+            //                var updatePastedText = function (someNote) {
+            //                    var original = someNote.code();
+            //                    var cleaned = crud.cleanPastedHTML(original); //this is where to call whatever clean function you want. I have mine in a different file, called CleanPastedHTML.
+            //                    someNote.code('').html(cleaned); //this sets the displayed content editor to the cleaned pasted code.
+            //                };
+            //                setTimeout(function () {
+            //                    //this kinda sucks, but if you don't do a setTimeout,
+            //                    //the function is called before the text is really pasted.
+            //                    updatePastedText(thisNote);
+            //                }, 10);
+            //            },
+            //            modules: $.extend($.summernote.options.modules, {anchorDialog: getAnchorDialog()}),
+            //            buttons: {anchor: getAnchorButton(), typo: getTypoButton(), typo2: getTypoButton2()},
+            //            //modules: {
+            //                //AnchorDialog: getAnchorDialog()
+            //            //},
+            //            height: 500, linksArray: this.win.crudAttachOptions
+            //        });
+            //    }
+            //
+            //    if ($coll_tmce.length)
+            //    {
+            //        $coll_tmce.each(function () {
+            //
+            //            if (container)
+            //            {
+            //                container.append($('<input type="hidden" name="_attach_to_link_" id="_attach_to_link_" />'))
+            //            }
+            //            tinymce.init({
+            //                selector: '#'+$(this).attr('id'),
+            //                height: 430,
+            //                toolbar: "paste  | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | code",
+            //                plugins: ["image", "link", "media", "code"] ,
+            //                paste_as_text: true,
+            //                automatic_uploads: false,
+            //                relative_urls : false,
+            //                remove_script_host : false,
+            //                convert_urls : true,
+            //                image_advtab: true,
+            //
+            //                file_picker_callback: function(callback, value, meta) {
+            //                    if (!$('#tiny_file').length)
+            //                    {
+            //                        $('<input type="file" class="input" name="tiny_file" id="tiny_file" style="display: none"/>').appendTo('body');
+            //
+            //                        $('#tiny_file').on('change', function (event) {
+            //
+            //                            $('.mce-widget.mce-btn.mce-primary.mce-first').css({left:'350px', width:'100px'}).find('button span').text('Loading...');
+            //                            var formData = new FormData();
+            //                            formData.append("file", this.files[0]);
+            //                            $.ajax({
+            //                                url : '/admin/crud/attach_upload',
+            //                                type : 'POST',
+            //                                data : formData,
+            //                                processData: false,
+            //                                contentType: false,
+            //                                success : function(data) {
+            //                                    $('.mce-widget.mce-btn.mce-primary.mce-first').css({left:'411px', width:'50px'}).find('button span').text('Ok');
+            //
+            //                                    $('#_attach_to_link_').val($('#_attach_to_link_').val() + ' '+data.id);
+            //                                    if (meta.filetype == 'file') {
+            //                                        callback(data.url);
+            //                                    }
+            //
+            //                                    // Provide image and alt text for the image dialog
+            //                                    if (meta.filetype == 'image') {
+            //                                        callback(data.url, {width:data.width, height:data.height});
+            //                                    }
+            //                                }
+            //                            });
+            //                        });
+            //
+            //                    }
+            //                    $('#tiny_file').trigger('click');
+            //
+            //
+            //
+            //
+            //                },
+            //                //FIXME
+            //                language: i18n.say('locale_short')
+            //            });
+            //
+            //        })
+            //    }
+            //
+            //},
+            //toggle_editors_content: function($form)
+            //{
+            //
+            //    $form.find('textarea[data-editor_type=mde]').each(function () {
+            //        if (simple_mdes[this.id])
+            //        {
+            //            $(this).val(simple_mdes[this.id].value())
+            //        }
+            //    });
+            //
+            //
+            //    $form.find('textarea[data-editor_type=summernote]').each(function ()
+            //    {
+            //        if ($(this).hasClass("html_editor"))
+            //        {
+            //            $(this).val($(this).summernote('code'));
+            //        }
+            //    })
+            //},
 
             format_error: function(error)
             {
@@ -577,7 +578,7 @@
 
             action: function  (elm, action)
             {
-                return  crud_actions[action](elm);;
+                return  crud_actions[action](elm);
             }
 
         };
@@ -703,7 +704,7 @@
                                 break;
                         }
                     }
-                    crud.init_ichecks(w);
+                    //crud.init_ichecks(w);
                     $("form", w).crud_form();
                 });
             } else {
@@ -776,8 +777,8 @@
     }
 
     $(function(){
-        crud.init_selects($('form'));
-        crud.init_date_pickers();
+        //crud.init_selects($('form'));
+        //crud.init_date_pickers();
         crud.trigger("page.start");
         $("table[data-crud_table]").crud_list();
         $("div[data-crud_tree]").crud_tree();
@@ -791,236 +792,6 @@
         });
     });
 
-    function getAnchorDialog()
-    {
-        var AnchorDialog = function (context) {
-            var self = this;
-            var ui = $.summernote.ui;
-
-            var $editor = context.layoutInfo.editor;
-            var options = context.options;
-            var lang = options.langInfo;
-
-            this.initialize = function () {
-                var $container = options.dialogsInBody ? $(document.body) : $editor;
-
-                var body = '<div class="form-group">' +
-                    '<label>Имя якоря</label>' +
-                    '<input class="note-anchor-name form-control" type="text" />' +
-                    '</div>';
-                var footer = '<button href="#" class="btn btn-primary note-anchor-btn disabled" disabled>Вставить</button>';
-
-                this.$dialog = ui.dialog({
-                    className: 'anchor-dialog',
-                    title: 'Вставить якорь',
-                    fade: options.dialogsFade,
-                    body: body,
-                    footer: footer
-                }).render().appendTo($container);
-            };
-
-            this.destroy = function () {
-                ui.hideDialog(this.$dialog);
-                this.$dialog.remove();
-            };
-
-            this.showAnchorDialog = function (ancInfo) {
-                return $.Deferred(function (deferred) {
-                    var $ancName = self.$dialog.find('.note-anchor-name'),
-                        $ancBtn = self.$dialog.find('.note-anchor-btn');
-
-                    ui.onDialogShown(self.$dialog, function () {
-                        context.triggerEvent('dialog.shown');
-
-                        $ancName.val(ancInfo.name);
-
-                        $ancName.on('input', function () {
-                            ui.toggleBtn($ancBtn, $ancName.val());
-                            // if linktext was modified by keyup,
-                            // stop cloning text from linkUrl
-                            ancInfo.name = $ancName.val();
-                        });
-
-                        $ancBtn.one('click', function (event) {
-                            event.preventDefault();
-
-                            deferred.resolve({
-                                range: ancInfo.range,
-                                name: $ancName.val()
-                            });
-                            self.$dialog.modal('hide');
-                        });
-                    });
-
-                    ui.onDialogHidden(self.$dialog, function () {
-                        // detach events
-                        $ancName.off('input keypress');
-                        $ancBtn.off('click');
-
-                        if (deferred.state() === 'pending') {
-                            deferred.reject();
-                        }
-                    });
-
-                    ui.showDialog(self.$dialog);
-                }).promise();
-            };
-
-            /**
-             * @param {Object} layoutInfo
-             */
-            this.show = function () {
-                //var ancInfo = context.invoke('editor.getLinkInfo');
-                var ancInfo = getAnchorInfo(context);
-
-                context.invoke('editor.saveRange');
-                this.showAnchorDialog(ancInfo).then(function (ancInfo) {
-                    context.invoke('editor.restoreRange');
-                    //context.invoke('editor.createAnchor', ancInfo);
-                    createAnchor(context, ancInfo);
-                }).fail(function () {
-                    context.invoke('editor.restoreRange');
-                });
-            };
-            //context.memo('help.anchorDialog.show', options.langInfo.help['anchorDialog.show']);
-        };
-
-        return AnchorDialog;
-    }
-
-    function createAnchor(context, ancInfo)
-    {
-        var ancName = ancInfo.name;
-        var rng = ancInfo.range || context.invoke('editor.createRange');
-        //var isTextChanged = rng.toString() !== linkText;
-
-        //if (options.onCreateLink) {
-        //    linkUrl = options.onCreateLink(linkUrl);
-        //}
-
-        //console.log(rng);
-
-        var anchors = [rng.insertNode($('<A name="'+ancName+'"></A>')[0])];
-        //var anchor = rng.insertNode($('<A name="'+ancName+'"></A>')[0]);
-        //if (isTextChanged) {
-        //    rng = rng.deleteContents();
-        //    var anchor = rng.insertNode($('<A>' + linkText + '</A>')[0]);
-        //    anchors.push(anchor);
-        //} else {
-        //    anchors = style.styleNodes(rng, {
-        //        nodeName: 'A',
-        //        expandClosestSibling: true,
-        //        onlyPartialContains: true
-        //    });
-        //}
-
-        //$.each(anchors, function (idx, anchor) {
-        //    $(anchor).attr('href', linkUrl);
-        //    if (isNewWindow) {
-        //        $(anchor).attr('target', '_blank');
-        //    } else {
-        //        $(anchor).removeAttr('target');
-        //    }
-        //});
-
-        return rng.select();
-
-        //var startRange = range.createFromNodeBefore(list.head(anchors));
-        //var startPoint = startRange.getStartPoint();
-        //var endRange = range.createFromNodeAfter(list.last(anchors));
-        //var endPoint = endRange.getEndPoint();
-        //
-        //range.create(
-        //    startPoint.node,
-        //    startPoint.offset,
-        //    endPoint.node,
-        //    endPoint.offset
-        //).select();
-    }
-
-    function getAnchorInfo(context)
-    {
-        var checkAnc = function (node) {return node && node.nodeName.toUpperCase() === 'A'};
-        var rng = context.invoke('editor.createRange').expand(checkAnc);
-
-        // Get the first anchor on range(for edit).
-        var $anchor = $(rng.nodes(checkAnc)[0]);
-
-        return {
-            range: rng,
-            name: $anchor.length ? $anchor.attr('name') : ''
-        };
-    }
-
-    function getAnchorButton()
-    {
-        var AnchorButton = function (context) {
-            var ui = $.summernote.ui;
-
-            // create button
-            var button = ui.button({
-                contents: '<i class="fa fa-anchor"/>',
-                tooltip: 'Якорь',
-                click: function () {
-                    // invoke insertText method with 'hello' on editor module.
-                    context.invoke('anchorDialog.show');
-                    //context.createInvokeHandler('anchorDialog.show')
-                }
-            });
-
-            return button.render();   // return button as jquery object
-        }
-        return AnchorButton;
-    }
-
-    function getTypoButton()
-    {
-        var TypoButton = function (context) {
-            var ui = $.summernote.ui;
-
-            // create button
-            var button = ui.button({
-                contents: '<i class="fa fa-check"/>',
-                tooltip: 'Типограф (typograf.artlebedev.ru)',
-                click: function () {
-                    if (confirm('Содержимое будет модифицировано. Продолжить ?'))
-                    {
-                        $.post('/typo/check', {content: context.code()}, function(res){
-                            context.code(res);
-                        });
-                    }
-                }
-            });
-
-            return button.render();   // return button as jquery object
-        }
-        return TypoButton;
-    }
-
-
-    function getTypoButton2()
-    {
-        var TypoButton2 = function (context) {
-            var ui = $.summernote.ui;
-
-            // create button
-            var button = ui.button({
-                contents: '<i class="fa fa-check"/>',
-                tooltip: 'Типограф (www.typograf.ru)',
-                click: function () {
-                    if (confirm('Содержимое будет модифицировано. Продолжить ?'))
-                    {
-                        $.post('/typo/check2', {content: context.code()}, function(res){
-                            context.code(res);
-                        });
-                    }
-                }
-            });
-
-            return button.render();   // return button as jquery object
-        }
-        return TypoButton2;
-    }
 
 
 })(window, document, location, console, jQuery);

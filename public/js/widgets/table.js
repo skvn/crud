@@ -23,7 +23,7 @@
                     if (c.data('list_ctype') === "checkbox")
                     {
                         col.fnCreatedCell = function(td, cellData, rowData, row, col){
-                            $(td).html('<input class="i-checks" data-rel="row" type="checkbox" value="' + cellData + '">').data('id',cellData)
+                            $(td).html('<input data-widget="crud_checkbox" class="i-checks" data-rel="row" type="checkbox" value="' + cellData + '">').data('id',cellData)
                         }
                         //$('thead tr:first td:first',tbl).html('<input class="i-checks" type="checkbox">');
                     }
@@ -169,7 +169,7 @@
     {
         if (cols[0]['ctype'] && cols[0]['ctype'] == 'checkbox')
         {
-            var all_chck = $('<input class="i-checks" type="checkbox">');
+            var all_chck = $('<input data-widget="crud_checkbox" class="i-checks" type="checkbox">');
             all_chck.on('ifChecked', function ()
             {
                 $('tr td', cont).find('input.i-checks').iCheck('check');
@@ -181,8 +181,8 @@
             $('thead tr:first th:first', cont).removeClass('sorting_asc').html('').append(all_chck.clone(true));
             $('tfoot tr:first th:first', cont).html('').append(all_chck);
         }
-
-        crud.init_ichecks();
+        crud.trigger('form.init', {form: cont});
+        //crud.init_ichecks();
 
     }
 
@@ -288,8 +288,7 @@
         $(crud.doc).on('submit', '#crud_filter_form', function (e) {
             e.preventDefault();
             var $form = $(this);
-            crud.toggle_form_progress($form);
-            crud.init_form_progress($form);
+            crud.trigger('form.before_submit', {form: $form});
             $form.ajaxSubmit(
                 {
                     type:'POST',
@@ -297,7 +296,8 @@
                     //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
                     dataType: 'json',
                     success: function (res) {
-                        crud.toggle_form_progress($form)
+                        crud.trigger('form.after_submit', {form: $form});
+                        //crud.toggle_form_progress($form)
                         crud.trigger('crud.filter_set', res);
 
                     }
@@ -332,8 +332,7 @@
             });
 
 
-            crud.toggle_form_progress($form);
-            crud.init_form_progress($form);
+            crud.trigger('form.before_submit', {form: $form});
             $form.ajaxSubmit(
                 {
                     type:'POST',
@@ -341,7 +340,8 @@
                     //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
                     dataType: 'json',
                     success: function (res) {
-                        crud.toggle_form_progress($form)
+                        crud.trigger('form.after_submit', {form: $form});
+                        //crud.toggle_form_progress($form)
                         crud.trigger('crud.filter_set',res);
                     }
 

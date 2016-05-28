@@ -1,0 +1,39 @@
+;(function ($, crud){
+    $.widget("crud.crud_checkbox", {
+        options: {},
+        _create: function(){
+            this.element.iCheck({
+                checkboxClass: 'icheckbox_square',
+                radioClass: 'iradio_square',
+                increaseArea: '20%'
+            }).on('ifChanged', function ()
+            {
+                var name = $(this).data('name');
+                if (name) {
+                    var hidden = $(this).parents('form').first().find('input[name=' + name + ']');
+                    if (hidden.length) {
+                        if ($(this).prop('checked')) {
+                            hidden.val('1');
+                        } else {
+                            hidden.val('0');
+                        }
+                    }
+                }
+                var disabled = true;
+                $(this).parents('table').find('tr td input.i-checks').each(function () {
+                    if ($(this).prop('checked'))
+                    {
+                        $(this).parents('tr').addClass('success');
+                        disabled = false;
+                        return;
+                    } else
+                    {
+                        $(this).parents('tr').removeClass('success');
+                    }
+                });
+                $('.crud_delete').attr('disabled', disabled);
+                $('.crud_table_command').attr('disabled', disabled);
+            })
+        }
+    });
+})(jQuery, CRUD)

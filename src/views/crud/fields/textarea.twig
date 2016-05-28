@@ -1,8 +1,8 @@
 {% include 'crud::crud/fields/label.twig' %}
-{% if input.config.editor %}
+{% if input.config.editor_type %}
 <div style="height: 600px;">
 {% endif %}
-<textarea {{ input.config.rows ? ('rows="'~input.config.rows~'"')|raw }} class="form-control {{ input.config.editor ? 'html_editor' }}" data-editor_type="{{ input.config.editor_type?input.config.editor_type }}"    {{ input.config.required ? 'required' }} name="{{ input.name }}" id="{{ input.getUniqueId() }}"  >{{ input.getValue()}}</textarea>
-{% if input.config.editor %}
+<textarea data-widget="crud_editor" data-type="{{ input.config.editor_type }}" {{ input.config.rows ? ('rows="'~input.config.rows~'"')|raw }} class="form-control" {{ input.config.required ? 'required' }} name="{{ input.name }}" id="{{ input.getUniqueId() }}"  >{{ input.getValue()}}</textarea>
+{% if input.config.editor_type %}
 </div>
 {% endif %}

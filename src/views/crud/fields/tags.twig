@@ -1,4 +1,4 @@
 {% include 'crud::crud/fields/label.twig' %}
-<input  id="{{ input.getUniqueId() }}" name="__{{ input.name }}" data-model="{{ input.config.model }}" class="form-control tagsinput"   />
+<input data-widget="crud_tags" id="{{ input.getUniqueId() }}" name="__{{ input.name }}" data-model="{{ input.config.model }}" class="form-control tagsinput"   />
 <input type="hidden" id="{{ input.getUniqueId() }}_hidden" name="{{ input.name }}" value="{{ input.getValue()|join(',') }}" />
 
