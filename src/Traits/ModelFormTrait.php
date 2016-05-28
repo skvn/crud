@@ -6,6 +6,10 @@ use Skvn\Crud\Form\Form;
 trait ModelFormTrait
 {
 
+    protected $form_fields_collection;
+    public $form;
+
+
     /**
      * Add field on the fly to the 'fields' array
      *

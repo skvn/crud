@@ -34,14 +34,12 @@ class CrudModel extends Model
 
 
     protected $app;
-    public $form;
     protected $codeColumn = 'id';
 
     protected $errors;
     protected static $rules = array();
     protected static $messages = array();
     protected $validator;
-    protected $form_fields_collection;
 
 
 
@@ -98,33 +96,27 @@ class CrudModel extends Model
         });
         static::saving(function($instance)
         {
-
             return $instance->onBeforeSave();
-
         });
 
         static::creating(function($instance)
         {
             return $instance->onBeforeCreate();
-
         });
 
         static::created(function($instance)
         {
             return $instance->onAfterCreate();
-
         });
 
         static::deleting(function($instance)
         {
             return $instance->onBeforeDelete();
-
         });
 
         static::deleted(function($instance)
         {
             return $instance->onAfterDelete();
-
         });
     }
 

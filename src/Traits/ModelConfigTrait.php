@@ -98,15 +98,12 @@ trait ModelConfigTrait
      */
     private function markFillable($name, $col=[])
     {
-        if (isset($col['relation']) &&
-            ($col['relation'] == 'belongsToMany' || $col['relation'] == 'hasMany' || $col['relation'] == 'hasOne')
-
-        ) {
+        if (isset($col['relation']) && in_array($col['relation'], ['belongsToMany', 'hasMany', 'hasOne']))
+        {
             if ($col['relation'] != 'hasOne')
             {
                 $this->config['fields'][$name]['multiple'] = 1;
             }
-
             //Add multi file to fillable since it is handled by fill not by post save relations
             if ($col['type'] != 'multi_file')
             {
@@ -130,7 +127,14 @@ trait ModelConfigTrait
             }
             else
             {
-                $this->fillable[] = $name;
+                if (!empty($col['name']))
+                {
+                    $this->fillable[] = $col['name'];
+                }
+                else
+                {
+                    $this->fillable[] = $name;
+                }
             }
         }
 
@@ -160,6 +164,27 @@ trait ModelConfigTrait
     function getField($name)
     {
         return $this->getFields($name);
+    }
+
+    public function getColumn($col)
+    {
+        if (!empty($this->config['fields'][$col]))
+        {
+            $conf =  $this->config['fields'][$col];
+            $conf['column_index'] = $col;
+            return $conf;
+        }
+        else
+        {
+            foreach ($this->config['fields'] as $col_name => $conf)
+            {
+                if (!empty($conf['relation_name']) &&  $conf['relation_name'] == $col)
+                {
+                    $conf['column_index'] = $col_name;
+                    return $conf;
+                }
+            }
+        }
     }
 
     /**
@@ -192,20 +217,6 @@ trait ModelConfigTrait
         }
     }
 
-    public function getColumn($col, $scope='fields')
-    {
-        if (!empty($this->config[$scope][$col]))
-        {
-            $conf =  $this->config[$scope][$col];
-            $conf['column_index'] = $col;
-        }
-        else
-        {
-            $conf =  $this->resolveColumnByRelationName($col, $scope);
-        }
-
-        return $conf;
-    }
 
     public function getFormConfig($prop='')
     {

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Str;
 
-trait SlugTrait  {
+trait ModelSlugTrait  {
 
     protected  static  $slugColumn = 'slug';
 
@@ -30,20 +30,27 @@ trait SlugTrait  {
 //        });
 //    }
 
-    protected  function onBeforeSave()
+    static function bootModelSlugTrait()
     {
-        if (!$this->getAttribute(self::$slugColumn))
+        static :: saving(function($instance){
+            $instance->processSlug();
+        });
+    }
+
+    protected function processSlug()
+    {
+        if (!$this->getAttribute(static::$slugColumn))
             {
-                $this->setAttribute(self::$slugColumn, $this->generateSlug());
+                $this->setAttribute(static::$slugColumn, $this->generateSlug());
             } else
             {
-                $this->setAttribute(self::$slugColumn, $this->validateSlugUnique(
-                    Str::slug($this->getAttribute(self::$slugColumn))
+                $this->setAttribute(static::$slugColumn, $this->validateSlugUnique(
+                    Str::slug($this->getAttribute(static::$slugColumn))
                 )
                 );
             }
 
-        parent::onBeforeSave();
+        //parent::onBeforeSave();
     }
 
 
@@ -59,7 +66,7 @@ trait SlugTrait  {
     private function validateSlugUnique($slug)
     {
         $id = $this->id?$this->id:0;
-        $count =  count(\DB::table($this->table)->where(self::$slugColumn, $slug)->where('id', '<>',$id)->get());
+        $count =  count(\DB::table($this->table)->where(static::$slugColumn, $slug)->where('id', '<>',$id)->get());
         if ($count>0)
         {
             $slug .= ($count+1);
@@ -103,7 +110,7 @@ trait SlugTrait  {
 
     static function findBySlug($slug)
     {
-        return self::where(self::$slugColumn,'=',$slug)->first();
+        return self::where(static::$slugColumn,'=',$slug)->first();
     }
 
 

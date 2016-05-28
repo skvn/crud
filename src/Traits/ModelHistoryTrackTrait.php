@@ -1,10 +1,18 @@
 <?php namespace Skvn\Crud\Traits;
 
 
-trait HistoryTrackTrait {
+trait ModelHistoryTrackTrait {
 
 
-    protected  function onAfterSave()
+    static function bootModelHistoryTrait()
+    {
+        static :: saved(function($instance){
+            $instance->processHistoryEvent();
+        });
+    }
+
+
+    protected  function processHistoryEvent()
     {
 
         $track_cols = array_filter($this->getFields(), function ($item) { if (!empty($item['track'])) return true;});
@@ -26,7 +34,7 @@ trait HistoryTrackTrait {
             }
         }
 
-        parent::onAfterSave();
+        //parent::onAfterSave();
     }
 
 }
