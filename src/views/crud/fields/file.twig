@@ -1,7 +1,7 @@
 {% include 'crud::crud/fields/label.twig' %}
 <div class="row">
 <div class="col-md-8">
-<input class="form-control" placeholder="{{ input.config.placeholder }}" {%  if  (input.config.required and  not crudObj.getAttribute(input.name)) %}  required {% endif %} name="{{ input.name }}" type="file">
+<input class="form-control" {{ (input.config.required and  not crudObj.getAttribute(input.name)) ? 'required' }} name="{{ input.name }}" type="file" />
 </div>
 
 {% if input.getValue() %}

@@ -1,0 +1,13 @@
+{% include 'crud::crud/fields/label.twig' %}
+<div class="row">
+    <div class="col-md-8">
+        <input class="form-control"  {{ (input.config.required and  not crudObj.getAttribute(input.name)) ? 'required' }} name="{{ input.name }}" type="file" />
+    </div>
+
+    {% if input.getValue() %}
+        <div class="col-md-4">
+            <a href="{{ input.getValue().getAttribute('download_link') }}" target="_blank"><img src="{{ input.getValue().getAttribute('download_link') }}" width="100" /></a><br />
+            <a class="label label-danger" href="{{ route('crud_command', {'model': crudObj.classViewName, 'id': crudObj.id, 'command_name': 'delete_single_attach'}) }}" data-confirm="{{ trans('crud::messages.really_delete') }}?" data-args='{"field":"{{ input.name }}" }' data-callback="elem.parent().remove();" data-click="crud_action" data-action="crud_command"><i class="fa fa-times-circle"></i> {{ trans('crud::messages.delete') }} {{ trans('crud::messages.file') }}</a>
+        </div>
+    {% endif %}
+</div>

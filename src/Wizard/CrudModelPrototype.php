@@ -199,7 +199,7 @@ class CrudModelPrototype
         if (!empty($this->config_data['fields'])) {
 
             foreach ($this->config_data['fields'] as $k => $f) {
-                if (!empty($f['type']) && ($f['type'] == Form::FIELD_FILE || $f['type'] == Form::FIELD_MULTI_FILE))
+                if (!empty($f['type']) && in_array($f['type'], [Form::FIELD_FILE, Form::FIELD_MULTI_FILE, Form::FIELD_IMAGE]))
                 {
                     $f['name'] = $k;
                     $f['multi'] = ($f['type'] == Form::FIELD_MULTI_FILE?1:0);

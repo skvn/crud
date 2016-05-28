@@ -22,6 +22,7 @@ class Form {
      *
      */
     const FIELD_FILE = 'file';
+    const FIELD_IMAGE = 'image';
     /**
      *
      */
@@ -217,6 +218,7 @@ class Form {
             self::FIELD_SELECT => 'Select',
             self::FIELD_CHECKBOX => 'Checkbox',
             self::FIELD_FILE => 'File',
+            self::FIELD_IMAGE => 'Image',
             self::FIELD_MULTI_FILE => 'Multiple files',
 
 

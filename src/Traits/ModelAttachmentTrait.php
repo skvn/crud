@@ -28,7 +28,7 @@ trait ModelAttachmentTrait {
         {
             foreach ($this->config['fields'] as $name => $field)
             {
-                if (!empty($field['type']) && in_array($field['type'], [Form :: FIELD_FILE]))
+                if (!empty($field['type']) && in_array($field['type'], [Form :: FIELD_FILE, Form :: FIELD_IMAGE]))
                 {
                     $this->setAttach($name, $field);
                 }
