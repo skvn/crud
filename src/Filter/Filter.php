@@ -150,7 +150,12 @@ class Filter {
         {
             if (!$this->form || $renew)
             {
-                $this->form = new Form($this->crudObj, $this->filters, $fillData);
+                //$this->form = new Form($this->crudObj, $this->filters, $fillData);
+                $this->form = Form :: create([
+                    'crudObj' => $this->crudObj,
+                    'config' => $this->filters,
+                    'data' => $fillData
+                ]);
             }
         }
 

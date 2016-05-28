@@ -100,79 +100,80 @@ class Form {
      * @param null $data
      * @param array $customProperties
      */
-    public function __construct($crudObj, $config, $data=null, $customProperties = [])
+    //public function __construct($crudObj, $config, $data=null, $customProperties = [])
+    public function __construct($args = [])
     {
-        $this->crudObj = $crudObj;
-        $this->config = $config;
-        $this->customProperties = $customProperties;
+        $this->crudObj = $args['crudObj'];
+        $this->config = $args['config'];
+        $this->customProperties = isset($args['props']) ? $args['props'] : [];
 
 
         if (is_array($this->config)) {
 
-            foreach ($config as $col => $colConfig)
+            foreach ($this->config as $col => $colConfig)
             {
                 if (empty($colConfig['column']))
                 {
                     $colConfig['column'] = $col;
                 }
                 $colConfig['name'] = $col;
-                $this->fields[$col] = Field::create($crudObj, $colConfig);
-                if ($data)
+                $this->fields[$col] = Field::create($this->crudObj, $colConfig);
+                if (!empty($args['data']))
                 {
                     switch ($colConfig['type'])
                     {
                         case self::FIELD_RANGE:
 
-                            if (!empty($data[$col]) && strpos($data[$col],'~') !== false)
+                            if (!empty($args['data'][$col]) && strpos($args['data'][$col],'~') !== false)
                             {
-                                $this->fields[$col]->setValue($data[$col]);
+                                $this->fields[$col]->setValue($args['data'][$col]);
 
                             }
                             else
                             {
-                                if (isset($data[$col . '_from']) || isset ($data[$col . '_to']))
+                                if (isset($args['data'][$col . '_from']) || isset ($args['data'][$col . '_to']))
                                 {
                                     $from = 0;
                                     $to = 0;
-                                    if (isset($data[$col . '_from']))
+                                    if (isset($args['data'][$col . '_from']))
                                     {
-                                        $from = $data[$col . '_from'];
+                                        $from = $args['data'][$col . '_from'];
                                     }
-                                    if (isset($data[$col . '_to']))
+                                    if (isset($args['data'][$col . '_to']))
                                     {
-                                        $to = $data[$col . '_to'];
+                                        $to = $args['data'][$col . '_to'];
                                     }
                                     $this->fields[$col]->setValue($from . '~' . $to);
                                 }
                             }
                             break;
                         case self::FIELD_DATE_RANGE:
-                            if (!empty($data[$col]) && strpos($data[$col],'~') !== false)
+                            if (!empty($args['data'][$col]) && strpos($args['data'][$col],'~') !== false)
                             {
-                                $this->fields[$col]->setValue($data[$col]);
+                                $this->fields[$col]->setValue($args['data'][$col]);
                             }
                             else
                             {
-                                if (isset($data[$col . '_from']) || isset ($data[$col . '_to']))
+                                if (isset($args['data'][$col . '_from']) || isset ($args['data'][$col . '_to']))
                                 {
                                     $from = 0;
                                     $to = '';
-                                    if (isset($data[$col . '_from']))
+                                    if (isset($args['data'][$col . '_from']))
                                     {
-                                        $from = strtotime($data[$col . '_from']);
+                                        $from = strtotime($args['data'][$col . '_from']);
                                     }
-                                    if (isset($data[$col . '_to']))
+                                    if (isset($args['data'][$col . '_to']))
                                     {
-                                        $to = strtotime($data[$col . '_to']);
+                                        $to = strtotime($args['data'][$col . '_to']);
                                     }
                                     $this->fields[$col]->setValue($from . '~' . $to);
                                 }
                             }
                             break;
                         default:
-                            if (isset($data[$col]))
+                            if (isset($args['data'][$col]))
                             {
-                                $this->fields[$col]->setValue($data[$col]);
+                                $this->fields[$col]->setValue($args['data'][$col]);
                             }
                             break;
                     }
@@ -189,11 +190,17 @@ class Form {
 
     }//
 
+    static function create($args = [])
+    {
+        return new self($args);
+    }
+
 
     public function __toString()
     {
         $app = Container :: getInstance();
-        return $app['view']->make('crud::crud/form', ['crudObj'=>$this->crudObj])->render();
+        $res = $app['view']->make('crud::crud/form', ['crudObj'=>$this->crudObj])->render();
+        return (string) $res;
     }
 
     public function getFieldsAsHtml()

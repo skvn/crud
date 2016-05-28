@@ -69,7 +69,13 @@ trait ModelFormTrait
     {
         if (!empty($config['forceNew']) ||  !$this->form)
         {
-            $this->form = new Form($this,$this->getFormConfig(), !empty($config['fillData'])?$config['fillData']:null, $config);
+            //$this->form = new Form($this,$this->getFormConfig(), !empty($config['fillData'])?$config['fillData']:null, $config);
+            $this->form = Form :: create([
+                'crudObj' => $this,
+                'config' => $this->getFormConfig(),
+                'data' => !empty($config['fillData'])?$config['fillData']:null,
+                'props' => $config
+            ]);
         }
 
         return $this->form;
@@ -80,7 +86,12 @@ trait ModelFormTrait
     {
         if (!$this->form_fields_collection)
         {
-            $form = new Form($this, $this->getFields(), $fillData);
+            //$form = new Form($this, $this->getFields(), $fillData);
+            $form = Form :: create([
+                'crudObj' => $this,
+                'config' => $this->getFields(),
+                'data' => $fillData
+            ]);
             $this->form_fields_collection = $form->fields;
         }
 
