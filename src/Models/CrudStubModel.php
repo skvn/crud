@@ -9,7 +9,7 @@ class CrudStubModel extends CrudModel
         return;
     }
 
-    function save($options = [])
+    function save(array $options = [])
     {
         return;
     }

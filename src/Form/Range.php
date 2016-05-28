@@ -100,4 +100,31 @@ class Range extends Field
         return $this->name . "_to";
     }
 
+    function importValue($data)
+    {
+        if (!empty($data[$this->name]) && strpos($data[$this->name],'~') !== false)
+        {
+            $this->setValue($data[$this->name]);
+
+        }
+        else
+        {
+            if (isset($data[$this->name . '_from']) || isset ($data[$this->name . '_to']))
+            {
+                $from = 0;
+                $to = 0;
+                if (isset($data[$this->name . '_from']))
+                {
+                    $from = $data[$this->name . '_from'];
+                }
+                if (isset($data[$this->name . '_to']))
+                {
+                    $to = $data[$this->name . '_to'];
+                }
+                $this->setValue($from . '~' . $to);
+            }
+        }
+
+    }
+
 } 

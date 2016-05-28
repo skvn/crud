@@ -53,6 +53,31 @@ class DateRange extends Range {
 //        }
 //    }
 
+    function importValue($data)
+    {
+        if (!empty($data[$this->name]) && strpos($data[$this->name],'~') !== false)
+        {
+            $this->setValue($data[$this->name]);
+        }
+        else
+        {
+            if (isset($data[$this->name . '_from']) || isset ($data[$this->name . '_to']))
+            {
+                $from = 0;
+                $to = '';
+                if (isset($data[$this->name . '_from']))
+                {
+                    $from = strtotime($data[$this->name . '_from']);
+                }
+                if (isset($data[$this->name . '_to']))
+                {
+                    $to = strtotime($data[$this->name . '_to']);
+                }
+                $this->setValue($from . '~' . $to);
+            }
+        }
+
+    }
 
 
 } 

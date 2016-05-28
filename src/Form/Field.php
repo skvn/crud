@@ -23,8 +23,6 @@ class Field
         {
             throw new ConfigException('Column '.$this->name.' is not well described');
         }
-
-
     }
 
     public static  function create(CrudModel $model, $config)
@@ -53,10 +51,14 @@ class Field
         return $this->value;
     }
 
-    function setValue($val){
-
-
+    function setValue($val)
+    {
         $this->value =  $val;
+    }
+
+    function importValue($data)
+    {
+        $this->value = isset($data[$this->name]) ? $data[$this->name] : null;
     }
 
     function getName()
