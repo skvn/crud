@@ -12,7 +12,7 @@ use Illuminate\Container\Container;
 
 
 
-class CrudModel extends Model
+abstract class CrudModel extends Model
 {
     use ModelInjectTrait;
     use ModelConfigTrait;

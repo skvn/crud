@@ -84,7 +84,6 @@ class Select extends Field {
             $method = $this->config['method_options'];
             if (method_exists($this->model, $method))
             {
-                die('111');
                 foreach ($this->model->$method() as $k => $v)
                 {
                     $opts[] = ['value' => $k, 'text' => $v];

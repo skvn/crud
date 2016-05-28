@@ -1,6 +1,7 @@
 <?php namespace Skvn\Crud\Form;
 
 use Illuminate\Container\Container;
+use Skvn\Crud\Models\CrudStubModel;
 
 
 /**
