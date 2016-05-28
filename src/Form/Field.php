@@ -9,7 +9,7 @@ class Field
 
     public $config;
     protected $value = null;
-    protected $model;
+    public $model;
     public $name;
     protected $uniqid;
 

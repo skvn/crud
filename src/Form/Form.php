@@ -117,7 +117,10 @@ class Form {
                 {
                     $colConfig['column'] = $col;
                 }
-                $colConfig['name'] = $col;
+                if (empty($colConfig['name']))
+                {
+                    $colConfig['name'] = $col;
+                }
                 $this->fields[$col] = Field::create($this->crudObj, $colConfig);
                 if (!empty($args['data']))
                 {
@@ -215,7 +218,7 @@ class Form {
      * Get array of available edit types
      * @return array
      */
-    static  function getAvailableFieldTypes()
+    static function getAvailableFieldTypes()
     {
         return [
             self::FIELD_TEXT => 'Text input',
@@ -238,7 +241,7 @@ class Form {
      * Get array of available filter types
      * @return array
      */
-    static  function getAvailableFilterTypes()
+    static function getAvailableFilterTypes()
     {
         return [
             self::FIELD_TEXT => 'Text input',
@@ -251,7 +254,7 @@ class Form {
         ];
     }//
 
-    static  function getAvailableRelationFieldTypes($multiple)
+    static function getAvailableRelationFieldTypes($multiple)
     {
         $ret =  [
             Form::FIELD_SELECT => 'Select',

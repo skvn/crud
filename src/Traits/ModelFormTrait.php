@@ -67,7 +67,7 @@ trait ModelFormTrait
     
     public function getForm($config = [])
     {
-        if (!empty($config['forceNew']) ||  !$this->form)
+        if (!empty($config['forceNew']) || !$this->form)
         {
             //$this->form = new Form($this,$this->getFormConfig(), !empty($config['fillData'])?$config['fillData']:null, $config);
             $this->form = Form :: create([
@@ -79,6 +79,11 @@ trait ModelFormTrait
         }
 
         return $this->form;
+    }
+
+    public function setForm(Form $form)
+    {
+        $this->form = $form;
     }
 
      

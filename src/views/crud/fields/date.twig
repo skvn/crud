@@ -1,11 +1,12 @@
 {% include 'crud::crud/fields/label.twig' %}
 {% if input.config.readonly %}
-<div class="input-group">{{ input.getValue()|date(input.config.format) }}</div>
+   <div class="input-group">{{ input.getValue()|date(input.config.format) }}</div>
 {% else %}
-<div class="row">
-   <div class="col-md-1">
-<div data-widget="crud_datetime" data-type="date" class="input-group date"  data-date-format="{{ input.config.jsformat }}">
-   <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" {{ input.config.required ? 'required' }}  name="{{ input.name }}" value="{{ input.getValue()|date(input.config.format) }}"  data-default="{{ input.config.default }}">
-</div>
-</div>
+   <div class="row">
+      <div class="col-md-1">
+         <div data-widget="crud_datetime" data-type="date" class="input-group date"  data-date-format="{{ input.config.jsformat }}">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" {{ input.config.required ? 'required' }}  name="{{ input.name }}" value="{{ input.getValue()|date(input.config.format) }}"  data-default="{{ input.config.default }}">
+         </div>
+      </div>
+   </div>
 {% endif %}

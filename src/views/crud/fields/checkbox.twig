@@ -1,9 +1,9 @@
 <div class="row">
-<div class="checkbox">
-<label for="{{ input.getUniqueId() }}">
-    <input data-widget="crud_checkbox" class="crud_checkbox i-checks" id="{{  input.getUniqueId() }}" data-name="{{ input.name }}"    type="checkbox"  {{ input.getValue()>0?'checked':''}} />
-    <input type="hidden" name="{{ input.name }}" id="_{{  crudObj.id }}"  value="{{ input.getValue() }}"  data-default="{{ input.config.default }}" />
-    <span>{{ input.config.title }}</span>
-</label>
-</div>
+    <div class="checkbox">
+        <label for="{{ input.getUniqueId() }}">
+            <input data-widget="crud_checkbox" class="crud_checkbox i-checks" id="{{  input.getUniqueId() }}" data-name="{{ input.name }}"    type="checkbox"  {{ input.getValue()>0?'checked':''}} />
+            <input type="hidden" name="{{ input.name }}" id="_{{  input.model.id }}"  value="{{ input.getValue() }}"  data-default="{{ input.config.default }}" />
+            <span>{{ input.config.title }}</span>
+        </label>
+    </div>
 </div>
