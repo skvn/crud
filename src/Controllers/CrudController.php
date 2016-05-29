@@ -13,7 +13,7 @@ class CrudController extends Controller
 {
     use TooltipTrait;
 
-    protected $app,$auth, $helper, $cmsHelper,  $request;
+    protected $app,$auth, $helper, $cmsHelper,  $request, $view;
 
 
     public function __construct(LaravelApplication $app, Guard $auth)
@@ -23,14 +23,15 @@ class CrudController extends Controller
         $this->helper = $this->app->make('skvn.crud');
         $this->cmsHelper = $this->app->make('skvn.cms');
         $this->request = $this->app['request'];
-        \View::share('cmsHelper', $this->cmsHelper);
-        \View::share('config', $this->app['config']->get('crud_common'));
+        $this->view = $this->app['view'];
+        $this->view->share('cmsHelper', $this->cmsHelper);
+        $this->view->share('config', $this->app['config']->get('crud_common'));
 
     }
 
     function welcome()
     {
-        return $this->app['view']->make("crud::welcome");
+        return $this->view->make("crud::welcome");
     }
 
 
@@ -40,7 +41,7 @@ class CrudController extends Controller
         $obj->initFilter();
 
         $view = !empty($args['view']) ? $args['view'] : $obj->resolveView('index');
-        return $this->app['view']->make($view, ['crudObj'=>$obj]);
+        return $this->view->make($view, ['crudObj'=>$obj]);
 
     }//
 
@@ -51,16 +52,16 @@ class CrudController extends Controller
 
         $obj->initFilter();
 
-        if ($this->app['request']->ajax())
+        if ($this->request->ajax())
         {
-            $params = $this->app['request']->all();
+            $params = $this->request->all();
             $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
             return CrudModelCollectionBuilder :: createTree($obj, $params)
                 ->applyContextFilter()
                 ->fetch();
 
         }
-        return $this->app['view']->make($obj->resolveView('tree'),['crudObj'=>$obj]);
+        return $this->view->make($obj->resolveView('tree'),['crudObj'=>$obj]);
 
     }//
 
@@ -76,9 +77,9 @@ class CrudController extends Controller
     {
         $obj = CrudModel :: createInstance($model, $scope);
 
-        $skip = (int) $this->app['request']->get('start',0);
-        $take =  (int) $this->app['request']->get('length',0);
-        $params = $this->app['request']->all();
+        $skip = (int) $this->request->get('start',0);
+        $take =  (int) $this->request->get('length',0);
+        $params = $this->request->all();
         $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
 
         return CrudModelCollectionBuilder :: createDataTables($obj, $params)
@@ -90,8 +91,8 @@ class CrudController extends Controller
     function crudEdit($model,$id)
     {
 
-        $obj = CrudModel :: createInstance($model, $this->app['request']->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
-        $req = $this->app['request']->all();
+        $obj = CrudModel :: createInstance($model, $this->request->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
+        $req = $this->request->all();
 
         foreach ($req as $k=>$v)
         {
@@ -103,7 +104,7 @@ class CrudController extends Controller
         }
 
         $edit_view = $obj->getListConfig('edit_tab')?'tab':'edit';
-        return $this->app['view']->make($obj->resolveView($edit_view),['crudObj'=>$obj,'id'=>$id,'scope'=>$obj->getScope(), 'form_tabbed'=>$obj->confParam('form_tabbed')]);
+        return $this->view->make($obj->resolveView($edit_view),['crudObj'=>$obj, 'crudForm' => $obj->getForm(), 'id'=>$id,'scope'=>$obj->getScope(), 'form_tabbed'=>$obj->confParam('form_tabbed')]);
 
     }
 
@@ -111,13 +112,13 @@ class CrudController extends Controller
     {
 
         try {
-            $obj = CrudModel :: createInstance($model, $this->app['request']->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
+            $obj = CrudModel :: createInstance($model, $this->request->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
 
             if ($obj->isTree())
             {
-                $obj->saveTree($this->app['request']->all());
+                $obj->saveTree($this->request->all());
             } else {
-                $obj->fillFromRequest($this->app['request']->all());
+                $obj->fillFromRequest($this->request->all());
 
                 if (!$obj->save())
                 {
@@ -144,7 +145,7 @@ class CrudController extends Controller
         try {
             $obj = CrudModel :: createInstance($model, $scope);
 
-            $obj->fillFilter($scope,$this->app['request']->all());
+            $obj->fillFilter($scope, $this->request->all());
 
             return ['success'=>true,'crud_model'=>$obj->classShortName,'scope'=>$scope];
 
@@ -160,7 +161,7 @@ class CrudController extends Controller
         try {
             $class = CrudModel :: resolveClass($model);
 
-            $ids = $this->app['request']->get('ids');
+            $ids = $this->request->get('ids');
             if (is_array($ids))
             {
                 $class::destroy($ids);
@@ -183,7 +184,7 @@ class CrudController extends Controller
             $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
 
             $command = camel_case($command);
-            $ret = $obj->$command($this->app['request']->all());
+            $ret = $obj->$command($this->request->all());
 
             return ['success'=>true, 'ret'=>$ret, 'message' => isset($ret['message']) ? $ret['message'] : null];
 
@@ -195,9 +196,9 @@ class CrudController extends Controller
 
     function crudTreeMove($model)
     {
-        $id = $this->app['request']->get('id');
-        $parent_id = $this->app['request']->get('parent_id');
-        $position = $this->app['request']->get('position');
+        $id = $this->request->get('id');
+        $parent_id = $this->request->get('parent_id');
+        $position = $this->request->get('position');
 
         $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
 

@@ -100,6 +100,11 @@ class Field
         return $value;
     }
 
+    function syncValue()
+    {
+        $this->model->{$this->name} = $this->prepareValueForDb($this->value);
+    }
+
 
 
 } 

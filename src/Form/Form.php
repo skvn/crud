@@ -105,26 +105,37 @@ class Form {
     public function __construct($args = [])
     {
         $this->crudObj = isset($args['crudObj']) ? $args['crudObj'] : new CrudStubModel();
-        $this->config = $args['config'];
+//        $this->config = $args['config'];
         $this->customProperties = isset($args['props']) ? $args['props'] : [];
-
-
-        if (is_array($this->config)) {
-
-            foreach ($this->config as $col => $colConfig)
+        if (!empty($args['config']) && is_array($args['config']))
+        {
+            foreach ($args['config'] as $col => $colConfig)
             {
-                if (empty($colConfig['column']))
-                {
-                    $colConfig['column'] = $col;
-                }
-                if (empty($colConfig['name']))
-                {
-                    $colConfig['name'] = $col;
-                }
-                $this->fields[$col] = Field::create($this->crudObj, $colConfig);
-                if (!empty($args['data']))
-                {
-                    $this->fields[$col]->importValue($args['data']);
+                $this->addControl($col, $colConfig);
+            }
+        }
+        if (!empty($args['data']) && is_array($args['data']))
+        {
+            $this->import($args['data']);
+        }
+
+
+//        if (is_array($this->config)) {
+
+//            foreach ($this->config as $col => $colConfig)
+//            {
+//                if (empty($colConfig['column']))
+//                {
+//                    $colConfig['column'] = $col;
+//                }
+//                if (empty($colConfig['name']))
+//                {
+//                    $colConfig['name'] = $col;
+//                }
+//                $this->fields[$col] = Field::create($this->crudObj, $colConfig);
+//                if (!empty($args['data']))
+//                {
+//                    $this->fields[$col]->importValue($args['data']);
 //                    switch ($colConfig['type'])
 //                    {
 //                        case self::FIELD_RANGE:
@@ -182,22 +193,67 @@ class Form {
 //                            }
 //                            break;
 //                    }
-                }
-                else
-                {
-                    if (isset($colConfig['value']))
-                    {
-                        $this->fields[$col]->setValue($colConfig['value']);
-                    }
-                }
-            }
-        }
+//                }
+//                else
+//                {
+//                    if (isset($colConfig['value']))
+//                    {
+//                        $this->fields[$col]->setValue($colConfig['value']);
+//                    }
+//                }
+//            }
+//        }
 
     }//
 
     static function create($args = [])
     {
         return new self($args);
+    }
+
+    function addControl($name, $config)
+    {
+        if (empty($config['column']))
+        {
+            $config['column'] = $name;
+        }
+        if (empty($config['name']))
+        {
+            $config['name'] = $name;
+        }
+        $this->config[$name] = $config;
+        $this->fields[$name] = Field::create($this->crudObj, $config);
+        if (isset($config['value']))
+        {
+            $this->fields[$name]->setValue($config['value']);
+        }
+        if (!$this->crudObj->getField($name))
+        {
+            $this->crudObj->addFormField($name, isset($config['title']) ? $config['title'] : '', isset($config['type']) ? $config['type'] : self :: FIELD_TEXT, $config);
+        }
+    }
+
+    function import($data)
+    {
+        foreach ($this->fields as $field)
+        {
+            $field->importValue($data);
+        }
+    }
+
+    function load($data)
+    {
+        $this->import($data);
+        $this->crudObj->fillFromRequest($data);
+        $this->sync();
+    }
+
+    function sync()
+    {
+        foreach ($this->fields as $field)
+        {
+            $field->syncValue();
+        }
     }
 
 
@@ -278,6 +334,21 @@ class Form {
     public function getFieldByName($fieldName)
     {
         return $this->fields[$fieldName];
+    }
+
+    public function __isset($key)
+    {
+        return $this->crudObj->__isset($key);
+    }
+
+    public function __get($key)
+    {
+        return $this->crudObj->__get($key);
+    }
+
+    public function __set($key, $value)
+    {
+        $this->crudObj->__set($key, $value);
     }
 
 
