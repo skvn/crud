@@ -69,7 +69,37 @@
 
 
 <!-- VENDOR LIBS AND PLUGINS -->
-<script src="{{ 'js/vendor.min.js'|asset }}"></script>
+{% if config_get('app.src_asset') %}
+    <script src="/vendor/src/bower_components/jquery/dist/jquery.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/bootstrap/dist/js/bootstrap.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/bootstrap-combobox/js/bootstrap-combobox.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/bootstrap-select/dist/js/bootstrap-select.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/bootstrap-switch/dist/js/bootstrap-switch.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/bootstrap-treeview/src/js/bootstrap-treeview.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/datatables/media/js/jquery.dataTables.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/datatables/media/js/dataTables.bootstrap.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/jquery-validation/dist/jquery.validate.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/jquery.steps/build/jquery.steps.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/matchHeight/jquery.matchHeight.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/moment/min/moment-with-locales.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/nestable/jquery.nestable.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/simplemde/dist/simplemde.min.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/summernote/dist/summernote.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/jquery-form/jquery.form.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/typeahead.js/dist/typeahead.bundle.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/plugins/tagmanager.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/jquery-ui/ui/core.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/jquery-ui/ui/widget.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/jquery-ui/ui/mouse.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/jquery-ui/ui/sortable.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/iCheck/icheck.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js?s={{ config_get('app.serial') }}"></script>
+    <script src="/vendor/src/bower_components/jstree/dist/jstree.js?s={{ config_get('app.serial') }}"></script>
+{% else %}
+    <script src="{{ 'js/vendor.min.js'|asset }}"></script>
+{% endif %}
 <!-- LOCALIZATION -->
 <script src="{{ 'js/modules/i18n.js'|asset }}"></script>
 <script src="{{ ('js/i18n/vendor/'~ cmsHelper.getLocale() ~'.min.js')|asset }}" ></script>

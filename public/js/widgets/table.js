@@ -1,5 +1,4 @@
 ;(function($, crud, win){
-    var columns = [];
     var i18n = win.i18n;
     bind_events();
     $.widget("crud.crud_list", {
@@ -11,6 +10,8 @@
             var order = [];
 
             var idx = 0;
+            this.col_list = [];
+            var obj = this;
             $("thead th", tbl).each(function(){
                 var c = $(this);
                 var col;
@@ -18,7 +19,7 @@
                 col = {name: c.data('list_name'), data: c.data('list_data'), ctype: c.data('list_ctype')};
 
                 col['orderable'] = c.data('list_orderable') == '1';
-                if (columns.length == 0)
+                if (obj.col_list.length == 0)
                 {
                     if (c.data('list_ctype') === "checkbox")
                     {
@@ -118,7 +119,7 @@
                 }
 
                 idx ++;
-                columns.push(col);
+                obj.col_list.push(col);
             });
 
             //console.log(cols);
@@ -131,7 +132,7 @@
                     ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), uri_params: tbl.data('list_uri_params')}),
                     //columns: crud_cols,
                     order: order,
-                    columns: columns,
+                    columns: this.col_list,
                     language: {
                         url: "/vendor/crud/js/i18n/vendor/dataTables/"+win.CURRENT_LOCALE+".json"
                     },
@@ -140,7 +141,7 @@
 
             });
             tbl.on( 'draw.dt', function (e, o) {
-                init_checkboxes(columns, this.element);
+                init_checkboxes(obj.col_list, this.element);
                 crud.trigger('crud.content_loaded', {cont: $(e.target)});
             } );
             tbl.on('dblclick', 'tbody>tr', function (){

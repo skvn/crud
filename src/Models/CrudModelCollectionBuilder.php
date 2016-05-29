@@ -120,6 +120,12 @@ class CrudModelCollectionBuilder
         return $this->collection;
     }
 
+    function setCollection($coll)
+    {
+        $this->collection = $coll;
+        return $this;
+    }
+
     function createBasicListQuery($joins = [])
     {
         $basic = $this->model->newQuery();
@@ -285,6 +291,7 @@ class CrudModelCollectionBuilder
 
     function paginate($skip, $take)
     {
+        //var_dump(get_class($this->collection));
         $this->collection->cnt = $this->collection->count();
         if ($take>0)
         {
