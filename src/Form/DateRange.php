@@ -30,6 +30,11 @@ class DateRange extends Range {
         }
     }
 
+    function getValueForList()
+    {
+        return $this->getValueFrom() . "-" . $this->getValueTo();
+    }
+
     function prepareValueForDb($value)
     {
         return strtotime($value . ' 14:23');

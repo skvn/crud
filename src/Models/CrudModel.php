@@ -291,6 +291,21 @@ abstract class CrudModel extends Model
         return parent::__call($method, $parameters);
     }
 
+    function __isset($key)
+    {
+        if (!empty($this->config['fields'][$key]['fields']))
+        {
+            foreach ($this->config['fields'][$key]['fields'] as $f)
+            {
+                if (parent :: __isset($f))
+                {
+                    return true;
+                }
+            }
+        }
+        return parent :: __isset($key);
+    }
+
     public function getAttribute($key)
     {
         //var_dump("getAttribute");
