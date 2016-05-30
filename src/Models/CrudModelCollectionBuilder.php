@@ -338,6 +338,7 @@ class CrudModelCollectionBuilder
         $q = $this->collection->getQuery();
         $this->app['session']->set("current_query_info", ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
         \Log :: info($this->collection->getQuery()->toSQL(), ['browsify' => true]);
+        \Log :: info($this->collection->getQuery()->getBindings(), ['browsify' => true]);
         $rs = $this->collection->get();
 
         foreach ($rs as $obj)

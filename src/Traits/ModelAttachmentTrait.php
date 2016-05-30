@@ -95,11 +95,26 @@ trait ModelAttachmentTrait {
         parent::setAttribute($key, $value);
     }
 
+//    function getAttribute($key)
+//    {
+//        if (array_key_exists($key, $this->attachedFiles) )
+//        {
+//            return $this->getAttach($key);
+//        }
+//        return parent :: getAttribute($key);
+//    }
+
 
     public function getAttach($attribute)
     {
         return  $this->attachedFiles[$attribute]->getInstanceOrCollection();
     }
+
+    function hasAttach($attribute)
+    {
+        return array_key_exists($attribute, $this->attachedFiles);
+    }
+
 
     public function deleteSingleAttach($args)
     {

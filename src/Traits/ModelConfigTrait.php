@@ -385,7 +385,14 @@ trait ModelConfigTrait
         {
             $rel = $relSpl[0];
             $attr = $relSpl[1];
-            $value = $this->$rel->$attr;
+            if (method_exists($this, 'hasAttach') && $this->hasAttach($rel))
+            {
+                $value = $this->getAttach($rel)->$attr;
+            }
+            else
+            {
+                $value = $this->$rel->$attr;
+            }
         }
         else
         {

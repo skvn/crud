@@ -13,11 +13,26 @@
 {% endif %}
 
 
-<table class="table table-striped table-bordered table-hover"  data-list_uri_params="{{ crudObj.flat_tree_uri_params }}"  data-list_table_ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-crud_table="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.scope }}" data-crud_noedit="{{ not crudObj.getListConfig('buttons.single_edit') }}" data-btn_edit="{{ crudObj.getListConfig('buttons.single_edit') }}" data-btn_delete="{{ crudObj.getListConfig('buttons.single_delete') }}" data-form_type="{{ crudObj.getListConfig('edit_tab')?'tabs':'popup' }}" data-list_actions='{{ crudObj.getListConfig('list_actions')|json_encode|raw }}' data-searchable="{{ crudObj.getListConfig('searchable') }}" >
+<table class="table table-striped table-bordered table-hover"
+       data-list_uri_params="{{ crudObj.flat_tree_uri_params }}"
+       data-list_table_ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}"
+       data-crud_table="{{ crudObj.classViewName }}"
+       data-crud_scope="{{ crudObj.scope }}"
+       data-crud_noedit="{{ not crudObj.getListConfig('buttons.single_edit') }}"
+       data-btn_edit="{{ crudObj.getListConfig('buttons.single_edit') }}"
+       data-btn_delete="{{ crudObj.getListConfig('buttons.single_delete') }}"
+       data-form_type="{{ crudObj.getListConfig('edit_tab')?'tabs':'popup' }}"
+       data-list_actions='{{ crudObj.getListConfig('list_actions')|json_encode|raw }}'
+       data-searchable="{{ crudObj.getListConfig('searchable') }}" >
     <thead>
     {% for c in crudObj.getListConfig('list') %}
         {% if not c.invisible %}
-        <th {% if c.width %} width="{{ c.width }}" {% endif %} data-list_ctype="{{ c.ctype }}" data-list_orderable="{{ c.orderable }}" data-list_data="{{ c.data }}" data-list_name="{{ c.name }}" {%  if  c.default_order %} data-default_order="{{ c.default_order}}"{% endif %} >{{ c.title }} {% if c.hint %}{{ config_get('crud_tooltip.pattern')|replace({'%s': c.hint.index, '%t': c.hint.default})|raw }}{% endif %}</th>
+        <th {{ c.width ? 'width="'~c.width~'"' }}
+                data-list_ctype="{{ c.ctype }}"
+                data-list_orderable="{{ c.orderable }}"
+                data-list_data="{{ c.data }}"
+                data-list_name="{{ c.name }}"
+                {{ c.default_order ? 'data-default_order="'~c.default_order~'"' }}>{{ c.title }} {% if c.hint %}{{ config_get('crud_tooltip.pattern')|replace({'%s': c.hint.index, '%t': c.hint.default})|raw }}{% endif %}</th>
         {% endif %}
     {% endfor %}
     </thead>
