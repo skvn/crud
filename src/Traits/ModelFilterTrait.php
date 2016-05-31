@@ -1,13 +1,13 @@
 <?php namespace Skvn\Crud\Traits;
 
 
-use Skvn\Crud\Filter\Filter;
+//use Skvn\Crud\Filter\Filter;
 
 
 trait ModelFilterTrait
 {
 
-    protected $filterObj;
+//    protected $filterObj;
 
 
     public  function appendConditions($conditions)
@@ -22,46 +22,52 @@ trait ModelFilterTrait
 
     public function initFilter()
     {
-        $filter =  Filter::create($this, $this->getScope());
-        $this->setFilter($filter);
+        return $this->getList()->initFilter();
+//        $filter =  Filter::create($this, $this->getScope());
+//        $this->setFilter($filter);
     }
 
     public function setFilter(Filter $filterObj)
     {
-        $this->filterObj = $filterObj;
-        $this->filterObj->setModel($this);
+        return $this->getList()->setFilter($filterObj);
+//        $this->filterObj = $filterObj;
+//        $this->filterObj->setModel($this);
     }
 
     public  function getFilter()
     {
-        if (!$this->filterObj)
-        {
-            throw new \InvalidArgumentException("Filter object is not set");
-        }
-        return $this->filterObj;
+        return $this->getList()->getFilter();
+//        if (!$this->filterObj)
+//        {
+//            throw new \InvalidArgumentException("Filter object is not set");
+//        }
+//        return $this->filterObj;
     }
 
     public function getFilterColumns()
     {
-        return $this->filterObj->filters;
+        return $this->getList()->getFilterColumns();
+//        return $this->filterObj->filters;
     }
 
     public function fillFilter($scope, $input)
     {
-        $this->initFilter($scope);
-
-        return $this->filterObj->fill($input, true);
+        return $this->getList()->fillFilter($scope, $input);
+//        $this->initFilter($scope);
+//
+//        return $this->filterObj->fill($input, true);
     }
 
 
     function getListDefaultFilter()
     {
-        if (!empty($this->config['list'][$this->scope]['filter_default']))
-        {
-            return $this->config['list'][$this->scope]['filter_default'];
-        }
-
-        return [];
+        return $this->getList()->getDefaultFilter();
+//        if (!empty($this->config['list'][$this->scope]['filter_default']))
+//        {
+//            return $this->config['list'][$this->scope]['filter_default'];
+//        }
+//
+//        return [];
     }
 
     function getAutocompleteList($query)
