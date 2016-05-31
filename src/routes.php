@@ -2,7 +2,7 @@
 $adm_route_params = [
     'prefix'=>'admin',
     'namespace' => 'Skvn\Crud\Controllers',
-    'middleware' =>  explode(',',env('APP_BACKEND_MIDDLEWARE',"web, auth"))
+    'middleware' =>  explode(',',env('APP_BACKEND_MIDDLEWARE',"web,auth"))
 ];
 
 $domain = env('APP_BACKEND_DOMAIN');
