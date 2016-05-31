@@ -1,5 +1,10 @@
 <?php
-$adm_route_params = array('prefix'=>'admin','namespace' => 'Skvn\Crud\Controllers','middleware' => ['web','auth']);
+$adm_route_params = [
+    'prefix'=>'admin',
+    'namespace' => 'Skvn\Crud\Controllers',
+    'middleware' =>  explode(',',env('APP_BACKEND_MIDDLEWARE',"web, auth"))
+];
+
 $domain = env('APP_BACKEND_DOMAIN');
 if ($domain)
 {
