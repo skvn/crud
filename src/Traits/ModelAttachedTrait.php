@@ -116,12 +116,51 @@ trait ModelAttachedTrait {
         return $fdata;
     }
 
+    function attachResize($w, $h, $crop = false)
+    {
+        $filename = $this->attachGetPath();
+        $resized_filename = str_replace($this->app['config']->get('attach.root'), $this->app['config']->get('attach.resized_path'), dirname($filename)) . DIRECTORY_SEPARATOR . $w . "z" . $h . "_" . ($crop ? 'crop' : 'full') . '_' . basename($filename);
+        if (!file_exists($resized_filename))
+        {
+            \Log :: info('resizing', ['browsify' => true]);
+            $img = \Image :: make($filename);
+            if ($crop)
+            {
+                $img->fit($w, $h);
+            }
+            else
+            {
+                $img->resize($w, $h, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+            }
+            if (!file_exists(dirname($resized_filename)))
+            {
+                $this->app['files']->makeDirectory(dirname($resized_filename), 0755, true, true);
+            }
+            $img->save($resized_filename);
+        }
+        return $resized_filename;
+    }
+
+    function getResizedPath($w, $h, $crop = false)
+    {
+        return $this->attachResize($w, $h, $crop);
+    }
+
+    function getResizedUrl($w, $h, $crop = false)
+    {
+        $path = $this->attachResize($w, $h, $crop);
+        return str_replace($this->app['config']->get('attach.resized_path'), $this->app['config']->get('attach.resized_url'), $path);
+    }
+
+
     public function getDownloadLinkAttribute()
     {
         $symlink = $this->app['config']->get('attach.symlink');
         if (!empty($symlink))
         {
-            return '/'.str_replace($this->app['config']->get('attach.root'), $symlink,$this->path);
+            return '/'.str_replace($this->app['config']->get('attach.root'), $symlink,$this->attachGetPath());
         }
         return $this->app['url']->route('download_attach',array('id' => $this->id, 'filename'=>urlencode($this->file_name), 'model' => $this->classViewName));
     }

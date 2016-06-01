@@ -299,7 +299,7 @@ trait ModelConfigTrait
         return !empty($this->config['tree']) && !$this->getTreeConfig('use_list');
     }
 
-    function getDescribedColumnValue($col, $format = false)
+    function getDescribedColumnValue($col, $format = false, $format_args = [])
     {
         $value = null;
         if ($relSpl = $this->resolveListRelation($col))
@@ -346,7 +346,7 @@ trait ModelConfigTrait
             $method = "crudFormatValue" . camel_case($format);
             if (method_exists($this, $method))
             {
-                $value = $this->$method($value);
+                $value = $this->$method($value, $format_args);
             }
         }
         return $value;

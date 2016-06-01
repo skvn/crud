@@ -454,6 +454,17 @@ abstract class CrudModel extends Model
     }
 
     /**
+     * Resize attached image
+     *
+     * @param $val
+     * @param array $args
+     */
+    function crudFormatValueResizedAttach($val, $args = [])
+    {
+        return '<img src="'.$val->getResizedUrl($args['width'], $args['height']).'" />';
+    }
+
+    /**
      * Get All available formatters
      *
      * @return array
