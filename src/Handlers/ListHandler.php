@@ -29,7 +29,7 @@ class ListHandler {
         $this->columns = $options['list'] ?? [];
         if (!empty($this->options['multiselect']))
         {
-            $this->prependColumn(['data' => $this->model->getKeyName(), 'width' => 30, 'ctyle' => "checkbox"]);
+            $this->prependColumn(['data' => $this->model->getKeyName(), 'width' => 30, 'ctype' => "checkbox"]);
         }
         else
         {
