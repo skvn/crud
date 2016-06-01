@@ -4,11 +4,11 @@
         <tr>
             <td style="width:350px;" nowrap="nowrap">
 
-                <select data-value="{{ column.data }}" class="form-control default_select" data-rel="field_select" data-list_col="data_col" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_col]" required>
+                <select data-value="{{ column.data }}" class="form-control default_select" data-rel="field_select" data-list_col="data_col" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_col]" required data-change="crud_action" data-action="wizard_fill_column_title">
                     <option value="">Choose field</option>
                     {#<option value="id" {{ 'id' == column.data?'selected' }}>ID</option>#}
                     {%  for f, fld in model.fields %}
-                        <option value="{{ f }}" {{ f == column.data?'selected' }}>{{ f }}</option>
+                        <option value="{{ f }}" {{ f == column.data?'selected' }}>{{ fld.title }}</option>
                     {% endfor %}
                 </select><br>
                 <b>Or</b><br>
@@ -28,7 +28,7 @@
                 <input type="text" data-list_col="data_rel" value="{{ res_rel[1] }}" data-rel="list_relation_attr" style="width:130px; display: inline" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_rel_attr]" placeholder="Relation attribute"/>
             </td>
             <td valign="top" style="width:150px;">
-                <input type="text" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][title]"  value="{{ column.title }}"  placeholder="Title *" required >
+                <input type="text" data-rel="title" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][title]"  value="{{ column.title }}"  placeholder="Title *" required >
             </td>
             <td valign="top"  style="width:80px;"><input type="text" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][width]" value="{{ column.width }}" placeholder="Width"></td>
             <td  style="width:70px;">

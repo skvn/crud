@@ -185,6 +185,12 @@
 
             },
 
+            wizard_fill_column_title: function (elem) {
+                var parent = elem.parents('tr').first();
+                parent.find('input[data-rel=title]').val(elem.find('option:selected').data('title'));
+
+            },
+
             wizard_remove_filter_field: function (elem)
             {
                 var list = elem.data('list');
@@ -486,18 +492,19 @@
         var fields = [];
 
         $('#f_container table[data-rel]').each ( function () {
-                fields.push($(this).data('rel'));
+                var title = $(this).find('input[data-rel=field_title]').val();
+                fields.push({value:$(this).data('rel'), text:title});
             }
         );
 
         if (fields.length) {
             $('select[data-rel="field_select"]').each(function () {
                 var val = $(this).data('value');
-                console.log(val);
+
                 $(this).empty();
                 var html = '<option value="">Choose  field</option>';
                 for (var i = 0; i < fields.length; i++) {
-                    html += '<option value="' + fields[i] + '">' + fields[i] + '</option>';
+                    html += '<option value="' + fields[i]['value'] + '" data-title="'+fields[i]['text']+'">' + fields[i]['text'] + '('+fields[i]['value']+') </option>';
                 }
                 $(this).html(html);
                 $(this).val(val);

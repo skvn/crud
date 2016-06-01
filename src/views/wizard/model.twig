@@ -5,7 +5,7 @@
 
         .wizard > .content
         {
-            min-height: 500px;;
+            min-height: 650px;;
         }
 
         .wizard > .content > .body
@@ -76,17 +76,17 @@
 
 
 
-                    {#
+
                     <div class="form-group">
                         <label for="ent_name_r">(Russian only) Model entity name (Родительный падеж)</label>
-                        <input type="text" class="form-control" id="ent_name_r" name="ent_name_r" />
+                        <input type="text" class="form-control" id="ent_name_r" name="ent_name_r" value="{{ model.ent_name_r }}" />
                     </div>
 
                     <div class="form-group">
                         <label for="ent_name_v">(Russian only) Model entity name (Винительный падеж)</label>
-                        <input type="text" class="form-control" id="ent_name_v" name="ent_name_v" />
+                        <input type="text" class="form-control" id="ent_name_v" name="ent_name_v"  value="{{ model.ent_name_v }}" />
                     </div>
-                    #}
+
 
 
                     <div class="form-group">

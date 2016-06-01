@@ -609,15 +609,14 @@ class CrudModelPrototype
         if (!empty($this->config_data['ent_name'])) {
             $conf['ent_name'] = $this->config_data['ent_name'];
         }
+        if (!empty($this->config_data['ent_name_r'])) {
+            $conf['ent_name_r'] = $this->config_data['ent_name_r'];
+        }
 
-        if (!empty($this->config_data['ent_name_r']))
-        {
-            $conf['ent_name_r'] = "user";
+        if (!empty($this->config_data['ent_name_v'])) {
+            $conf['ent_name_v'] = $this->config_data['ent_name_v'];
         }
-        if (!empty($this->config_data['ent_name_v']))
-        {
-            $conf['ent_name_v'] = "user";
-        }
+        
         if (!empty($this->config_data['dialog_width']))
         {
             $conf['dialog_width'] = 1000;
