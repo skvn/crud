@@ -184,8 +184,13 @@
                     //    alert('show');
                     //    $('#crud_form').modal('show');
                     //}
-
-                    $('#crud_form').find('form').first().crud_form();
+                    var frm = $('form:first', $('#crud_form'));
+                    frm.crud_form();
+                    var handler = 'onShow_' + frm.data('crud_model') + '_' + frm.data('crud_scope');
+                    if (crud_actions[handler])
+                    {
+                        crud_actions[handler]($('#crud_form'));
+                    }
                     self.trigger('crud.content_loaded', {cont: $('#crud_form')});
                     //$('#crud_form').modal('show');
 

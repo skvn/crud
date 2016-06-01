@@ -5,6 +5,7 @@
         options: {},
         _create: function()
         {
+            console.log('form created');
             
             var $form = this.element;
 
@@ -134,7 +135,25 @@
                 $("input[data-title_for='"+$(this).attr('name')+"']", $form).val(name);
             });
 
+            $($form).on('change', 'select', function(e){
+                crud.trigger('form.change', {form: $form, elem: $(this)});
+            });
 
+
+        },
+        showFields: function(names)
+        {
+            for (var i in names)
+            {
+                $(".form-group[data-ref="+names[i]+"]", this.element).show();
+            }
+        },
+        hideFields: function(names)
+        {
+            for (var i in names)
+            {
+                $(".form-group[data-ref="+names[i]+"]", this.element).hide();
+            }
         }
     });
 
