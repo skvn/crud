@@ -37,7 +37,7 @@ class ListHandler {
         }
         if (!empty($this->options['buttons']['single_edit']) || !empty($this->options['buttons']['single_delete']) || !empty($this->options['list_actions']))
         {
-            $this->appendColumn(['data' => "actions", 'width' => 50, 'ctype' => "actions"]);
+            $this->appendColumn(['data' => "actions", 'width' => 100, 'ctype' => "actions"]);
         }
         foreach($this->columns as $k => $col)
         {

@@ -27,7 +27,7 @@
     <thead>
     {% for c in crudObj.getListConfig('list') %}
         {% if not c.invisible %}
-        <th {{ c.width ? 'width="'~c.width~'"' }}
+        <th {{ c.width ? ('width="'~c.width~'px"')|raw }}
                 data-list_ctype="{{ c.ctype }}"
                 data-list_orderable="{{ c.orderable }}"
                 data-list_data="{{ c.data }}"

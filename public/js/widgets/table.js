@@ -52,7 +52,7 @@
                     {
 
                         col.fnCreatedCell = function(td, cellData, rowData, row, col){
-                            var buttons = '<nobr>';
+                            var buttons = '';
 
                             if (tbl.data('btn_edit'))
                             {
@@ -63,14 +63,14 @@
                             {
                                 buttons += "<a class='text-danger' data-confirm='"+i18n.say('delete_element')+"?' data-id='"+rowData.id+"' data-click='crud_event' data-event='crud.delete_element'  style='cursor:pointer;font-size:24px;'><i class='fa fa-trash-o'> </i></a>";
                             }
-                            buttons +='</nobr>';
+
 
                             if (tbl.data('list_actions')) {
 
                                 var actions = tbl.data('list_actions');
-                                buttons += '<div class="dropdown  dropdown-kebab-pf" style="width:15px;">'
+                                buttons += '<span class="dropdown  dropdown-kebab-pf" style="width:15px;margin-left:10px;">'
                                     + '<button class="btn btn-link dropdown-toggle" type="button"  data-toggle="dropdown">'
-                                    + '<span class="fa fa-ellipsis-v"></span>'
+                                    + '<span class="fa fa-ellipsis-v" style="margin-bottom: 10px;"></span>'
                                     + '</button>'
                                     + '<ul class="dropdown-menu dropdown-menu-right" >';
 
@@ -104,7 +104,7 @@
                                 }
 
                                 + '</ul>'
-                                + '</div>';
+                                + '</span>';
                             }
                             $(td).html(buttons);
                         }
@@ -132,6 +132,7 @@
                     ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), uri_params: tbl.data('list_uri_params')}),
                     //columns: crud_cols,
                     order: order,
+                    autoWidth: false,
                     columns: this.col_list,
                     language: {
                         url: "/vendor/crud/js/i18n/vendor/dataTables/"+win.CURRENT_LOCALE+".json"
