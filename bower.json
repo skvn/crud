@@ -21,6 +21,7 @@
     "bootstrapvalidator": "~0.5.3",
     "iCheck": "jquery-icheck#~1.0.2",
     "jstree": "~3.3.0",
-    "jquery-validation": "^1.15.0"
+    "jquery-validation": "^1.15.0",
+    "datatables-treetable": "*"
   }
 }

@@ -16533,3 +16533,49 @@ table.dataTable{clear:both;margin-top:6px !important;margin-bottom:6px !importan
 {
     display: list-item;
 }
+table.treetable span.indenter {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  text-align: right;
+
+  /* Disable text selection of nodes (for better D&D UX) */
+  user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  -webkit-user-select: none;
+
+  /* Force content-box box model for indenter (Bootstrap compatibility) */
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+
+  width: 19px;
+}
+
+table.treetable span.indenter a {
+  background-position: left center;
+  background-repeat: no-repeat;
+  display: inline-block;
+  text-decoration: none;
+  width: 19px;
+}
+
+table.dt-treetable tr.branch.collapsed .indenter a:before {
+  content: "►"
+}
+table.dt-treetable tr.branch.expanded .indenter a:before {
+  content: "▾"
+}
+
+table.dt-treetable tr.branch.collapsed .indenter a:before {
+  font-family: 'Glyphicons Halflings';
+  /* content: "\e158"; */
+  content: "\e250";
+}
+table.dt-treetable tr.branch.expanded .indenter a:before {
+  font-family: 'Glyphicons Halflings';
+  /* content: "\e159"; */
+  content: "\e252";
+}

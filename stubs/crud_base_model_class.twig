@@ -25,7 +25,7 @@ class {{ model.name }}Base extends CrudModel{
     /* @param $joins  array  Array of joins to use in with($joins); Eloquent method
     */
     public function   {{ camel_case("get_"~alias~"_list_query") }}($joins = []) {
-            return CrudModelCollectionBuilder :: createEmpty($this)->createBasicListQuery($joins);
+            return CrudModelCollectionBuilder :: createEmpty($this,  \Request::all() )->createBasicListQuery($joins);
      }
     {% endfor %}
 

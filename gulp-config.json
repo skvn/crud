@@ -21,7 +21,12 @@
           "resources/bower_components/iCheck/skins/square/square.css",
           "resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css",
           "resources/bower_components/jstree/dist/themes/default/style.min.css",
-          "resources/bower_components/jquery.steps/demo/css/jquery.steps.css"
+          "resources/bower_components/jquery.steps/demo/css/jquery.steps.css",
+          "resources/bower_components/jquery-treetable/css/jquery.treetable.css",
+          "resources/bower_components/datatables-treetable/css/treeTable.dataTables.css",
+          "resources/bower_components/datatables-treetable/css/treeTable.bootstrap.css"
+
+
 
 		],
       "vendor_css_images": [
@@ -64,7 +69,9 @@
           "resources/bower_components/bootstrapvalidator/dist/js/bootstrapValidator.min.js",
           "resources/bower_components/iCheck/icheck.min.js",
           "resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
-          "resources/bower_components/jstree/dist/jstree.min.js"
+          "resources/bower_components/jstree/dist/jstree.min.js",
+          "resources/bower_components/jquery-treetable/jquery.treetable.js",
+          "resources/bower_components/datatables-treetable/js/dataTables.treeTable.js"
 
         ],
 

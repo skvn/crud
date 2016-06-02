@@ -8,7 +8,7 @@ class CrudModelCollectionBuilder
     protected $model;
     protected $app;
     protected $columns;
-    protected $collection;
+    protected $collectionQuery;
     protected $params = [];
 
     function __construct(CrudModel $model, $args = [])
@@ -29,19 +29,23 @@ class CrudModelCollectionBuilder
     static function create(CrudModel $model, $args = [])
     {
         $obj = new self($model, $args);
-//        if (!empty($args))
-//        {
-//            $obj->setViewType($view_type);
-//        }
         $obj->createCollection();
         return $obj;
     }
 
     static function createDataTables(CrudModel $model, $args = [])
     {
-        $args['view_type'] = "data_tables";
+        $listType = $model->getListConfig('type');
+        if ($listType && $listType == 'dt_tree') {
+            $args['view_type'] = "data_tables_tree";
+        } else {
+            $args['view_type'] = "data_tables";
+        }
+
         return self :: create($model, $args);
     }
+
+
 
     static function createTree(CrudModel $model, $args = [])
     {
@@ -83,7 +87,7 @@ class CrudModelCollectionBuilder
     {
         if (!empty($this->params['raw']))
         {
-            $this->collection = $this->model->newQuery();
+            $this->collectionQuery = $this->model->newQuery();
             return $this;
         }
         $scope = $this->model->getScope();
@@ -102,27 +106,28 @@ class CrudModelCollectionBuilder
         }
         if (method_exists($this->model, $method))
         {
-            $this->collection = $this->model->$method($joins);
+            $this->collectionQuery = $this->model->$method($joins);
         }
         else if (method_exists($this->model, $method_query))
         {
-            $this->collection = $this->model->$method_query($joins);
+            $this->collectionQuery = $this->model->$method_query($joins);
         }
         else
         {
-            $this->collection = $this->createBasicListQuery($joins);
+            $this->collectionQuery = $this->createBasicListQuery($joins);
         }
+
         return $this;
     }
 
-    function getCollection()
+    function getCollectionQuery()
     {
-        return $this->collection;
+        return $this->collectionQuery;
     }
 
-    function setCollection($coll)
+    function setCollectionQuery($coll)
     {
-        $this->collection = $coll;
+        $this->collectionQuery = $coll;
         return $this;
     }
 
@@ -139,6 +144,12 @@ class CrudModelCollectionBuilder
         {
             $basic->orderBy($this->model->getColumnTreePath() , 'asc');
             $basic->orderBy($this->model->getColumnTreeOrder(), 'asc');
+
+            if (isset ($this->params['parent_id']))
+            {
+                $basic->where($this->model->getColumnTreePid(), $this->params['parent_id']);
+            }
+
         }
         else
         {
@@ -192,12 +203,14 @@ class CrudModelCollectionBuilder
             $this->applyConditions($conditions);
             //$this->collection->cnt = $this->collection->count();
         }
+
+
         return $this;
     }
 
     function applyConditions($conditions)
     {
-        $conditions = $this->model->preApplyConditions($this->collection, $conditions);
+        $conditions = $this->model->preApplyConditions($this->collectionQuery, $conditions);
 
         foreach ($conditions as $cond)
         {
@@ -211,11 +224,12 @@ class CrudModelCollectionBuilder
             else
             {
                 //use joins
-                $this->collection->whereHas($cond['join'], function($query) use ($cond) {
+                $this->collectionQuery->whereHas($cond['join'], function($query) use ($cond) {
                     $this->applyFilterWhere($cond['cond']);
                 });
             }
         }
+
 
         return $this;
     }//
@@ -224,7 +238,7 @@ class CrudModelCollectionBuilder
     {
         if (is_string($cond))
         {
-            $this->collection->whereRaw($cond);
+            $this->collectionQuery->whereRaw($cond);
         }
         else if (is_array($cond[0]))
         {
@@ -243,13 +257,13 @@ class CrudModelCollectionBuilder
                     }
                 }
             };
-            $this->collection->where($or_where);
+            $this->collectionQuery->where($or_where);
         }
         else
         {
             //simple and
             list($col, $act, $val) = $cond;
-            $coll = is_null($q) ? $this->collection : $q;
+            $coll = is_null($q) ? $this->collectionQuery : $q;
             switch (strtolower($act))
             {
                 case 'in':
@@ -271,7 +285,7 @@ class CrudModelCollectionBuilder
     function applyFilterOrWhere($cond, $q = null)
     {
         list($col, $act, $val) = $cond;
-        $coll = is_null($q) ? $this->collection : $q;
+        $coll = is_null($q) ? $this->collectionQuery : $q;
         switch (strtolower($act))
         {
             case 'in':
@@ -292,10 +306,10 @@ class CrudModelCollectionBuilder
     function paginate($skip, $take)
     {
         //var_dump(get_class($this->collection));
-        $this->collection->cnt = $this->collection->count();
+        $this->collectionQuery->cnt = $this->collectionQuery->count();
         if ($take>0)
         {
-            $this->collection->skip($skip)->take($take);
+            $this->collectionQuery->skip($skip)->take($take);
         }
 
         return $this;
@@ -308,18 +322,23 @@ class CrudModelCollectionBuilder
             case 'data_tables':
                 return $this->fetchDataTables();
             break;
+
+            case 'data_tables_tree':
+                return $this->fetchDataTablesTree();
+                break;
+
             case 'tree':
                 return $this->fetchTree();
             break;
             default:
-                return $this->collection->get();
+                return $this->collectionQuery->get();
             break;
         }
     }
 
     function fetchDataTables()
     {
-        
+
         $columns = $this->params['columns'];
 
         if (!empty($this->params['order']))
@@ -329,17 +348,17 @@ class CrudModelCollectionBuilder
             {
                 foreach ($order as $oc)
                 {
-                    $this->collection->orderBy(!empty($columns[$oc['column']]['name']) ? $columns[$oc['column']]['name'] : $columns[$oc['column']]['data'], $oc['dir']);
+                    $this->collectionQuery->orderBy(!empty($columns[$oc['column']]['name']) ? $columns[$oc['column']]['name'] : $columns[$oc['column']]['data'], $oc['dir']);
                 }
             }
         }
         $data = [];
-        $total = !empty($this->collection->cnt) ? $this->collection->cnt : 0;
-        $q = $this->collection->getQuery();
+        $total = !empty($this->collectionQuery->cnt) ? $this->collectionQuery->cnt : 0;
+        $q = $this->collectionQuery->getQuery();
         $this->app['session']->set("current_query_info", ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
-        \Log :: info($this->collection->getQuery()->toSQL(), ['browsify' => true]);
-        \Log :: info($this->collection->getQuery()->getBindings(), ['browsify' => true]);
-        $rs = $this->collection->get();
+        \Log :: info($this->collectionQuery->getQuery()->toSQL(), ['browsify' => true]);
+        \Log :: info($this->collectionQuery->getQuery()->getBindings(), ['browsify' => true]);
+        $rs = $this->collectionQuery->get();
 
         foreach ($rs as $obj)
         {
@@ -371,9 +390,80 @@ class CrudModelCollectionBuilder
 
     }
 
+    function fetchDataTablesTree()
+    {
+
+
+        if (!empty($this->params['columns']))
+        {
+            $columns = $this->params['columns'];
+        } else {
+            $columns = $this->columns;
+        }
+
+
+        $this->collectionQuery->withCount('children');
+
+        if (!empty($this->params['order']))
+        {
+            $order = $this->params['order'];
+            if (is_array($order))
+            {
+                foreach ($order as $oc)
+                {
+                    $this->collection->orderBy(!empty($columns[$oc['column']]['name']) ? $columns[$oc['column']]['name'] : $columns[$oc['column']]['data'], $oc['dir']);
+                }
+            }
+        }
+        $data = [];
+        $total = !empty($this->collectionQuery->cnt) ? $this->collectionQuery->cnt : 0;
+        $q = $this->collectionQuery->getQuery();
+        $this->app['session']->set("current_query_info", ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
+        \Log :: info($this->collectionQuery->getQuery()->toSQL(), ['browsify' => true]);
+        \Log :: info($this->collectionQuery->getQuery()->getBindings(), ['browsify' => true]);
+        $rs = $this->collectionQuery->get();
+
+        foreach ($rs as $obj)
+        {
+            $row = [];
+            foreach ($columns as $col)
+            {
+                $row[$col['data']] = '';
+                $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
+            }
+            foreach ($this->columns as $col)
+            {
+                if (!empty($col['invisible']))
+                {
+                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
+                }
+                if (isset($row[$col['data']]) && !empty($col['format']))
+                {
+                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'], $col['format_args'] ?? []);
+                }
+            }
+            $treeColumn = $obj->getColumnTreePid();
+            $row[$treeColumn] = $obj->$treeColumn;
+            if ($obj->children_count>0)
+            {
+                $row['__has_children'] = true;
+            } else {
+                $row['__has_children'] = false;
+            }
+            $data[] = $row;
+        }
+
+        return [
+            "recordsTotal"=>$total ,
+            "recordsFiltered"=>$total,
+            'data'=>$data
+        ];
+
+    }
+
     function fetchTree()
     {
-        $data = $this->collection->get();
+        $data = $this->collectionQuery->get();
         $ret = [];
         foreach ($data as $row)
         {
@@ -409,7 +499,7 @@ class CrudModelCollectionBuilder
     {
 
         $data = [];
-        foreach ($this->collection->get() as $obj)
+        foreach ($this->collectionQuery->get() as $obj)
         {
             $row = [];
 
@@ -431,7 +521,7 @@ class CrudModelCollectionBuilder
 
     function count()
     {
-        return $this->collection->count();
+        return $this->collectionQuery->count();
     }
 
 

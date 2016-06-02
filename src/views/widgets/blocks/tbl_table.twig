@@ -22,8 +22,13 @@
        data-btn_edit="{{ crudObj.getListConfig('buttons.single_edit') }}"
        data-btn_delete="{{ crudObj.getListConfig('buttons.single_delete') }}"
        data-form_type="{{ crudObj.getListConfig('edit_tab')?'tabs':'popup' }}"
+       data-list_type="{{ crudObj.getListConfig('type')?crudObj.getListConfig('type'):'dt' }}"
        data-list_actions='{{ crudObj.getListConfig('list_actions')|json_encode|raw }}'
-       data-searchable="{{ crudObj.getListConfig('searchable') }}" >
+       data-searchable="{{ crudObj.getListConfig('searchable') }}"
+       data-key_name="{{ crudObj.getKeyName() }}"
+       {{ crudObj.isTree()?('data-parent_id="'~crudObj.getColumnTreePid()~'"')|raw }}
+
+>
     <thead>
     {% for c in crudObj.getListConfig('list') %}
         {% if not c.invisible %}

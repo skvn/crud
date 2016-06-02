@@ -125,28 +125,59 @@
             //console.log(cols);
             //var list_name = crud.crudObj.list_name ? crud.crudObj.list_name : 'index';
             var rowCallBack = crud.win.crudRowCallback ? crud.win.crudRowCallback : null;
-            tbl.dataTable({
-                    searching: tbl.data('searchable')?true:false,
-                    processing: true,
-                    serverSide: true,
-                    ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), uri_params: tbl.data('list_uri_params')}),
-                    //columns: crud_cols,
-                    order: order,
-                    autoWidth: false,
-                    columns: this.col_list,
-                    language: {
-                        url: "/vendor/crud/js/i18n/vendor/dataTables/"+win.CURRENT_LOCALE+".json"
-                    },
-                    rowCallback: rowCallBack
+            var dtConfig = {
+                searching: tbl.data('searchable')?true:false,
+                processing: true,
+                serverSide: true,
+                ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), uri_params: tbl.data('list_uri_params')}),
+                //columns: crud_cols,
+                order: order,
+                autoWidth: false,
+                columns: this.col_list,
+                language: {
+                    url: "/vendor/crud/js/i18n/vendor/dataTables/"+win.CURRENT_LOCALE+".json"
+                },
+                rowCallback: rowCallBack
 
 
-            });
+            };
+
+            if (tbl.data('list_type') == 'dt_tree')
+            {
+
+                dtConfig['processing'] = false;
+                dtConfig['serverSide']  = false;
+                dtConfig['ajax'] = {url:dtConfig['ajax'], data: {parent_id:0}};
+                dtConfig['ordering'] =  false;
+                dtConfig['paging'] =  false;
+                dtConfig['treetable'] =  {
+                    branchAttr: '__has_children',
+                    nodeIdAttr: tbl.data('key_name'),
+                    parentIdAttr: tbl.data('parent_id'), 
+                    expandable: true,
+                        onNodeExpand: function() {
+                            var node = this;
+                            var url = tbl.DataTable().ajax.url();
+                            var params = {parent_id:node.id, columns:tbl.DataTable().ajax.params()['columns']};
+                            $.getJSON(url, params)
+                                .done(function(json) {
+                                    tbl.DataTable().treeTable.addChildren(node, json.data);
+                                } )
+                                .fail(function(e) {
+                                    console.log("error", e);
+                                } )
+                        ;
+                    }
+                }
+            }
+            tbl.dataTable(dtConfig);
+
             tbl.on( 'draw.dt', function (e, o) {
                 init_checkboxes(obj.col_list, this.element);
                 crud.trigger('crud.content_loaded', {cont: $(e.target)});
             } );
             tbl.on('dblclick', 'tbody>tr', function (){
-
+                
                 if (tbl.data('crud_noedit') == '1')
                 {
                     return;

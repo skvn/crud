@@ -27,9 +27,7 @@ trait TreeTrait  {
     //protected $columnTreeDepth = 'tree_depth';
 
     protected $parents;
-
-
-
+    
     public function makeRoot()
     {
         $title_f = ($this->confParam('title_field')?$this->confParam('title_field'):'title');
@@ -169,35 +167,39 @@ trait TreeTrait  {
         return $this->processSiblingOf($sibling, '>');
     }
 
+//    public function parent()
+//    {
+//        return $this->newQuery()->where($this->getKeyName(), '=', $this->getTreePid());
+//    }
+
     public function parent()
     {
-        return $this->newQuery()->where($this->getKeyName(), '=', $this->getTreePid());
+        return $this->belongsTo(get_class($this),$this->getColumnTreePid());
     }
-
+    
     public function sibling()
     {
         return $this->newQuery()->where($this->getColumnTreePid(), '=', $this->getTreePid());
     }
 
-    public function children($depth=0)
+    public function children($depth=1)
     {
-        $query = $this->newQuery();
 
-        if ($depth==1)
+        if ($depth == 1)
         {
-            $query->where($this->getColumnTreePid(), '=', $this->getKey());
-        }
-        else
-        {
-            $query->where($this->getColumnTreePath(), 'like', $this->getTreePath().$this->getKey().'.%');
-        }
+            return $this->hasMany(get_class($this),$this->getColumnTreePid());
 
-        if ($depth)
-        {
-            $query->where($this->getColumnTreeDepth(), '<=', $this->getTreeDepth() + $depth);
-        }
+        } else {
+            
+            $query = $this->newQuery();
+            $query->where($this->getColumnTreePath(), 'like', $this->getTreePath() . $this->getKey() . '.%');
+            
+            if ($depth) {
+                $query->where($this->getColumnTreeDepth(), '<=', $this->getTreeDepth() + $depth);
+            }
 
-        return $query;
+            return $query;
+        }
     }
 
     public function isDescendant($ancestor)
