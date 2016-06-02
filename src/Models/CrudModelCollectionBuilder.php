@@ -339,7 +339,7 @@ class CrudModelCollectionBuilder
     function fetchDataTables()
     {
 
-        $columns = $this->params['columns'];
+        $columns  = $this->params['columns'] ?? $this->columns;;
 
         if (!empty($this->params['order']))
         {
@@ -394,12 +394,8 @@ class CrudModelCollectionBuilder
     {
 
 
-        if (!empty($this->params['columns']))
-        {
-            $columns = $this->params['columns'];
-        } else {
-            $columns = $this->columns;
-        }
+        $columns  = $this->params['columns'] ?? $this->columns;;
+
 
 
         $this->collectionQuery->withCount('children');
