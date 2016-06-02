@@ -88,7 +88,7 @@ class Form {
     /**
      * @var
      */
-    public $fields;
+    public $fields = [];
 
     public $customProperties;
     //public $visibleFields;
