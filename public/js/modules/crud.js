@@ -637,6 +637,7 @@
                     {
                         eval(elem.data('callback'));
                     }
+                    crud.trigger('crud.reload', res);
                 }
                 else
                 {
