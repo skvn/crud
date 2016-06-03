@@ -50,7 +50,7 @@
           "resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js",
           "resources/bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js",
           "resources/bower_components/bootstrap-treeview/dist/bootstrap-treeview.min.js",
-          "resources/bower_components/datatables/media/js/jquery.dataTables.js",
+          "resources/bower_components/dt/media/js/jquery.dataTables.js",
           "resources/bower_components/datatables/media/js/dataTables.bootstrap.min.js",
           "resources/bower_components/jquery-validation/dist/jquery.validate.min.js",
           "resources/bower_components/jquery.steps/build/jquery.steps.min.js",
