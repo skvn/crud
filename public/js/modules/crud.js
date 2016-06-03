@@ -727,6 +727,13 @@
             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    $(crud.doc).ajaxError(function(e, xhr){
+        if (xhr.status == 401)
+        {
+            alert('Unauthorized');
+            crud.loc.reload();
+        }
+    });
     $(crud.doc).on('click','*[data-click]', function (e){
             e.preventDefault();
             handle_action($(this),$(this).data('click') )
