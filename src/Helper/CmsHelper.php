@@ -363,4 +363,15 @@ class CmsHelper
         return $this->app->getLocale();
     }
 
+
+    function getVendorJs()
+    {
+        $config = json_decode(file_get_contents(__DIR__ .'/../../gulp-config.json'), true)['paths']['vendor_js'];
+        array_walk($config, function (&$item) {
+            $item = str_replace('resources/bower_components','', $item);
+        });
+
+        return $config;
+        //resources/bower_components/
+    }
 }
