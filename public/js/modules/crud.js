@@ -637,6 +637,7 @@
                     {
                         eval(elem.data('callback'));
                     }
+                    crud.trigger('crud.reload', res);
                 }
                 else
                 {
@@ -710,7 +711,10 @@
                         }
                     }
                     //crud.init_ichecks(w);
-                    $("form", w).crud_form();
+                    if ($("form", w).attr('id') != 'crud_filter_form')
+                    {
+                        $("form", w).crud_form();
+                    }
                 });
             } else {
                 alert('Crud popup url not defined!');

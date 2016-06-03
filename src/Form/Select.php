@@ -73,11 +73,7 @@ class Select extends Field {
 //
 //        }
         $opts = [];
-        if (!empty($this->config['model']))
-        {
-            $opts =  $this->getModelOptions();
-        }
-        elseif (!empty($this->config['method_options']))
+        if (!empty($this->config['method_options']))
         {
             $this->value = $this->model->getAttribute($this->getName());
             $opts = [];
@@ -97,6 +93,10 @@ class Select extends Field {
                     $opts = $this->model->$method();
                 }
             }
+        }
+        elseif (!empty($this->config['model']))
+        {
+            $opts =  $this->getModelOptions();
         }
         else
         {

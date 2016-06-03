@@ -318,6 +318,10 @@ abstract class CrudModel extends Model
                 return $this->getRelationshipFromMethod($key, $camelKey);
             }
         }
+//        if (method_exists($this, 'hasAttach') && $this->hasAttach($key))
+//        {
+//            return $this->getAttach($key);
+//        }
 //        $method = camel_case("attr_" . $key);
 //        if (method_exists($this, $method))
 //        {
