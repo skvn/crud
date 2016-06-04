@@ -6,45 +6,65 @@ trait ModelRelationTrait
 
     protected $dirtyRelations = [];
     //protected $crudRelations = [];
-    protected $processableRelations = [];
+    //protected $processableRelations = [];
+
+    static function bootModelRelationTrait()
+    {
+        static :: registerSetter(function ($instance, $key, $value){
+            return $instance->relationSetValue($key, $value);
+        });
+    }
+
+    protected function relationSetValue($key, $value)
+    {
+        $col = $this->config['fields'][$key] ?? [];
+        if (!empty($col['relation']))
+        {
+            $this->dirtyRelations[$key] = $value;
+            return true;
+        }
+    }
 
     public function saveRelations()
     {
-        $formConf = $this->getFields();
+        //$formConf = $this->getFields();
         if ($this->dirtyRelations  && is_array($this->dirtyRelations ))
         {
             $form = $this->getForm(['fillData'=>$this->dirtyRelations,'forceNew' => true]);
 
             foreach ($this->dirtyRelations as $k => $v)
             {
-                if (!empty($form->fields[$k]))
-                {
-                    $v = $form->fields[$k]->getValueForDb();
-                }
+                $control = $form->fields[$k];
+                //if (!empty($form->fields[$k]))
+                //{
+                    //$v = $form->fields[$k]->getValueForDb();
+                //}
+                $v = $control->getValueForDb();
 
                 //switch ($this->crudRelations[$k])
-                switch ($this->config['fields'][$k]['relation'])
+                //switch ($this->config['fields'][$k]['relation'])
+                switch ($control->config['relation'])
                 {
-
                     case self :: RELATION_HAS_ONE:
-                        $class = self :: resolveClass($formConf[$k]['model']);
-                        $relObj = $class::find($v);
-                        $relObj->setAttribute($formConf[$k]['ref_column'], $this->id);
+                        $relObj = self :: createInstance($control->config['model'], null, $v);
+                        //$class = self :: resolveClass($formConf[$k]['model']);
+                        //$relObj = $class::find($v);
+                        $relObj->setAttribute($control->config['ref_column'], $this->getKey());
                         $relObj->save();
                         break;
 
                     case self :: RELATION_HAS_MANY:
-                        $class = self :: resolveClass($formConf[$k]['model']);
+                        //$class = self :: resolveClass($formConf[$k]['model']);
                         if (is_array($v))
                         {
                             $oldIds = $this->$k()->lists('id');
-                            foreach ($v as $id) {
-
-                                $obj = $class::find($id);
+                            foreach ($v as $id)
+                            {
+                                //$obj = $class::find($id);
+                                $obj = self :: createInstance($control->config['model'], null, $id);
                                 $this->$k()->save($obj);
                             }
                             $toUnlink = array_diff($oldIds, $v);
-
                         }
                         else
                         {
@@ -55,15 +75,16 @@ trait ModelRelationTrait
                         {
                             foreach ($toUnlink as $id)
                             {
-                                if (!empty($formConf[$k]['ref_column']))
+                                if (!empty($control->config['ref_column']))
                                 {
-                                    $col = $formConf[$k]['ref_column'];
+                                    $col = $control->config['ref_column'];
                                 }
                                 else
                                 {
-                                    $col = snake_case($this->classShortName . 'Id');
+                                    $col = $this->classViewName . '_id';
                                 }
-                                $obj = $class::find($id);
+                                //$obj = $class::find($id);
+                                $obj = self :: createInstance($control->config['model'], null, $id);
                                 $obj->$col = null;
                                 $obj->save();
                             }
@@ -89,8 +110,9 @@ trait ModelRelationTrait
         $this->dirtyRelations = null;
     }//
 
-    private function createCrudRelation($relType, $relAttributes, $method)
+    private function createCrudRelation($relAttributes, $method)
     {
+        $relType = $relAttributes['relation'];
         switch ($relType)
         {
             case self::RELATION_BELONGS_TO:
@@ -169,7 +191,7 @@ trait ModelRelationTrait
     {
         if (array_key_exists($name, $this->config['fields']))
         {
-            $col = $this->getColumn($name);
+            $col = $this->getField($name);
             if (!empty($col['relation']))
             {
                 return $col;

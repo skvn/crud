@@ -180,7 +180,7 @@ class Form {
     function load($data)
     {
         $this->import($data);
-        $this->crudObj->fillFromRequest($data);
+        //$this->crudObj->fillFromRequest($data);
         $this->sync();
     }
 

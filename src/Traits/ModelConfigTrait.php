@@ -39,7 +39,7 @@ trait ModelConfigTrait
         $this->config['class_name'] = $this->classViewName;
         if (!empty($this->config['fields']))
         {
-            $form = !empty($this->config['form']) ? $this->flatFields($this->config['form'], !empty($this->config['form_tabbed'])) : [];
+//            $form = !empty($this->config['form']) ? $this->flatFields($this->config['form'], !empty($this->config['form_tabbed'])) : [];
             foreach ($this->config['fields'] as $name => $col)
             {
                 if (empty($col['field']))
@@ -58,10 +58,10 @@ trait ModelConfigTrait
 //                }
 
                 //if field in form - make it fillable or processable as relation
-                if (in_array($name, $form) || !empty($col['fillable']))
-                {
-                    $this->markFillable($name, $col);
-                }
+//                if (in_array($name, $form) || !empty($col['fillable']))
+//                {
+//                    $this->markFillable($name, $col);
+//                }
                 $this->config['fields'][$name] = $col;
             }
         }
@@ -93,64 +93,64 @@ trait ModelConfigTrait
      * @param array $name
      * @param $col
      */
-    private function markFillable($name, $col=[])
-    {
-        if (isset($col['relation']) && in_array($col['relation'], ['belongsToMany', 'hasMany', 'hasOne']))
-        {
-            if ($col['relation'] != 'hasOne')
-            {
-                $this->config['fields'][$name]['multiple'] = 1;
-            }
-            //Add multi file to fillable since it is handled by fill not by post save relations
-            if ($col['type'] != 'multi_file')
-            {
-                $this->processableRelations[$name] = $col['relation'];
-            }
-            else
-            {
-                $this->fillable[] = $name;
-            }
-            return;
-
-        }
-        else
-        {
-            if (!empty($col['fields']))
-            {
-                foreach ($col['fields'] as $f)
-                {
-                    $this->fillable[] = $f;
-                }
-            }
-            else
-            {
-                $this->fillable[] = $col['field'];
-//                if (!empty($col['name']))
+//    private function markFillable($name, $col=[])
+//    {
+//        if (isset($col['relation']) && in_array($col['relation'], ['belongsToMany', 'hasMany', 'hasOne']))
+//        {
+//            if ($col['relation'] != 'hasOne')
+//            {
+//                $this->config['fields'][$name]['multiple'] = 1;
+//            }
+//            //Add multi file to fillable since it is handled by fill not by post save relations
+//            if ($col['type'] != 'multi_file')
+//            {
+//                //$this->processableRelations[$name] = $col['relation'];
+//            }
+//            else
+//            {
+//                $this->fillable[] = $name;
+//            }
+//            return;
+//
+//        }
+//        else
+//        {
+//            if (!empty($col['fields']))
+//            {
+//                foreach ($col['fields'] as $f)
 //                {
-//                    $this->fillable[] = $col['name'];
+//                    $this->fillable[] = $f;
 //                }
-//                else
-//                {
-//                    $this->fillable[] = $name;
-//                }
-            }
-        }
+//            }
+//            else
+//            {
+//                $this->fillable[] = $col['field'];
+////                if (!empty($col['name']))
+////                {
+////                    $this->fillable[] = $col['name'];
+////                }
+////                else
+////                {
+////                    $this->fillable[] = $name;
+////                }
+//            }
+//        }
+//
+//    }
 
-    }
-
-    private function flatFields($fields, $tabbed)
-    {
-        if ($tabbed)
-        {
-            $cols = [];
-            foreach ($fields as $tab => $flist)
-            {
-                $cols = array_merge($cols, $flist);
-            }
-            return $cols;
-        }
-        return $fields;
-    }
+//    private function flatFields($fields, $tabbed)
+//    {
+//        if ($tabbed)
+//        {
+//            $cols = [];
+//            foreach ($fields as $tab => $flist)
+//            {
+//                $cols = array_merge($cols, $flist);
+//            }
+//            return $cols;
+//        }
+//        return $fields;
+//    }
 
     public function getFields($prop='')
     {
@@ -164,9 +164,9 @@ trait ModelConfigTrait
         return $this->getFields($name);
     }
 
-    public function getColumn($col)
-    {
-        return $this->config['fields'][$col] ?? null;
+//    public function getColumn($col)
+//    {
+//        return $this->config['fields'][$col] ?? null;
 //        if (!empty($this->config['fields'][$col]))
 //        {
 //            $conf =  $this->config['fields'][$col];
@@ -184,7 +184,7 @@ trait ModelConfigTrait
 //                }
 //            }
 //        }
-    }
+//    }
 
     /**
      * @param $key
@@ -374,20 +374,20 @@ trait ModelConfigTrait
             $this->config['scopes'][$this->scope] = ['title' => "Autogenerated"];
         }
         $this->config['scope'] = $this->scope;
-        if (!empty($this->config['fields']))
-        {
-            $form = !empty($this->config['scopes'][$this->scope]['form']) ? $this->flatFields($this->config['scopes'][$this->scope]['form'], !empty($this->config['scopes'][$this->scope]['form_tabbed'])) : [];
-            if (!empty($this->config['fields']))
-            {
-                foreach ($this->config['fields'] as $name => $field)
-                {
-                    if (in_array($name, $form))
-                    {
-                        $this->markFillable($name, $field);
-                    }
-                }
-            }
-        }
+//        if (!empty($this->config['fields']))
+//        {
+//            $form = !empty($this->config['scopes'][$this->scope]['form']) ? $this->flatFields($this->config['scopes'][$this->scope]['form'], !empty($this->config['scopes'][$this->scope]['form_tabbed'])) : [];
+//            if (!empty($this->config['fields']))
+//            {
+//                foreach ($this->config['fields'] as $name => $field)
+//                {
+//                    if (in_array($name, $form))
+//                    {
+//                        $this->markFillable($name, $field);
+//                    }
+//                }
+//            }
+//        }
     }
 
     function getScope()

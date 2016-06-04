@@ -145,35 +145,35 @@ abstract class CrudModel extends Model
 
     public function fillFromRequest(array $attributes)
     {
-        foreach ($attributes as $k=>$v)
-        {
-            if (array_key_exists($k, $this->processableRelations))
-            {
-                $this->dirtyRelations[$k] = $v;
-            }
-        }
+//        foreach ($attributes as $k=>$v)
+//        {
+//            if (array_key_exists($k, $this->processableRelations))
+//            {
+//                $this->dirtyRelations[$k] = $v;
+//            }
+//        }
 
-        foreach ($this->processableRelations as $k=>$v)
-        {
-            if (!array_key_exists($k,$attributes))
-            {
-               $this->dirtyRelations[$k] = null;
-            }
-        }
+//        foreach ($this->processableRelations as $k=>$v)
+//        {
+//            if (!array_key_exists($k,$attributes))
+//            {
+//               $this->dirtyRelations[$k] = null;
+//            }
+//        }
 
-        foreach ($this->config['fields'] as $col_idx => $col)
-        {
-            if (!empty($col['fields']))
-            {
-                foreach ($col['fields'] as $f)
-                {
-                    if (!empty($attributes[$f]))
-                    {
-                        $attributes[$f] = $this->getForm()->fields[$col_idx]->prepareValueForDb($attributes[$f]);
-                    }
-                }
-            }
-        }
+//        foreach ($this->config['fields'] as $col_idx => $col)
+//        {
+//            if (!empty($col['fields']))
+//            {
+//                foreach ($col['fields'] as $f)
+//                {
+//                    if (!empty($attributes[$f]))
+//                    {
+//                        $attributes[$f] = $this->getForm()->fields[$col_idx]->prepareValueForDb($attributes[$f]);
+//                    }
+//                }
+//            }
+//        }
 
         return parent::fill($attributes);
     }
@@ -225,7 +225,7 @@ abstract class CrudModel extends Model
 //                $relType =  $this->crudRelations[$method];
 //                $relAttributes = $this->getColumn($method);
 //                return $this->createCrudRelation($relType, $relAttributes, $method);
-                return $this->createCrudRelation($col['relation'], /*$this->getColumn($method)*/$col, $method);
+                return $this->createCrudRelation(/*$col['relation'], $this->getColumn($method)*/$col, $method);
             //}
 
         }
@@ -273,6 +273,11 @@ abstract class CrudModel extends Model
         if ($this->callSetters($key, $value) === true)
         {
             return;
+        }
+        $fld = $this->config['fields'][$key] ?? [];
+        if (!empty($fld['field']) && $fld['field'] !== $key)
+        {
+            return parent :: setAttribute($fld['field'], $value);
         }
         return parent :: setAttribute($key, $value);
     }

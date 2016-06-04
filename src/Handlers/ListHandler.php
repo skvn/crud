@@ -43,7 +43,7 @@ class ListHandler {
         {
             if (empty($col['title']))
             {
-                $cdesc = $this->model->getColumn($col['data']);
+                $cdesc = $this->model->getField($col['data']);
                 if (!empty($cdesc['title'])) {
                     $this->columns[$k]['title'] = $cdesc['title'];
                 }

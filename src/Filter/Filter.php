@@ -90,7 +90,7 @@ class Filter {
 
     public function initOneFilterColumn($column_name)
     {
-        if ($field_description = $this->crudObj->getColumn($column_name))
+        if ($field_description = $this->crudObj->getField($column_name))
         {
             $field_description['required'] = 0;
             if ($field_description['type'] == Form::FIELD_SELECT)

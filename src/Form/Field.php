@@ -119,7 +119,8 @@ class Field
 
     function syncValue()
     {
-        $this->model->{$this->name} = $this->prepareValueForDb($this->value);
+        $this->model->setAttribute($this->name, $this->prepareValueForDb($this->value));
+        //$this->model->{$this->name} = $this->prepareValueForDb($this->value);
     }
 
 
