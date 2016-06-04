@@ -13,7 +13,7 @@ class DateTime extends Field {
     {
         if (!$this->value)
         {
-            $this->value = $this->model->getAttribute($this->getName());
+            $this->value = $this->model->getAttribute($this->getField());
             if (!$this->value)
             {
                 if (empty($this->config['db_type']) ||$this->config['db_type'] == 'int' ) {
@@ -29,19 +29,6 @@ class DateTime extends Field {
         return $this->value;
     }
 
-    /**
-     * @return array
-     */
-    function getFilterCondition()
-    {
-        return false;
-        if (!empty($this->value)) {
-            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
-            return ['cond' => [$col, 'LIKE', '%' . $this->value . '%']];
-        }
-
-
-    }
 
     function getValueForList()
     {

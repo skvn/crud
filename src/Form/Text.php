@@ -10,7 +10,7 @@ class Text extends Field {
         {
             if (!in_array($this->getName(), $this->model->getHidden()))
             {
-                $this->value = $this->model->getAttribute($this->getName());
+                $this->value = $this->model->getAttribute($this->getField());
             }
         }
 
@@ -21,7 +21,7 @@ class Text extends Field {
     {
         if (!empty($this->value))
         {
-            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
+            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->field;
             $value = str_replace(['*', '?'], ['%', '_'], $this->value);
             if (strpos($value, "~") === 0)
             {

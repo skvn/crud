@@ -3,6 +3,7 @@
 
 class Number extends Field {
 
+    protected $filtrable = true;
 
     function getValue()
     {
@@ -10,20 +11,11 @@ class Number extends Field {
         {
             if (!in_array($this->getName(), $this->model->getHidden()))
             {
-                $this->value = $this->model->getAttribute($this->getName());
+                $this->value = $this->model->getAttribute($this->getField());
             }
         }
 
         return $this->value;
     }
 
-    function getFilterCondition()
-    {
-        if (!empty($this->value)) {
-            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
-            return ['cond' => [$col, '=',  $this->value ]];
-        }
-
-
-    }
-} 
+}

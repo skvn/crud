@@ -9,9 +9,6 @@ use Skvn\Crud\Traits\ModelFormTrait;
 
 use Illuminate\Container\Container;
 
-
-
-
 abstract class CrudModel extends Model
 {
     use ModelInjectTrait;
@@ -22,15 +19,14 @@ abstract class CrudModel extends Model
 
     //use SoftDeletingTrait;
 
-
     const RELATION_BELONGS_TO_MANY = 'belongsToMany';
     const RELATION_BELONGS_TO = 'belongsTo';
     const RELATION_HAS_MANY = 'hasMany';
     const RELATION_HAS_ONE = 'hasOne';
 
     const DEFAULT_SCOPE = 'default';
-
-
+    const CREATED_BY = "created_by";
+    const UPDATED_BY = "updated_by";
 
 
     protected $app;
@@ -42,8 +38,6 @@ abstract class CrudModel extends Model
     protected $validator;
 
 
-
-
     public function __construct(array $attributes = array(), $validator = null)
     {
         $this->app = Container :: getInstance();
@@ -53,9 +47,7 @@ abstract class CrudModel extends Model
         parent::__construct($attributes);
         $this->postconstruct();
 
-
         $this->validator = $validator ?: $this->app['validator'];
-
     }
 
     static function resolveClass($model)
@@ -81,55 +73,15 @@ abstract class CrudModel extends Model
         return $obj;
     }
 
-
-    public static function boot()
-    {
-        parent::boot();
-        static::bootCrud();
-    }
-
-    public static function bootCrud()
-    {
-        static::saved(function($instance) {
-
-            return $instance->onAfterSave();
-        });
-        static::saving(function($instance)
-        {
-            return $instance->onBeforeSave();
-        });
-
-        static::creating(function($instance)
-        {
-            return $instance->onBeforeCreate();
-        });
-
-        static::created(function($instance)
-        {
-            return $instance->onAfterCreate();
-        });
-
-        static::deleting(function($instance)
-        {
-            return $instance->onBeforeDelete();
-        });
-
-        static::deleted(function($instance)
-        {
-            return $instance->onAfterDelete();
-        });
-    }
-
     protected  function onBeforeCreate()
     {
         if ($this->track_authors && $this->app['auth']->check())
         {
-            $this->created_by = $this->app['auth']->user()->id;
+            $this->{static :: CREATED_BY} = $this->app['auth']->user()->id;
         }
 
         return true;
     }
-
 
     protected  function onAfterCreate()
     {
@@ -140,7 +92,6 @@ abstract class CrudModel extends Model
     {
         return true;
     }
-
 
     protected  function onAfterDelete()
     {
@@ -173,15 +124,12 @@ abstract class CrudModel extends Model
                     }
                 }
             }
-
             if ($this->track_authors && $this->app['auth']->check())
             {
-                $this->updated_by = $this->app['auth']->user()->id;
+                $this->{static :: UPDATED_BY} = $this->app['auth']->user()->id;
             }
-
             return true;
         }
-
         return false;
     }
 
@@ -195,11 +143,8 @@ abstract class CrudModel extends Model
         return $this->app;
     }
 
-
-
     public function fillFromRequest(array $attributes)
     {
-        
         foreach ($attributes as $k=>$v)
         {
             if (array_key_exists($k, $this->processableRelations))
@@ -215,7 +160,6 @@ abstract class CrudModel extends Model
                $this->dirtyRelations[$k] = null;
             }
         }
-
 
         foreach ($this->config['fields'] as $col_idx => $col)
         {
@@ -234,11 +178,8 @@ abstract class CrudModel extends Model
         return parent::fill($attributes);
     }
 
-
-
     public function setCreatedAtAttribute($value)
     {
-
         $type = $this->confParam('timestamps_type');
         if (!$type || $type == 'int')
         {
@@ -251,7 +192,6 @@ abstract class CrudModel extends Model
                 $value = strtotime($value);
             }
         }
-
         $this->attributes['created_at'] = $value;
     }
 
@@ -269,23 +209,24 @@ abstract class CrudModel extends Model
                 $value = strtotime($value);
             }
         }
-
         $this->attributes['updated_at'] = $value;
     }
-
-
-
-
 
     public function __call($method, $parameters)
     {
         //var_dump("__call");
-        if (array_key_exists($method, $this->crudRelations))
+        //if (array_key_exists($method, $this->crudRelations))
+        //if (array_key_exists($method, $this->config['fields']))
+        if ($col = $this->getCrudRelation($method))
         {
-            $relType =  $this->crudRelations[$method];
-            $relAttributes = $this->getColumn($method);
-
-            return $this->createCrudRelation($relType, $relAttributes, $method);
+            //$col = $this->config['fields'][$method];
+            //if (!empty($col['relation']))
+            //{
+//                $relType =  $this->crudRelations[$method];
+//                $relAttributes = $this->getColumn($method);
+//                return $this->createCrudRelation($relType, $relAttributes, $method);
+                return $this->createCrudRelation($col['relation'], /*$this->getColumn($method)*/$col, $method);
+            //}
 
         }
         return parent::__call($method, $parameters);
@@ -293,7 +234,8 @@ abstract class CrudModel extends Model
 
     function __isset($key)
     {
-        if (!empty($this->config['fields'][$key]['fields']))
+        $col = $this->config['fields'][$key] ?? [];
+        if (!empty($col['fields']))
         {
             foreach ($this->config['fields'][$key]['fields'] as $f)
             {
@@ -303,50 +245,43 @@ abstract class CrudModel extends Model
                 }
             }
         }
+        if (!empty($col['field']) && $col['field'] !== $key)
+        {
+            return parent :: __isset($col['field']);
+        }
         return parent :: __isset($key);
     }
 
     public function getAttribute($key)
     {
         //var_dump("getAttribute");
-        if (array_key_exists($key, $this->crudRelations))
+        if ($this->getCrudRelation($key))
+        //if (array_key_exists($key, $this->crudRelations))
         {
             if ( ! array_key_exists($key, $this->relations))
             {
                 $camelKey = camel_case($key);
-
                 return $this->getRelationshipFromMethod($key, $camelKey);
             }
         }
-//        if (method_exists($this, 'hasAttach') && $this->hasAttach($key))
-//        {
-//            return $this->getAttach($key);
-//        }
-//        $method = camel_case("attr_" . $key);
-//        if (method_exists($this, $method))
-//        {
-//            return $this->$method();
-//        }
-
 
         return parent::getAttribute($key);
     }
 
-//    public function setAttribute($key, $value)
-//    {
-//        //var_dump("setAttribute");
-//        return parent :: setAttribute($key, $value);
-//    }
-
-
-
+    function setAttribute($key, $value)
+    {
+        if ($this->callSetters($key, $value) === true)
+        {
+            return;
+        }
+        return parent :: setAttribute($key, $value);
+    }
 
     function getTitle()
     {
         $param = $this->confParam('title_field', 'title');
         return $this->getAttribute($param);
     }
-
 
     function checkAcl($access = "")
     {
@@ -362,10 +297,8 @@ abstract class CrudModel extends Model
         return $this->attributes[$this->codeColumn];
     }
 
-
     public function validate()
     {
-
         $v = $this->validator->make($this->attributes, static::$rules, static::$messages);
         if ($v->passes())
         {
@@ -374,7 +307,6 @@ abstract class CrudModel extends Model
         $this->setErrors($v->messages());
         return false;
     }
-
 
     protected function setErrors($errors)
     {
@@ -386,32 +318,14 @@ abstract class CrudModel extends Model
         return $this->errors;
     }
 
-
     public function hasErrors()
     {
         return ! empty($this->errors);
     }
 
-
-//    function offsetExists($offset)
-//    {
-//        return parent :: offsetExists($offset);
-//    }
-//
-//    function offsetGet($offset)
-//    {
-//        return parent :: offsetGet($offset);
-//    }
-
-//    public function __get($key)
-//    {
-//        return parent :: __get($key);
-//    }
-
     function getViewRefAttribute()
     {
         $id = ($this->id?$this->id:-1);
-
         return $this->classViewName . "_" . $this->scope . "_" . $id;
     }
 
@@ -496,6 +410,20 @@ abstract class CrudModel extends Model
             }
         }
         return $flist;
+    }
+
+    function guessNewKey()
+    {
+        if (empty($this->guessed_id))
+        {
+            $this->guessed_id = $this->app['db']->table($this->getTable())->max($this->getKeyName())+1;
+        }
+        return $this->guessed_id;
+    }
+
+    function getParentInstanceId()
+    {
+        return 0;
     }
 
 

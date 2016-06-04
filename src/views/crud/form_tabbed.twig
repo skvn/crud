@@ -16,7 +16,7 @@
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
     <ul class="nav nav-tabs">
         {% set active=0 %}
-        {% for tab_id,tab_info in crudObj.confParam('tabs') %}
+        {% for tab_id,tab_info in crudForm.tabs %}
             {% if tab_info.acl|allowed('r') %}
                 <li class="{{ active == 0 ? 'active' }}"><a href="#{{ tab_id }}" data-toggle="tab">{{ tab_info.title }}</a></li>
                 {% set active = 1 %}
@@ -25,11 +25,11 @@
     </ul>
     <div class="tab-content">
         {% set active = 0 %}
-        {% for tab_id,tab_info in crudObj.confParam('tabs') %}
+        {% for tab_id,tab_info in crudForm.tabs %}
             {% if tab_info.acl|allowed('r') %}
                 <div class="tab-pane {{ active == 0 ? 'active' }}" id="{{ tab_id }}">
                     <fieldset style="padding-bottom: 20px; padding-top: 20px;">
-                        {% for input in  crudObj.getForm().fields %}
+                        {% for input in  crudForm.fields %}
                             {% if input.config.tab == tab_id %}
                                     {% include 'crud::crud/fields/line_wrap.twig' %}
                             {% endif %}

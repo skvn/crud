@@ -14,7 +14,7 @@ class Select extends Field {
         {
             if (!in_array($this->getName(), $this->model->getHidden()))
             {
-                $this->value = $this->model->getAttribute($this->getName());
+                $this->value = $this->model->getAttribute($this->getField());
             }
         }
 
@@ -24,13 +24,21 @@ class Select extends Field {
     function getValueForList()
     {
         $v = $this->getValue();
-        if (!empty($this->config['select_options']))
+        $olist = $this->getOptions();
+        foreach ($olist as $o)
         {
-            if (isset($this->config['select_options'][$v]))
+            if ($o['value'] == $v)
             {
-                return is_array($this->config['select_options'][$v]) ? $this->config['select_options'][$v]['caption'] : $this->config['select_options'][$v];
+                return $o['text'];
             }
         }
+//        if (!empty($this->config['select_options']))
+//        {
+//            if (isset($this->config['select_options'][$v]))
+//            {
+//                return is_array($this->config['select_options'][$v]) ? $this->config['select_options'][$v]['caption'] : $this->config['select_options'][$v];
+//            }
+//        }
         return $v;
     }
 
@@ -75,7 +83,7 @@ class Select extends Field {
         $opts = [];
         if (!empty($this->config['method_options']))
         {
-            $this->value = $this->model->getAttribute($this->getName());
+            $this->value = $this->model->getAttribute($this->getField());
             $opts = [];
             $method = $this->config['method_options'];
             if (method_exists($this->model, $method))
@@ -172,7 +180,7 @@ class Select extends Field {
             }
             else
             {
-                $this->value = $this->model->getAttribute($this->getName());
+                $this->value = $this->model->getAttribute($this->getField());
             }
         }
 

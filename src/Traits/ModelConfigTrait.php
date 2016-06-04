@@ -42,33 +42,35 @@ trait ModelConfigTrait
             $form = !empty($this->config['form']) ? $this->flatFields($this->config['form'], !empty($this->config['form_tabbed'])) : [];
             foreach ($this->config['fields'] as $name => $col)
             {
-
+                if (empty($col['field']))
+                {
+                    $col['field'] = $name;
+                }
                 if (!empty($col['hint_default']) && !empty($col['hint']) &&  $col['hint'] === 'auto')
                 {
-                    $this->config['fields'][$name]['hint'] = $this->classShortName.'_fields_'.$name;
+                    $col['hint'] = $this->classShortName.'_fields_'.$name;
                 }
                 //fill relations
-                if (isset($col['relation']))
-                {
-                    $rel_name = !empty($this->config['fields'][$name]['relation_name']) ? $this->config['fields'][$name]['relation_name'] : $name;
-                    $this->crudRelations[$rel_name] = $col['relation'];
-                }
+//                if (isset($col['relation']))
+//                {
+//                    $rel_name = !empty($this->config['fields'][$name]['relation_name']) ? $this->config['fields'][$name]['relation_name'] : $name;
+//                    $this->crudRelations[$rel_name] = $col['relation'];
+//                }
 
                 //if field in form - make it fillable or processable as relation
                 if (in_array($name, $form) || !empty($col['fillable']))
                 {
                     $this->markFillable($name, $col);
                 }
+                $this->config['fields'][$name] = $col;
             }
         }
 
         if (empty($this->table))
         {
-            $this->table = isset($this->config['table']) ? $this->config['table'] : $this->classViewName;
+            $this->table = $this->config['table'] ?? $this->classViewName;
         }
-
-        $this->timestamps = isset($this->config['timestamps']) ? $this->config['timestamps'] : false;
-
+        $this->timestamps = $this->config['timestamps'] ?? false;
         if (isset($this->config['authors']))
         {
             $this->track_authors = $this->config['authors'];
@@ -76,19 +78,12 @@ trait ModelConfigTrait
 
         if ($this->isTree())
         {
-//            $this->fillable[] = $this->columnTreePid;
-//            $this->fillable[] = $this->columnTreeOrder;
-//            $this->fillable[] = $this->columnTreePath ;
-//            $this->fillable[] = $this->columnTreeDepth;
             $this->fillable[] = $this->config['tree']['pid_column'];
             $this->fillable[] = $this->config['tree']['order_column'];
             $this->fillable[] = $this->config['tree']['path_column'] ;
             $this->fillable[] = $this->config['tree']['depth_column'];
         }
-
         $this->config['file_params'] = [];
-
-
     }
 
 
@@ -129,14 +124,15 @@ trait ModelConfigTrait
             }
             else
             {
-                if (!empty($col['name']))
-                {
-                    $this->fillable[] = $col['name'];
-                }
-                else
-                {
-                    $this->fillable[] = $name;
-                }
+                $this->fillable[] = $col['field'];
+//                if (!empty($col['name']))
+//                {
+//                    $this->fillable[] = $col['name'];
+//                }
+//                else
+//                {
+//                    $this->fillable[] = $name;
+//                }
             }
         }
 
@@ -170,23 +166,24 @@ trait ModelConfigTrait
 
     public function getColumn($col)
     {
-        if (!empty($this->config['fields'][$col]))
-        {
-            $conf =  $this->config['fields'][$col];
-            $conf['column_index'] = $col;
-            return $conf;
-        }
-        else
-        {
-            foreach ($this->config['fields'] as $col_name => $conf)
-            {
-                if (!empty($conf['relation_name']) &&  $conf['relation_name'] == $col)
-                {
-                    $conf['column_index'] = $col_name;
-                    return $conf;
-                }
-            }
-        }
+        return $this->config['fields'][$col] ?? null;
+//        if (!empty($this->config['fields'][$col]))
+//        {
+//            $conf =  $this->config['fields'][$col];
+//            $conf['column_index'] = $col;
+//            return $conf;
+//        }
+//        else
+//        {
+//            foreach ($this->config['fields'] as $col_name => $conf)
+//            {
+//                if (!empty($conf['relation_name']) &&  $conf['relation_name'] == $col)
+//                {
+//                    $conf['column_index'] = $col_name;
+//                    return $conf;
+//                }
+//            }
+//        }
     }
 
     /**
@@ -456,29 +453,13 @@ trait ModelConfigTrait
         return in_array($column, $this->list_prefs['columns']);
     }
 
-    function isManyRelation($relation)
-    {
-        return in_array($relation, ['hasMany','belongsToMany', 'morphToMany', 'morphedByMany']);
-    }
 
-    function guessNewKey()
-    {
-        if (empty($this->guessed_id))
-        {
-            $this->guessed_id = $this->app['db']->table($this->getTable())->max($this->getKeyName())+1;
-        }
-        return $this->guessed_id;
-    }
 
     static function fileParams()
     {
         return [];
     }
 
-    function getParentInstanceId()
-    {
-        return 0;
-    }
 
     function getFilesConfig($name, $param = null)
     {

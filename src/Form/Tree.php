@@ -19,7 +19,7 @@ class Tree extends Field {
                     $this->value = $this->$relation->id;
 
                 } else {
-                    $this->value = $this->model->getAttribute($this->getName());
+                    $this->value = $this->model->getAttribute($this->getField());
                 }
             }
         }

@@ -11,13 +11,16 @@ class Field
     protected $value = null;
     public $model;
     public $name;
+    protected $field;
     protected $uniqid;
+    protected $filtrable = false;
 
     function __construct(CrudModel $model, $config)
     {
         $this->config = $config;
         $this->model = $model;
         $this->name = $config['name'];
+        $this->field = $config['field'];
 
         if (!$this->validateConfig())
         {
@@ -35,8 +38,17 @@ class Field
 
     function getFilterCondition()
     {
-        return false;
+        if (!$this->filtrable)
+        {
+            return false;
+        }
+        if (!empty($this->value)) {
+            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->field;
+            return ['cond' => [$col, '=',  $this->value ]];
+        }
     }
+
+
 
     function  getUniqueId()
     {
@@ -64,6 +76,11 @@ class Field
     function getName()
     {
         return $this->name;
+    }
+
+    function getField()
+    {
+        return $this->field;
     }
 
     function getConfig(){

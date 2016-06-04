@@ -64,7 +64,7 @@ class Range extends Field
         if (!empty($this->value))
         {
             $split = explode('~',$this->value);
-            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->config['column'];
+            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->field;
             if ($split[0] != '' && $split[1] != '')
             {
                 return ['cond' => [$col, 'BETWEEN', $split]];

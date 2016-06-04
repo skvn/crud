@@ -1,5 +1,5 @@
 {% include 'crud::crud/fields/label.twig' %}
-<select  data-widget="crud_select" data-default="{{ input.config.default }}" data-grouped="{{ input.isGrouped?'1':'0' }}" class="form-control" data-placeholder="-- Выберите"  {{ input.config.required ? 'required' }} name="{{ input.name }}{{input.config.multiple?'[]'}}" {{ input.config.multiple ? 'multiple' }} >
+<select  data-widget="crud_select" data-default="{{ input.config.default }}" data-grouped="{{ input.isGrouped?'1':'0' }}" class="form-control" data-placeholder="-- Выберите"  {{ input.config.required ? 'required' }} name="{{ input.field }}{{input.config.multiple?'[]'}}" {{ input.config.multiple ? 'multiple' }} >
 
 {% if input.isGrouped %}
     {% for gr in input.getOptions() %}

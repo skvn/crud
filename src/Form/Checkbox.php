@@ -3,24 +3,17 @@
 
 class Checkbox extends Field {
 
+    protected $filtrable = true;
+
 
     function getValue()
     {
         if ($this->value === null)
         {
-            $this->value = $this->model->getAttribute($this->getName());
+            $this->value = $this->model->getAttribute($this->getField());
         }
 
         return $this->value;
     }
 
-    function getFilterCondition()
-    {
-        if (!empty($this->value)) {
-            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
-            return ['cond' => [$col, '=',  $this->value]];
-        }
-
-
-    }
-} 
+}

@@ -13,7 +13,7 @@ class Date extends Field {
     {
         if (is_null($this->value))
         {
-            $this->value = $this->model->getAttribute($this->getName());
+            $this->value = $this->model->getAttribute($this->getField());
             if (!$this->value)
             {
                 if ($this->isInt())
@@ -47,19 +47,6 @@ class Date extends Field {
     }
 
 
-    /**
-     * @return array
-     */
-    function getFilterCondition()
-    {
-        return false;
-        if (!empty($this->value)) {
-            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
-            return ['cond' => [$col, 'LIKE', '%' . $this->value . '%']];
-        }
-
-
-    }
 
     function  getValueForDb()
     {

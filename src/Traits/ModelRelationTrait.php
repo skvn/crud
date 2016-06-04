@@ -5,7 +5,7 @@ trait ModelRelationTrait
 {
 
     protected $dirtyRelations = [];
-    protected $crudRelations = [];
+    //protected $crudRelations = [];
     protected $processableRelations = [];
 
     public function saveRelations()
@@ -22,7 +22,8 @@ trait ModelRelationTrait
                     $v = $form->fields[$k]->getValueForDb();
                 }
 
-                switch ($this->crudRelations[$k])
+                //switch ($this->crudRelations[$k])
+                switch ($this->config['fields'][$k]['relation'])
                 {
 
                     case self :: RELATION_HAS_ONE:
@@ -94,7 +95,7 @@ trait ModelRelationTrait
         {
             case self::RELATION_BELONGS_TO:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],$relAttributes['column_index'], null, $method);
-                return $this->$relType(self :: resolveClass($relAttributes['model']), $relAttributes['column_index'], null, $method);
+                return $this->$relType(self :: resolveClass($relAttributes['model']), $relAttributes['field'], null, $method);
                 break;
 
             case self::RELATION_HAS_ONE:
@@ -159,5 +160,22 @@ trait ModelRelationTrait
         return $data;
     }
 
+    function isManyRelation($relation)
+    {
+        return in_array($relation, ['hasMany','belongsToMany', 'morphToMany', 'morphedByMany']);
+    }
+
+    function getCrudRelation($name)
+    {
+        if (array_key_exists($name, $this->config['fields']))
+        {
+            $col = $this->getColumn($name);
+            if (!empty($col['relation']))
+            {
+                return $col;
+            }
+        }
+        return false;
+    }
 
 }

@@ -8,7 +8,7 @@ class File extends Field {
     {
         if (!$this->value)
         {
-            if ($this->model->getAttribute($this->getName()))
+            if ($this->model->getAttribute($this->getField()))
             {
                 $this->value = $this->model->getAttach($this->getName());
             }
@@ -17,8 +17,4 @@ class File extends Field {
         return $this->value;
     }
 
-    function getFilterCondition()
-    {
-        return false;
-    }
-} 
+}

@@ -8,7 +8,7 @@ class TextArea extends Field {
     {
         if (!$this->value)
         {
-            $this->value = $this->model->getAttribute($this->getName());
+            $this->value = $this->model->getAttribute($this->getField());
         }
 
         return $this->value;
@@ -17,7 +17,7 @@ class TextArea extends Field {
     function getFilterCondition()
     {
         if (!empty($this->value)) {
-            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->name;
+            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->field;
             return ['cond' => [$col, 'LIKE', '%' . $this->value . '%']];
         }
 

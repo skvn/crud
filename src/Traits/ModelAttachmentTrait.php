@@ -31,6 +31,7 @@ trait ModelAttachmentTrait {
                 if (!empty($field['type']) && in_array($field['type'], [Form :: FIELD_FILE, Form :: FIELD_IMAGE]))
                 {
                     $this->setAttach($name, $field);
+                    $this->fillable[] = $name;
                 }
             }
         }
@@ -48,6 +49,10 @@ trait ModelAttachmentTrait {
 
         static::registerPostconstruct(function($instance){
             $instance->attachAppendConfig();
+        });
+
+        static::registerSetter(function ($instance, $key, $value){
+            return $instance->attachSetAttribute($key, $value);
         });
 
         static::deleting(function($instance) {
@@ -72,14 +77,14 @@ trait ModelAttachmentTrait {
     }
 
 
-    public function setAttribute($key, $value)
+    public function attachSetAttribute($key, $value)
     {
         if (array_key_exists($key, $this->attachedFiles) )
         {
             //don't delete  when file is not altered
             if ($value === '')
             {
-                return;
+                return true;
             }
             //Numeric value means we are back from handler and file ID is assigned
             //ObjectCollection means the model is filled with default values
@@ -89,10 +94,10 @@ trait ModelAttachmentTrait {
             )
             {
                 $this->processAttaches[$key] = $value;
-                return;
+                return true;
             }
         }
-        parent::setAttribute($key, $value);
+//        parent::setAttribute($key, $value);
     }
 
 //    function getAttribute($key)
@@ -122,7 +127,7 @@ trait ModelAttachmentTrait {
         {
             $deleted = $this->getAttach($args['field'])->delete();
             //$attrValue = $this->getAttribute($args['field']);
-            $this->setAttribute($args['field'],0);
+            $this->setAttribute($this->attachedFiles[$args['field']]->getOption('field'),0);
             $this->save();
             return $deleted;
         }

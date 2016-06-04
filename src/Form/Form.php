@@ -89,6 +89,7 @@ class Form {
      * @var
      */
     public $fields = [];
+    public $tabs = [];
 
     public $customProperties;
     //public $visibleFields;
@@ -115,6 +116,10 @@ class Form {
         {
             $this->import($args['data']);
         }
+        if (!empty($args['tabs']))
+        {
+            $this->setTabs($args['tabs']);
+        }
     }//
 
     static function create($args = [])
@@ -124,10 +129,6 @@ class Form {
 
     function addField($name, $config)
     {
-        if (empty($config['column']))
-        {
-            $config['column'] = $name;
-        }
         if (empty($config['name']))
         {
             $config['name'] = $name;
@@ -158,6 +159,12 @@ class Form {
     function setCustomProperties($props)
     {
         $this->customProperties = $props;
+        return $this;
+    }
+
+    function setTabs($tabs)
+    {
+        $this->tabs = $tabs;
         return $this;
     }
 

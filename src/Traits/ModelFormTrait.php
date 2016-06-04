@@ -73,6 +73,7 @@ trait ModelFormTrait
             $this->form = Form :: create([
                 'crudObj' => $this,
                 'config' => $this->getFormConfig(),
+                'tabs' => $this->confParam('tabs'),
                 'data' => !empty($config['fillData'])?$config['fillData']:null,
                 'props' => $config
             ]);
