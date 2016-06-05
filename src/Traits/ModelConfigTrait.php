@@ -268,7 +268,14 @@ trait ModelConfigTrait
             }
             else
             {
-                $value = $this->$rel->$attr;
+                try
+                {
+                    $value = $this->$rel->$attr;
+                }
+                catch (\Exception $e)
+                {
+                    $value = "(not found)";
+                }
             }
         }
         else
