@@ -76,13 +76,13 @@ trait ModelConfigTrait
             $this->track_authors = $this->config['authors'];
         }
 
-        if ($this->isTree())
-        {
-            $this->fillable[] = $this->config['tree']['pid_column'];
-            $this->fillable[] = $this->config['tree']['order_column'];
-            $this->fillable[] = $this->config['tree']['path_column'] ;
-            $this->fillable[] = $this->config['tree']['depth_column'];
-        }
+//        if ($this->isTree())
+//        {
+//            $this->fillable[] = $this->config['tree']['pid_column'];
+//            $this->fillable[] = $this->config['tree']['order_column'];
+//            $this->fillable[] = $this->config['tree']['path_column'] ;
+//            $this->fillable[] = $this->config['tree']['depth_column'];
+//        }
         $this->config['file_params'] = [];
     }
 
@@ -213,47 +213,6 @@ trait ModelConfigTrait
                 return $this->confParam($original_key, $default, false);
             }
             return $val;
-        }
-    }
-
-
-    public function getFormConfig($prop='')
-    {
-        $form = null;
-        $form =  $this->confParam('form');
-        $tabbed = $this->confParam('form_tabbed');
-        $form_array = [];
-        $fields = $this->getFields();
-
-        if (is_array($form))
-        {
-            if ($tabbed)
-            {
-                foreach ($form as $tab_alias=>$field_set) {
-                    foreach ($field_set as $fname)
-                    {
-                        $form_array[$fname] = $fields[$fname];
-                        $form_array[$fname]['tab'] = $tab_alias;
-                    }
-
-                }
-
-            } else {
-
-                foreach ($form as $fname) {
-                    $form_array[$fname] = $fields[$fname];
-                }
-            }
-
-        }
-
-        if (empty($prop))
-        {
-            return $form_array;
-        }
-        else
-        {
-            return $form_array[$prop];
         }
     }
 

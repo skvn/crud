@@ -419,11 +419,11 @@ trait TreeTrait  {
         if ($this->id == $this->rootId())
         {
             // no tree actions on root
-            $this->fill($input);
+            //$this->fill($input);
             return $this->save();
         }
 
-        $treeAction = (!empty($input['tree_action'])?$input['tree_action']:'');
+        $treeAction = $input['tree_action'] ?? '';
 
         $oldParent = $this->getAttribute($this->getColumnTreePid());
         if (!isset($input[$this->getColumnTreePid()]))
@@ -437,13 +437,12 @@ trait TreeTrait  {
             $parent = $this->rootId();
         }
 
+        //$this->fillFromRequest($input);
         if (!$this->exists)
         {
-            $this->fillFromRequest($input);
             $this->moveTreeAction($parent,-1);
         } else {
 
-            $this->fillFromRequest($input);
             if ($oldParent == $parent)
             {
                 $this->save();

@@ -86,11 +86,17 @@ trait ModelInjectTrait {
         });
         static::saving(function($instance)
         {
-            return $instance->onBeforeSave();
+            if ($instance->validate())
+            {
+                $instance->crudHandleTrackAuthors("update");
+                return $instance->onBeforeSave();
+            }
+            return false;
         });
 
         static::creating(function($instance)
         {
+            $instance->crudHandleTrackAuthors("create");
             return $instance->onBeforeCreate();
         });
 
@@ -110,6 +116,47 @@ trait ModelInjectTrait {
         });
     }
 
+    protected  function onBeforeCreate()
+    {
+        return true;
+    }
+
+
+    protected  function onAfterCreate()
+    {
+        return true;
+    }
+
+    protected  function onBeforeSave()
+    {
+        return true;
+    }
+
+    protected  function onAfterSave()
+    {
+        return true;
+    }
+
+    protected  function onBeforeDelete()
+    {
+        return true;
+    }
+
+    protected  function onAfterDelete()
+    {
+        return true;
+    }
+
+
+    protected function crudHandleTrackAuthors($op)
+    {
+        $prop = $op == "create" ? static :: CREATED_BY : static :: UPDATED_BY;
+        if ($this->track_authors && $this->app['auth']->check())
+        {
+            $this->$prop = $this->app['auth']->user()->id;
+        }
+
+    }
 
 
 }

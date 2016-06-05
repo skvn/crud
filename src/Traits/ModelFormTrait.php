@@ -69,7 +69,6 @@ trait ModelFormTrait
     {
         if (!empty($config['forceNew']) || !$this->form)
         {
-            //$this->form = new Form($this,$this->getFormConfig(), !empty($config['fillData'])?$config['fillData']:null, $config);
             $this->form = Form :: create([
                 'crudObj' => $this,
                 'config' => $this->getFormConfig(),
@@ -86,6 +85,39 @@ trait ModelFormTrait
     {
         $this->form = $form;
     }
+
+    public function getFormConfig()
+    {
+        $form =  $this->confParam('form');
+        $tabbed = $this->confParam('form_tabbed');
+        $form_array = [];
+        $fields = $this->getFields();
+
+        if (is_array($form))
+        {
+            if ($tabbed)
+            {
+                foreach ($form as $tab_alias=>$field_set)
+                {
+                    foreach ($field_set as $fname)
+                    {
+                        $form_array[$fname] = $fields[$fname];
+                        $form_array[$fname]['tab'] = $tab_alias;
+                    }
+                }
+
+            } else {
+
+                foreach ($form as $fname) {
+                    $form_array[$fname] = $fields[$fname];
+                }
+            }
+
+        }
+
+        return $form_array;
+    }
+
 
      
     public function getFieldsObjects($fillData=null)

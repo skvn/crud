@@ -115,12 +115,12 @@ class CrudController extends Controller
             $obj = CrudModel :: createInstance($model, $this->request->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
             $form = $obj->getForm();
 
+            $form->load($this->request->all());
             if ($obj->isTree())
             {
                 $obj->saveTree($this->request->all());
             } else {
                 //$obj->fillFromRequest($this->request->all());
-                $form->load($this->request->all());
 
                 if (!$obj->save())
                 {

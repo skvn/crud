@@ -73,78 +73,47 @@ abstract class CrudModel extends Model
         return $obj;
     }
 
-    protected  function onBeforeCreate()
-    {
-        if ($this->track_authors && $this->app['auth']->check())
-        {
-            $this->{static :: CREATED_BY} = $this->app['auth']->user()->id;
-        }
 
-        return true;
-    }
 
-    protected  function onAfterCreate()
-    {
-        return true;
-    }
+//    protected  function onBeforeSave()
+//    {
+//        if ($this->validate())
+//        {
+//            $dirty = $this->getDirty();
+//
+//            //process dirty attributes
+//            if (count($dirty))
+//            {
+//                $this->getForm(['fillData'=>$dirty,'forceNew' => true]);
+//                if (!empty($this->form->fields) && is_array($this->form->fields))
+//                {
+//                    foreach ($dirty as $k => $v)
+//                    {
+//                        if (isset($this->form->fields[$k]))
+//                        {
+//                            $field = $this->form->fields[$k];
+//                            $val = $field->getValueForDb();
+//                            if ($val !== $v)
+//                            {
+//                                $this->setAttribute($k, $val);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
 
-    protected  function onBeforeDelete()
-    {
-        return true;
-    }
-
-    protected  function onAfterDelete()
-    {
-        return true;
-    }
-
-    protected  function onBeforeSave()
-    {
-        if ($this->validate())
-        {
-            $dirty = $this->getDirty();
-
-            //process dirty attributes
-            if (count($dirty))
-            {
-                $this->getForm(['fillData'=>$dirty,'forceNew' => true]);
-                if (!empty($this->form->fields) && is_array($this->form->fields))
-                {
-                    foreach ($dirty as $k => $v)
-                    {
-                        if (isset($this->form->fields[$k]))
-                        {
-                            $field = $this->form->fields[$k];
-                            $val = $field->getValueForDb();
-                            if ($val !== $v)
-                            {
-                                $this->setAttribute($k, $val);
-                            }
-                        }
-                    }
-                }
-            }
-            if ($this->track_authors && $this->app['auth']->check())
-            {
-                $this->{static :: UPDATED_BY} = $this->app['auth']->user()->id;
-            }
-            return true;
-        }
-        return false;
-    }
-
-    protected  function onAfterSave()
-    {
-        return $this->saveRelations();
-    }
 
     function getApp()
     {
         return $this->app;
     }
 
-    public function fillFromRequest(array $attributes)
-    {
+//    public function fillFromRequest(array $attributes)
+//    {
 //        foreach ($attributes as $k=>$v)
 //        {
 //            if (array_key_exists($k, $this->processableRelations))
@@ -175,8 +144,8 @@ abstract class CrudModel extends Model
 //            }
 //        }
 
-        return parent::fill($attributes);
-    }
+//        return parent::fill($attributes);
+//    }
 
     public function setCreatedAtAttribute($value)
     {

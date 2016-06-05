@@ -13,6 +13,10 @@ trait ModelRelationTrait
         static :: registerSetter(function ($instance, $key, $value){
             return $instance->relationSetValue($key, $value);
         });
+
+        static :: saved(function ($instance){
+            $instance->saveRelations();
+        });
     }
 
     protected function relationSetValue($key, $value)

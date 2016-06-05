@@ -25,29 +25,6 @@ class CrudHelper {
 
     }
 
-//    public  function prepareCollectionRaw($coll, $columns)
-//    {
-//
-//        $data = [];
-//        $coll = $coll->get();
-//        foreach ($coll as $obj)
-//        {
-//            $row = [];
-//
-//            foreach ($columns as $col)
-//            {
-//                $row[$col['data']] = '';
-//                $row[$col['data']] = strip_tags(preg_replace('#\<sup.+</sup>#Us', '', $obj->getDescribedColumnValue($col['data'])));
-//
-//            }
-//            $data[] = $row;
-//        }
-//
-//        return $data;
-//    }//
-
-
-
     function sortArray( $data, $field )
     {
         $field = (array) $field;
