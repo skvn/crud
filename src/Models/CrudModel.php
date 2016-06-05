@@ -61,7 +61,7 @@ abstract class CrudModel extends Model
         $class = static :: resolveClass($model);
         if (!empty($id))
         {
-            $obj = $class::firstOrNew(['id'=>(int)$id]);
+            $obj = $class::findOrNew((int)$id);
         }
         else
         {

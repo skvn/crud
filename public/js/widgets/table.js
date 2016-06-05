@@ -81,6 +81,15 @@
                                     if (actions[i]['command'])
                                     {
                                         var com_url = crud.format_setting("model_command_url", {command:actions[i]['command'],id:rowData.id, model:tbl.data('crud_table'), scope:tbl.data('crud_scope')} );
+                                        if (actions[i]['params'])
+                                        {
+                                            var add = actions[i]['params'];
+                                            for (var n in rowData)
+                                            {
+                                                add = add.replace('%'+n, rowData[n]);
+                                            }
+                                            com_url = com_url + '&' +add;
+                                        }
                                         buttons += '<li><a href="'+com_url+'" data-click="crud_action" data-action="crud_command" '+ (actions[i]['confirm'] ? 'data-confirm="'+actions[i]['confirm']+'"' : '') +'>';
                                     } else if (actions[i]['event'])
                                     {
