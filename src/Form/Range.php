@@ -109,22 +109,28 @@ class Range extends Field
         }
         else
         {
-            if (isset($data[$this->name . '_from']) || isset ($data[$this->name . '_to']))
+            if (isset($data[$this->getFromFieldName()]) || isset ($data[$this->getToFieldName()]))
             {
                 $from = 0;
                 $to = 0;
-                if (isset($data[$this->name . '_from']))
+                if (isset($data[$this->getFromFieldName()]))
                 {
-                    $from = $data[$this->name . '_from'];
+                    $from = $data[$this->getFromFieldName()];
                 }
-                if (isset($data[$this->name . '_to']))
+                if (isset($data[$this->getToFieldName()]))
                 {
-                    $to = $data[$this->name . '_to'];
+                    $to = $data[$this->getToFieldName()];
                 }
                 $this->setValue($from . '~' . $to);
             }
         }
 
+    }
+
+    function syncValue()
+    {
+        $this->model->setAttribute($this->getFromFieldName(), $this->prepareValueForDb($this->getValueFrom()));
+        $this->model->setAttribute($this->getToFieldName(), $this->prepareValueForDb($this->getValueTo()));
     }
 
 } 

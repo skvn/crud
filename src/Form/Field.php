@@ -17,6 +17,10 @@ class Field
 
     function __construct(CrudModel $model, $config)
     {
+        if (empty($config['field']))
+        {
+            $config['field'] = $config['name'];
+        }
         $this->config = $config;
         $this->model = $model;
         $this->name = $config['name'];

@@ -37,6 +37,10 @@ class DateRange extends Range {
 
     function prepareValueForDb($value)
     {
+        if (is_numeric($value))
+        {
+            return $value;
+        }
         return strtotime($value . ' 14:23');
     }
 
@@ -66,23 +70,24 @@ class DateRange extends Range {
         }
         else
         {
-            if (isset($data[$this->name . '_from']) || isset ($data[$this->name . '_to']))
+            if (isset($data[$this->getFromFieldName()]) || isset ($data[$this->getToFieldName()]))
             {
                 $from = 0;
                 $to = '';
-                if (isset($data[$this->name . '_from']))
+                if (isset($data[$this->getFromFieldName()]))
                 {
-                    $from = strtotime($data[$this->name . '_from']);
+                    $from = strtotime($data[$this->getFromFieldName()]);
                 }
-                if (isset($data[$this->name . '_to']))
+                if (isset($data[$this->getToFieldName()]))
                 {
-                    $to = strtotime($data[$this->name . '_to']);
+                    $to = strtotime($data[$this->getToFieldName()]);
                 }
                 $this->setValue($from . '~' . $to);
             }
         }
 
     }
+
 
 
 
