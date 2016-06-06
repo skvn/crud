@@ -103,12 +103,55 @@ class CrudController extends Controller
         $obj = CrudModel :: createInstance($model, $scope);
 
         $params = $this->request->all();
-        $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
 
-//        return CrudModelCollectionBuilder :: createDataTables($obj, $params)
-//            ->applyContextFilter()
-//            ->paginate($skip, $take)
-//            ->fetch();
+        $cols = $obj->getList()->getParam("columns");
+        $xls = [];
+        $row = [];
+        foreach ($cols as $col)
+        {
+            if ((empty($col['ctype']) || $col['ctype'] != "checkbox") && $col['data'] != "actions" && empty($col['invisible']))
+            {
+                $row[] = $col['title'];
+            }
+        }
+        $xls[] = $row;
+
+        $query = $this->app['session']->get("current_query_info");
+        if (empty($query) || !isset($query['sql']) || !isset($query['bind']))
+        {
+            $q = CrudModelCollectionBuilder :: createDataTables($obj, $params)
+                ->applyContextFilter()->getCollectionQuery()->getQuery();
+            $query = ['sql' => $q->toSQL(), 'bind' => $q->getBindings()];
+        }
+
+        $rs = \DB :: select($query['sql'], $query['bind']);
+        foreach ($rs as $r)
+        {
+            $row = [];
+            foreach ($cols as $col)
+            {
+                if ((empty($col['ctype']) || $col['ctype'] != "checkbox") && $col['data'] != "actions" && empty($col['invisible']))
+                {
+                    $row[] = $r[$col['data']] ?? "";
+                }
+            }
+            $xls[] = $row;
+        }
+
+
+
+        $writer = new \XLSXWriter();
+        $writer->writeSheet($xls,'Sheet1');
+        $data = $writer->writeToString();
+
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Pragma: no-cache"); //keeps ie happy
+        header("Content-Disposition: attachment; filename=xls.xlsx");
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Length: " . strlen($data));
+        header('Content-Transfer-Encoding: binary');
+        echo $data;
+        exit;
     }//
 
     function crudEdit($model,$id)

@@ -149,7 +149,10 @@ class ListHandler {
 
     public function getFilterColumns()
     {
-        return $this->filter->filters;
+        if ($this->filter)
+        {
+            return $this->filter->filters;
+        }
     }
 
     public function fillFilter($scope, $input)
