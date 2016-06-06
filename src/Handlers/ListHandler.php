@@ -171,34 +171,32 @@ class ListHandler {
 
     function getParam($prop = '')
     {
-        if (strpos($prop,'.') === false)
+        if (empty($prop))
         {
-            if (empty($prop))
-            {
-                return array_merge($this->options, ['list' => $this->columns, 'all_columns' => $this->all_columns]);
-            }
-            else
-            {
-                switch ($prop)
-                {
-                    case 'list':
-                    case 'columns':
-                        return $this->columns;
-                    break;
-                    case 'all_columns':
-                        return $this->all_columns;
-                    break;
-                    default:
-                        return $this->getOption($prop);
-                    break;
-                }
-            }
+            return array_merge($this->options, ['list' => $this->columns, 'all_columns' => $this->all_columns]);
         }
-        else
+        if (strpos($prop, ".") !== false)
         {
-            return $this->app['config']->get('crud.'.$this->model->getTable().'.scopes.'.$this->model->scope.'.'.$prop);
+            list($s, $p) = explode(".", $prop, 2);
+            if (!isset($this->options[$s]))
+            {
+                return null;
+            }
+            return $this->options[$s][$p] ?? null;
         }
-
+        switch ($prop)
+        {
+            case 'list':
+            case 'columns':
+                return $this->columns;
+                break;
+            case 'all_columns':
+                return $this->all_columns;
+                break;
+            default:
+                return $this->getOption($prop);
+                break;
+        }
     }
 
 
