@@ -176,13 +176,22 @@ class CrudModelPrototype
                 }
             }
 
-            if (!empty($rel['local_key']))
-            {
-                $key = $rel['local_key'];
+            if (!empty($rel['local_key'])) {
 
-            } else {
-                $key = $rel_arr['relation_name'];
+                $rel_arr['field'] = $rel['local_key'];
             }
+
+
+
+//            if (!empty($rel['local_key']))
+//            {
+//                $key = $rel['local_key'];
+//
+//            } else {
+//                $key = $rel_arr['relation_name'];
+//            }
+
+            $key = $rel_arr['relation_name'];
             $this->config_data['fields'][$key] = $rel_arr;
         }
 
@@ -201,8 +210,11 @@ class CrudModelPrototype
             foreach ($this->config_data['fields'] as $k => $f) {
                 if (!empty($f['type']) && in_array($f['type'], [Form::FIELD_FILE, Form::FIELD_MULTI_FILE, Form::FIELD_IMAGE]))
                 {
-                    $f['name'] = $k;
+                    $f['name'] = $f['rel_name'];
+                    $f['field'] = $k;
                     $f['multi'] = ($f['type'] == Form::FIELD_MULTI_FILE?1:0);
+                    $this->config_data['fields'][$f['rel_name']] = $f;
+                    unset($this->config_data['fields'][$k]);
                     $this->addFileField($f);
                 }
             }
@@ -287,6 +299,7 @@ class CrudModelPrototype
                         
             foreach ($this->config_data['fields'] as $k=> $f)
             {
+
 
                 if (!isset($this->column_types[$k]) && empty($f['relation']))
                 {

@@ -23,12 +23,12 @@
                 $(this).parents('table').find('tr td input.i-checks').each(function () {
                     if ($(this).prop('checked'))
                     {
-                        $(this).parents('tr').addClass('success');
+                        $(this).parents('tr').addClass('success').addClass('selected');
                         disabled = false;
                         return;
                     } else
                     {
-                        $(this).parents('tr').removeClass('success');
+                        $(this).parents('tr').removeClass('success').removeClass('selected');
                     }
                 });
                 $('.crud_delete').attr('disabled', disabled);

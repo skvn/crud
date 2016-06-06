@@ -65,9 +65,9 @@
                             }
 
 
-                            if (tbl.data('list_actions')) {
+                            if (tbl.data('list_single_actions') && tbl.data('list_single_actions').length) {
 
-                                var actions = tbl.data('list_actions');
+                                var actions = tbl.data('list_single_actions');
                                 buttons += '<span class="dropdown  dropdown-kebab-pf" style="width:15px;margin-left:10px;">'
                                     + '<button class="btn btn-link dropdown-toggle" type="button"  data-toggle="dropdown">'
                                     + '<span class="fa fa-ellipsis-v" style="margin-bottom: 10px;"></span>'
@@ -80,24 +80,15 @@
 
                                     if (actions[i]['command'])
                                     {
-                                        var com_url = crud.format_setting("model_command_url", {command:actions[i]['command'],id:rowData.id, model:tbl.data('crud_table'), scope:tbl.data('crud_scope')} );
-                                        if (actions[i]['params'])
-                                        {
-                                            var add = actions[i]['params'];
-                                            for (var n in rowData)
-                                            {
-                                                add = add.replace('%'+n, rowData[n]);
-                                            }
-                                            com_url = com_url + '&' +add;
-                                        }
-                                        buttons += '<li><a href="'+com_url+'" data-click="crud_action" data-action="crud_command" '+ (actions[i]['confirm'] ? 'data-confirm="'+actions[i]['confirm']+'"' : '') +'>';
+
+                                        buttons += '<li><a href="'+actions[i]['command']+'" data-model="'+tbl.data('crud_table')+'" data-scope="'+tbl.data('crud_scope')+'" data-id="'+rowData.id+'" data-click="crud_action" data-action="crud_command" '+ (actions[i]['confirm'] ? 'data-confirm="'+actions[i]['confirm']+'"' : '') +'>';
                                     } else if (actions[i]['event'])
                                     {
                                         buttons += '<li><a href="#" data-model="'+tbl.data('crud_table')+'" data-scope="'+tbl.data('crud_scope')+'" data-id="'+rowData.id+'" data-click="crud_event" data-event="'+actions[i]['event']+'" >';
                                     }
                                     else if (actions[i]['popup'])
                                     {
-                                        buttons += '<li><a href="'+actions[i]['popup']+'" data-model="'+tbl.data('crud_table')+'" data-id="'+rowData.id+'" data-scope="'+tbl.data('crud_scope')+'" data-click="crud_popup" data-popup="'+actions[i]['popup_id']+'" data-event="'+actions[i]['event']+'" >';
+                                        buttons += '<li><a href="'+actions[i]['popup']+'"  data-title="'+actions[i]['title']+'" data-model="'+tbl.data('crud_table')+'" data-id="'+rowData.id+'" data-scope="'+tbl.data('crud_scope')+'" data-click="crud_popup" data-popup="'+actions[i]['popup_id']+'" data-event="'+actions[i]['event']+'" >';
                                     }
 
 
@@ -138,6 +129,7 @@
                 searching: tbl.data('searchable')?true:false,
                 processing: true,
                 serverSide: true,
+
                 ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), uri_params: tbl.data('list_uri_params')}),
                 //columns: crud_cols,
                 order: order,

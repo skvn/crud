@@ -43,6 +43,7 @@ Route::group($adm_route_params, function() {
     Route::post('crud/{model}/update/{id}',                         array('as' => 'crud_update',                'uses' => 'CrudController@crudUpdate'));
     Route::post('crud/{model}/filter/{scope}',                      array('as' => 'crud_filter',                'uses' => 'CrudController@crudFilter'));
     Route::get('crud/{model}/list/{scope}',                         array('as' => 'crud_list',                  'uses' => 'CrudController@crudList'));
+    Route::get('crud/{model}/popup_index/{scope}',                  array('as' => 'crud_popup_index',           'uses' => 'CrudController@crudPopupIndex'));
     Route::get('crud/{model}/excel/{scope}',                        array('as' => 'crud_list_excel',            'uses' => 'CrudController@crudListExcel'));
     Route::post('crud/{model}/delete',                              array('as' => 'crud_delete',                'uses' => 'CrudController@crudDelete'));
     Route::post('crud/{model}/{id}/command/{command_name}',         array('as' => 'crud_command',               'uses' => 'CrudController@crudCommand'));

@@ -3,3 +3,21 @@
         <a href="#" class="btn btn-danger crud_delete" disabled data-click="crud_action" data-action="table_mass_delete" data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}">{{ trans('crud::messages.delete_selected') }}</a>
     {% endif %}
 {% endif %}
+
+{% set mass_actions = crudObj.getListConfig('list_mass_actions') %}
+{%  if mass_actions %}
+{%  for a in mass_actions %}
+    {%  if a.popup  %}
+    <a class="crud_table_command {{ a.btn_class }}" data-confirm="{{ a.confirm }}" href="{{ a.popup }}" data-mass_action="1" data-title="{{ a.title }}'" data-model="{{ crudObj.classViewName }}"  data-scope="{{ crudObj.scope }}" data-click="crud_popup" data-popup="{{ a.popup_id }}" data-event="{{ a.event }}"><i class="{{ a.class }}"></i> {{ a.title }}</a>
+    {% elseif a.command %}
+        <a class="crud_table_command {{ a.btn_class }}"  data-confirm="{{ a.confirm }}" href="{{ a.command }}" data-mass_action="1" data-model="{{ crudObj.classViewName }}"  data-scope="{{ crudObj.scope }}" data-click="crud_action" data-action="crud_command"><i class="{{ a.class }}"></i> {{ a.title }}</a>
+    {% elseif a.event %}
+        <a class="crud_table_command {{ a.btn_class }}" data-confirm="{{ a.confirm }}" href="#" data-mass_action="1" data-title="{{ a.title }}'" data-model="{{ crudObj.classViewName }}"  data-scope="{{ crudObj.scope }}" data-click="crud_event"  data-event="{{ a.event }}"><i class="{{ a.class }}"></i> {{ a.title }}</a>
+    {% endif %}
+
+{% endfor %}
+{% endif %}
+
+
+
+

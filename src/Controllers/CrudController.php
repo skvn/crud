@@ -45,6 +45,16 @@ class CrudController extends Controller
 
     }//
 
+    function crudPopupIndex($model, $scope = CrudModel :: DEFAULT_SCOPE, $args = [])
+    {
+        $obj = CrudModel :: createInstance($model, $scope);
+        $obj->initFilter();
+
+        $view = !empty($args['view']) ? $args['view'] : $obj->resolveView('popup_index');
+        return $this->view->make($view, ['crudObj'=>$obj]);
+
+    }//
+
 
     function crudTree($model, $scope = CrudModel :: DEFAULT_SCOPE)
     {

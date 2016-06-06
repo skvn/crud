@@ -400,6 +400,24 @@ abstract class CrudModel extends Model
         return 0;
     }
 
+    public function applyCrudRequestCommand($args, $method)
+    {
+        
+        if ($this->id > 0) {
+
+            $this->$method($args);
+
+        } else if (!empty($args['selected_rows']) && is_array($args['selected_rows']))
+        {
+
+            foreach ($args['selected_rows'] as $row)
+            {
+                $obj = self::find($row['id']);
+                $obj->$method($args);
+            }
+        }
+    }
+
 
 
 }
