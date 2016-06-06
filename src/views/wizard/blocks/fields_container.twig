@@ -13,7 +13,9 @@
                     {%  include  'crud::wizard/blocks/fields/tab' %}
                     {%  for f  in fields %}
                         {% set fld = model.fields[f]  %}
-                        {% set used_fields = used_fields|merge([f]) %}
+                        {#{% set fkey   = f %}#}
+                        {#{%  set f = fld.field?fld.field:f %}#}
+                        {#{% set used_fields = used_fields|merge([f]) %}#}
                         {%  include  'crud::wizard/blocks/fields/field_row' %}
                     {% endfor %}
                 {% endfor %}
@@ -21,14 +23,14 @@
             {%  for f, fld in model.fields %}
                 {% if f != 'id' and not (f in used_fields) %}
                     {% set fld = model.fields[f]  %}
-                    {% set used_fields = used_fields|merge([f]) %}
+
                     {%  include  'crud::wizard/blocks/fields/field_row' %}
                 {% endif %}
             {% endfor %}
 
             {%  else  %}
             {%  for f, fld in model.fields %}
-                    {% set used_fields = used_fields|merge([f]) %}
+                    {#{% set used_fields = used_fields|merge([f]) %}#}
                     {%  include  'crud::wizard/blocks/fields/field_row' %}
             {% endfor %}
 

@@ -25,7 +25,7 @@ class ListHandler {
     {
         $this->app = Container :: getInstance();
         $this->model = $parentInstance;
-        $this->options = array_merge($this->default_options, $options);
+        $this->options = $this->prepareOptions($options);
         $this->columns = $options['list'] ?? [];
         if (!empty($this->options['multiselect']))
         {
@@ -35,7 +35,8 @@ class ListHandler {
         {
             $this->prependColumn(['data' => $this->model->getKeyName(), 'invisible' => true]);
         }
-        if (!empty($this->options['buttons']['single_edit']) || !empty($this->options['buttons']['single_delete']) || !empty($this->options['list_actions']))
+        if (!empty($this->options['buttons']['single_edit']) || !empty($this->options['buttons']['single_delete'])
+            || !empty($this->options['list_single_actions']))
         {
             $this->appendColumn(['data' => "actions", 'width' => 100, 'ctype' => "actions"]);
         }
@@ -197,6 +198,26 @@ class ListHandler {
                 return $this->getOption($prop);
                 break;
         }
+
+    }//
+
+
+    private function prepareOptions($options)
+    {
+        $combined_options =  array_merge($this->default_options, $options);
+        if (!empty($combined_options['list_actions']))
+        {
+            $combined_options['list_single_actions'] = array_filter($combined_options['list_actions'], function ($item) {
+               return !empty($item['single']);
+            });
+
+            $combined_options['list_mass_actions'] = array_filter($combined_options['list_actions'], function ($item) {
+                return !empty($item['mass']);
+            });
+        }
+
+        return $combined_options;
+
     }
 
 

@@ -1,3 +1,7 @@
+{% set fkey   = f %}
+                    {%  set f = fld.field?fld.field:f %}
+                    {% set used_fields = used_fields|merge([f]) %}
+
 <table class="table table-bordered table-striped"   data-rel="{{ f }}"  style="max-width: 1200px;">
 <tr data-rel="{{ f }}">
 <td style="width: 200px;"><b>{{ f }}</b></td>

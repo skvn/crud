@@ -1,6 +1,9 @@
 <div class="form-group">
     <div class="col col-xs-4">
     {% include 'crud::wizard/blocks/fields/field_title.twig' %}
+        <label>Relation name *
+            <input type="text" data-rel="field_rel" class="form-control" name="fields[{{ ALIAS }}][rel_name]" value="{{ fkey }}" required placeholder="Relation name*" >
+        </label>
     </div>
     <div class="col col-xs-4">
         {% include 'crud::wizard/blocks/fields/field_hint.twig' %}

@@ -192,29 +192,63 @@
         crud_command: function(elem)
         {
             var args = elem.data('args') || {};
-            if (elem.data('collect_rows'))
+
+            // if (elem.data('collect_rows'))
+            // {
+            //     var tbl = $('table[data-list_table_ref='+elem.data('collect_rows')+']');
+            //     if (tbl.length <= 0)
+            //     {
+            //         alert('Таблица данных не найдена');
+            //         return;
+            //     }
+            //     var ids = [];
+            //     $('input[data-rel=row]', tbl).each(function(){
+            //         if ($(this).prop('checked'))
+            //         {
+            //             ids.push($(this).val());
+            //         }
+            //     })
+            //     if (ids.length <= 0)
+            //     {
+            //         alert(i18n.say('no_item_selected'));
+            //         return;
+            //     }
+            //     args['ids'] = ids;
+            // }
+
+            args['command'] = elem.attr('href');
+            args['id'] = parseInt(elem.data('id'))>0?parseInt(elem.data('id')):-1;
+            args['model'] = elem.data('model');
+            args['scope'] = elem.data('scope');
+            
+            var com_url = crud.format_setting("model_command_url", args );
+            var $tbl = $('table[data-list_table_ref='+args['model']+'_'+args['scope']+']');
+            
+            if (args['id']<0)
             {
-                var tbl = $('table[data-list_table_ref='+elem.data('collect_rows')+']');
-                if (tbl.length <= 0)
-                {
-                    alert('Таблица данных не найдена');
-                    return;
+
+                var rows =[];
+                var selected_objs =  $tbl.DataTable().rows('.selected').data();
+                for (var i = 0; i < selected_objs.length; i++) {
+                    rows.push(selected_objs[i]);
                 }
-                var ids = [];
-                $('input[data-rel=row]', tbl).each(function(){
-                    if ($(this).prop('checked'))
-                    {
-                        ids.push($(this).val());
-                    }
-                })
-                if (ids.length <= 0)
-                {
-                    alert(i18n.say('no_item_selected'));
-                    return;
-                }
-                args['ids'] = ids;
+
+                args['selected_rows'] = rows;
+            } else {
+                args['selected_row'] = $tbl.DataTable().row(elem.parents('tr').first()).data();
             }
-            $.post(elem.attr('href'), args, function (res)
+
+
+            // if (actions[i]['params'])
+            // {
+            //     var add = actions[i]['params'];
+            //     for (var n in rowData)
+            //     {
+            //         add = add.replace('%'+n, rowData[n]);
+            //     }
+            //     com_url = com_url + '&' +add;
+            // }
+            $.post(com_url, args, function (res)
             {
                 if (res.success)
                 {

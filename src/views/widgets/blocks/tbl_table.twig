@@ -23,7 +23,7 @@
        data-btn_delete="{{ crudObj.getListConfig('buttons.single_delete') }}"
        data-form_type="{{ crudObj.getListConfig('edit_tab')?'tabs':'popup' }}"
        data-list_type="{{ crudObj.getListConfig('type')?crudObj.getListConfig('type'):'dt' }}"
-       data-list_actions='{{ crudObj.getListConfig('list_actions')|json_encode|raw }}'
+       data-list_single_actions='{{ crudObj.getListConfig('list_single_actions')|json_encode|raw }}'
        data-searchable="{{ crudObj.getListConfig('searchable') }}"
        data-key_name="{{ crudObj.getKeyName() }}"
        {{ crudObj.isTree()?('data-parent_id="'~crudObj.getColumnTreePid()~'"')|raw }}
@@ -37,7 +37,7 @@
                 data-list_orderable="{{ c.orderable }}"
                 data-list_data="{{ c.data }}"
                 data-list_name="{{ c.name }}"
-                {{ c.default_order ? 'data-default_order="'~c.default_order~'"' }}>{{ c.title }} {% if c.hint %}{{ config_get('crud_tooltip.pattern')|replace({'%s': c.hint.index, '%t': c.hint.default})|raw }}{% endif %}</th>
+                {{ c.default_order ? ('data-default_order="'~c.default_order~'"')|raw }}>{{ c.title }} {% if c.hint %}{{ config_get('crud_tooltip.pattern')|replace({'%s': c.hint.index, '%t': c.hint.default})|raw }}{% endif %}</th>
         {% endif %}
     {% endfor %}
     </thead>

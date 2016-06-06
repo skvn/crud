@@ -29,6 +29,23 @@
         <label>
             Icon class <input type="text" class="form-control" value="{{ action.class }}"  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][class]">
         </label>
+        <label>
+            Button class <input type="text" class="form-control" value="{{ action.btn_class }}"  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][btn_class]">
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label class="checkbox-inline">
+            <input type="checkbox" value="1" {{ {{ action.single}}?'checked' }}   name="list[{{ ALIAS }}][list_actions][{{ NUM }}][single]"  />
+            Single rows
+        </label>
+
+        <label class="checkbox-inline">
+            <input type="checkbox" value="1" {{ action.mass?'checked' }}  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][mass]"  />
+            Mass actions
+        </label>
+
+
     </div>
     <div class="form-group" style="padding-top: 10px;">
     <a href="#" style="" data-click="crud_action" data-action="wizard_remove_parent" data-parent="li" data-confirm="Remove this action?"  class="label label-danger">
