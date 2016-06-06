@@ -3,4 +3,7 @@
         <a href="#" title="{{ trans('crud::messages.configure_cols') }}" data-click="crud_action" data-action="open_popup" data-popup="crud_table_columns" data-uri="{{ route('crud_table_columns') }}" data-model="{{ crudObj.classViewName }}" data-context="{{ crudObj.scope }}"><i class="fa fa-gear"></i></a>&nbsp;
     {% endif %}
     <a href="#" title="{{ trans('crud::messages.refresh_list') }}" data-click="crud_action" data-action="refresh_table" data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}"><i class="fa fa-refresh"></i></a>
+    {% if crudObj.getListConfig('buttons.export_excel') %}
+        <a  href="#" data-click="crud_action" data-action="open_popup" data-model="{{ crudObj.classViewName }}" data-scope="{{ crudObj.scope }}"><i class="fa fa-file-excel-o"></i></a>
+    {% endif %}
 </div>

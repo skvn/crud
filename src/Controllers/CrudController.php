@@ -73,7 +73,7 @@ class CrudController extends Controller
         return $obj->getAutocompleteList(\Request::get('q'));
     }
 
-    function crudList($model,$scope)
+    function crudList($model, $scope)
     {
         $obj = CrudModel :: createInstance($model, $scope);
 
@@ -86,6 +86,19 @@ class CrudController extends Controller
             ->applyContextFilter()
             ->paginate($skip, $take)
             ->fetch();
+    }//
+
+    function crudListExcel($model, $scope)
+    {
+        $obj = CrudModel :: createInstance($model, $scope);
+
+        $params = $this->request->all();
+        $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
+
+//        return CrudModelCollectionBuilder :: createDataTables($obj, $params)
+//            ->applyContextFilter()
+//            ->paginate($skip, $take)
+//            ->fetch();
     }//
 
     function crudEdit($model,$id)
