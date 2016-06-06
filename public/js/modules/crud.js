@@ -222,9 +222,11 @@
             args['scope'] = elem.data('scope');
             
             var com_url = crud.format_setting("model_command_url", args );
+            var $tbl = $('table[data-list_table_ref='+args['model']+'_'+args['scope']+']');
+            
             if (args['id']<0)
             {
-                var $tbl = $('table[data-list_table_ref='+args['model']+'_'+args['scope']+']');
+
                 var rows =[];
                 var selected_objs =  $tbl.DataTable().rows('.selected').data();
                 for (var i = 0; i < selected_objs.length; i++) {
@@ -232,6 +234,8 @@
                 }
 
                 args['selected_rows'] = rows;
+            } else {
+                args['selected_row'] = $tbl.DataTable().row(elem.parents('tr').first()).data();
             }
 
 
