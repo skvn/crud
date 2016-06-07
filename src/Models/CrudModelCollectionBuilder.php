@@ -366,19 +366,19 @@ class CrudModelCollectionBuilder
             foreach ($columns as $col)
             {
                 $row[$col['data']] = '';
-                $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
+                $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'] ?? false, $col['format_args'] ?? []);
             }
-            foreach ($this->columns as $col)
-            {
-                if (!empty($col['invisible']))
-                {
-                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
-                }
-                if (isset($row[$col['data']]) && !empty($col['format']))
-                {
-                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'], $col['format_args'] ?? []);
-                }
-            }
+//            foreach ($this->columns as $col)
+//            {
+//                if (!empty($col['invisible']))
+//                {
+//                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
+//                }
+//                if (isset($row[$col['data']]) && !empty($col['format']))
+//                {
+//                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'], $col['format_args'] ?? []);
+//                }
+//            }
             $data[] = $row;
         }
 
@@ -425,19 +425,19 @@ class CrudModelCollectionBuilder
             foreach ($columns as $col)
             {
                 $row[$col['data']] = '';
-                $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
+                $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'] ?? false, $col['format_args'] ?? []);
             }
-            foreach ($this->columns as $col)
-            {
-                if (!empty($col['invisible']))
-                {
-                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
-                }
-                if (isset($row[$col['data']]) && !empty($col['format']))
-                {
-                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'], $col['format_args'] ?? []);
-                }
-            }
+//            foreach ($this->columns as $col)
+//            {
+//                if (!empty($col['invisible']))
+//                {
+//                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
+//                }
+//                if (isset($row[$col['data']]) && !empty($col['format']))
+//                {
+//                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'], $col['format_args'] ?? []);
+//                }
+//            }
             $treeColumn = $obj->getColumnTreePid();
             $row[$treeColumn] = $obj->$treeColumn;
             if ($obj->children_count>0)

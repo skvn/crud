@@ -270,7 +270,16 @@ trait ModelConfigTrait
             {
                 try
                 {
-                    $value = $this->$rel->$attr;
+                    $relObj = $this->$rel;
+                    $value = $relObj->$attr;
+                    if (!empty($format))
+                    {
+                        $method = "crudFormatValue" . camel_case($format);
+                        if (method_exists($relObj, $method))
+                        {
+                            $value = $relObj->$method($value, $format_args);
+                        }
+                    }
                 }
                 catch (\Exception $e)
                 {
@@ -293,23 +302,14 @@ trait ModelConfigTrait
                 {
                     $value = $this->$col;
                 }
-            }
-            //FIXME
-//            else
-//            {
-//                $meth = camel_case('get_' . $col);
-//                if (method_exists($this, $meth))
-//                {
-//                    return $this->$meth();
-//                }
-//            }
-        }
-        if (!empty($format))
-        {
-            $method = "crudFormatValue" . camel_case($format);
-            if (method_exists($this, $method))
-            {
-                $value = $this->$method($value, $format_args);
+                if (!empty($format))
+                {
+                    $method = "crudFormatValue" . camel_case($format);
+                    if (method_exists($this, $method))
+                    {
+                        $value = $this->$method($value, $format_args);
+                    }
+                }
             }
         }
         return $value;
