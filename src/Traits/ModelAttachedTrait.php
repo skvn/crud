@@ -99,29 +99,36 @@ trait ModelAttachedTrait {
 
     function attachResize($w, $h, $crop = false)
     {
-        $filename = $this->attachGetPath();
-        $resized_filename = str_replace($this->app['config']->get('attach.root'), $this->app['config']->get('attach.resized_path'), dirname($filename)) . DIRECTORY_SEPARATOR . $w . "z" . $h . "_" . ($crop ? 'crop' : 'full') . '_' . basename($filename);
-        if (!file_exists($resized_filename))
+        try
         {
-            \Log :: info('resizing', ['browsify' => true]);
-            $img = \Image :: make($filename);
-            if ($crop)
+            $filename = $this->attachGetPath();
+            $resized_filename = str_replace($this->app['config']->get('attach.root'), $this->app['config']->get('attach.resized_path'), dirname($filename)) . DIRECTORY_SEPARATOR . $w . "z" . $h . "_" . ($crop ? 'crop' : 'full') . '_' . basename($filename);
+            if (!file_exists($resized_filename))
             {
-                $img->fit($w, $h);
+                \Log :: info('resizing', ['browsify' => true]);
+                $img = \Image :: make($filename);
+                if ($crop)
+                {
+                    $img->fit($w, $h);
+                }
+                else
+                {
+                    $img->resize($w, $h, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                }
+                if (!file_exists(dirname($resized_filename)))
+                {
+                    $this->app['files']->makeDirectory(dirname($resized_filename), 0755, true, true);
+                }
+                $img->save($resized_filename);
             }
-            else
-            {
-                $img->resize($w, $h, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-            }
-            if (!file_exists(dirname($resized_filename)))
-            {
-                $this->app['files']->makeDirectory(dirname($resized_filename), 0755, true, true);
-            }
-            $img->save($resized_filename);
+            return $resized_filename;
         }
-        return $resized_filename;
+        catch (\Exception $e)
+        {
+            return "/images/noimage.gif";
+        }
     }
 
     function getResizedPath($w, $h, $crop = false)

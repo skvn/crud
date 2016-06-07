@@ -74,7 +74,7 @@ class Field
 
     function importValue($data)
     {
-        $this->value = isset($data[$this->name]) ? $data[$this->name] : null;
+        $this->value = isset($data[$this->field]) ? $data[$this->field] : null;
     }
 
     function getName()
@@ -93,7 +93,7 @@ class Field
 
     function getFilterColumnName()
     {
-        return (!empty($this->config['filter_column'])?$this->config['filter_column']:$this->name);
+        return (!empty($this->config['filter_column'])?$this->config['filter_column']:$this->field);
     }
 
     function  validate()

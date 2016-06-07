@@ -123,10 +123,11 @@ class Filter {
             foreach ($this->filters as $k => $filterCol)
             {
                 $value = $form->fields[$k]->getValue();
-                $storeData[$k] = $value;
+                $storeData[$form->fields[$k]->getField()] = $value;
                 $this->filters[$k]['value'] = $value;
             }
         }
+        //var_dump($storeData);
 
         if ($andStore)
         {
@@ -173,7 +174,7 @@ class Filter {
                 $c = $field->getFilterCondition();
                 if ($c)
                 {
-                    $filters[$field->getName()] = $c;
+                    $filters[$field->getField()] = $c;
                 }
             }
         }
