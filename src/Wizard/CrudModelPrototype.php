@@ -118,8 +118,6 @@ class CrudModelPrototype
         foreach ($this->config_data['relations'] as $rel)
         {
 
-
-
             $rel_arr = [
                 'relation' => $rel['type'],
                 'title' => $rel['title'],
@@ -193,6 +191,8 @@ class CrudModelPrototype
 
             $key = $rel_arr['relation_name'];
             $this->config_data['fields'][$key] = $rel_arr;
+
+            //\Log :: info(print_r($rel_arr,1), ['browsify' => true]);
         }
 
 
@@ -418,11 +418,41 @@ class CrudModelPrototype
      */
     private function processLists()
     {
+
         if (!empty($this->config_data['list']))
         {
             foreach ($this->config_data['list'] as $alias=>$list)
             {
 
+                //form
+                if (empty($list['form_tabs']) && !empty($list['form'])) {
+
+                    $this->config_data['list'][$alias]['form'] = explode(",",$list['form']);
+
+                } else if (!empty($list['form_tabs'])) {
+
+
+                    $form_tabs = json_decode($list['form_tabs'], true);
+                    unset( $this->config_data['list'][$alias]['form_tabs']);
+                    $tabs = [];
+                    foreach ($form_tabs as $i=>$tab)
+                    {
+                        if (!empty($tab['alias']))
+                        {
+                            $tab_alias = $tab['alias'];
+                        } else {
+                            $tab_alias = 'tab_'.$i;
+                        }
+                        $tabs[$tab_alias] = ['title'=>$tab['title']];
+                        $this->config_data['list'][$alias]['form'][$tab_alias] = $tab['fields'];
+                    }
+                    $this->config_data['list'][$alias]['tabs'] = $tabs;
+                    $this->config_data['list'][$alias]['form_tabbed'] = 1;
+
+                }
+
+
+                
                 $searchable = 0;
                 //columns
                 if (!empty($list['columns']))
@@ -431,6 +461,10 @@ class CrudModelPrototype
                     foreach ($list['columns'] as $k=>$column)
                     {
 
+                        if (!is_numeric($k))
+                        {
+                            continue;
+                        }
                         if (!empty($column['data_col']))
                         {
                             $column['data'] = $column['data_col'];
@@ -477,8 +511,12 @@ class CrudModelPrototype
                 //actions
                 if (!empty($list['list_actions'])) {
                     $actions = [];
-                    foreach ($list['list_actions'] as $action) {
+                    foreach ($list['list_actions'] as $k=> $action) {
 
+                        if (!is_numeric($k))
+                        {
+                            unset ($this->config_data['list'][$alias]['list_actions'][$k]);
+                        }
                         if (is_array($action)&&
                             (!empty($action['command']) || !empty($action['event'])  || !empty($action['popup'])))
                         {
@@ -496,7 +534,6 @@ class CrudModelPrototype
 
             }
 
-            //exit;
         }
 
 
@@ -512,40 +549,18 @@ class CrudModelPrototype
 
         if (!empty($this->config_data['fields']))
         {
-            $form_fields = [];
-            foreach ($this->config_data['fields'] as $key=>$f)
-            {
+//            $form_fields = [];
+//            foreach ($this->config_data['fields'] as $key=>$f)
+//            {
+//
+//                if (isset($f['editable']) && $f['editable'] )
+//                {
+//                    $form_fields[] = $key;
+//                }
+//
+//            }
 
-                if (isset($f['editable']) && $f['editable'] )
-                {
-                    $form_fields[] = $key;
-                }
-
-            }
-
-            if (empty($this->config_data['form_tabs'])) {
-
-                $this->config_data['form'] = $form_fields;
-
-            } else {
-
-                $this->config_data['form'] = [];
-                $form_tabs = json_decode($this->config_data['form_tabs'], true);
-                unset($this->config_data['form_tabs']);
-                $tabs = [];
-                foreach ($form_tabs as $i=>$tab)
-                {
-                    if (!empty($tab['alias']))
-                    {
-                        $alias = $tab['alias'];
-                    } else {
-                        $alias = 'tab_'.$i;
-                    }
-                    $tabs[$alias] = ['title'=>$tab['title']];
-                    $this->config_data['form'][$alias] = $tab['fields'];
-                }
-                $this->config_data['tabs'] = $tabs;
-            }
+            
         }
 
         //track timestamps?
@@ -654,10 +669,10 @@ class CrudModelPrototype
             $conf['form'] = $this->config_data['form'];
         }
 
-        if (!empty($this->config_data['tabs'])) {
-            $conf['tabs'] = $this->config_data['tabs'];
-            $conf['form_tabbed'] = 1;
-        }
+//        if (!empty($this->config_data['tabs'])) {
+//            $conf['tabs'] = $this->config_data['tabs'];
+//            $conf['form_tabbed'] = 1;
+//        }
 
 
 

@@ -125,23 +125,23 @@ class Wizard
 
     public function checkUnsupportedConfig($model)
     {
-        if (!empty($model['scopes']))
-        {
-            foreach ($model['scopes'] as $list_alias=>$list_arr)
-            {
-                if (isset($list_arr['form']) || isset($list_arr['tabs']) )
-                {
-                    return false;
-                }
-                foreach ($list_arr as $list_col)
-                {
-                    if (isset($list_col['format']))
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
+//        if (!empty($model['scopes']))
+//        {
+//            foreach ($model['scopes'] as $list_alias=>$list_arr)
+//            {
+//                if (isset($list_arr['form']) || isset($list_arr['tabs']) )
+//                {
+//                    return false;
+//                }
+//                foreach ($list_arr as $list_col)
+//                {
+//                    if (isset($list_col['format']))
+//                    {
+//                        return false;
+//                    }
+//                }
+//            }
+//        }
 
         return true;
     }

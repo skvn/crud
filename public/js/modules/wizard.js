@@ -30,7 +30,7 @@
                 }
 
                 alias = alias.toLowerCase().replace(new RegExp(" ","g"),'_');
-                if (!used_list_aliases[alias])
+                if (!used_list_aliases[alias] && ! $('.scope_container[data-scope='+alias+']').length)
                 {
                     used_list_aliases[alias] = 1;
                     var list_html  = $('#list_tpl').html();
@@ -40,6 +40,7 @@
 
                     adjust_step_height();
                     $('#list_alias').css('display','inline');
+                    init_draggable_fields();
 
                 } else {
                     alert('List alias "'+alias+'" already in use. Use another alias');
@@ -122,10 +123,12 @@
             
             wizard_add_form_tab: function (elem) {
 
-                if ($('#tab_new').val()) {
+                var $inp = elem.parent().find('input');
+                var $cont = $('#list_form_'+elem.data('rel'));
+                if ($inp.val()) {
 
-                    $('<div class="alert alert-info" data-form_tab="1"><span><span class="pficon pficon-info"></span> '+$('#tab_new').val()+'</span> <div class="pull-right"><a href="#" data-click="crud_action"  data-action="wizard_remove_parent" data-parent="div.alert" data-confirm="Remove tab?" class="label label-danger"><i class="fa fa-trash-o"></i> Remove</a></div></div>').appendTo($('#f_container'));
-                    $('#tab_new').val('');
+                    $('<span class="list-group-item list-group-item-danger" data-form_tab="1"><span><span class="fa fa-folder-o"></span> '+$inp.val()+'</span> <div class="pull-right"><a href="#" data-click="crud_action"  data-action="wizard_remove_parent" data-parent="span.list-group-item-danger" data-confirm="Remove tab?" class="label label-danger"><i class="fa fa-trash-o"></i> Remove</a></div></span>').appendTo($cont);
+                    $inp.val('');
                     adjust_step_height();
                 }
             },
@@ -467,6 +470,11 @@
                     }
                 });
 
+
+
+                init_draggable_fields();
+                update_form_stubs();
+
                 break;
 
 
@@ -474,6 +482,23 @@
 
     }
 
+    function init_draggable_fields()
+    {
+        $('#lists_container div[data-rel=fields_stack]').each (function () {
+
+            $(this).sortable({
+                connectWith: "#list_form_"+$(this).data('list'),
+                update: function (event, ui) {
+                    update_form_stubs();
+                }
+            }).disableSelection();
+
+            $("#list_form_"+$(this).data('list')).sortable({
+                connectWith: $(this)
+            }).disableSelection();
+
+        });
+    }
     function adjust_step_height()
     {
         $(".wizard .content > .title.current").next(".body")
@@ -512,6 +537,25 @@
         }
     }
 
+    function update_form_stubs()
+    {
+        $("*[data-rel=fields_form]").each(function () {
+
+            var lg = $(this).find('.list-group-item');
+            if (lg.length)
+            {
+                $(this).find('.ph').hide();
+                lg.removeClass('list-group-item-info').addClass('list-group-item-success');
+            } else {
+                $(this).find('.ph').show();
+            }
+        });
+
+        $("*[data-rel=fields_stack]").find('.list-group-item').removeClass('list-group-item-success').addClass('list-group-item-info');
+
+
+    }
+    
     function init_steps()
     {
 
@@ -568,41 +612,59 @@
                    }
                 });
 
-                var tabs = $('#f_container').find('div[data-form_tab]');
-                var tabs_arr = [];
                 var was_error = false;
-                if (tabs.length)
-                {
-                    var first_child = $('#f_container').children().get(0);
-                    if (!$(first_child).data('form_tab'))
-                    {
-                        was_error = true;
-                        alert("If you are using tabs. The form should start with a one.\nPlease drag the first tab to the very top of the form fields list");
-                        return false;
-                    }
-                    tabs.each(function () {
-                        var tab = {};
-                        tab.title = $.trim($(this).find('span').text());
-                        if ($(this).data('alias'))
-                        {
-                            tab.alias = $(this).data('alias');
-                        }
-                        var tab_fields = $(this).nextUntil('div[data-form_tab]','table');
-                        if (tab_fields.length)
-                        {
-                            tab.fields = tab_fields.map(function (){if ($(this).data('rel')){return $(this).data('rel')}}).toArray();
-                        } else {
-                            alert('Tab '+tab.title+' contains no fields');
-                            was_error = true;
-                        }
-                        tabs_arr.push(tab);
-                    });
 
-                    if (!was_error)
+                $('*[data-rel=fields_form]').each (function () {
+
+                    if ($(this).data('list') != '_ALIAS_')
                     {
-                        $('<textarea name="form_tabs">'+JSON.stringify(tabs_arr)+'</textarea>').appendTo(form);
+                        var $cont = $(this);
+                        var tabs = $cont.find('*[data-form_tab]');
+                        var tabs_arr = [];
+
+                        if (tabs.length)
+                        {
+                            var first_child = $cont.children(':visible').get(0);
+                            if (!$(first_child).data('form_tab'))
+                            {
+                                was_error = true;
+                                alert("If you are using tabs. The form should start with a one.\nPlease drag the first tab to the very top of the form fields list");
+                                return false;
+                            }
+                            tabs.each(function () {
+                                var tab = {};
+                                tab.title = $.trim($(this).find('span').text());
+                                if ($(this).data('alias'))
+                                {
+                                    tab.alias = $(this).data('alias');
+                                }
+                                var tab_fields = $(this).nextUntil('*[data-form_tab]','span');
+                                if (tab_fields.length)
+                                {
+                                    tab.fields = tab_fields.map(function (){if ($(this).data('rel')){return $(this).data('rel')}}).toArray();
+                                } else {
+                                    alert('Tab '+tab.title+' contains no fields');
+                                    was_error = true;
+                                }
+                                tabs_arr.push(tab);
+                            });
+
+                            if (!was_error)
+                            {
+                                $('<textarea name="list['+$cont.data('list')+'][form_tabs]">'+JSON.stringify(tabs_arr)+'</textarea>').appendTo($cont);
+                            }
+                        } else {
+                            var form = [];
+                            $cont.find('*[data-rel]').each (function () {
+
+                                form.push($(this).data('rel'));
+                            });
+                            $('<input type="hidden" name="list['+$cont.data('list')+'][form]" value="'+form.join(",")+'" />').appendTo($cont);
+                        }
                     }
-                }
+
+                });
+
 
                 if (!was_error) {
                     form.submit();

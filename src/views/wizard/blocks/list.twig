@@ -1,7 +1,7 @@
 {%  if not list %}
 <div id="list_tpl" style="display: none">
 {% endif %}
-    <div class="panel panel-default">
+    <div class="panel panel-default scope_container" data-scope="{{ ALIAS }}">
         <div class="panel-heading">
             <h3 class="panel-title">
                 <button  data-click="crud_action"  data-parent=".panel" data-action="wizard_remove_parent" data-confirm="Remove this scope?" class="label btn-inverse label-danger pull-right">
@@ -82,6 +82,58 @@
                 <a href="#" class="btn btn-primary"  data-click="crud_action"  data-action="wizard_add_list_col" data-skip_arr="1" data-fragment="action_tpl_{{ ALIAS }}" data-container="list_actions_{{ ALIAS }}"><i class="fa fa-plus"></i> Add action</a>
 
                 <hr>
+
+                <div class="col-md-1"><h3>Form</h3></div>
+                <div class="col-md-3 col-md-offset-1" style="padding-top: 20px;">
+                Add tab {{ wiz_macros.help('Config/Form#tabbed_form_definition') }}<input type="text" style="display:inline; width:150px;" />
+                <a href="#" class="btn btn-success"  data-click="crud_action" data-rel="{{ ALIAS }}" data-action="wizard_add_form_tab" ><i class="fa fa-plus"></i> add</a>
+                </div>
+                <br clear="all" />
+                <div class="col-md-4">
+                    <h5>Form fields</h5>
+                    <div id="list_form_{{ ALIAS }}"  data-rel="fields_form" data-list="{{ ALIAS }}"  class="list-group">
+                        {% set used_fields = [] %}
+                        {%  if list.form_tabbed %}
+                            {%  for tab_alias, fields in list.form %}
+                                {% set tab = list.tabs[tab_alias] %}
+                                {%  include  'crud::wizard/blocks/fields/tab' %}
+                                {%  for f  in fields %}
+                                    {% set fld = model.fields[f]  %}
+                                    {%  include  'crud::wizard/blocks/fields/field_stub' %}
+                                {% endfor %}
+                            {% endfor %}
+
+                        {%  else  %}
+
+                            {%  for f in list.form %}
+                                {% set fld = model.fields[f]  %}
+                                {%  include  'crud::wizard/blocks/fields/field_stub' %}
+                            {% endfor %}
+
+                        {% endif %}
+
+                        {%  if not used_fields|length %}
+                            <b class="ph">Drag form fields here &larr;</b>
+                        {% endif %}
+
+                    </div>
+                </div>
+                <div class="col-md-4 col-offset-1">
+                    <h5>Available fields (drag'n'drop to form fields)</h5>
+                    <div id="list_fields_{{ ALIAS }}" data-rel="fields_stack" data-list="{{ ALIAS }}"  class="list-group">
+                        {%  for f, fld in model.fields %}
+                            {% if f != 'id' and not (f in used_fields) %}
+                                {% set fld = model.fields[f]  %}
+                                {%  include  'crud::wizard/blocks/fields/field_stub' %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <hr />
+
+
+
 
                 {#<h3>Filter fields</h3>#}
                 {#<table class="table table-bordered table-striped"  id="{{ ALIAS }}f_container"  style="max-width: 1200px">#}
