@@ -6,6 +6,7 @@ use Skvn\Crud\Traits\ModelConfigTrait;
 use Skvn\Crud\Traits\ModelRelationTrait;
 use Skvn\Crud\Traits\ModelFilterTrait;
 use Skvn\Crud\Traits\ModelFormTrait;
+use Skvn\Crud\Exceptions\NotFoundException;
 
 use Illuminate\Container\Container;
 
@@ -400,23 +401,58 @@ abstract class CrudModel extends Model
         return 0;
     }
 
-    public function applyCrudRequestCommand($args, $method)
+    function crudExecuteCommand($command, $args = [])
     {
-        
-        if ($this->id > 0) {
-
-            $this->$method($args);
-
-        } else if (!empty($args['selected_rows']) && is_array($args['selected_rows']))
+        if (!empty($args['selected_rows']))
         {
-
+            $ids = [];
             foreach ($args['selected_rows'] as $row)
             {
-                $obj = self::find($row['id']);
-                $obj->$method($args);
+                $ids[] = $row['id'];
+            }
+            $args['ids'] = $ids;
+            if (method_exists($this, $command . 'Bulk'))
+            {
+                return $this->{$command . 'Bulk'}($args);
+            }
+            else
+            {
+                if (!method_exists($this, $command))
+                {
+                    throw new NotFoundException("Command " . $command . " do not exists on model " . $this->classShortName);
+                }
+                foreach ($args['ids'] as $id)
+                {
+                    $obj = static :: findOrFail($id);
+                    $obj->$command($args);
+                }
+                return;
             }
         }
+        if (!method_exists($this, $command))
+        {
+            throw new NotFoundException("Command " . $command . " do not exists on model " . $this->classShortName);
+        }
+        return $this->$command($args);
     }
+
+//    public function applyCrudRequestCommand($method, $args = [])
+//    {
+//
+//        if ($this->id > 0) {
+//
+//            $this->$method($args);
+//
+//        } else if (!empty($args['selected_rows']) && is_array($args['selected_rows']))
+//        {
+//
+//            foreach ($args['selected_rows'] as $row)
+//            {
+//                $obj = self::findOrFail($row['id']);
+//                $obj->$method($args);
+//            }
+//        }
+//    }
 
 
 
