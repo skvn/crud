@@ -45,7 +45,7 @@
                 else
                 {
                     col.fnCreatedCell = function(td, cellData, rowData, row, col){
-                        $(td).attr('id', c.data('list_data')+'_'+rowData.id);
+                        $(td).attr('id', c.data('list_data')+'_'+rowData.id).data('ref', c.data('list_data')).attr('data-ref', c.data('list_data'));
                     }
 
                     if (c.data('list_ctype') === "actions")

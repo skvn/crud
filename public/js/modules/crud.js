@@ -220,6 +220,9 @@
             args['id'] = parseInt(elem.data('id'))>0?parseInt(elem.data('id')):-1;
             args['model'] = elem.data('model');
             args['scope'] = elem.data('scope');
+            $("input", elem.parents("form:first")).each(function(){
+                args[$(this).attr('name')] = $(this).val();
+            });
             
             var com_url = crud.format_setting("model_command_url", args );
             var $tbl = $('table[data-list_table_ref='+args['model']+'_'+args['scope']+']');
@@ -258,6 +261,7 @@
                     }
                     if (elem.data('callback_event'))
                     {
+                        res['elem'] = elem;
                         crud.trigger(elem.data('callback_event'), res);
                     }
                     else if (elem.data('callback'))
