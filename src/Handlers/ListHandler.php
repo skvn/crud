@@ -134,7 +134,7 @@ class ListHandler {
     public function setFilter(Filter $filterObj)
     {
         $this->filter = $filterObj;
-        $this->filter->setModel($this->model);
+        //$this->filter->setModel($this->model);
         return $this;
     }
 
@@ -210,6 +210,27 @@ class ListHandler {
         $combined_options =  array_merge($this->default_options, $options);
         if (!empty($combined_options['list_actions']))
         {
+            array_walk($combined_options['list_actions'], function(&$act, $idx){
+                switch ($act)
+                {
+                    case !empty($act['popup']);
+                        $act['href'] = $act['popup'];
+                        $act['click'] = "crud_popup";
+                    break;
+                    case !empty($act['command']):
+                        $act['href'] = $act['command'];
+                        $act['click'] = "crud_action";
+                        $act['action'] = "crud_command";
+                    break;
+                    case !empty($act['event']):
+                        $act['href'] = "#";
+                        $act['click'] = "crud_event";
+                    break;
+                    default:
+                        $act['href'] = "#";
+                    break;
+                }
+            });
             $combined_options['list_single_actions'] = array_filter($combined_options['list_actions'], function ($item) {
                return !empty($item['single']);
             });

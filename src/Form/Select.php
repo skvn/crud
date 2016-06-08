@@ -83,7 +83,7 @@ class Select extends Field {
         $opts = [];
         if (!empty($this->config['method_options']))
         {
-            $this->value = $this->model->getAttribute($this->getField());
+            //$this->value = $this->model->getAttribute($this->getField());
             $opts = [];
             $method = $this->config['method_options'];
             if (method_exists($this->model, $method))
