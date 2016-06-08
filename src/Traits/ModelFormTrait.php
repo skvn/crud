@@ -72,7 +72,7 @@ trait ModelFormTrait
             $this->form = Form :: create([
                 'crudObj' => $this,
                 'config' => $this->getFormConfig(),
-                'tabs' => $this->confParam('tabs'),
+                'tabs' => $this->getListConfig('tabs'),
                 'data' => !empty($config['fillData'])?$config['fillData']:null,
                 'props' => $config
             ]);
@@ -88,8 +88,8 @@ trait ModelFormTrait
 
     public function getFormConfig()
     {
-        $form =  $this->confParam('form');
-        $tabbed = $this->confParam('form_tabbed');
+        $form =  $this->getListConfig('form');
+        $tabbed = $this->getListConfig('form_tabbed');
         $form_array = [];
         $fields = $this->getFields();
 

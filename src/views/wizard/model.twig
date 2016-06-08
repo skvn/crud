@@ -104,13 +104,13 @@
         <h1>Relations</h1>
         {% include 'crud::wizard/blocks/relations_container' %}
 
-        <h1>Form Fields</h1>
+        <h1>Editable Form Fields</h1>
         {% include 'crud::wizard/blocks/fields_container' %}
 
         {#<h1>Files</h1>#}
         {#{% include 'crud::wizard/blocks/files' %}#}
 
-        <h1>Model Scopes & Lists</h1>
+        <h1>Scopes (List & Form)</h1>
         <fieldset>
 
             <div class="row">
@@ -125,7 +125,7 @@
                     </div>
                     <label>
 
-                        <input  type="text" class="form-control" id="list_alias" style="{%  if not model.list|length %}display:none;{% endif %} width:300px;" placeholder="Enter scope name" />
+                        <input  type="text" class="form-control" id="list_alias" style="width:300px;" placeholder="Enter scope name" />
 
                         <a href="#" class="btn btn-success" data-click="crud_action" data-action="wizard_add_list" ><i class="fa fa-plus"></i> Add scope</a>
 

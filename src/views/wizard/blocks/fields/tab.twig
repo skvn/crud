@@ -1,1 +1,5 @@
-<div class="alert alert-info" data-form_tab="1" data-alias="{{ tab_alias }}"><span><span class="pficon pficon-info"></span> {{ tab.title }}</span>  <div class="pull-right"><a href="#" data-click="crud_action"  data-action="wizard_remove_parent" data-parent="div.alert" data-confirm="Remove tab?" class="label label-danger"><i class="fa fa-trash-o"></i> Remove</a></div></div>
+<span class="list-group-item list-group-item-danger" data-form_tab="1" data-alias="{{ tab_alias }}">
+    <span><span class="fa fa-folder-o"></span> {{ tab.title }}</span>
+    <div class="pull-right"><a href="#" data-click="crud_action"  data-action="wizard_remove_parent" data-parent="span.list-group-item-danger" data-confirm="Remove tab?" class="label label-danger"><i class="fa fa-trash-o"></i> Remove</a>
+    </div>
+</span>

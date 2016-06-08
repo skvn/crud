@@ -188,32 +188,21 @@ trait ModelConfigTrait
 
     /**
      * @param $key
-     * @param null $default
-     * @param bool $use_scope
+     * @param null $default     
      * @return mixed
      *
-     * Get config param. If $use_scope === true, look first in list.CURRENT_SCOPE
+     * Get config param.
      *
      */
-    public function confParam($key, $default = null, $use_scope=true)
+    public function confParam($key, $default = null)
     {
-        if (!$use_scope) {
-            if (strpos($key, '.') === false) {
-                return (!empty($this->config[$key]) ? $this->config[$key] : $default);
-            } else {
-                return $this->app['config']->get('crud.' . $this->getTable() . '.' . $key, $default);
-            }
+        
+        if (strpos($key, '.') === false) {
+            return (!empty($this->config[$key]) ? $this->config[$key] : $default);
         } else {
-
-            $original_key = $key;
-            $key = 'scopes.' . $this->scope . '.' . $key;
-            $val = $this->app['config']->get('crud.' . $this->getTable() . '.' . $key);
-            if (is_null($val))
-            {
-                return $this->confParam($original_key, $default, false);
-            }
-            return $val;
+            return $this->app['config']->get('crud.' . $this->getTable() . '.' . $key, $default);
         }
+        
     }
 
     function getList()
