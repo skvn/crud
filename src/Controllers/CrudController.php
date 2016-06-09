@@ -8,6 +8,7 @@ use Skvn\Crud\Models\CrudNotify as Notify;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Skvn\Crud\Traits\TooltipTrait;
+use Skvn\Crud\Form\Form;
 
 class CrudController extends Controller
 {
@@ -26,6 +27,7 @@ class CrudController extends Controller
         $this->view = $this->app['view'];
         $this->view->share('cmsHelper', $this->cmsHelper);
         $this->view->share('config', $this->app['config']->get('crud_common'));
+        $this->view->share('avail_controls', Form :: $controls);
 
     }
 

@@ -144,6 +144,7 @@ class Form {
         {
             throw new ConfigException('Control already registered: ' . $class);
         }
+        $conf['class'] = $class;
         self :: $controls[$conf['type']] = $conf;
     }
 

@@ -7,7 +7,8 @@ class Date extends Field {
         'type' => "date",
         'template' => "crud::crud/fields/date.twig",
         'wizard_template' => "crud::wizard/blocks/fields/date.twig",
-        'caption' => "Date"
+        'caption' => "Date",
+        'widget_url' => "js/widgets/datetime.js"
     ];
 
     function validateConfig()

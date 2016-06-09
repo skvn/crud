@@ -12,7 +12,8 @@ class Select extends Field {
         'template' => "crud::crud/fields/select.twig",
         'wizard_template' => "crud::wizard/blocks/fields/select.twig",
         'caption' => "Select",
-        'filtrable' => true
+        'filtrable' => true,
+        'widget_url' => "js/widgets/select.js"
     ];
 
 

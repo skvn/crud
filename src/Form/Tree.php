@@ -10,7 +10,8 @@ class Tree extends Field {
     static $controlInfo = [
         'type' => "tree",
         'template' => "crud::crud/fields/tree.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/tree.twig"
+        'wizard_template' => "crud::wizard/blocks/fields/tree.twig",
+        'widget_url' => "js/widgets/tree_control.js"
     ];
 
 

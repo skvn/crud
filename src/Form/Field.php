@@ -52,9 +52,11 @@ abstract class Field
 
     public static  function create(CrudModel $model, $config)
     {
-        $type = 'Skvn\Crud\Form\\'.studly_case($config['type']);
+        //$type = 'Skvn\Crud\Form\\'.studly_case($config['type']);
         //$type = studly_case($config['type']);
-        return new $type($model, $config);
+        //var_dump(Form :: $controls);
+        $class = Form :: $controls[$config['type']]['class'];
+        return new $class($model, $config);
     }
 
 
@@ -71,6 +73,10 @@ abstract class Field
     }
 
 
+    function getTemplate()
+    {
+        return Form :: $controls[$this->config['type']]['template'];
+    }
 
     function  getUniqueId()
     {

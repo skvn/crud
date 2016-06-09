@@ -7,7 +7,8 @@ class TextArea extends Field {
         'type' => "textarea",
         'template' => "crud::crud/fields/textarea.twig",
         'wizard_template' => "crud::wizard/blocks/fields/textarea.twig",
-        'caption' => 'Textarea'
+        'caption' => 'Textarea',
+        'widget_url' => "js/widgets/editor.js"
     ];
 
 

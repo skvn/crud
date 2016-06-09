@@ -7,7 +7,8 @@ class Tags extends Field {
     static $controlInfo = [
         'type' => "tags",
         'template' => "crud::crud/fields/tags.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/tags.twig"
+        'wizard_template' => "crud::wizard/blocks/fields/tags.twig",
+        'widget_url' => "js/widgets/tags.js"
     ];
 
     function getValue()
