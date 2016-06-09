@@ -3,13 +3,37 @@
 
 class TextArea extends Field {
 
+    const TYPE = "textarea";
+
     static $controlInfo = [
-        'type' => "textarea",
-        'template' => "crud::crud/fields/textarea.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/textarea.twig",
         'caption' => 'Textarea',
-        'widget_url' => "js/widgets/editor.js"
     ];
+
+    static function controlTemplate()
+    {
+        return "crud::crud/fields/textarea.twig";
+    }
+
+    static function controlWizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/textarea.twig";
+    }
+
+    static function controlWidgetUrl()
+    {
+        return "js/widgets/editor.js";
+    }
+
+    static function controlCaption()
+    {
+        return "Textarea";
+    }
+
+    static function controlFiltrable()
+    {
+        return false;
+    }
+
 
 
     function getValue()

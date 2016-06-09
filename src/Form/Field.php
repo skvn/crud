@@ -23,6 +23,8 @@ abstract class Field
     const TAGS = 'tags';
     const TREE = 'tree';
 
+    const TYPE = "abstract";
+
 
     public $config;
     protected $value = null;
@@ -50,6 +52,18 @@ abstract class Field
         }
     }
 
+    abstract static function controlTemplate();
+    abstract static function controlWizardTemplate();
+    abstract static function controlWidgetUrl();
+    abstract static function controlCaption();
+    abstract static function controlFiltrable();
+
+    function getControlTemplate()
+    {
+        return static :: controlTemplate();
+    }
+
+
     public static  function create(CrudModel $model, $config)
     {
         //$type = 'Skvn\Crud\Form\\'.studly_case($config['type']);
@@ -70,12 +84,6 @@ abstract class Field
             $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->field;
             return ['cond' => [$col, '=',  $this->value ]];
         }
-    }
-
-
-    function getTemplate()
-    {
-        return Form :: $controls[$this->config['type']]['template'];
     }
 
     function  getUniqueId()

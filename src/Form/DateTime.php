@@ -3,12 +3,33 @@
 
 class DateTime extends Field {
 
-    static $controlInfo = [
-        'type' => "date_time",
-        'template' => "crud::crud/fields/date_time.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/date_time.twig",
-        'caption' => "Date + Time"
-    ];
+    const TYPE = "date_time";
+
+    static function controlTemplate()
+    {
+        return "crud::crud/fields/date_time.twig";
+    }
+
+    static function controlWizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/date_time.twig";
+    }
+
+    static function controlWidgetUrl()
+    {
+        return false;
+    }
+
+    static function controlCaption()
+    {
+        return "Date + Time";
+    }
+
+    static function controlFiltrable()
+    {
+        return false;
+    }
+
 
     function validateConfig()
     {

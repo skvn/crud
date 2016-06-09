@@ -127,24 +127,21 @@ class Form {
 
     static function registerControl($class)
     {
-        if (!property_exists($class, 'controlInfo'))
+        if (!defined($class . "::TYPE"))
         {
-            throw new ConfigException('Invalid control class: ' . $class);
+            throw new ConfigException("Invalid control class " . $class);
         }
-        $conf = $class :: $controlInfo ?? [];
-        if (empty($conf))
-        {
-            throw new ConfigException('Invalid control class: ' . $class);
-        }
-        if (empty($conf['type']))
-        {
-            throw new ConfigException('No type defined for control class: ' . $class);
-        }
-        if (isset(self :: $controls[$conf['type']]))
+        $conf =  [
+            'type' => $class :: TYPE,
+            'class' => $class,
+            'widget_url' => $class :: controlWidgetUrl(),
+            'caption' => $class :: controlCaption(),
+            'filtrable' => $class :: controlFiltrable()
+        ];
+        if (isset(self :: $controls[$class :: TYPE]))
         {
             throw new ConfigException('Control already registered: ' . $class);
         }
-        $conf['class'] = $class;
         self :: $controls[$conf['type']] = $conf;
     }
 
@@ -241,7 +238,7 @@ class Form {
         $types = [];
         foreach (self :: $controls as $control)
         {
-            $types[$control['type']] = $control['caption'] ?? "---";
+            $types[$control['type']] = $control['caption'];
         }
         return $types;
 //        return [
@@ -270,9 +267,9 @@ class Form {
         $types = [];
         foreach (self :: $controls as $control)
         {
-            if (!empty($control['filtrable']))
+            if ($control['filtrable'])
             {
-                $types[$control['type']] = $control['caption'] ?? "---";
+                $types[$control['type']] = $control['caption'];
             }
         }
         return $types;

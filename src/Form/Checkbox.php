@@ -3,15 +3,32 @@
 
 class Checkbox extends Field {
 
+    const TYPE = "checkbox";
 
-    static $controlInfo = [
-        'type' => "checkox",
-        'template' => "crud::crud/fields/checkbox.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/checkbox.twig",
-        'caption' => "Checkbox",
-        'filtrable' => true,
-        'widget_url' => "js/widgets/checkbox.js"
-    ];
+    static function controlTemplate()
+    {
+        return "crud::crud/fields/checkbox.twig";
+    }
+
+    static function controlWizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/checkbox.twig";
+    }
+
+    static function controlWidgetUrl()
+    {
+        return "js/widgets/checkbox.js";
+    }
+
+    static function controlCaption()
+    {
+        return "Checkbox";
+    }
+
+    static function controlFiltrable()
+    {
+        return true;
+    }
 
     protected $filtrable = true;
 

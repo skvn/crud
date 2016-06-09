@@ -3,13 +3,34 @@
 
 class Number extends Field {
 
-    static $controlInfo = [
-        'type' => "number",
-        'template' => "crud::crud/fields/number.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/number.twig",
-        'caption' => "Number input",
-        'filtrable' => true
-    ];
+    const TYPE = "number";
+
+
+    static function controlTemplate()
+    {
+        return "crud::crud/fields/number.twig";
+    }
+
+    static function controlWizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/number.twig";
+    }
+
+    static function controlWidgetUrl()
+    {
+        return false;
+    }
+
+    static function controlCaption()
+    {
+        return "Number input";
+    }
+
+    static function controlFiltrable()
+    {
+        return true;
+    }
+
 
 
     protected $filtrable = true;

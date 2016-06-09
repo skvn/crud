@@ -4,12 +4,34 @@ use Skvn\Crud\Models\CrudModel;
 
 class Tags extends Field {
 
-    static $controlInfo = [
-        'type' => "tags",
-        'template' => "crud::crud/fields/tags.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/tags.twig",
-        'widget_url' => "js/widgets/tags.js"
-    ];
+    const TYPE = "tags";
+
+
+    static function controlTemplate()
+    {
+        return "crud::crud/fields/tags.twig";
+    }
+
+    static function controlWizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/tags.twig";
+    }
+
+    static function controlWidgetUrl()
+    {
+        return "js/widgets/tags.js";
+    }
+
+    static function controlCaption()
+    {
+        return "---";
+    }
+
+    static function controlFiltrable()
+    {
+        return false;
+    }
+
 
     function getValue()
     {

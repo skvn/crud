@@ -3,12 +3,37 @@
 
 class File extends Field {
 
+    const TYPE = "file";
+
     static $controlInfo = [
-        'type' => "file",
-        'template' => "crud::crud/fields/file.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/file.twig",
         'caption' => "File"
     ];
+
+    static function controlTemplate()
+    {
+        return "crud::crud/fields/file.twig";
+    }
+
+    static function controlWizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/file.twig";
+    }
+
+    static function controlWidgetUrl()
+    {
+        return false;
+    }
+
+    static function controlCaption()
+    {
+        return "File";
+    }
+
+    static function controlFiltrable()
+    {
+        return false;
+    }
+
 
     function getValue()
     {

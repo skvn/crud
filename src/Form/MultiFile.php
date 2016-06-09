@@ -3,12 +3,34 @@
 
 class MultiFile extends Field {
 
-    static $controlInfo = [
-        'type' => "multi_file",
-        'template' => "crud::crud/fields/multi_file.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/multi_file.twig",
-        'caption' => "Multiple files"
-    ];
+    const TYPE = "multi_file";
+
+
+    static function controlTemplate()
+    {
+        return "crud::crud/fields/multi_file.twig";
+    }
+
+    static function controlWizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/multi_file.twig";
+    }
+
+    static function controlWidgetUrl()
+    {
+        return false;
+    }
+
+    static function controlCaption()
+    {
+        return "Multiple files";
+    }
+
+    static function controlFiltrable()
+    {
+        return false;
+    }
+
 
     function getExisting()
     {

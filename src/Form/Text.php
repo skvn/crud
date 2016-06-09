@@ -3,13 +3,34 @@
 
 class Text extends Field {
 
-    static $controlInfo = [
-        'type' => "text",
-        'template' => "crud::crud/fields/text.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/text.twig",
-        'caption' => "Text input",
-        'filtrable' => true
-    ];
+    const TYPE = "text";
+
+
+
+    static function controlTemplate()
+    {
+        return "crud::crud/fields/text.twig";
+    }
+
+    static function controlWizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/text.twig";
+    }
+
+    static function controlWidgetUrl()
+    {
+        return false;
+    }
+
+    static function controlCaption()
+    {
+        return "Text input";
+    }
+
+    static function controlFiltrable()
+    {
+        return true;
+    }
 
 
     function getValue()

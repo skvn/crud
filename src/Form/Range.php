@@ -3,11 +3,35 @@
 
 class Range extends Field
 {
-    static $controlInfo = [
-        'type' => "range",
-        'template' => "crud::crud/fields/range.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/range.twig"
-    ];
+    const TYPE = "range";
+
+
+
+    static function controlTemplate()
+    {
+        return "crud::crud/fields/range.twig";
+    }
+
+    static function controlWizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/range.twig";
+    }
+
+    static function controlWidgetUrl()
+    {
+        return false;
+    }
+
+    static function controlCaption()
+    {
+        return "---";
+    }
+
+    static function controlFiltrable()
+    {
+        return false;
+    }
+
 
     function getValue()
     {

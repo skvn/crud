@@ -3,12 +3,33 @@
 
 class Image extends File {
 
-    static $controlInfo = [
-        'type' => "image",
-        'template' => "crud::crud/fields/image.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/image.twig",
-        'caption' => "Image"
-    ];
+    const TYPE = "image";
+
+    static function controlTemplate()
+    {
+        return "crud::crud/fields/image.twig";
+    }
+
+    static function controlWizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/image.twig";
+    }
+
+    static function controlWidgetUrl()
+    {
+        return false;
+    }
+
+    static function controlCaption()
+    {
+        return "Image";
+    }
+
+    static function controlFiltrable()
+    {
+        return false;
+    }
+
 
 
 }

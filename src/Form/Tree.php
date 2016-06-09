@@ -7,12 +7,33 @@ use Illuminate\Support\Collection;
 
 class Tree extends Field {
 
-    static $controlInfo = [
-        'type' => "tree",
-        'template' => "crud::crud/fields/tree.twig",
-        'wizard_template' => "crud::wizard/blocks/fields/tree.twig",
-        'widget_url' => "js/widgets/tree_control.js"
-    ];
+    const TYPE = "tree";
+
+
+    static function controlTemplate()
+    {
+        return "crud::crud/fields/tree.twig";
+    }
+
+    static function controlWizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/tree.twig";
+    }
+
+    static function controlWidgetUrl()
+    {
+        return "js/widgets/tree_control.js";
+    }
+
+    static function controlCaption()
+    {
+        return "---";
+    }
+
+    static function controlFiltrable()
+    {
+        return false;
+    }
 
 
     public  function  getValue()
