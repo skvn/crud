@@ -190,6 +190,7 @@ class CrudModelPrototype
 //            }
 
             $key = $rel_arr['relation_name'];
+            unset($rel_arr['relation_name']);
             $this->config_data['fields'][$key] = $rel_arr;
 
             //\Log :: info(print_r($rel_arr,1), ['browsify' => true]);
@@ -334,6 +335,7 @@ class CrudModelPrototype
                         }
                     }
 
+                    unset( $this->config_data['fields'][$k]['property_name']);
                 }
 
                 //if any textarea has a html editor, add inline img trait

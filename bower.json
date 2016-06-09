@@ -23,7 +23,7 @@
     "jstree": "~3.3.0",
     "jquery-validation": "^1.15.0",
     "datatables-treetable": "*",
-    "datatables": "https://github.com/skvn/dt.git#^1.10.12",
+    "datatables": "latest",
     "dt": "https://github.com/skvn/dt.git"
   }
 }
