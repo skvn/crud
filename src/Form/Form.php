@@ -2,6 +2,7 @@
 
 use Illuminate\Container\Container;
 use Skvn\Crud\Models\CrudStubModel;
+use Skvn\Crud\Exceptions\ConfigException;
 
 
 /**
@@ -11,68 +12,70 @@ use Skvn\Crud\Models\CrudStubModel;
  */
 class Form {
 
-    /**
-     *
-     */
-    const FIELD_SELECT = 'select';
-    /**
-     *
-     */
-    const FIELD_TEXT = 'text';
-    /**
-     *
-     */
-    const FIELD_FILE = 'file';
-    const FIELD_IMAGE = 'image';
-    /**
-     *
-     */
-    const FIELD_CHECKBOX = 'checkbox';
-    /**
-     *
-     */
-    const FIELD_MULTI_FILE = 'multi_file';
-    /**
-     *
-     */
-    const FIELD_TEXTAREA = 'textarea';
-    /**
-     *
-     */
-    const FIELD_DATE = 'date';
+    static $controls = [];
 
-    /**
-     *
-     */
-    const FIELD_DATE_TIME = 'date_time';
-
-    /**
-     *
-     */
-    const FIELD_RANGE = 'range';
-    /**
-     *
-     */
-    const FIELD_DATE_RANGE = 'date_range';
-    /**
-     *
-     */
-    const FIELD_NUMBER = 'number';
-
-    /**
-     *
-     */
-    const FIELD_DECIMAL = 'decimal';
-
-    /**
-     *
-     */
-    const FIELD_TAGS = 'tags';
-
-    /**
-     *
-     */
-    const FIELD_TREE = 'tree';
+//    /**
+//     *
+//     */
+//    const FIELD_SELECT = 'select';
+//    /**
+//     *
+//     */
+//    const FIELD_TEXT = 'text';
+//    /**
+//     *
+//     */
+//    const FIELD_FILE = 'file';
+//    const FIELD_IMAGE = 'image';
+//    /**
+//     *
+//     */
+//    const FIELD_CHECKBOX = 'checkbox';
+//    /**
+//     *
+//     */
+//    const FIELD_MULTI_FILE = 'multi_file';
+//    /**
+//     *
+//     */
+//    const FIELD_TEXTAREA = 'textarea';
+//    /**
+//     *
+//     */
+//    const FIELD_DATE = 'date';
+//
+//    /**
+//     *
+//     */
+//    const FIELD_DATE_TIME = 'date_time';
+//
+//    /**
+//     *
+//     */
+//    const FIELD_RANGE = 'range';
+//    /**
+//     *
+//     */
+//    const FIELD_DATE_RANGE = 'date_range';
+//    /**
+//     *
+//     */
+//    const FIELD_NUMBER = 'number';
+//
+//    /**
+//     *
+//     */
+//    const FIELD_DECIMAL = 'decimal';
+//
+//    /**
+//     *
+//     */
+//    const FIELD_TAGS = 'tags';
+//
+//    /**
+//     *
+//     */
+//    const FIELD_TREE = 'tree';
 
 
 
@@ -122,6 +125,28 @@ class Form {
         }
     }//
 
+    static function registerControl($class)
+    {
+        if (!property_exists($class, 'controlInfo'))
+        {
+            throw new ConfigException('Invalid control class: ' . $class);
+        }
+        $conf = $class :: $controlInfo ?? [];
+        if (empty($conf))
+        {
+            throw new ConfigException('Invalid control class: ' . $class);
+        }
+        if (empty($conf['type']))
+        {
+            throw new ConfigException('No type defined for control class: ' . $class);
+        }
+        if (isset(self :: $controls[$conf['type']]))
+        {
+            throw new ConfigException('Control already registered: ' . $class);
+        }
+        self :: $controls[$conf['type']] = $conf;
+    }
+
     static function create($args = [])
     {
         return new self($args);
@@ -141,7 +166,7 @@ class Form {
         }
         if (!$this->crudObj->getField($name))
         {
-            $this->crudObj->addFormField($name, isset($config['title']) ? $config['title'] : '', isset($config['type']) ? $config['type'] : self :: FIELD_TEXT, $config);
+            $this->crudObj->addFormField($name, isset($config['title']) ? $config['title'] : '', isset($config['type']) ? $config['type'] : "text", $config);
         }
         return $this;
     }
@@ -201,27 +226,38 @@ class Form {
     }
 
 
+    static function getAttachFields()
+    {
+
+    }
+
     /**
      * Get array of available edit types
      * @return array
      */
     static function getAvailableFieldTypes()
     {
-        return [
-            self::FIELD_TEXT => 'Text input',
-            self::FIELD_NUMBER => 'Number input',
-            self::FIELD_TEXTAREA => 'Textarea',
-            self::FIELD_DATE => 'Date',
-            self::FIELD_DATE_TIME => 'Date + Time',
-            self::FIELD_DATE_RANGE => 'Date range',
-            self::FIELD_SELECT => 'Select',
-            self::FIELD_CHECKBOX => 'Checkbox',
-            self::FIELD_FILE => 'File',
-            self::FIELD_IMAGE => 'Image',
-            self::FIELD_MULTI_FILE => 'Multiple files',
-
-
-        ];
+        $types = [];
+        foreach (self :: $controls as $control)
+        {
+            $types[$control['type']] = $control['caption'] ?? "---";
+        }
+        return $types;
+//        return [
+//            self::FIELD_TEXT => 'Text input',
+//            self::FIELD_NUMBER => 'Number input',
+//            self::FIELD_TEXTAREA => 'Textarea',
+//            self::FIELD_DATE => 'Date',
+//            self::FIELD_DATE_TIME => 'Date + Time',
+//            self::FIELD_DATE_RANGE => 'Date range',
+//            self::FIELD_SELECT => 'Select',
+//            self::FIELD_CHECKBOX => 'Checkbox',
+//            self::FIELD_FILE => 'File',
+//            self::FIELD_IMAGE => 'Image',
+//            self::FIELD_MULTI_FILE => 'Multiple files',
+//
+//
+//        ];
     }//
 
     /**
@@ -230,26 +266,38 @@ class Form {
      */
     static function getAvailableFilterTypes()
     {
-        return [
-            self::FIELD_TEXT => 'Text input',
-            self::FIELD_RANGE => 'Number range',
-            self::FIELD_DATE_RANGE => 'Date range',
-            self::FIELD_SELECT => 'Select',
-            self::FIELD_CHECKBOX => 'Checkbox',
-            //self::FIELD_FILE => 'File',
-            //self::FIELD_MULTI_FILE => 'Multiple files',
-        ];
+        $types = [];
+        foreach (self :: $controls as $control)
+        {
+            if (!empty($control['filtrable']))
+            {
+                $types[$control['type']] = $control['caption'] ?? "---";
+            }
+        }
+        return $types;
+//        return [
+//            self::FIELD_TEXT => 'Text input',
+//            self::FIELD_RANGE => 'Number range',
+//            self::FIELD_DATE_RANGE => 'Date range',
+//            self::FIELD_SELECT => 'Select',
+//            self::FIELD_CHECKBOX => 'Checkbox',
+//            //self::FIELD_FILE => 'File',
+//            //self::FIELD_MULTI_FILE => 'Multiple files',
+//        ];
     }//
 
     static function getAvailableRelationFieldTypes($multiple)
     {
         $ret =  [
-            Form::FIELD_SELECT => 'Select',
+            //Form::FIELD_SELECT => 'Select',
+            "select" => 'Select',
         ];
         if ($multiple)
         {
-            $ret[Form::FIELD_TAGS] = 'Tags';
-            $ret[Form::FIELD_TREE] = 'Tree';
+//            $ret[Form::FIELD_TAGS] = 'Tags';
+//            $ret[Form::FIELD_TREE] = 'Tree';
+            $ret['tags'] = 'Tags';
+            $ret['tree'] = 'Tree';
         }
 
         return $ret;

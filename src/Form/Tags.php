@@ -4,6 +4,11 @@ use Skvn\Crud\Models\CrudModel;
 
 class Tags extends Field {
 
+    static $controlInfo = [
+        'type' => "tags",
+        'template' => "crud::crud/fields/tags.twig",
+        'wizard_template' => "crud::wizard/blocks/fields/tags.twig"
+    ];
 
     function getValue()
     {

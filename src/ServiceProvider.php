@@ -41,6 +41,7 @@ class ServiceProvider extends LServiceProvider {
     {
         $this->registerCommands();
         $this->registerHelpers();
+        $this->registerControls();
 
         // Register dependency packages
         $this->app->register('Intervention\Image\ImageServiceProvider');
@@ -92,6 +93,14 @@ class ServiceProvider extends LServiceProvider {
         $this->app->bindIf('skvn.crud', function($app){
             return new Helper\CrudHelper($app);
         }, true);
+    }
+
+    protected function registerControls()
+    {
+        foreach ($this->app['config']->get('crud_common')['form_controls'] as $class)
+        {
+            Form\Form :: registerControl($class);
+        }
     }
 
 

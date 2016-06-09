@@ -3,6 +3,11 @@
 
 class Range extends Field
 {
+    static $controlInfo = [
+        'type' => "range",
+        'template' => "crud::crud/fields/range.twig",
+        'wizard_template' => "crud::wizard/blocks/fields/range.twig"
+    ];
 
     function getValue()
     {

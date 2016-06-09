@@ -3,6 +3,12 @@
 
 class DateTime extends Field {
 
+    static $controlInfo = [
+        'type' => "date_time",
+        'template' => "crud::crud/fields/date_time.twig",
+        'wizard_template' => "crud::wizard/blocks/fields/date_time.twig",
+        'caption' => "Date + Time"
+    ];
 
     function validateConfig()
     {

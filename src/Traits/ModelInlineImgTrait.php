@@ -1,6 +1,6 @@
 <?php namespace Skvn\Crud\Traits;
 
-use Skvn\Crud\Form\Form;
+use Skvn\Crud\Form\Field;
 
 /**
  * Class ModelInlineImgTrait
@@ -29,7 +29,7 @@ trait ModelInlineImgTrait {
         {
             foreach ($this->config['fields'] as $name => $field)
             {
-                if (!empty($field['type']) && in_array($field['type'], [Form :: FIELD_TEXTAREA]) && !empty($field['editor']))
+                if (!empty($field['type']) && in_array($field['type'], [Field :: TEXTAREA]) && !empty($field['editor']))
                 {
                     $cols[] = $name;
                 }
