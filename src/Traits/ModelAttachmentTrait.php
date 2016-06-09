@@ -3,7 +3,7 @@
 
 use Skvn\Crud\Handlers\AttachmentHandler;
 use Skvn\Crud\Models\CrudFile;
-use Skvn\Crud\Form\Form;
+use Skvn\Crud\Form\Field;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -28,7 +28,7 @@ trait ModelAttachmentTrait {
         {
             foreach ($this->config['fields'] as $name => $field)
             {
-                if (!empty($field['type']) && in_array($field['type'], [Form :: FIELD_FILE, Form :: FIELD_IMAGE]))
+                if (!empty($field['type']) && in_array($field['type'], [Field :: FILE, Field :: IMAGE]))
                 {
                     $this->setAttach($name, $field);
                     $this->fillable[] = $name;

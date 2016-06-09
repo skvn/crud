@@ -1,6 +1,15 @@
 {% set ALIAS = "_ALIAS_" %}
 {% set fld = null %}
 
+{% for c in all_controls %}
+    {% if c.wizard_template %}
+        <div class="form-inline" id="tpl_f_{{ c.type }}" style="display: none" >
+            {% include c.wizard_template %}
+        </div>
+    {% endif %}
+{% endfor %}
+
+{#
 <div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_TEXT') }}" style="display: none" >
     {% include 'crud::wizard/blocks/fields/text.twig' %}
 </div>
@@ -50,3 +59,4 @@
 
 </div>
 
+#}

@@ -6,6 +6,7 @@ use Skvn\Crud\Exceptions\WizardException;
 use Skvn\Crud\Wizard\Migrator;
 use Skvn\Crud\Wizard\Wizard;
 use Skvn\Crud\Wizard\CrudModelPrototype;
+use Skvn\Crud\Form\Form;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application as LaravelApplication;
 
@@ -33,6 +34,7 @@ class WizardController extends Controller {
 
         \View::share('cmsHelper', $this->cmsHelper);
         \View::share('wizard', $this->wizard);
+        \View::share('all_controls', Form :: $controls);
     }
 
     function index()

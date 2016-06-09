@@ -7,6 +7,15 @@ use Illuminate\Support\Collection;
 
 class Select extends Field {
 
+    static $controlInfo = [
+        'type' => "select",
+        'template' => "crud::crud/fields/select.twig",
+        'wizard_template' => "crud::wizard/blocks/fields/select.twig",
+        'caption' => "Select",
+        'filtrable' => true,
+        'widget_url' => "js/widgets/select.js"
+    ];
+
 
     function getValue()
     {

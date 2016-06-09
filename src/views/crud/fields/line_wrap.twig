@@ -1,10 +1,10 @@
 {%  if input.config.type == 'multi_file' %}
-    {% include 'crud::crud/fields/'~input.config.type~'.twig' %}
+    {% include input.getTemplate() %}
 {%  else  %}
 <div class="form-group " data-ref="{{ input.name }}">
 
     <div class="col-md-{{ COL_WIDTH?COL_WIDTH:12 }}">
-     {% include 'crud::crud/fields/'~input.config.type~'.twig' %}
+     {% include input.getTemplate() %}
     </div>
 
 </div>

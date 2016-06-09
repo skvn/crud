@@ -1,4 +1,4 @@
 <div class="form-group " >
-    {% include 'crud::crud/fields/'~input.config.type~'.twig' %}
+    {% include input.getTemplate() %}
 </div>
 <div class="hr-line-dashed"></div>

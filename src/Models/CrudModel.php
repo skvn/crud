@@ -358,6 +358,17 @@ abstract class CrudModel extends Model
     }
 
     /**
+     * Format date from timestamp
+     *
+     * @param $val
+     * @param array $args
+     */
+    function crudFormatValueDate($val, $args = [])
+    {
+        return date($args['format'] ?? 'd.m.Y', $val);
+    }
+
+    /**
      * Get All available formatters
      *
      * @return array

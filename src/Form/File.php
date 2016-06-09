@@ -3,6 +3,12 @@
 
 class File extends Field {
 
+    static $controlInfo = [
+        'type' => "file",
+        'template' => "crud::crud/fields/file.twig",
+        'wizard_template' => "crud::wizard/blocks/fields/file.twig",
+        'caption' => "File"
+    ];
 
     function getValue()
     {

@@ -3,6 +3,16 @@
 
 class Checkbox extends Field {
 
+
+    static $controlInfo = [
+        'type' => "checkox",
+        'template' => "crud::crud/fields/checkbox.twig",
+        'wizard_template' => "crud::wizard/blocks/fields/checkbox.twig",
+        'caption' => "Checkbox",
+        'filtrable' => true,
+        'widget_url' => "js/widgets/checkbox.js"
+    ];
+
     protected $filtrable = true;
 
 

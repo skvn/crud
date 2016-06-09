@@ -3,6 +3,14 @@
 
 class DateRange extends Range {
 
+    static $controlInfo = [
+        'type' => "date_range",
+        'template' => "crud::crud/fields/date_range.twig",
+        'wizard_template' => "crud::wizard/blocks/fields/date_range.twig",
+        'caption' => "Date range",
+        'filtrable' => true
+    ];
+
 
     function getValueFrom()
     {

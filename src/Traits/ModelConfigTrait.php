@@ -272,7 +272,7 @@ trait ModelConfigTrait
                 }
                 catch (\Exception $e)
                 {
-                    $value = "(not found)";
+                    $value = "(not found)" . $e->getMessage() . ":" . $e->getFile() . ":" . $e->getLine();
                 }
             }
         }

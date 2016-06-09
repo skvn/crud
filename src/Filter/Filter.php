@@ -3,6 +3,7 @@
 
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Form\Form;
+use Skvn\Crud\Form\Field;
 
 class Filter {
 
@@ -93,7 +94,7 @@ class Filter {
         if ($field_description = $this->crudObj->getField($column_name))
         {
             $field_description['required'] = 0;
-            if ($field_description['type'] == Form::FIELD_SELECT)
+            if ($field_description['type'] == Field::SELECT)
             {
                 $field_description['multiple'] = 1;
             }

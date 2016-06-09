@@ -1,6 +1,7 @@
 <?php namespace Skvn\Crud\Wizard;
 
 use Skvn\Crud\Form\Form;
+use Skvn\Crud\Form\Field;
 use Skvn\Crud\Models\CrudModel;
 
 
@@ -558,7 +559,7 @@ class Wizard
      */
     public  function isDateField($type)
     {
-        return in_array($type, [Form::FIELD_DATE_RANGE, Form::FIELD_DATE, Form::FIELD_DATE_TIME]);
+        return in_array($type, [Field::DATE_RANGE, Field::DATE, Field::DATE_TIME]);
     }
 
     /**

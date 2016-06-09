@@ -21,14 +21,18 @@ class Common extends Twig_Extension
 
     function asset($asset, $use_skin=0, $package = 'crud')
     {
+        if (strpos($asset, '/') === 0)
+        {
+            return $asset . "?s=" . $this->app['config']->get('app.serial');
+        }
         if (!$use_skin)
         {
-            return '/vendor/' . $package . '/' . $asset . '?s=' . \Config :: get('app.serial');
+            return '/vendor/' . $package . '/' . $asset . '?s=' . $this->app['config']->get('app.serial');
         }
         else
         {
             $path = '/skins/';
-            $path  .= \Config::get('view.skin').'/';
+            $path  .= $this->app['config']->get('view.skin').'/';
 
             if (!empty($package))
             {
@@ -36,7 +40,7 @@ class Common extends Twig_Extension
             }
 
             $path .= $asset;
-            $path .= '?s=' . \Config :: get('app.serial');
+            $path .= '?s=' . $this->app['config']->get('app.serial');
 
 
             return $path;

@@ -3,7 +3,7 @@
 
 
 use Skvn\Crud\Exceptions\WizardException;
-use Skvn\Crud\Form\Form;
+use Skvn\Crud\Form\Field;
 
 /**
  * Class CrudModelPrototype
@@ -209,11 +209,11 @@ class CrudModelPrototype
         if (!empty($this->config_data['fields'])) {
 
             foreach ($this->config_data['fields'] as $k => $f) {
-                if (!empty($f['type']) && in_array($f['type'], [Form::FIELD_FILE, Form::FIELD_MULTI_FILE, Form::FIELD_IMAGE]))
+                if (!empty($f['type']) && in_array($f['type'], [Field::FILE, Field::MULTI_FILE, Field::IMAGE]))
                 {
                     $f['name'] = $f['rel_name'];
                     $f['field'] = $k;
-                    $f['multi'] = ($f['type'] == Form::FIELD_MULTI_FILE?1:0);
+                    $f['multi'] = ($f['type'] == Field::MULTI_FILE?1:0);
                     $this->config_data['fields'][$f['rel_name']] = $f;
                     unset($this->config_data['fields'][$k]);
                     $this->addFileField($f);
@@ -283,7 +283,7 @@ class CrudModelPrototype
             $pivot_table = '';
         }
         $this->config_data['attaches'][] = ['column'=>$data['name'], 'multi'=>$data['multi'], 'pivot_table'=>$pivot_table];
-        $this->config_data['fields'][$data['name']] = array_merge(['editable'=>1,'type' => ($data['multi']?Form::FIELD_MULTI_FILE: Form::FIELD_FILE)], $data);
+        $this->config_data['fields'][$data['name']] = array_merge(['editable'=>1,'type' => ($data['multi']?Field::MULTI_FILE: Field::FILE)], $data);
     }
 
     /**
@@ -321,10 +321,10 @@ class CrudModelPrototype
                     $this->config_data['fields'][$k]['format'] = $formats[$f['format']]['php'];
                     $this->config_data['fields'][$k]['jsformat'] = $formats[$f['format']]['js'];
 
-                    if (in_array($f['type'], [Form::FIELD_DATE, Form::FIELD_DATE_TIME]))
+                    if (in_array($f['type'], [Field::DATE, Field::DATE_TIME]))
                     {
                         $this->config_data['fields'][$k]['db_type'] = $this->column_types[$k];
-                    } elseif ($f['type'] == Form::FIELD_DATE_RANGE)
+                    } elseif ($f['type'] == Field::DATE_RANGE)
                     {
                         $this->config_data['fields'][$k]['db_type'] = $this->column_types[$f['fields'][0]];
 
@@ -339,7 +339,7 @@ class CrudModelPrototype
                 }
 
                 //if any textarea has a html editor, add inline img trait
-                if (!empty($f['type']) && $f['type'] == Form::FIELD_TEXTAREA && !empty($f['editor']))
+                if (!empty($f['type']) && $f['type'] == Field::TEXTAREA && !empty($f['editor']))
                 {
                     if (!isset($this->config_data['inline_img']))
                     {
@@ -389,7 +389,7 @@ class CrudModelPrototype
                         $field['column'] = $k;
 
                         //process date
-                        if (!empty($f['type']) && $f['type'] == Form::FIELD_DATE_RANGE) {
+                        if (!empty($f['type']) && $f['type'] == Field::DATE_RANGE) {
                             $formats = $this->wizard->getAvailableDateFormats();
                             $field['format'] = $formats[$f['format']]['php'];
                             $field['jsformat'] = $formats[$f['format']]['js'];

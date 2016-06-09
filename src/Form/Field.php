@@ -4,8 +4,25 @@ use Skvn\Crud\Exceptions\ConfigException;
 use Skvn\Crud\Models\CrudModel;
 
 
-class Field
+abstract class Field
 {
+
+    const SELECT = 'select';
+    const TEXT = 'text';
+    const FILE = 'file';
+    const IMAGE = 'image';
+    const CHECKBOX = 'checkbox';
+    const MULTI_FILE = 'multi_file';
+    const TEXTAREA = 'textarea';
+    const DATE = 'date';
+    const DATE_TIME = 'date_time';
+    const RANGE = 'range';
+    const DATE_RANGE = 'date_range';
+    const NUMBER = 'number';
+    const DECIMAL = 'decimal';
+    const TAGS = 'tags';
+    const TREE = 'tree';
+
 
     public $config;
     protected $value = null;
@@ -25,6 +42,7 @@ class Field
         $this->model = $model;
         $this->name = $config['name'];
         $this->field = $config['field'];
+        $this->getValue();
 
         if (!$this->validateConfig())
         {
@@ -34,9 +52,11 @@ class Field
 
     public static  function create(CrudModel $model, $config)
     {
-        $type = 'Skvn\Crud\Form\\'.studly_case($config['type']);
+        //$type = 'Skvn\Crud\Form\\'.studly_case($config['type']);
         //$type = studly_case($config['type']);
-        return new $type($model, $config);
+        //var_dump(Form :: $controls);
+        $class = Form :: $controls[$config['type']]['class'];
+        return new $class($model, $config);
     }
 
 
@@ -53,6 +73,10 @@ class Field
     }
 
 
+    function getTemplate()
+    {
+        return Form :: $controls[$this->config['type']]['template'];
+    }
 
     function  getUniqueId()
     {

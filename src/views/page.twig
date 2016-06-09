@@ -95,13 +95,12 @@
 <script src="{{ 'js/widgets/table.js'|asset }}"></script>
 <script src="{{ 'js/widgets/form.js'|asset }}"></script>
 <script src="{{ 'js/widgets/tree.js'|asset }}"></script>
-<script src="{{ 'js/widgets/tree_control.js'|asset }}"></script>
-<script src="{{ 'js/widgets/select.js'|asset }}"></script>
-<script src="{{ 'js/widgets/tags.js'|asset }}"></script>
-<script src="{{ 'js/widgets/datetime.js'|asset }}"></script>
-<script src="{{ 'js/widgets/editor.js'|asset }}"></script>
-<script src="{{ 'js/widgets/checkbox.js'|asset }}"></script>
 <script src="{{ 'js/modules/tooltip.js'|asset }}"></script>
+{% for c in avail_controls %}
+    {% if c.widget_url %}
+        <script src="{{ c.widget_url|asset }}"></script>
+    {% endif %}
+{% endfor %}
 {#<script src="{{ 'js/modules/notify.js'|asset }}"></script>#}
 
 <!-- ASSETS -->

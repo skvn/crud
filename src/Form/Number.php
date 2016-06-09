@@ -3,6 +3,15 @@
 
 class Number extends Field {
 
+    static $controlInfo = [
+        'type' => "number",
+        'template' => "crud::crud/fields/number.twig",
+        'wizard_template' => "crud::wizard/blocks/fields/number.twig",
+        'caption' => "Number input",
+        'filtrable' => true
+    ];
+
+
     protected $filtrable = true;
 
     function getValue()

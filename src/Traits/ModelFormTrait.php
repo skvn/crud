@@ -32,7 +32,7 @@ trait ModelFormTrait
 
         if (empty($fieldType))
         {
-            $fieldType = Form::FIELD_TEXT;
+            $fieldType = "text";
         }
         $params = ['type'=>$fieldType];
 
