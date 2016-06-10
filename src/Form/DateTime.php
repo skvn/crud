@@ -2,46 +2,43 @@
 
 
 use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Wizard\CrudModelPrototype;
 use Skvn\Crud\Wizard\Wizard;
+use Skvn\Crud\Contracts\FormControl;
 
 
-class DateTime extends Field implements WizardableField
+class DateTime extends Field implements WizardableField, FormControl
 {
 
-    use CommonFieldWizardTrait;
+    use WizardCommonFieldTrait;
 
-    const TYPE = "date_time";
 
-    public static function fieldDbType() {
+    function controlType()
+    {
+        return "date_time";
+    }
+
+    public function wizardDbType() {
         return 'dateTime';
     }
 
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/date_time.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/date_time.twig";
     }
 
-    static function controlWidgetUrl()
-    {
-        return false;
-    }
 
-    static function controlCaption()
+    function wizardCaption()
     {
         return "Date + Time";
     }
 
-    static function controlFiltrable()
-    {
-        return false;
-    }
 
 
     function validateConfig()
@@ -89,7 +86,7 @@ class DateTime extends Field implements WizardableField
         }
     }
 
-    static function callbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    function wizardCallbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
     {
         $formats = $modelPrototype->wizard->getAvailableDateFormats();
         $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];

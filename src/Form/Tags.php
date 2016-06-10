@@ -2,15 +2,20 @@
 
 use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Models\CrudModel;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
+use Skvn\Crud\Contracts\FormControl;
 
-class Tags extends Field implements WizardableField {
+
+class Tags extends Field implements WizardableField, FormControl {
 
     
-    use CommonFieldWizardTrait;
+    use WizardCommonFieldTrait;
     
-    const TYPE = "tags";
 
+    function controlType()
+    {
+        return "tags";
+    }
 
         
     /**
@@ -18,7 +23,7 @@ class Tags extends Field implements WizardableField {
      *
      * @return bool
      */
-    public static function controlIsForRelationOnly():bool
+    public function wizardIsForRelationOnly():bool
     {
         return true;
     }
@@ -28,7 +33,7 @@ class Tags extends Field implements WizardableField {
      *
      * @return bool
      */
-    public static function controlIsForRelation():bool
+    public function wizardIsForRelation():bool
     {
         return true;
     }
@@ -38,35 +43,31 @@ class Tags extends Field implements WizardableField {
      *
      * @return bool
      */
-    public static function controlIsForManyRelation():bool
+    public function wizardIsForManyRelation():bool
     {
         return true;
     }
     
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/tags.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/tags.twig";
     }
 
-    static function controlWidgetUrl()
+    function controlWidgetUrl()
     {
         return "js/widgets/tags.js";
     }
 
-    static function controlCaption()
+    function wizardCaption()
     {
         return "---";
     }
 
-    static function controlFiltrable()
-    {
-        return false;
-    }
 
 
     function getValue()

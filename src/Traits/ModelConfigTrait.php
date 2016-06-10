@@ -1,6 +1,7 @@
 <?php namespace Skvn\Crud\Traits;
 
 use Skvn\Crud\Form\Field;
+use Skvn\Crud\Form\Form;
 use Skvn\Crud\Exceptions\ConfigException;
 use Skvn\Crud\Models\CrudFile;
 use Skvn\Crud\Handlers\ListHandler;
@@ -284,7 +285,7 @@ trait ModelConfigTrait
                 if ($form_config && !empty($form_config['type']))
                 {
                     $form_config['name'] = $col;
-                    $field = Field::create($this, $form_config);
+                    $field = Form::createControl($this, $form_config);
                     $value = $field->getValueForList();
                 }
                 else

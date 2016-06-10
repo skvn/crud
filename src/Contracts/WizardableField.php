@@ -7,7 +7,6 @@ use Skvn\Crud\Wizard\Wizard;
 interface WizardableField
 {
 
-    const WIZARDABLE = true;
 
 
     /**
@@ -15,21 +14,23 @@ interface WizardableField
      *
      * @return null|string
      */
-    public static function fieldDbType();
+    public function wizardDbType();
     
     /**
      * Returns true if the  control can be used only for relation editing only
      * 
      * @return bool
      */
-    public static function controlIsForRelationOnly():bool;
+    public function wizardIsForRelationOnly():bool;
 
     /**
      * Returns true if the  control can be used only for relation editing
      *
      * @return bool
      */
-    public static function controlIsForRelation():bool;
+    public function wizardIsForRelation():bool;
+
+
 
 
     /**
@@ -37,14 +38,17 @@ interface WizardableField
      *
      * @return bool
      */
-    public static function controlIsForManyRelation():bool;
+    public function wizardIsForManyRelation():bool;
     
     /**
      * Get path to wizard template
      *
      * @return string
      */
-    public static function controlWizardTemplate() ;
+    public function wizardTemplate() ;
+
+    function wizardCaption();
+    function wizardFiltrable();
 
     /**
      * Apply actions to the field config array during setup in wizard
@@ -54,7 +58,7 @@ interface WizardableField
      * @param CrudModelPrototype $modelPrototype
      * @return void
      */
-    public static function callbackFieldConfig ($fieldKey,array &$fieldConfig,CrudModelPrototype $modelPrototype);
+    public function wizardCallbackFieldConfig ($fieldKey,array &$fieldConfig,CrudModelPrototype $modelPrototype);
 
     /**
      * Apply actions to the model config array during setup in wizard
@@ -64,6 +68,6 @@ interface WizardableField
      * @param CrudModelPrototype $modelPrototype
      * @return void
      */
-    public  static function callbackModelConfig($fieldKey,array &$modelConfig,CrudModelPrototype $modelPrototype);
+    public function wizardCallbackModelConfig($fieldKey,array &$modelConfig,CrudModelPrototype $modelPrototype);
 
 }

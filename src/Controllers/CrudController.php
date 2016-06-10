@@ -27,7 +27,7 @@ class CrudController extends Controller
         $this->view = $this->app['view'];
         $this->view->share('cmsHelper', $this->cmsHelper);
         $this->view->share('config', $this->app['config']->get('crud_common'));
-        $this->view->share('avail_controls', Form :: $controls);
+        $this->view->share('avail_controls', Form :: getAvailControls());
 
     }
 

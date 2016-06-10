@@ -5,16 +5,22 @@ use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Illuminate\Support\Collection;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
+use Skvn\Crud\Contracts\FormControl;
 
-class Select extends Field implements WizardableField
+
+class Select extends Field implements WizardableField, FormControl
 {
     
-    use CommonFieldWizardTrait;
+    use WizardCommonFieldTrait;
     
-    const TYPE = "select";
 
-    public static function fieldDbType() {
+    function controlType()
+    {
+        return "select";
+    }
+
+    public function wizardDbType() {
         return 'integer';
     }
 
@@ -23,7 +29,7 @@ class Select extends Field implements WizardableField
      *
      * @return bool
      */
-    public static function controlIsForRelationOnly():bool
+    public function widgetIsForRelationOnly():bool
     {
         return false;
     }
@@ -33,7 +39,7 @@ class Select extends Field implements WizardableField
      *
      * @return bool
      */
-    public static function controlIsForRelation():bool
+    public function widgetIsForRelation():bool
     {
         return true;
     }
@@ -43,32 +49,32 @@ class Select extends Field implements WizardableField
      *
      * @return bool
      */
-    public static function controlIsForManyRelation():bool
+    public function widgetIsForManyRelation():bool
     {
         return true;
     }
     
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/select.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/select.twig";
     }
 
-    static function controlWidgetUrl()
+    function controlWidgetUrl()
     {
         return "js/widgets/select.js";
     }
 
-    static function controlCaption()
+    function wizardCaption()
     {
         return "Select";
     }
 
-    static function controlFiltrable()
+    function wizardFiltrable()
     {
         return true;
     }

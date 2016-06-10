@@ -2,46 +2,47 @@
 
 
 use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Wizard\CrudModelPrototype;
+use Skvn\Crud\Contracts\FormControl;
 
-class TextArea extends Field implements WizardableField{
+
+class TextArea extends Field implements WizardableField, FormControl{
 
     
-    use CommonFieldWizardTrait;
+    use WizardCommonFieldTrait;
     
-    const TYPE = "textarea";
+
+    function controlType()
+    {
+        return "textarea";
+    }
 
 
-
-    public static function fieldDbType() {
+    public function wizardDbType() {
         return 'longText';
     }
 
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/textarea.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/textarea.twig";
     }
 
-    static function controlWidgetUrl()
+    function controlWidgetUrl()
     {
         return "js/widgets/editor.js";
     }
 
-    static function controlCaption()
+    function wizardCaption()
     {
         return "Textarea";
     }
 
-    static function controlFiltrable()
-    {
-        return false;
-    }
 
 
 
@@ -64,7 +65,7 @@ class TextArea extends Field implements WizardableField{
 
     }
 
-    public  static function callbackModelConfig($fieldKey,array &$modelConfig,CrudModelPrototype $modelPrototype)
+    public  function wizardCallbackModelConfig($fieldKey,array &$modelConfig,CrudModelPrototype $modelPrototype)
     {
         if (!empty($modelConfig['fields'][$fieldKey]['editor']))
         {

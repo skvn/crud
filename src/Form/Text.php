@@ -2,38 +2,40 @@
 
 
 use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
+use Skvn\Crud\Contracts\FormControl;
 
-class Text extends Field implements WizardableField{
+
+class Text extends Field implements WizardableField, FormControl{
 
     
-    use CommonFieldWizardTrait;
+    use WizardCommonFieldTrait;
     
-    const TYPE = "text";
+
+    function controlType()
+    {
+        return "text";
+    }
 
 
 
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/text.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/text.twig";
     }
 
-    static function controlWidgetUrl()
-    {
-        return false;
-    }
 
-    static function controlCaption()
+    function wizardCaption()
     {
         return "Text input";
     }
 
-    static function controlFiltrable()
+    function wizardFiltrable()
     {
         return true;
     }

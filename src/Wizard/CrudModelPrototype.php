@@ -321,10 +321,10 @@ class CrudModelPrototype
                 {
                     $k = $f['property_name'];
                 }
-                if ($class = Form::resolveControlClassByType($f['type']))
+                if ($control = Form::getControlByType($f['type']))
                 {
-                    $class::callbackFieldConfig($k,$f,$this);
-                    $class::callbackModelConfig($k,$f,$this);
+                    $control->wizardCallbackFieldConfig($k,$f,$this);
+                    $control->wizardCallbackModelConfig($k,$f,$this);
                 }
 
                 $this->config_data['fields'][$k] = $f;

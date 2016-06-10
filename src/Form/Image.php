@@ -2,39 +2,37 @@
 
 
 use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
+use Skvn\Crud\Contracts\FormControl;
 
-class Image extends File implements WizardableField{
+
+class Image extends File implements WizardableField, FormControl{
 
 
-    use CommonFieldWizardTrait;
+    use WizardCommonFieldTrait;
     
-    const TYPE = "image";
 
-    static function controlTemplate()
+    function controlType()
+    {
+        return "image";
+    }
+
+    function controlTemplate()
     {
         return "crud::crud/fields/image.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/image.twig";
     }
 
-    static function controlWidgetUrl()
-    {
-        return false;
-    }
 
-    static function controlCaption()
+    function wizardCaption()
     {
         return "Image";
     }
 
-    static function controlFiltrable()
-    {
-        return false;
-    }
 
 
 

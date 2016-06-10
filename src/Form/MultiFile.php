@@ -2,40 +2,37 @@
 
 
 use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
+use Skvn\Crud\Contracts\FormControl;
 
-class MultiFile extends Field implements WizardableField{
+
+class MultiFile extends Field implements WizardableField, FormControl{
 
 
-    use CommonFieldWizardTrait;
+    use WizardCommonFieldTrait;
     
-    const TYPE = "multi_file";
 
+    function controlType()
+    {
+        return "multi_file";
+    }
 
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/multi_file.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/multi_file.twig";
     }
 
-    static function controlWidgetUrl()
-    {
-        return false;
-    }
 
-    static function controlCaption()
+    function wizardCaption()
     {
         return "Multiple files";
     }
 
-    static function controlFiltrable()
-    {
-        return false;
-    }
 
 
     function getExisting()

@@ -3,6 +3,7 @@
 use Skvn\Crud\Form\Form;
 use Skvn\Crud\Form\Field;
 use Skvn\Crud\Models\CrudModel;
+use Skvn\Crud\Contracts\WizardableField;
 
 
 /**
@@ -389,13 +390,14 @@ class Wizard
     function getAvailableFieldTypes()
     {
         $types = [];
-        foreach (Form:: $controls as $control)
+        foreach (Form:: getAvailControls() as $control)
         {
-            $class = $control['class'];
-            if (defined($class . "::WIZARDABLE")) {
-                if (!$class::controlIsForRelationOnly()) {
-                    $control['template_path'] = $class::controlWizardTemplate();
-                    $types[$control['type']] = $control;
+            if ($control instanceof WizardableField)
+            {
+                if (!$control->wizardIsForRelationOnly())
+                {
+                    $control['template_path'] = $control->wizardTemplate();
+                    $types[$control->controlType()] = $control;
                 }
             }
 
@@ -411,12 +413,13 @@ class Wizard
     function getAvailableFilterTypes()
     {
         $types = [];
-        foreach (Form :: $controls as $control)
+        foreach (Form :: getAvailControls() as $control)
         {
-            $class = $control['class'];
-            if (defined($class . "::WIZARDABLE")) {
-                if ($control['filtrable']) {
-                    $types[$control['type']] = $control['caption'];
+            if ($control instanceof WizardableField)
+            {
+                if ($control->wizardFiltrable())
+                {
+                    $types[$control->controlType()] = $control->wizardCaption();
                 }
             }
         }
@@ -433,18 +436,19 @@ class Wizard
     {
         $types = [];
 
-        foreach (Form :: $controls as $control)
+        foreach (Form :: getAvailControls() as $control)
         {
-            $class = $control['class'];
-            if (defined($class . "::WIZARDABLE")) {
-                if ($class::controlIsForRelation()) {
+            if ($control instanceof WizardableField)
+            {
+                if ($control->wizardIsForRelation())
+                {
                     if ($multiple)
                     {
-                         if ($class::controlIsForManyRelation()) {
-                             $types[$control['type']] = $control['caption'];
+                         if ($control->wizardIsForManyRelation()) {
+                             $types[$control->controlType()] = $control->wizardCaption();
                          }
                     } else {
-                        $types[$control['type']] = $control['caption'];
+                        $types[$control->controlType()] = $control->wizardCaption();
                     }
 
                 }

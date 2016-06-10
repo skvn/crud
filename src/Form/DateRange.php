@@ -2,42 +2,42 @@
 
 
 use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Wizard\CrudModelPrototype;
+use Skvn\Crud\Contracts\FormControl;
 
-class DateRange extends Range implements WizardableField 
+
+class DateRange extends Range implements WizardableField, FormControl
 {
 
-    use CommonFieldWizardTrait;
+    use WizardCommonFieldTrait;
     
-    const TYPE = "date_range";
 
+    function controlType()
+    {
+        return "date_range";
+    }
 
-    public static function fieldDbType() {
+    public function wizardDbType() {
         return '';
     }
 
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/date_range.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/date_range.twig";
     }
 
-    static function controlWidgetUrl()
-    {
-        return false;
-    }
-
-    static function controlCaption()
+    function wizardCaption()
     {
         return "Date range";
     }
 
-    static function controlFiltrable()
+    function wizardFiltrable()
     {
         return true;
     }
@@ -127,7 +127,7 @@ class DateRange extends Range implements WizardableField
 
     }
 
-    public static function callbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    public function wizardCallbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
     {
         $fieldConfig['db_type'] = $modelPrototype->column_types[$fieldConfig['fields'][0]];
 

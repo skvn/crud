@@ -34,45 +34,41 @@ abstract class Field
     protected $uniqid;
     protected $filtrable = false;
 
-    function __construct(CrudModel $model, $config)
+
+    static function create()
+    {
+        return new static();
+    }
+
+    function setModel(CrudModel $model)
+    {
+        $this->model = $model;
+        $this->getValue();
+        return $this;
+    }
+
+    function setConfig($config)
     {
         if (empty($config['field']))
         {
             $config['field'] = $config['name'];
         }
         $this->config = $config;
-        $this->model = $model;
         $this->name = $config['name'];
         $this->field = $config['field'];
-        $this->getValue();
 
         if (!$this->validateConfig())
         {
             throw new ConfigException('Column '.$this->name.' is not well described');
         }
+
+        return $this;
     }
 
-    abstract static function controlTemplate();
-    abstract static function controlWidgetUrl();
-    abstract static function controlCaption();
-    abstract static function controlFiltrable();
-
-    
-    function getControlTemplate()
+    function controlWidgetUrl()
     {
-        return static :: controlTemplate();
+        return false;
     }
-
-
-    public static  function create(CrudModel $model, $config)
-    {
-        //$type = 'Skvn\Crud\Form\\'.studly_case($config['type']);
-        //$type = studly_case($config['type']);
-        //var_dump(Form :: $controls);
-        $class = Form :: $controls[$config['type']]['class'];
-        return new $class($model, $config);
-    }
-
 
     function getFilterCondition()
     {

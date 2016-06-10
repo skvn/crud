@@ -3,7 +3,7 @@
 use Skvn\Crud\Wizard\Wizard;
 use Skvn\Crud\Wizard\CrudModelPrototype;
 
-trait CommonFieldWizardTrait
+trait WizardCommonFieldTrait
 {
 
 
@@ -12,7 +12,7 @@ trait CommonFieldWizardTrait
      *
      * @return string
      */
-    public static function fieldDbType() {
+    public function wizardDbType() {
         return 'string';
     }
 
@@ -22,7 +22,7 @@ trait CommonFieldWizardTrait
      *
      * @return bool
      */
-    public static function controlIsForRelationOnly():bool
+    public function wizardIsForRelationOnly():bool
     {
         return false;
     }
@@ -32,7 +32,7 @@ trait CommonFieldWizardTrait
      *
      * @return bool
      */
-    public static function controlIsForRelation():bool
+    public function wizardIsForRelation():bool
     {
         return false;
     }
@@ -42,18 +42,28 @@ trait CommonFieldWizardTrait
      *
      * @return bool
      */
-    public static function controlIsForManyRelation():bool
+    public function wizardIsForManyRelation():bool
     {
         return false;
     }
 
-    public static function callbackFieldConfig ($fieldKey,array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    function wizardFiltrable()
+    {
+        return false;
+    }
+
+    function wizardCaption()
+    {
+        return "---";
+    }
+
+    public function wizardCallbackFieldConfig ($fieldKey,array &$fieldConfig,  CrudModelPrototype $modelPrototype)
     {
         //var_dump($fieldConfig);
     }
 
 
-    public static function callbackModelConfig($fieldKey,  array &$modelConfig, CrudModelPrototype $modelPrototype)
+    public function wizardCallbackModelConfig($fieldKey,  array &$modelConfig, CrudModelPrototype $modelPrototype)
     {
 
     }

@@ -2,48 +2,49 @@
 
 
 use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
+use Skvn\Crud\Contracts\FormControl;
 
-class Number extends Field implements WizardableField{
 
-    use CommonFieldWizardTrait;
+class Number extends Field implements WizardableField, FormControl{
+
+    use WizardCommonFieldTrait;
+    protected $filtrable = true;
+
     
-    
-    const TYPE = "number";
 
+    function controlType()
+    {
+        return "number";
+    }
 
-    public static function fieldDbType() {
+    public function wizardDbType() {
         return 'integer';
     }
     
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/number.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/number.twig";
     }
 
-    static function controlWidgetUrl()
-    {
-        return false;
-    }
 
-    static function controlCaption()
+    function wizardCaption()
     {
         return "Number input";
     }
 
-    static function controlFiltrable()
+    function wizardFiltrable()
     {
         return true;
     }
 
 
 
-    protected $filtrable = true;
 
     function getValue()
     {

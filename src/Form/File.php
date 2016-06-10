@@ -2,40 +2,37 @@
 
 
 use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
+use Skvn\Crud\Contracts\FormControl;
 
-class File extends Field implements WizardableField
+
+class File extends Field implements WizardableField, FormControl
 {
 
-    use CommonFieldWizardTrait;
+    use WizardCommonFieldTrait;
 
-    const TYPE = "file";
 
+    function controlType()
+    {
+        return "file";
+    }
     
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/file.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/file.twig";
     }
 
-    static function controlWidgetUrl()
-    {
-        return false;
-    }
 
-    static function controlCaption()
+    function wizardCaption()
     {
         return "File";
     }
 
-    static function controlFiltrable()
-    {
-        return false;
-    }
 
 
     function getValue()

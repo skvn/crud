@@ -2,44 +2,42 @@
 
 
 use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
+use Skvn\Crud\Contracts\FormControl;
 
-class Range extends Field implements WizardableField
+
+class Range extends Field implements WizardableField, FormControl
 {
     
-    use CommonFieldWizardTrait;
+    use WizardCommonFieldTrait;
     
-    const TYPE = "range";
+
+    function controlType()
+    {
+        return "range";
+    }
 
 
-    public static function fieldDbType() {
+    public function wizardDbType() {
         return '';
     }
     
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/range.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/range.twig";
     }
 
-    static function controlWidgetUrl()
-    {
-        return false;
-    }
 
-    static function controlCaption()
+    function wizardCaption()
     {
         return "Range";
     }
 
-    static function controlFiltrable()
-    {
-        return false;
-    }
 
 
     function getValue()

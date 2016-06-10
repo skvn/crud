@@ -5,21 +5,27 @@ use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Illuminate\Support\Collection;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
+use Skvn\Crud\Contracts\FormControl;
 
-class Tree extends Field implements WizardableField{
+
+class Tree extends Field implements WizardableField, FormControl{
 
 
-    use CommonFieldWizardTrait;
+    use WizardCommonFieldTrait;
     
-    const TYPE = "tree";
+
+    function controlType()
+    {
+        return "tree";
+    }
 
     /**
      * Returns true if the  control can be used only for relation editing only
      *
      * @return bool
      */
-    public static function controlIsForRelationOnly():bool
+    public function wizardIsForRelationOnly():bool
     {
         return true;
     }
@@ -29,7 +35,7 @@ class Tree extends Field implements WizardableField{
      *
      * @return bool
      */
-    public static function controlIsForRelation():bool
+    public function wizardIsForRelation():bool
     {
         return true;
     }
@@ -39,35 +45,31 @@ class Tree extends Field implements WizardableField{
      *
      * @return bool
      */
-    public static function controlIsForManyRelation():bool
+    public function wizardIsForManyRelation():bool
     {
         return true;
     }
 
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/tree.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/tree.twig";
     }
 
-    static function controlWidgetUrl()
+    function controlWidgetUrl()
     {
         return "js/widgets/tree_control.js";
     }
 
-    static function controlCaption()
+    function widgetCaption()
     {
         return "---";
     }
 
-    static function controlFiltrable()
-    {
-        return false;
-    }
 
 
     public  function  getValue()

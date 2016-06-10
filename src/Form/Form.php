@@ -2,13 +2,15 @@
 
 use Illuminate\Container\Container;
 use Skvn\Crud\Models\CrudStubModel;
+use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Exceptions\ConfigException;
+use Skvn\Crud\Contracts\FormControl;
 
 
 
 class Form {
 
-    static $controls = [];
+    protected static $controls = [];
 
     /**
      * @var
@@ -53,27 +55,35 @@ class Form {
 
     static function registerControl($class)
     {
-        if (!defined($class . "::TYPE"))
+        $control = $class :: create();
+        if (! $control instanceof FormControl)
         {
             throw new ConfigException("Invalid control class " . $class);
         }
-        $conf =  [
-            'type' => $class :: TYPE,
-            'class' => $class,
-            'widget_url' => $class :: controlWidgetUrl(),
-            'caption' => $class :: controlCaption(),
-            'filtrable' => $class :: controlFiltrable()
-        ];
-        if (isset(self :: $controls[$class :: TYPE]))
+        if (isset(self :: $controls[$control->controlType()]))
         {
             throw new ConfigException('Control already registered: ' . $class);
         }
-        self :: $controls[$conf['type']] = $conf;
+        self :: $controls[$control->controlType()] = $control;
+    }
+
+    static function getAvailControls()
+    {
+        return self :: $controls;
     }
 
     static function create($args = [])
     {
         return new self($args);
+    }
+
+    static function createControl(CrudModel $model, $config)
+    {
+        $class = get_class(self :: $controls[$config['type']]);
+        return $class :: create()->setConfig($config)->setModel($model);
+//        $control = new $class($config);
+//        $control->setModel($model);
+//        return $control;
     }
 
     function addField($name, $config)
@@ -83,7 +93,7 @@ class Form {
             $config['name'] = $name;
         }
         $this->config[$name] = $config;
-        $this->fields[$name] = Field::create($this->crudObj, $config);
+        $this->fields[$name] = self :: createControl($this->crudObj, $config);
         if (isset($config['value']))
         {
             $this->fields[$name]->setValue($config['value']);
@@ -175,9 +185,9 @@ class Form {
      * @param string $type
      * @return string|null
      */
-    public static function resolveControlClassByType(string $type)
+    public static function getControlByType(string $type)
     {
-        return self::$controls[$type]['class'] ?? null;
+        return self::$controls[$type] ?? null;
 
     }
 

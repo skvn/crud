@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Skvn\Crud\Form\Form;
 use Skvn\Crud\Exceptions\WizardException;
+use Skvn\Crud\Contracts\WizardableField;
 
 class Migrator
 {
@@ -96,8 +97,8 @@ class Migrator
 
     public  function getColumDbTypeByEditType($type)
     {
-        $class = Form::resolveControlClassByType($type);
-        return $class:: fieldDbType();
+        $control = Form::getControlByType($type);
+        return $control instanceof WizardableField ? $control->wizardDbType() : "unknown";
     }//
 
     private  function checkMigrationName($class_name)

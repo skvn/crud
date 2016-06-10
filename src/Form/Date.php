@@ -1,34 +1,36 @@
 <?php namespace Skvn\Crud\Form;
 
+use Skvn\Crud\Contracts\FormControl;
 
-class Date extends Field {
 
-    const TYPE = "date";
+class Date extends Field implements FormControl{
 
-    static function controlTemplate()
+
+    function controlType()
+    {
+        return "date";
+    }
+
+    function controlTemplate()
     {
         return "crud::crud/fields/date.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/date.twig";
     }
 
-    static function controlWidgetUrl()
+    function controlWidgetUrl()
     {
         return "js/widgets/datetime.js";
     }
 
-    static function controlCaption()
+    function widgetCaption()
     {
         return "Date";
     }
 
-    static function controlFiltrable()
-    {
-        return false;
-    }
 
 
     function validateConfig()
@@ -87,7 +89,7 @@ class Date extends Field {
         }
     }
 
-    public static function callbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    public function wizardCallbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
     {
         $formats = $modelPrototype->wizard->getAvailableDateFormats();
         $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];

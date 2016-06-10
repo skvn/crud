@@ -2,45 +2,50 @@
 
 
 use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
+use Skvn\Crud\Contracts\FormControl;
 
-class Checkbox extends Field implements WizardableField 
+class Checkbox extends Field implements WizardableField, FormControl
 {
     
-    use CommonFieldWizardTrait;
-    
-    const TYPE = "checkbox";
+    use WizardCommonFieldTrait;
+    protected $filtrable = true;
 
-    public static function fieldDbType() {
+
+    function controlType()
+    {
+        return "checkbox";
+    }
+
+    public function wizardDbType() {
         return 'boolean';
     }
     
-    static function controlTemplate()
+    function controlTemplate()
     {
         return "crud::crud/fields/checkbox.twig";
     }
 
-    static function controlWizardTemplate()
+    function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/checkbox.twig";
     }
 
-    static function controlWidgetUrl()
+    function controlWidgetUrl()
     {
         return "js/widgets/checkbox.js";
     }
 
-    static function controlCaption()
+    function wizardCaption()
     {
         return "Checkbox";
     }
 
-    static function controlFiltrable()
+    function wizardFiltrable()
     {
         return true;
     }
 
-    protected $filtrable = true;
 
 
     function getValue()
