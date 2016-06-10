@@ -86,4 +86,17 @@ class Date extends Field {
             return date('Y-m-d',strtotime($this->getValue()));
         }
     }
+
+    function  prepareValueForDb($value)
+    {
+        if ($this->isInt())
+        {
+            return strtotime($value . ' 14:23');
+        }
+        else
+        {
+            return date('Y-m-d',strtotime($this->value));
+        }
+    }
+
 } 
