@@ -51,4 +51,9 @@ class File extends Field implements WizardableField
         return $this->value;
     }
 
+    function importValue($data)
+    {
+        $this->value = isset($data[$this->name]) ? $data[$this->name] : null;
+    }
+
 }

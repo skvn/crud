@@ -1,22 +1,10 @@
 <?php namespace Skvn\Crud\Form;
 
 
-use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\CommonFieldWizardTrait;
-use Skvn\Crud\Wizard\CrudModelPrototype;
-
-
-class Date extends Field implements WizardableField
-{
-    
-    use CommonFieldWizardTrait;
+class Date extends Field {
 
     const TYPE = "date";
 
-    public static function fieldDbType() {
-        return 'date';
-    }
-    
     static function controlTemplate()
     {
         return "crud::crud/fields/date.twig";
@@ -105,6 +93,19 @@ class Date extends Field implements WizardableField
         $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];
         $fieldConfig['format'] = $formats[$fieldConfig['format']]['php'];
         $fieldConfig['db_type'] = $modelPrototype->column_types[$fieldKey];
+    }
+
+
+    function  prepareValueForDb($value)
+    {
+        if ($this->isInt())
+        {
+            return strtotime($value . ' 14:23');
+        }
+        else
+        {
+            return date('Y-m-d',strtotime($this->value));
+        }
     }
 
 } 

@@ -32,6 +32,7 @@ trait ModelAttachmentTrait {
                 {
                     $this->setAttach($name, $field);
                     $this->fillable[] = $name;
+                    $this->fillable[] = $field['field'];
                 }
             }
         }
