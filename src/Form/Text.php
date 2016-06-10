@@ -1,8 +1,14 @@
 <?php namespace Skvn\Crud\Form;
 
 
-class Text extends Field {
+use Skvn\Crud\Contracts\WizardableField;
+use Skvn\Crud\Traits\CommonFieldWizardTrait;
 
+class Text extends Field implements WizardableField{
+
+    
+    use CommonFieldWizardTrait;
+    
     const TYPE = "text";
 
 

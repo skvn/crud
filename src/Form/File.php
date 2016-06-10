@@ -1,14 +1,17 @@
 <?php namespace Skvn\Crud\Form;
 
 
-class File extends Field {
+use Skvn\Crud\Contracts\WizardableField;
+use Skvn\Crud\Traits\CommonFieldWizardTrait;
+
+class File extends Field implements WizardableField
+{
+
+    use CommonFieldWizardTrait;
 
     const TYPE = "file";
 
-    static $controlInfo = [
-        'caption' => "File"
-    ];
-
+    
     static function controlTemplate()
     {
         return "crud::crud/fields/file.twig";

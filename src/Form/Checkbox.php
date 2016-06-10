@@ -1,10 +1,20 @@
 <?php namespace Skvn\Crud\Form;
 
 
-class Checkbox extends Field {
+use Skvn\Crud\Contracts\WizardableField;
+use Skvn\Crud\Traits\CommonFieldWizardTrait;
 
+class Checkbox extends Field implements WizardableField 
+{
+    
+    use CommonFieldWizardTrait;
+    
     const TYPE = "checkbox";
 
+    public static function fieldDbType() {
+        return 'boolean';
+    }
+    
     static function controlTemplate()
     {
         return "crud::crud/fields/checkbox.twig";

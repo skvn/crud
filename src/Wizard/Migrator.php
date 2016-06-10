@@ -11,18 +11,7 @@ class Migrator
 
     private $request, $app;
 
-    private $type_map = [
-        Form::FIELD_CHECKBOX => 'tinyInteger',
-        Form::FIELD_DATE => 'date',
-        Form::FIELD_DATE_TIME => 'dateTime',
-        Form::FIELD_NUMBER => 'double',
-        //Form::FIELD_DECIMAL => 'double',
-        Form::FIELD_SELECT => 'integer',
-        Form::FIELD_TEXT => 'string',
-        Form::FIELD_TEXTAREA => 'longText'
 
-    ];
-    
 
 
     public function __construct(Request $request=null)
@@ -107,9 +96,8 @@ class Migrator
 
     public  function getColumDbTypeByEditType($type)
     {
-        if (!empty($this->type_map[$type])) {
-            return $this->type_map[$type];
-        }
+        $class = Form::resolveControlClassByType($type);
+        return $class:: fieldDbType();
     }//
 
     private  function checkMigrationName($class_name)

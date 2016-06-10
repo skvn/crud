@@ -1,9 +1,21 @@
 <?php namespace Skvn\Crud\Form;
 
 
-class DateRange extends Range {
+use Skvn\Crud\Contracts\WizardableField;
+use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Wizard\CrudModelPrototype;
 
+class DateRange extends Range implements WizardableField 
+{
+
+    use CommonFieldWizardTrait;
+    
     const TYPE = "date_range";
+
+
+    public static function fieldDbType() {
+        return '';
+    }
 
     static function controlTemplate()
     {
@@ -115,6 +127,20 @@ class DateRange extends Range {
 
     }
 
+    public static function callbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    {
+        $fieldConfig['db_type'] = $modelPrototype->column_types[$fieldConfig['fields'][0]];
+
+        $formats = $modelPrototype->wizard->getAvailableDateFormats();
+        $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];
+        $fieldConfig['format'] = $formats[$fieldConfig['format']]['php'];
+        unset($fieldConfig['property_name']);
+
+    }
+
+
+
+//
 
 
 

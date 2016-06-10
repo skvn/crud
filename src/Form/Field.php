@@ -53,11 +53,11 @@ abstract class Field
     }
 
     abstract static function controlTemplate();
-    abstract static function controlWizardTemplate();
     abstract static function controlWidgetUrl();
     abstract static function controlCaption();
     abstract static function controlFiltrable();
 
+    
     function getControlTemplate()
     {
         return static :: controlTemplate();

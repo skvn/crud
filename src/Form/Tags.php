@@ -1,12 +1,48 @@
 <?php namespace Skvn\Crud\Form;
 
+use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Models\CrudModel;
+use Skvn\Crud\Traits\CommonFieldWizardTrait;
 
-class Tags extends Field {
+class Tags extends Field implements WizardableField {
 
+    
+    use CommonFieldWizardTrait;
+    
     const TYPE = "tags";
 
 
+        
+    /**
+     * Returns true if the  control can be used only for relation editing only
+     *
+     * @return bool
+     */
+    public static function controlIsForRelationOnly():bool
+    {
+        return true;
+    }
+
+    /**
+     * Returns true if the  control can be used only for relation editing
+     *
+     * @return bool
+     */
+    public static function controlIsForRelation():bool
+    {
+        return true;
+    }
+
+    /**
+     * Returns true if the  control can be used  for "many" - type relation editing
+     *
+     * @return bool
+     */
+    public static function controlIsForManyRelation():bool
+    {
+        return true;
+    }
+    
     static function controlTemplate()
     {
         return "crud::crud/fields/tags.twig";

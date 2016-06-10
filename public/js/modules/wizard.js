@@ -624,7 +624,7 @@
 
                         if (tabs.length)
                         {
-                            var first_child = $cont.children(':visible').get(0);
+                            var first_child = $cont.children('.list-group-item').get(0);
                             if (!$(first_child).data('form_tab'))
                             {
                                 was_error = true;

@@ -1,6 +1,9 @@
 {% set fkey   = f %}
-                    {%  set f = fld.field?fld.field:f %}
-                    {% set used_fields = used_fields|merge([f]) %}
+{%  set f = fld.field?fld.field:f %}
+
+{%  if used_fields  %}
+{% set used_fields = used_fields|merge([f]) %}
+{% endif %}
 
 <table class="table table-bordered table-striped"   data-rel="{{ f }}"  style="max-width: 1200px;">
 <tr data-rel="{{ f }}">
@@ -12,7 +15,7 @@
         <select name="fields[{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-action="wizard_add_field"  style="display:inline; width:250px;"  >
             <option value="">Choose field type</option>
             {% for k,v in wizard.getAvailableFieldTypes() %}
-                <option value="{{ k }}" {{ fld.type == k?'selected' }}>{{ v }}</option>
+                <option value="{{ k }}" {{ fld.type == k?'selected' }}>{{ v.caption }}</option>
             {% endfor %}
         </select>
         {#<a href="#" class="btn btn-success" data-rel="{{ f }}"  data-click="crud_action" data-action="wizard_add_field" ><i class="fa fa-plus"></i> Apply</a>

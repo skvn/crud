@@ -1,62 +1,10 @@
 {% set ALIAS = "_ALIAS_" %}
 {% set fld = null %}
 
-{% for c in all_controls %}
-    {% if c.wizard_template %}
-        <div class="form-inline" id="tpl_f_{{ c.type }}" style="display: none" >
-            {% include c.wizard_template %}
+{% for k,v in wizard.getAvailableFieldTypes() %}
+    {% if v.template_path %}
+        <div class="form-inline" id="tpl_f_{{ k}}" style="display: none" >
+            {% include v.template_path %}
         </div>
     {% endif %}
 {% endfor %}
-
-{#
-<div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_TEXT') }}" style="display: none" >
-    {% include 'crud::wizard/blocks/fields/text.twig' %}
-</div>
-
-<div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_TEXTAREA') }}" style="display: none" >
-    {% include 'crud::wizard/blocks/fields/textarea.twig' %}
-</div>
-
-<div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_NUMBER') }}" style="display: none" >
-    {% include 'crud::wizard/blocks/fields/number.twig' %}
-</div>
-
-
-<div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_DATE') }}" style="display: none" >
-    {% include 'crud::wizard/blocks/fields/date.twig' %}
-
-</div>
-
-<div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_DATE_TIME') }}" style="display: none" >
-    {% include 'crud::wizard/blocks/fields/date_time.twig' %}
-
-</div>
-
-<div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_SELECT') }}" style="display: none" >
-    {% include 'crud::wizard/blocks/fields/select.twig' %}
-
-</div>
-
-<div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_CHECKBOX') }}" style="display: none" >
-    {% include 'crud::wizard/blocks/fields/checkbox.twig' %}
-</div>
-
-<div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_FILE') }}" style="display: none" >
-    {% include 'crud::wizard/blocks/fields/file.twig' %}
-</div>
-
-<div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_IMAGE') }}" style="display: none" >
-    {% include 'crud::wizard/blocks/fields/image.twig' %}
-</div>
-
-<div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_MULTI_FILE') }}" style="display: none" >
-    {% include 'crud::wizard/blocks/fields/multi_file.twig' %}
-</div>
-
-<div class="form-inline" id="tpl_f_{{ constant('\\Skvn\\Crud\\Form\\Form::FIELD_DATE_RANGE') }}" style="display: none" >
-    {% include 'crud::wizard/blocks/fields/date_range.twig' %}
-
-</div>
-
-#}

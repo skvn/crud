@@ -388,7 +388,20 @@ class Wizard
      */
     function getAvailableFieldTypes()
     {
-        return Form::getAvailableFieldTypes();
+        $types = [];
+        foreach (Form:: $controls as $control)
+        {
+            $class = $control['class'];
+            if (defined($class . "::WIZARDABLE")) {
+                if (!$class::controlIsForRelationOnly()) {
+                    $control['template_path'] = $class::controlWizardTemplate();
+                    $types[$control['type']] = $control;
+                }
+            }
+
+
+        }
+        return $types;
     }
 
     /**
@@ -397,7 +410,17 @@ class Wizard
      */
     function getAvailableFilterTypes()
     {
-        return Form::getAvailableFilterTypes();
+        $types = [];
+        foreach (Form :: $controls as $control)
+        {
+            $class = $control['class'];
+            if (defined($class . "::WIZARDABLE")) {
+                if ($control['filtrable']) {
+                    $types[$control['type']] = $control['caption'];
+                }
+            }
+        }
+        return $types;
     }
 
 
@@ -408,8 +431,32 @@ class Wizard
      */
     function getAvailableRelationFieldTypes($multiple=false)
     {
-        return Form::getAvailableRelationFieldTypes($multiple);
+        $types = [];
+
+        foreach (Form :: $controls as $control)
+        {
+            $class = $control['class'];
+            if (defined($class . "::WIZARDABLE")) {
+                if ($class::controlIsForRelation()) {
+                    if ($multiple)
+                    {
+                         if ($class::controlIsForManyRelation()) {
+                             $types[$control['type']] = $control['caption'];
+                         }
+                    } else {
+                        $types[$control['type']] = $control['caption'];
+                    }
+
+                }
+            }
+
+
+        }
+        return $types;
+
+        return $ret;
     }
+
 
     /**
      * Get an array of all columns for all crud-models

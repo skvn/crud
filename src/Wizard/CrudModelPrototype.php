@@ -4,6 +4,7 @@
 
 use Skvn\Crud\Exceptions\WizardException;
 use Skvn\Crud\Form\Field;
+use Skvn\Crud\Form\Form;
 
 /**
  * Class CrudModelPrototype
@@ -37,7 +38,7 @@ class CrudModelPrototype
     /**
      * @var Wizard
      */
-    protected $wizard;
+    public $wizard;
     /**
      * @var
      */
@@ -56,7 +57,7 @@ class CrudModelPrototype
     /**
      * @var array Table column types arrays
      */
-    private $column_types = [];
+    public $column_types = [];
 
     /**
      * @var array Array of columns that should be added to the table
@@ -293,14 +294,13 @@ class CrudModelPrototype
     {
 
         $this->config_data['form_fields'] = [];
-        $fields_to_delete = [];
+        //$fields_to_delete = [];
 
         if (!empty($this->config_data['fields']))
         {
-                        
+
             foreach ($this->config_data['fields'] as $k=> $f)
             {
-
 
                 if (!isset($this->column_types[$k]) && empty($f['relation']))
                 {
@@ -314,56 +314,30 @@ class CrudModelPrototype
                     $this->config_data['form_fields'][] = $k;
                 }
 
-                //process date range
-                if (!empty($f['type']) && $this->wizard->isDateField($f['type']))
+                //process field config by field
+                //
+
+                if (!empty($f['property_name']))
                 {
-                    $formats = $this->wizard->getAvailableDateFormats();
-                    $this->config_data['fields'][$k]['format'] = $formats[$f['format']]['php'];
-                    $this->config_data['fields'][$k]['jsformat'] = $formats[$f['format']]['js'];
-
-                    if (in_array($f['type'], [Field::DATE, Field::DATE_TIME]))
-                    {
-                        $this->config_data['fields'][$k]['db_type'] = $this->column_types[$k];
-                    } elseif ($f['type'] == Field::DATE_RANGE)
-                    {
-                        $this->config_data['fields'][$k]['db_type'] = $this->column_types[$f['fields'][0]];
-
-                        if ($f['property_name'] != $k) {
-                            $fld = $this->config_data['fields'][$k];
-                            $this->config_data['fields'][$f['property_name']] = $fld;
-                            $fields_to_delete[] = $k;
-                        }
-                    }
-
-                    unset( $this->config_data['fields'][$k]['property_name']);
+                    $k = $f['property_name'];
+                }
+                if ($class = Form::resolveControlClassByType($f['type']))
+                {
+                    $class::callbackFieldConfig($k,$f,$this);
+                    $class::callbackModelConfig($k,$f,$this);
                 }
 
-                //if any textarea has a html editor, add inline img trait
-                if (!empty($f['type']) && $f['type'] == Field::TEXTAREA && !empty($f['editor']))
-                {
-                    if (!isset($this->config_data['inline_img']))
-                    {
-                        $this->config_data['inline_img'] = [];
-                        if (!isset($this->config_data['traits']))
-                        {
-                            $this->config_data['traits'] = [];
-                        }
-                        $this->config_data['traits'][] = 'ModelInlineImgTrait';
-                    }
-
-                    $this->config_data['inline_img'][] = $k;
-
-                }
+                $this->config_data['fields'][$k] = $f;
 
             }
 
-            if (count($fields_to_delete))
-            {
-                foreach ($fields_to_delete as $k)
-                {
-                    unset($this->config_data['fields'][$k]);
-                }
-            }
+//            if (count($fields_to_delete))
+//            {
+//                foreach ($fields_to_delete as $k)
+//                {
+//                    unset($this->config_data['fields'][$k]);
+//                }
+//            }
 
 
         }
@@ -736,6 +710,7 @@ class CrudModelPrototype
     {
         if (count($this->add_fields))
         {
+
             $migrator = new Migrator();
             $columns = [];
 

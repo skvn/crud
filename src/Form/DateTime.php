@@ -1,9 +1,22 @@
 <?php namespace Skvn\Crud\Form;
 
 
-class DateTime extends Field {
+use Skvn\Crud\Contracts\WizardableField;
+use Skvn\Crud\Traits\CommonFieldWizardTrait;
+use Skvn\Crud\Wizard\CrudModelPrototype;
+use Skvn\Crud\Wizard\Wizard;
+
+
+class DateTime extends Field implements WizardableField
+{
+
+    use CommonFieldWizardTrait;
 
     const TYPE = "date_time";
+
+    public static function fieldDbType() {
+        return 'dateTime';
+    }
 
     static function controlTemplate()
     {
@@ -75,4 +88,14 @@ class DateTime extends Field {
             return date('Y-m-d H:i:s',strtotime($this->getValue()));
         }
     }
+
+    static function callbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    {
+        $formats = $modelPrototype->wizard->getAvailableDateFormats();
+        $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];
+        $fieldConfig['format'] = $formats[$fieldConfig['format']]['php'];
+        $fieldConfig['db_type'] = $modelPrototype->column_types[$fieldKey];
+    }
+
+    
 } 

@@ -34,7 +34,7 @@ class WizardController extends Controller {
 
         \View::share('cmsHelper', $this->cmsHelper);
         \View::share('wizard', $this->wizard);
-        \View::share('all_controls', Form :: $controls);
+        
     }
 
     function index()

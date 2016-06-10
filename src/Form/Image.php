@@ -1,8 +1,14 @@
 <?php namespace Skvn\Crud\Form;
 
 
-class Image extends File {
+use Skvn\Crud\Contracts\WizardableField;
+use Skvn\Crud\Traits\CommonFieldWizardTrait;
 
+class Image extends File implements WizardableField{
+
+
+    use CommonFieldWizardTrait;
+    
     const TYPE = "image";
 
     static function controlTemplate()

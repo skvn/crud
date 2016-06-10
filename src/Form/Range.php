@@ -1,12 +1,21 @@
 <?php namespace Skvn\Crud\Form;
 
 
-class Range extends Field
+use Skvn\Crud\Contracts\WizardableField;
+use Skvn\Crud\Traits\CommonFieldWizardTrait;
+
+class Range extends Field implements WizardableField
 {
+    
+    use CommonFieldWizardTrait;
+    
     const TYPE = "range";
 
 
-
+    public static function fieldDbType() {
+        return '';
+    }
+    
     static function controlTemplate()
     {
         return "crud::crud/fields/range.twig";
@@ -24,7 +33,7 @@ class Range extends Field
 
     static function controlCaption()
     {
-        return "---";
+        return "Range";
     }
 
     static function controlFiltrable()

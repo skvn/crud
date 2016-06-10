@@ -1,15 +1,53 @@
 <?php namespace Skvn\Crud\Form;
 
 
+use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Illuminate\Support\Collection;
+use Skvn\Crud\Traits\CommonFieldWizardTrait;
 
-class Select extends Field {
-
+class Select extends Field implements WizardableField
+{
+    
+    use CommonFieldWizardTrait;
+    
     const TYPE = "select";
 
+    public static function fieldDbType() {
+        return 'integer';
+    }
 
+    /**
+     * Returns true if the  control can be used only for relation editing only
+     *
+     * @return bool
+     */
+    public static function controlIsForRelationOnly():bool
+    {
+        return false;
+    }
+
+    /**
+     * Returns true if the  control can be used only for relation editing
+     *
+     * @return bool
+     */
+    public static function controlIsForRelation():bool
+    {
+        return true;
+    }
+
+    /**
+     * Returns true if the  control can be used  for "many" - type relation editing
+     *
+     * @return bool
+     */
+    public static function controlIsForManyRelation():bool
+    {
+        return true;
+    }
+    
     static function controlTemplate()
     {
         return "crud::crud/fields/select.twig";

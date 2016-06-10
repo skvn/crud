@@ -1,8 +1,14 @@
 <?php namespace Skvn\Crud\Form;
 
 
-class MultiFile extends Field {
+use Skvn\Crud\Contracts\WizardableField;
+use Skvn\Crud\Traits\CommonFieldWizardTrait;
 
+class MultiFile extends Field implements WizardableField{
+
+
+    use CommonFieldWizardTrait;
+    
     const TYPE = "multi_file";
 
 

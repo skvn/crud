@@ -1,11 +1,21 @@
 <?php namespace Skvn\Crud\Form;
 
 
-class Number extends Field {
+use Skvn\Crud\Contracts\WizardableField;
+use Skvn\Crud\Traits\CommonFieldWizardTrait;
 
+class Number extends Field implements WizardableField{
+
+    use CommonFieldWizardTrait;
+    
+    
     const TYPE = "number";
 
 
+    public static function fieldDbType() {
+        return 'integer';
+    }
+    
     static function controlTemplate()
     {
         return "crud::crud/fields/number.twig";

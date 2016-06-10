@@ -1,0 +1,36 @@
+<div class="row">
+<div class="form-group">
+    <div class="col col-xs-4">
+    {% include 'crud::wizard/blocks/fields/field_title' %}
+    </div>
+    <div class="col col-xs-4">
+        {% include 'crud::wizard/blocks/fields/field_hint' %}
+    </div>
+    <div class="col col-xs-2">
+        {% include 'crud::wizard/blocks/fields/field_required' %}
+    </div>
+</div>
+</div>
+
+<div class="row">
+    <div class="form-group">
+        <div class="col col-xs-1">
+            <label>Fields:</label>
+        </div>
+        <div class="col col-xs-4">
+            <label>Property name
+                <input type="text" value="{{ fld?ALIAS:ALIAS~'_range' }}" data-change="crud_action" data-action="wizard_adjust_prop_name" name="fields[{{ ALIAS }}][property_name]" required />
+            </label>
+        </div>
+        <div class="col col-xs-3">
+            <label> Start field
+            <input type="number" value="{{ fld.fields[0] }}" name="fields[{{ ALIAS }}][fields][0]" required />
+            </label>
+        </div>
+        <div class="col col-xs-3">
+            <label> End field
+                <input type="number" value="{{ fld.fields[1] }}" name="fields[{{ ALIAS }}][fields][1]" required />
+            </label>
+        </div>
+    </div>
+</div>
