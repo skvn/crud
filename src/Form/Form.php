@@ -131,7 +131,7 @@ class Form {
     {
         foreach ($this->fields as $field)
         {
-            $field->importValue($data);
+            $field->pullFromData($data);
         }
         return $this;
     }
@@ -147,7 +147,7 @@ class Form {
     {
         foreach ($this->fields as $field)
         {
-            $field->syncValue();
+            $field->pushToModel();
         }
     }
 

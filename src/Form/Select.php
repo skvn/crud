@@ -7,29 +7,60 @@ use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Illuminate\Support\Collection;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Contracts\FormControlFiltrable;
+use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
-class Select extends Field implements WizardableField, FormControl
+class Select extends Field implements WizardableField, FormControl, FormControlFiltrable
 {
     
     use WizardCommonFieldTrait;
-    
+    use FormControlCommonTrait;
 
-    function controlType()
+    function pullFromModel()
+    {
+        if (!in_array($this->name, $this->model->getHidden()))
+        {
+            $this->value = $this->model->getAttribute($this->field);
+        }
+    }
+
+    function getOutputValue():string
+    {
+        $olist = $this->getOptions();
+        foreach ($olist as $o)
+        {
+            if ($o['value'] == $this->value)
+            {
+                return $o['text'];
+            }
+        }
+        return $this->value;
+    }
+
+
+    function controlType():string
     {
         return "select";
     }
 
-    public function wizardDbType() {
-        return 'integer';
+    function controlTemplate():string
+    {
+        return "crud::crud/fields/select.twig";
     }
+
+    function controlWidgetUrl():string
+    {
+        return "js/widgets/select.js";
+    }
+
 
     /**
      * Returns true if the  control can be used only for relation editing only
      *
      * @return bool
      */
-    public function widgetIsForRelationOnly():bool
+    public function wizardIsForRelationOnly():bool
     {
         return false;
     }
@@ -39,7 +70,7 @@ class Select extends Field implements WizardableField, FormControl
      *
      * @return bool
      */
-    public function widgetIsForRelation():bool
+    public function wizardIsForRelation():bool
     {
         return true;
     }
@@ -49,109 +80,32 @@ class Select extends Field implements WizardableField, FormControl
      *
      * @return bool
      */
-    public function widgetIsForManyRelation():bool
+    public function wizardIsForManyRelation():bool
     {
         return true;
     }
-    
-    function controlTemplate()
+
+    public function wizardDbType()
     {
-        return "crud::crud/fields/select.twig";
+        return 'integer';
     }
+
 
     function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/select.twig";
     }
 
-    function controlWidgetUrl()
-    {
-        return "js/widgets/select.js";
-    }
 
     function wizardCaption()
     {
         return "Select";
     }
 
-    function wizardFiltrable()
+
+
+    public function getOptions()
     {
-        return true;
-    }
-
-
-    function getValue()
-    {
-        if (is_null($this->value))
-        {
-            if (!in_array($this->getName(), $this->model->getHidden()))
-            {
-                $this->value = $this->model->getAttribute($this->getField());
-            }
-        }
-
-        return $this->value;
-    }
-
-    function getValueForList()
-    {
-        $v = $this->getValue();
-        $olist = $this->getOptions();
-        foreach ($olist as $o)
-        {
-            if ($o['value'] == $v)
-            {
-                return $o['text'];
-            }
-        }
-//        if (!empty($this->config['select_options']))
-//        {
-//            if (isset($this->config['select_options'][$v]))
-//            {
-//                return is_array($this->config['select_options'][$v]) ? $this->config['select_options'][$v]['caption'] : $this->config['select_options'][$v];
-//            }
-//        }
-        return $v;
-    }
-
-
-    public function getOptions($empty_option=null)
-    {
-        //$options = array();
-//        if (!empty($this->config['select_options']))
-//        {
-//            if (!$this->value)
-//            {
-//                if (!empty($this->config['relation'])
-//                    &&
-//                    $this->model->isManyRelation($this->config['relation']))
-//                {
-//                    $this->value = $this->model->getRelationIds($this->getName());
-//                }
-//                else if (!empty($this->config['relation'])
-//                    && $this->config['relation'] == CrudModel::RELATION_HAS_ONE)
-//                {
-//                    $relation = $this->getName();
-//                    $this->value = $this->$relation->id;
-//                }
-//                else
-//                {
-//                    $this->value = $this->model->getAttribute($this->getName());
-//                }
-//            }
-//            $opts = [];
-//            if (!is_array($this->config['select_options']))
-//            {
-//                $this->config['select_options'] = $this->model->getAttribute($this->config['select_options']);
-//            }
-//
-//            foreach ($this->config['select_options'] as $k => $v)
-//            {
-//                $txt = is_array($v) ? $v['caption'] : $v;
-//                $opts[] = ['value' => $k, 'text' => $txt];
-//            }
-//
-//        }
         $opts = [];
         if (!empty($this->config['method_options']))
         {
@@ -227,10 +181,7 @@ class Select extends Field implements WizardableField, FormControl
         {
             if ($modelObj->confParam('tree'))
             {
-//                $collection = $class::all();
                 $collection = CrudModelCollectionBuilder :: create($modelObj)->fetch();
-//                $coll = $modelObj->getListCollection();
-//                $collection = $modelObj->prepareCollectionForView($coll, null, 'tree_flattened');
             }
             else
             {

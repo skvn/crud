@@ -48,7 +48,6 @@ interface WizardableField
     public function wizardTemplate() ;
 
     function wizardCaption();
-    function wizardFiltrable();
 
     /**
      * Apply actions to the field config array during setup in wizard

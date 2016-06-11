@@ -15,7 +15,7 @@
         <select name="fields[{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-action="wizard_add_field"  style="display:inline; width:250px;"  >
             <option value="">Choose field type</option>
             {% for k,v in wizard.getAvailableFieldTypes() %}
-                <option value="{{ k }}" {{ fld.type == k?'selected' }}>{{ v.caption }}</option>
+                <option value="{{ k }}" {{ fld.type == k?'selected' }}>{{ v.wizardCaption() }}</option>
             {% endfor %}
         </select>
         {#<a href="#" class="btn btn-success" data-rel="{{ f }}"  data-click="crud_action" data-action="wizard_add_field" ><i class="fa fa-plus"></i> Apply</a>

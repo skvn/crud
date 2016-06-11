@@ -2,9 +2,9 @@
 {% set fld = null %}
 
 {% for k,v in wizard.getAvailableFieldTypes() %}
-    {% if v.template_path %}
+    {% if v.wizardTemplate() %}
         <div class="form-inline" id="tpl_f_{{ k}}" style="display: none" >
-            {% include v.template_path %}
+            {% include v.wizardTemplate() %}
         </div>
     {% endif %}
 {% endfor %}

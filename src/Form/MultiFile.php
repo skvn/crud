@@ -4,20 +4,22 @@
 use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
 class MultiFile extends Field implements WizardableField, FormControl{
 
 
     use WizardCommonFieldTrait;
-    
+    use FormControlCommonTrait;
 
-    function controlType()
+
+    function controlType():string
     {
         return "multi_file";
     }
 
-    function controlTemplate()
+    function controlTemplate():string
     {
         return "crud::crud/fields/multi_file.twig";
     }

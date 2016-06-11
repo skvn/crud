@@ -4,27 +4,45 @@
 use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Traits\FormControlCommonTrait;
+use Skvn\Crud\Contracts\FormControlFiltrable;
 
 
-class Number extends Field implements WizardableField, FormControl{
+class Number extends Field implements WizardableField, FormControl, FormControlFiltrable{
 
     use WizardCommonFieldTrait;
-    protected $filtrable = true;
+    use FormControlCommonTrait;
 
-    
+    function pullFromModel()
+    {
+        if (!in_array($this->name, $this->model->getHidden()))
+        {
+            $this->value = $this->model->getAttribute($this->field);
+        }
+    }
 
-    function controlType()
+    function getFilterCondition()
+    {
+        if (!empty($this->value))
+        {
+            return ['cond' => [$this->getFilterColumnName(), '=',  $this->value ]];
+        }
+    }
+
+
+    function controlType():string
     {
         return "number";
     }
 
-    public function wizardDbType() {
-        return 'integer';
-    }
-    
-    function controlTemplate()
+    function controlTemplate():string
     {
         return "crud::crud/fields/number.twig";
+    }
+
+    public function wizardDbType()
+    {
+        return 'integer';
     }
 
     function wizardTemplate()
@@ -38,25 +56,5 @@ class Number extends Field implements WizardableField, FormControl{
         return "Number input";
     }
 
-    function wizardFiltrable()
-    {
-        return true;
-    }
-
-
-
-
-    function getValue()
-    {
-        if (!$this->value)
-        {
-            if (!in_array($this->getName(), $this->model->getHidden()))
-            {
-                $this->value = $this->model->getAttribute($this->getField());
-            }
-        }
-
-        return $this->value;
-    }
 
 }

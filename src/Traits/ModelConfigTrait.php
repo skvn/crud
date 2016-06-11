@@ -1,6 +1,5 @@
 <?php namespace Skvn\Crud\Traits;
 
-use Skvn\Crud\Form\Field;
 use Skvn\Crud\Form\Form;
 use Skvn\Crud\Exceptions\ConfigException;
 use Skvn\Crud\Models\CrudFile;
@@ -40,7 +39,6 @@ trait ModelConfigTrait
         $this->config['class_name'] = $this->classViewName;
         if (!empty($this->config['fields']))
         {
-//            $form = !empty($this->config['form']) ? $this->flatFields($this->config['form'], !empty($this->config['form_tabbed'])) : [];
             foreach ($this->config['fields'] as $name => $col)
             {
                 if (empty($col['field']))
@@ -51,18 +49,6 @@ trait ModelConfigTrait
                 {
                     $col['hint'] = $this->classShortName.'_fields_'.$name;
                 }
-                //fill relations
-//                if (isset($col['relation']))
-//                {
-//                    $rel_name = !empty($this->config['fields'][$name]['relation_name']) ? $this->config['fields'][$name]['relation_name'] : $name;
-//                    $this->crudRelations[$rel_name] = $col['relation'];
-//                }
-
-                //if field in form - make it fillable or processable as relation
-//                if (in_array($name, $form) || !empty($col['fillable']))
-//                {
-//                    $this->markFillable($name, $col);
-//                }
                 $this->config['fields'][$name] = $col;
             }
         }
@@ -77,81 +63,10 @@ trait ModelConfigTrait
             $this->track_authors = $this->config['authors'];
         }
 
-//        if ($this->isTree())
-//        {
-//            $this->fillable[] = $this->config['tree']['pid_column'];
-//            $this->fillable[] = $this->config['tree']['order_column'];
-//            $this->fillable[] = $this->config['tree']['path_column'] ;
-//            $this->fillable[] = $this->config['tree']['depth_column'];
-//        }
         $this->config['file_params'] = [];
     }
 
 
-    /**
-     * Mark field as fillable
-     *
-     * @param array $name
-     * @param $col
-     */
-//    private function markFillable($name, $col=[])
-//    {
-//        if (isset($col['relation']) && in_array($col['relation'], ['belongsToMany', 'hasMany', 'hasOne']))
-//        {
-//            if ($col['relation'] != 'hasOne')
-//            {
-//                $this->config['fields'][$name]['multiple'] = 1;
-//            }
-//            //Add multi file to fillable since it is handled by fill not by post save relations
-//            if ($col['type'] != 'multi_file')
-//            {
-//                //$this->processableRelations[$name] = $col['relation'];
-//            }
-//            else
-//            {
-//                $this->fillable[] = $name;
-//            }
-//            return;
-//
-//        }
-//        else
-//        {
-//            if (!empty($col['fields']))
-//            {
-//                foreach ($col['fields'] as $f)
-//                {
-//                    $this->fillable[] = $f;
-//                }
-//            }
-//            else
-//            {
-//                $this->fillable[] = $col['field'];
-////                if (!empty($col['name']))
-////                {
-////                    $this->fillable[] = $col['name'];
-////                }
-////                else
-////                {
-////                    $this->fillable[] = $name;
-////                }
-//            }
-//        }
-//
-//    }
-
-//    private function flatFields($fields, $tabbed)
-//    {
-//        if ($tabbed)
-//        {
-//            $cols = [];
-//            foreach ($fields as $tab => $flist)
-//            {
-//                $cols = array_merge($cols, $flist);
-//            }
-//            return $cols;
-//        }
-//        return $fields;
-//    }
 
     public function getFields($prop='')
     {
@@ -164,28 +79,6 @@ trait ModelConfigTrait
     {
         return $this->getFields($name);
     }
-
-//    public function getColumn($col)
-//    {
-//        return $this->config['fields'][$col] ?? null;
-//        if (!empty($this->config['fields'][$col]))
-//        {
-//            $conf =  $this->config['fields'][$col];
-//            $conf['column_index'] = $col;
-//            return $conf;
-//        }
-//        else
-//        {
-//            foreach ($this->config['fields'] as $col_name => $conf)
-//            {
-//                if (!empty($conf['relation_name']) &&  $conf['relation_name'] == $col)
-//                {
-//                    $conf['column_index'] = $col_name;
-//                    return $conf;
-//                }
-//            }
-//        }
-//    }
 
     /**
      * @param $key
@@ -285,8 +178,8 @@ trait ModelConfigTrait
                 if ($form_config && !empty($form_config['type']))
                 {
                     $form_config['name'] = $col;
-                    $field = Form::createControl($this, $form_config);
-                    $value = $field->getValueForList();
+                    $field = Form :: createControl($this, $form_config);
+                    $value = $field->getOutputValue();
                 }
                 else
                 {

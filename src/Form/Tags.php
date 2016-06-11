@@ -4,20 +4,43 @@ use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
 class Tags extends Field implements WizardableField, FormControl {
 
     
     use WizardCommonFieldTrait;
-    
+    use FormControlCommonTrait;
 
-    function controlType()
+
+    function pullFromModel()
+    {
+        $class = CrudModel :: resolveClass($this->config['model']);
+        $dummyModel = new $class();
+        $ids = $this->model->getRelationIds($this->name);
+        if (count($ids))
+        {
+            $collection = $class::findMany($ids);
+            $this->value = $collection->pluck($dummyModel->confParam('title_field'));
+        }
+    }
+
+    function controlType():string
     {
         return "tags";
     }
 
-        
+    function controlTemplate():string
+    {
+        return "crud::crud/fields/tags.twig";
+    }
+
+    function controlWidgetUrl():string
+    {
+        return "js/widgets/tags.js";
+    }
+
     /**
      * Returns true if the  control can be used only for relation editing only
      *
@@ -48,43 +71,15 @@ class Tags extends Field implements WizardableField, FormControl {
         return true;
     }
     
-    function controlTemplate()
-    {
-        return "crud::crud/fields/tags.twig";
-    }
 
     function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/tags.twig";
     }
 
-    function controlWidgetUrl()
-    {
-        return "js/widgets/tags.js";
-    }
-
-    function wizardCaption()
-    {
-        return "---";
-    }
 
 
 
-    function getValue()
-    {
-        if (!$this->value)
-        {
-            $class = CrudModel :: resolveClass($this->config['model']);
-            $dummyModel = new $class();
-            $ids = $this->model->getRelationIds($this->getName());
-            if (count($ids)) {
-                $collection = $class::findMany($ids);
-                $this->value = $collection->pluck($dummyModel->confParam('title_field'));
-            }
-        }
-
-        return $this->value;
-    }
 
     function getValueForDb()
     {

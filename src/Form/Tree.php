@@ -7,18 +7,51 @@ use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Illuminate\Support\Collection;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
 class Tree extends Field implements WizardableField, FormControl{
 
 
     use WizardCommonFieldTrait;
-    
+    use FormControlCommonTrait;
 
-    function controlType()
+    function pullFromModel()
+    {
+        if ($this->model->isManyRelation($this->config['relation']))
+        {
+            $this->value =  $this->model->getRelationIds($this->name);
+        }
+        else
+        {
+            if ($this->config['relation'] == CrudModel::RELATION_HAS_ONE)
+            {
+                $relation = $this->name;
+                $this->value = $this->$relation->getKey();
+            }
+            else
+            {
+                $this->value = $this->model->getAttribute($this->field);
+            }
+        }
+    }
+
+
+    function controlType():string
     {
         return "tree";
     }
+
+    function controlTemplate():string
+    {
+        return "crud::crud/fields/tree.twig";
+    }
+
+    function controlWidgetUrl():string
+    {
+        return "js/widgets/tree_control.js";
+    }
+
 
     /**
      * Returns true if the  control can be used only for relation editing only
@@ -50,48 +83,16 @@ class Tree extends Field implements WizardableField, FormControl{
         return true;
     }
 
-    function controlTemplate()
-    {
-        return "crud::crud/fields/tree.twig";
-    }
 
     function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/tree.twig";
     }
 
-    function controlWidgetUrl()
-    {
-        return "js/widgets/tree_control.js";
-    }
-
-    function widgetCaption()
-    {
-        return "---";
-    }
 
 
 
-    public  function  getValue()
-    {
 
-        if (is_null($this->value)) {
-            if ($this->model->isManyRelation($this->config['relation'])) {
-                $this->value =  $this->model->getRelationIds($this->getName());
-            } else {
-                if ($this->config['relation'] == CrudModel::RELATION_HAS_ONE) {
-                    $relation = $this->getName();
-                    $this->value = $this->$relation->id;
-
-                } else {
-                    $this->value = $this->model->getAttribute($this->getField());
-                }
-            }
-        }
-
-        return $this->value;
-
-    }
 
     function  getValueForDb()
     {

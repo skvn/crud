@@ -4,11 +4,6 @@ interface Control
 {
     function __construct($config);//пустой
     function setModel(CrudModel $model);
-    function controlTemplate();
-    function controlWizardTemplate();
-    function controlWidgetUrl();
-    function controlCaption();
-    function controlFiltrable();
     function controlValidate(); //проверка конфига
 
     function freshValue(); //забрать из модели

@@ -4,6 +4,7 @@
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Form\Form;
 use Skvn\Crud\Form\Field;
+use Skvn\Crud\Contracts\FormControlFiltrable;
 
 class Filter {
 
@@ -60,32 +61,13 @@ class Filter {
 
         if ($filters)
         {
-            //SUPPORT FOR OLD STYLE 
-            //when filter field is described in 'fields'
-            // and filter contains only field names
-            if (isset($filters[0]))
+            foreach ($filters as $column_name)
             {
-                foreach ($filters as $column_name)
+                if ($field_description = $this->initOneFilterColumn($column_name))
                 {
-                    if ($field_description = $this->initOneFilterColumn($column_name))
-                    {
-                        $this->filters[$column_name] = $field_description;
-                    }
+                    $this->filters[$column_name] = $field_description;
                 }
             }
-//            } else {
-//                foreach ($filters as $column_name=>$field_description) {
-//                    if (is_array($field_description)) {
-//                        $this->appendColumnDefaults($column_name, $field_description);
-//                        $this->filters[$column_name] = $field_description;
-//                    } else {
-//                        if ($field_description = $this->initOneFilterColumn($column_name)) {
-//                            $this->filters[$column_name] = $field_description;
-//                        }
-//                    }
-//                }
-//            }
-
         }
     }
 
@@ -93,6 +75,12 @@ class Filter {
     {
         if ($field_description = $this->crudObj->getField($column_name))
         {
+            $control = Form :: getControlByType($field_description['type']);
+            if (!$control instanceof FormControlFiltrable)
+            {
+                return false;
+            }
+
             $field_description['required'] = 0;
             if ($field_description['type'] == Field::SELECT)
             {
@@ -172,10 +160,13 @@ class Filter {
             $form = $this->getForm();
             foreach ($form->fields as $field)
             {
-                $c = $field->getFilterCondition();
-                if ($c)
+                if ($field instanceof FormControlFiltrable)
                 {
-                    $filters[$field->getField()] = $c;
+                    $c = $field->getFilterCondition();
+                    if ($c)
+                    {
+                        $filters[$field->getField()] = $c;
+                    }
                 }
             }
         }

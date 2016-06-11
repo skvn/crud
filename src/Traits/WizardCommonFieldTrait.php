@@ -47,11 +47,6 @@ trait WizardCommonFieldTrait
         return false;
     }
 
-    function wizardFiltrable()
-    {
-        return false;
-    }
-
     function wizardCaption()
     {
         return "---";

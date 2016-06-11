@@ -5,38 +5,54 @@ use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Wizard\CrudModelPrototype;
 use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Contracts\FormControlFiltrable;
+use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
-class TextArea extends Field implements WizardableField, FormControl{
+class TextArea extends Field implements WizardableField, FormControl, FormControlFiltrable{
 
     
     use WizardCommonFieldTrait;
-    
+    use FormControlCommonTrait;
 
-    function controlType()
+
+    function getFilterCondition()
+    {
+        if (!empty($this->value))
+        {
+            return ['cond' => [$this->getFilterColumnName(), 'LIKE', '%' . $this->value . '%']];
+        }
+
+    }
+
+
+    function controlType():string
     {
         return "textarea";
     }
 
-
-    public function wizardDbType() {
-        return 'longText';
-    }
-
-    function controlTemplate()
+    function controlTemplate():string
     {
         return "crud::crud/fields/textarea.twig";
     }
+
+    function controlWidgetUrl():string
+    {
+        return "js/widgets/editor.js";
+    }
+
+
+    public function wizardDbType()
+    {
+        return 'longText';
+    }
+
 
     function wizardTemplate()
     {
         return "crud::wizard/blocks/fields/textarea.twig";
     }
 
-    function controlWidgetUrl()
-    {
-        return "js/widgets/editor.js";
-    }
 
     function wizardCaption()
     {
@@ -46,24 +62,7 @@ class TextArea extends Field implements WizardableField, FormControl{
 
 
 
-    function getValue()
-    {
-        if (!$this->value)
-        {
-            $this->value = $this->model->getAttribute($this->getField());
-        }
 
-        return $this->value;
-    }
-
-    function getFilterCondition()
-    {
-        if (!empty($this->value)) {
-            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->field;
-            return ['cond' => [$col, 'LIKE', '%' . $this->value . '%']];
-        }
-
-    }
 
     public  function wizardCallbackModelConfig($fieldKey,array &$modelConfig,CrudModelPrototype $modelPrototype)
     {

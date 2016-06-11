@@ -32,7 +32,6 @@ abstract class Field
     public $name;
     protected $field;
     protected $uniqid;
-    protected $filtrable = false;
 
 
     static function create()
@@ -43,7 +42,7 @@ abstract class Field
     function setModel(CrudModel $model)
     {
         $this->model = $model;
-        $this->getValue();
+        $this->pullFromModel();
         return $this;
     }
 
@@ -57,52 +56,12 @@ abstract class Field
         $this->name = $config['name'];
         $this->field = $config['field'];
 
-        if (!$this->validateConfig())
+        if (!$this->controlValidateConfig())
         {
             throw new ConfigException('Column '.$this->name.' is not well described');
         }
 
         return $this;
-    }
-
-    function controlWidgetUrl()
-    {
-        return false;
-    }
-
-    function getFilterCondition()
-    {
-        if (!$this->filtrable)
-        {
-            return false;
-        }
-        if (!empty($this->value)) {
-            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->field;
-            return ['cond' => [$col, '=',  $this->value ]];
-        }
-    }
-
-    function  getUniqueId()
-    {
-        if (!$this->uniqid)
-        {
-            $this->uniqid = uniqid($this->name);
-        }
-        return $this->uniqid;
-    }
-    function getValue()
-    {
-        return $this->value;
-    }
-
-    function setValue($val)
-    {
-        $this->value =  $val;
-    }
-
-    function importValue($data)
-    {
-        $this->value = isset($data[$this->field]) ? $data[$this->field] : null;
     }
 
     function getName()
@@ -115,8 +74,18 @@ abstract class Field
         return $this->field;
     }
 
-    function getConfig(){
+    function getConfig()
+    {
         return $this->config;
+    }
+
+    function  getUniqueId()
+    {
+        if (!$this->uniqid)
+        {
+            $this->uniqid = uniqid($this->name);
+        }
+        return $this->uniqid;
     }
 
     function getFilterColumnName()
@@ -124,36 +93,6 @@ abstract class Field
         return (!empty($this->config['filter_column'])?$this->config['filter_column']:$this->field);
     }
 
-    function  validate()
-    {
-        return true;
-    }
-
-    function  getValueForDb()
-    {
-        return $this->getValue();
-    }
-
-    function  getValueForList()
-    {
-        return $this->getValue();
-    }
-
-    function validateConfig()
-    {
-        return true;
-    }
-
-    function prepareValueForDb($value)
-    {
-        return $value;
-    }
-
-    function syncValue()
-    {
-        $this->model->setAttribute($this->name, $this->prepareValueForDb($this->value));
-        //$this->model->{$this->name} = $this->prepareValueForDb($this->value);
-    }
 
 
 

@@ -9,103 +9,19 @@ use Skvn\Crud\Contracts\FormControl;
 
 class DateRange extends Range implements WizardableField, FormControl
 {
-
     use WizardCommonFieldTrait;
-    
 
-    function controlType()
+
+    function getOutputValue():string
     {
-        return "date_range";
+        return date($this->config['format'], $this->getValueFrom()) . "-" . date($this->config['format'], $this->getValueTo());
     }
 
-    public function wizardDbType() {
-        return '';
-    }
-
-    function controlTemplate()
-    {
-        return "crud::crud/fields/date_range.twig";
-    }
-
-    function wizardTemplate()
-    {
-        return "crud::wizard/blocks/fields/date_range.twig";
-    }
-
-    function wizardCaption()
-    {
-        return "Date range";
-    }
-
-    function wizardFiltrable()
-    {
-        return true;
-    }
-
-
-    function getValueFrom()
-    {
-        if ($this->getValue())
-        {
-            $from =  explode('~',$this->getValue())[0];
-            if (!empty($from))
-            {
-                return date($this->config['format'],$from);
-            }
-        }
-    }
-
-    function getValueTo()
-    {
-
-        if ($this->getValue())
-        {
-            $spl = explode('~',$this->getValue());
-            if (!empty($spl[1]))
-            {
-
-                return date($this->config['format'],$spl[1]);
-            }
-        }
-    }
-
-    function getValueForList()
-    {
-        return $this->getValueFrom() . "-" . $this->getValueTo();
-    }
-
-    function prepareValueForDb($value)
-    {
-        if (is_numeric($value))
-        {
-            return $value;
-        }
-        return strtotime($value . ' 14:23');
-    }
-
-//    private function isInt()
-//    {
-//        return (empty($this->config['db_type']) ||$this->config['db_type'] == 'int');
-//    }
-
-
-//    function  getValueForDb()
-//    {
-//        if ($this->isInt())
-//        {
-//            return strtotime($this->getValue() . ' 14:23');
-//        }
-//        else
-//        {
-//            return date('Y-m-d',strtotime($this->getValue()));
-//        }
-//    }
-
-    function importValue($data)
+    function pullFromData(array $data)
     {
         if (!empty($data[$this->name]) && strpos($data[$this->name],'~') !== false)
         {
-            $this->setValue($data[$this->name]);
+            $this->value = $data[$this->name];
         }
         else
         {
@@ -121,11 +37,45 @@ class DateRange extends Range implements WizardableField, FormControl
                 {
                     $to = strtotime($data[$this->getToFieldName()]);
                 }
-                $this->setValue($from . '~' . $to);
+                $this->value = $from . '~' . $to;
             }
         }
 
     }
+
+
+
+    function controlType():string
+    {
+        return "date_range";
+    }
+
+
+    function controlTemplate():string
+    {
+        return "crud::crud/fields/date_range.twig";
+    }
+
+    public function wizardDbType()
+    {
+        return '';
+    }
+
+    function wizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/date_range.twig";
+    }
+
+    function wizardCaption()
+    {
+        return "Date range";
+    }
+
+
+
+
+
+
 
     public function wizardCallbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
     {

@@ -18,7 +18,6 @@ abstract class CrudModel extends Model
     use ModelFilterTrait;
     use ModelFormTrait;
 
-    //use SoftDeletingTrait;
 
     const RELATION_BELONGS_TO_MANY = 'belongsToMany';
     const RELATION_BELONGS_TO = 'belongsTo';
@@ -44,7 +43,6 @@ abstract class CrudModel extends Model
         $this->app = Container :: getInstance();
         $this->bootIfNotBooted();
         $this->preconstruct();
-        //$this->initConfig();
         parent::__construct($attributes);
         $this->postconstruct();
 
@@ -67,86 +65,15 @@ abstract class CrudModel extends Model
         else
         {
             $obj = new $class();
-//            $app = Container :: getInstance();
-//            $obj = $app->make($class);
         }
         $obj->setScope($scope);
         return $obj;
     }
 
-
-
-//    protected  function onBeforeSave()
-//    {
-//        if ($this->validate())
-//        {
-//            $dirty = $this->getDirty();
-//
-//            //process dirty attributes
-//            if (count($dirty))
-//            {
-//                $this->getForm(['fillData'=>$dirty,'forceNew' => true]);
-//                if (!empty($this->form->fields) && is_array($this->form->fields))
-//                {
-//                    foreach ($dirty as $k => $v)
-//                    {
-//                        if (isset($this->form->fields[$k]))
-//                        {
-//                            $field = $this->form->fields[$k];
-//                            $val = $field->getValueForDb();
-//                            if ($val !== $v)
-//                            {
-//                                $this->setAttribute($k, $val);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            return true;
-//        }
-//        return false;
-//    }
-
-
     function getApp()
     {
         return $this->app;
     }
-
-//    public function fillFromRequest(array $attributes)
-//    {
-//        foreach ($attributes as $k=>$v)
-//        {
-//            if (array_key_exists($k, $this->processableRelations))
-//            {
-//                $this->dirtyRelations[$k] = $v;
-//            }
-//        }
-
-//        foreach ($this->processableRelations as $k=>$v)
-//        {
-//            if (!array_key_exists($k,$attributes))
-//            {
-//               $this->dirtyRelations[$k] = null;
-//            }
-//        }
-
-//        foreach ($this->config['fields'] as $col_idx => $col)
-//        {
-//            if (!empty($col['fields']))
-//            {
-//                foreach ($col['fields'] as $f)
-//                {
-//                    if (!empty($attributes[$f]))
-//                    {
-//                        $attributes[$f] = $this->getForm()->fields[$col_idx]->prepareValueForDb($attributes[$f]);
-//                    }
-//                }
-//            }
-//        }
-
-//        return parent::fill($attributes);
-//    }
 
     public function setCreatedAtAttribute($value)
     {
@@ -184,20 +111,9 @@ abstract class CrudModel extends Model
 
     public function __call($method, $parameters)
     {
-        //var_dump("__call");
-        //if (array_key_exists($method, $this->crudRelations))
-        //if (array_key_exists($method, $this->config['fields']))
         if ($col = $this->getCrudRelation($method))
         {
-            //$col = $this->config['fields'][$method];
-            //if (!empty($col['relation']))
-            //{
-//                $relType =  $this->crudRelations[$method];
-//                $relAttributes = $this->getColumn($method);
-//                return $this->createCrudRelation($relType, $relAttributes, $method);
-                return $this->createCrudRelation(/*$col['relation'], $this->getColumn($method)*/$col, $method);
-            //}
-
+                return $this->createCrudRelation($col, $method);
         }
         return parent::__call($method, $parameters);
     }
@@ -224,9 +140,7 @@ abstract class CrudModel extends Model
 
     public function getAttribute($key)
     {
-        //var_dump("getAttribute");
         if ($this->getCrudRelation($key))
-        //if (array_key_exists($key, $this->crudRelations))
         {
             if ( ! array_key_exists($key, $this->relations))
             {
@@ -446,25 +360,5 @@ abstract class CrudModel extends Model
         }
         return $this->$command($args);
     }
-
-//    public function applyCrudRequestCommand($method, $args = [])
-//    {
-//
-//        if ($this->id > 0) {
-//
-//            $this->$method($args);
-//
-//        } else if (!empty($args['selected_rows']) && is_array($args['selected_rows']))
-//        {
-//
-//            foreach ($args['selected_rows'] as $row)
-//            {
-//                $obj = self::findOrFail($row['id']);
-//                $obj->$method($args);
-//            }
-//        }
-//    }
-
-
 
 }

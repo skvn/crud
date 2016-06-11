@@ -4,118 +4,28 @@
 use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Contracts\FormControlFiltrable;
+use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
-class Range extends Field implements WizardableField, FormControl
+class Range extends Field implements WizardableField, FormControl, FormControlFiltrable
 {
     
     use WizardCommonFieldTrait;
-    
+    use FormControlCommonTrait;
 
-    function controlType()
+    function pullFromModel()
     {
-        return "range";
-    }
-
-
-    public function wizardDbType() {
-        return '';
-    }
-    
-    function controlTemplate()
-    {
-        return "crud::crud/fields/range.twig";
-    }
-
-    function wizardTemplate()
-    {
-        return "crud::wizard/blocks/fields/range.twig";
-    }
-
-
-    function wizardCaption()
-    {
-        return "Range";
-    }
-
-
-
-    function getValue()
-    {
-        if (is_null($this->value))
+        if (!empty($this->config['fields']))
         {
-            if (!empty($this->config['fields']))
-            {
-                $this->value = $this->model->getAttribute($this->config['fields'][0]) . "~" . $this->model->getAttribute($this->config['fields'][1]);
-            }
-        }
-        return $this->value;
-    }
-
-
-    function getValueFrom()
-    {
-        if ($this->getValue())
-        {
-            return explode('~',$this->getValue())[0];
+            $this->value = $this->model->getAttribute($this->config['fields'][0]) . "~" . $this->model->getAttribute($this->config['fields'][1]);
         }
     }
 
-    function getValueTo()
+    function pushToModel()
     {
-        if ($this->getValue())
-        {
-            $spl = explode('~',$this->getValue());
-            if (isset($spl[1]))
-            {
-                return $spl[1];
-            }
-        }
-    }
-
-    function getDefaultFrom()
-    {
-        if (!empty($this->config['default']))
-        {
-            return explode('~',$this->config['default'])[0];
-        }
-    }
-
-    function getDefaultTo()
-    {
-
-        if (!empty($this->config['default']))
-        {
-            $spl = explode('~',$this->config['default']);
-            if (isset($spl[1]))
-            {
-
-                return $spl[1];
-            }
-        }
-    }
-
-    function getFilterCondition()
-    {
-        if (!empty($this->value))
-        {
-            $split = explode('~',$this->value);
-            $col = !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->field;
-            if ($split[0] != '' && $split[1] != '')
-            {
-                return ['cond' => [$col, 'BETWEEN', $split]];
-            }
-            elseif ($split[0] != '')
-            {
-                return ['cond' => [$col, '>=', $split[0]]];
-            }
-            elseif ($split[1] != '')
-            {
-                return ['cond' => [$col, '=<', $split[1]]];
-            }
-        }
-
-
+        $this->model->setAttribute($this->getFromFieldName(), $this->$this->getValueFrom());
+        $this->model->setAttribute($this->getToFieldName(), $this->getValueTo());
     }
 
     function getFromFieldName()
@@ -136,12 +46,43 @@ class Range extends Field implements WizardableField, FormControl
         return $this->name . "_to";
     }
 
-    function importValue($data)
+    function getValueFrom()
+    {
+        if (strpos($this->value ?? "", "~") !== false)
+        {
+            return explode('~',$this->value)[0];
+        }
+    }
+
+    function getValueTo()
+    {
+        if (strpos($this->value ?? "", "~") !== false)
+        {
+            return explode("~", $this->value)[1];
+        }
+    }
+
+    function getDefaultFrom()
+    {
+        if (!empty($this->config['default']) && strpos($this->config['default'], "~") !== false)
+        {
+            return explode('~',$this->config['default'])[0];
+        }
+    }
+
+    function getDefaultTo()
+    {
+        if (!empty($this->config['default']) && strpos($this->config['default'], "~") !== false)
+        {
+            return explode('~',$this->config['default'])[1];
+        }
+    }
+
+    function pullFromData(array $data)
     {
         if (!empty($data[$this->name]) && strpos($data[$this->name],'~') !== false)
         {
-            $this->setValue($data[$this->name]);
-
+            $this->value = $data[$this->name];
         }
         else
         {
@@ -157,16 +98,66 @@ class Range extends Field implements WizardableField, FormControl
                 {
                     $to = $data[$this->getToFieldName()];
                 }
-                $this->setValue($from . '~' . $to);
+                $this->value = $from . '~' . $to;
             }
         }
 
     }
 
-    function syncValue()
+    function getFilterCondition()
     {
-        $this->model->setAttribute($this->getFromFieldName(), $this->prepareValueForDb($this->getValueFrom()));
-        $this->model->setAttribute($this->getToFieldName(), $this->prepareValueForDb($this->getValueTo()));
+        if (!empty($this->value))
+        {
+            $split = explode('~',$this->value);
+            $col = $this->getFilterColumnName();
+            if ($split[0] != '' && $split[1] != '')
+            {
+                return ['cond' => [$col, 'BETWEEN', $split]];
+            }
+            elseif ($split[0] != '')
+            {
+                return ['cond' => [$col, '>=', $split[0]]];
+            }
+            elseif ($split[1] != '')
+            {
+                return ['cond' => [$col, '=<', $split[1]]];
+            }
+        }
     }
+
+
+
+
+    function controlType():string
+    {
+        return "range";
+    }
+
+    function controlTemplate():string
+    {
+        return "crud::crud/fields/range.twig";
+    }
+
+    public function wizardDbType()
+    {
+        return '';
+    }
+
+    function wizardTemplate()
+    {
+        return "crud::wizard/blocks/fields/range.twig";
+    }
+
+
+    function wizardCaption()
+    {
+        return "Range";
+    }
+
+
+
+
+
+
 
 } 

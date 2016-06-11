@@ -4,28 +4,64 @@
 use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Wizard\CrudModelPrototype;
-use Skvn\Crud\Wizard\Wizard;
 use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
 class DateTime extends Field implements WizardableField, FormControl
 {
 
     use WizardCommonFieldTrait;
+    use FormControlCommonTrait;
+
+    function pullFromModel()
+    {
+        $this->value = $this->model->getAttribute($this->field);
+        if (!$this->value)
+        {
+            if ($this->isInt())
+            {
+                $this->value = time();
+            }
+            else
+            {
+                $this->value = new \DateTime('now');
+            }
+        }
+    }
+
+    function getOutputValue():string
+    {
+
+        if ($this->isInt())
+        {
+            return date($this->config['format'], $this->value);
+        }
+        else
+        {
+            return date($this->config['format'], strtotime($this->value));
+        }
+    }
 
 
-    function controlType()
+    function controlType():string
     {
         return "date_time";
     }
 
-    public function wizardDbType() {
-        return 'dateTime';
-    }
-
-    function controlTemplate()
+    function controlTemplate():string
     {
         return "crud::crud/fields/date_time.twig";
+    }
+
+    function controlValidateConfig():bool
+    {
+        return !empty($this->config['format']);
+    }
+
+    public function wizardDbType()
+    {
+        return 'dateTime';
     }
 
     function wizardTemplate()
@@ -33,57 +69,9 @@ class DateTime extends Field implements WizardableField, FormControl
         return "crud::wizard/blocks/fields/date_time.twig";
     }
 
-
     function wizardCaption()
     {
         return "Date + Time";
-    }
-
-
-
-    function validateConfig()
-    {
-        return !empty($this->config['format']);
-    }
-
-    function getValue()
-    {
-        if (!$this->value)
-        {
-            $this->value = $this->model->getAttribute($this->getField());
-            if (!$this->value)
-            {
-                if (empty($this->config['db_type']) ||$this->config['db_type'] == 'int' ) {
-                    $this->value = time();
-                } else {
-                    $this->value = (new \DateTime('now'));
-                }
-
-            }
-
-        }
-
-        return $this->value;
-    }
-
-
-    function getValueForList()
-    {
-
-        if (empty($this->config['db_type']) ||$this->config['db_type'] == 'int' ) {
-            return date($this->config['format'], $this->getValue());
-        } else {
-            return date($this->config['format'], strtotime($this->getValue()));
-        }
-    }
-
-    function  getValueForDb()
-    {
-        if (empty($this->config['db_type']) ||$this->config['db_type'] == 'int' ) {
-            return strtotime($this->getValue());
-        } else {
-            return date('Y-m-d H:i:s',strtotime($this->getValue()));
-        }
     }
 
     function wizardCallbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
@@ -94,5 +82,9 @@ class DateTime extends Field implements WizardableField, FormControl
         $fieldConfig['db_type'] = $modelPrototype->column_types[$fieldKey];
     }
 
-    
+    private function isInt()
+    {
+        return (empty($this->config['db_type']) || $this->config['db_type'] == 'int');
+    }
+
 } 
