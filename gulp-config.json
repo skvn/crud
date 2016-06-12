@@ -74,6 +74,38 @@
           "resources/bower_components/datatables-treetable/js/dataTables.treeTable.js"
 
         ],
+      "vendor_js_src": [
+        "resources/bower_components/jquery/dist/jquery.js",
+        "resources/bower_components/bootstrap/dist/js/bootstrap.js",
+        "resources/bower_components/bootstrap-combobox/js/bootstrap-combobox.js",
+        "resources/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js",
+        "resources/bower_components/bootstrap-select/dist/js/bootstrap-select.js",
+        "resources/bower_components/bootstrap-switch/dist/js/bootstrap-switch.js",
+        "resources/bower_components/bootstrap-treeview/src/js/bootstrap-treeview.js",
+        "resources/bower_components/dt/media/js/jquery.dataTables.js",
+        "resources/bower_components/datatables/media/js/dataTables.bootstrap.js",
+        "resources/bower_components/jquery-validation/dist/jquery.validate.js",
+        "resources/bower_components/jquery.steps/build/jquery.steps.js",
+        "resources/bower_components/matchHeight/jquery.matchHeight.js",
+        "resources/bower_components/moment/min/moment-with-locales.js",
+        "resources/bower_components/nestable/jquery.nestable.js",
+        "resources/bower_components/simplemde/dist/simplemde.min.js",
+        "resources/bower_components/summernote/dist/summernote.js",
+        "resources/bower_components/jquery-form/jquery.form.js",
+        "resources/bower_components/typeahead.js/dist/typeahead.bundle.js",
+        "resources/plugins/tagmanager.js",
+        "resources/bower_components/jquery-ui/ui/core.js",
+        "resources/bower_components/jquery-ui/ui/widget.js",
+        "resources/bower_components/jquery-ui/ui/mouse.js",
+        "resources/bower_components/jquery-ui/ui/sortable.js",
+        "resources/bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js",
+        "resources/bower_components/iCheck/icheck.js",
+        "resources/bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js",
+        "resources/bower_components/jstree/dist/jstree.js",
+        "resources/bower_components/jquery-treetable/jquery.treetable.js",
+        "resources/bower_components/datatables-treetable/js/dataTables.treeTable.js"
+
+      ],
 
       "vendor_js_locales": {
         "ru": [

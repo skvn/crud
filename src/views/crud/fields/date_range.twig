@@ -2,9 +2,9 @@
 <div class="row">
     <div class="col-md-1" style="width:260px;">
         <div data-widget="crud_datetime" data-type="date" class="date input-daterange input-group"   data-date-format="{{ input.config.jsformat }}">
-            <input type="text" class="input-sm form-control" name="{{ input.getFromFieldName() }}" value="{{ input.getValueFrom()|date(input.config.format) }}" data-default="{{ input.getDefaultFrom()|date(input.config.format) }}"/>
+            <input type="text" class="input-sm form-control" name="{{ input.getFromFieldName() }}" value="{{ input.getValueFrom() ? input.getValueFrom()|date(input.config.format) }}" data-default="{{ input.getDefaultFrom()|date(input.config.format) }}"/>
             <span class="input-group-addon">{{ trans('crud::messages.to') }}</span>
-            <input type="text" class="input-sm form-control" name="{{ input.getToFieldName() }}" value="{{ input.getValueTo()|date(input.config.format)}}"  data-default="{{ input.getDefaultTo()|date(input.config.format) }}" />
+            <input type="text" class="input-sm form-control" name="{{ input.getToFieldName() }}" value="{{ input.getValueTo() ? input.getValueTo()|date(input.config.format)}}"  data-default="{{ input.getDefaultTo()|date(input.config.format) }}" />
         </div>
     </div>
 </div>

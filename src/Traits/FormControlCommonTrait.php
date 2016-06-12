@@ -43,15 +43,4 @@ trait FormControlCommonTrait
         $this->value =  $val;
     }
 
-
-
-
-
-
-
-
-    function getValueForDb()
-    {
-        return $this->value;
-    }
 }

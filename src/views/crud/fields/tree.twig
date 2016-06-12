@@ -1,4 +1,4 @@
 {% include 'crud::crud/fields/label.twig' %}
 &nbsp;&nbsp;<input type="text" id="search_{{ input.getUniqueId()}}" placeholder="{{ trans('crud::messages.search') }}" />
 <div data-widget="crud_tree_control" data-name="{{ input.name }}" data-model_id="{{ input.model.id }}" data-model="{{ input.model.classViewName }}" data-rel_form="{{ input.model.view_ref }}" id="{{ input.getUniqueId()}}"></div>
-<input type="hidden" name="{{ input.name }}" id="hidden_{{ input.getUniqueId()}}" value="{{ input.getValue() }}">
+<input type="hidden" name="{{ input.name }}" id="hidden_{{ input.getUniqueId()}}" value="{{ input.getValue()|join(",") }}">

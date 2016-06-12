@@ -18,7 +18,7 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            {% for c in crudObj.getListConfig().all_columns %}
+                            {% for c in crudObj.getList().getParam('all_columns') %}
                                 {% if not c.ctype and not c.invisible%}
                                     {% if not c.acl or c.acl|allowed('r') %}
                                         <label class="control-label text-left">

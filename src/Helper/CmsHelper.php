@@ -366,9 +366,9 @@ class CmsHelper
 
     function getVendorJs()
     {
-        $config = json_decode(file_get_contents(__DIR__ .'/../../gulp-config.json'), true)['paths']['vendor_js'];
+        $config = json_decode(file_get_contents(__DIR__ .'/../../gulp-config.json'), true)['paths']['vendor_js_src'];
         array_walk($config, function (&$item) {
-            $item = str_replace('resources/bower_components','', $item);
+            $item = str_replace('resources','', $item);
         });
 
         return $config;

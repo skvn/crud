@@ -26,6 +26,42 @@ class Tags extends Field implements WizardableField, FormControl {
         }
     }
 
+    function pullFromData(array $data)
+    {
+        if (!empty($data[$this->name]))
+        {
+            if (is_array($data[$this->name]))
+            {
+                $this->value = $data[$this->name];
+            }
+            else
+            {
+                $this->value = explode(",", $data[$this->name]);
+            }
+        }
+        else
+        {
+            $this->value = [];
+        }
+    }
+
+    function pushToModel()
+    {
+        $ids = [];
+        $class = CrudModel :: resolveClass($this->config['model']);
+        $dummyModel = new $class();
+        if (!empty($this->value))
+        {
+            foreach ($this->value as $title)
+            {
+                $obj = $class::firstOrCreate([$dummyModel->confParam('title_field') => trim($title)]);
+                $ids[] = $obj->getKey();
+            }
+        }
+        $this->model->setAttribute($this->name, $ids);
+    }
+
+
     function controlType():string
     {
         return "tags";
@@ -77,28 +113,6 @@ class Tags extends Field implements WizardableField, FormControl {
         return "crud::wizard/blocks/fields/tags.twig";
     }
 
-
-
-
-
-    function getValueForDb()
-    {
-        if ($this->value) {
-
-            $split = explode(',',$this->value);
-            $class = CrudModel :: resolveClass($this->config['model']);
-            $dummyModel = new $class();
-            $ids = [];
-            foreach ($split as $title) {
-                $title = trim($title);
-                $obj = $class::firstOrCreate([$dummyModel->confParam('title_field') => $title]);
-                $ids[] = $obj->id;
-            }
-
-
-            return $ids;
-        }
-    }
 
 
 } 

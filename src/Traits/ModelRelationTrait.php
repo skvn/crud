@@ -34,26 +34,28 @@ trait ModelRelationTrait
         //$formConf = $this->getFields();
         if ($this->dirtyRelations  && is_array($this->dirtyRelations ))
         {
-            $form = $this->getForm(['fillData'=>$this->dirtyRelations,'forceNew' => true]);
+            //$form = $this->getForm(['fillData'=>$this->dirtyRelations,'forceNew' => true]);
 
             foreach ($this->dirtyRelations as $k => $v)
             {
-                $control = $form->fields[$k];
+                //$control = $form->fields[$k];
                 //if (!empty($form->fields[$k]))
                 //{
                     //$v = $form->fields[$k]->getValueForDb();
                 //}
-                $v = $control->getValueForDb();
+                //$v = $control->getValueForDb();
 
                 //switch ($this->crudRelations[$k])
                 //switch ($this->config['fields'][$k]['relation'])
-                switch ($control->config['relation'])
+                //switch ($control->config['relation'])
+                $field = $this->getField($k);
+                switch ($field['relation'])
                 {
                     case self :: RELATION_HAS_ONE:
-                        $relObj = self :: createInstance($control->config['model'], null, $v);
+                        $relObj = self :: createInstance($field['model'], null, $v);
                         //$class = self :: resolveClass($formConf[$k]['model']);
                         //$relObj = $class::find($v);
-                        $relObj->setAttribute($control->config['ref_column'], $this->getKey());
+                        $relObj->setAttribute($field['ref_column'], $this->getKey());
                         $relObj->save();
                         break;
 
@@ -65,7 +67,7 @@ trait ModelRelationTrait
                             foreach ($v as $id)
                             {
                                 //$obj = $class::find($id);
-                                $obj = self :: createInstance($control->config['model'], null, $id);
+                                $obj = self :: createInstance($field['model'], null, $id);
                                 $this->$k()->save($obj);
                             }
                             $toUnlink = array_diff($oldIds, $v);
@@ -79,16 +81,16 @@ trait ModelRelationTrait
                         {
                             foreach ($toUnlink as $id)
                             {
-                                if (!empty($control->config['ref_column']))
+                                if (!empty($field['ref_column']))
                                 {
-                                    $col = $control->config['ref_column'];
+                                    $col = $field['ref_column'];
                                 }
                                 else
                                 {
                                     $col = $this->classViewName . '_id';
                                 }
                                 //$obj = $class::find($id);
-                                $obj = self :: createInstance($control->config['model'], null, $id);
+                                $obj = self :: createInstance($field['model'], null, $id);
                                 $obj->$col = null;
                                 $obj->save();
                             }

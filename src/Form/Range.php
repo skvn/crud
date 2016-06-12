@@ -24,7 +24,7 @@ class Range extends Field implements WizardableField, FormControl, FormControlFi
 
     function pushToModel()
     {
-        $this->model->setAttribute($this->getFromFieldName(), $this->$this->getValueFrom());
+        $this->model->setAttribute($this->getFromFieldName(), $this->getValueFrom());
         $this->model->setAttribute($this->getToFieldName(), $this->getValueTo());
     }
 

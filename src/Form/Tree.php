@@ -20,20 +20,44 @@ class Tree extends Field implements WizardableField, FormControl{
     {
         if ($this->model->isManyRelation($this->config['relation']))
         {
-            $this->value =  $this->model->getRelationIds($this->name);
+            $this->value =  $this->model->getRelationIds($this->name)->toArray();
         }
         else
         {
             if ($this->config['relation'] == CrudModel::RELATION_HAS_ONE)
             {
                 $relation = $this->name;
-                $this->value = $this->$relation->getKey();
+                $this->value = [$this->$relation->getKey()];
             }
             else
             {
-                $this->value = $this->model->getAttribute($this->field);
+                $this->value = [$this->model->getAttribute($this->field)];
             }
         }
+    }
+
+    function pullFromData(array $data)
+    {
+        if (!empty($data[$this->name]))
+        {
+            if (is_array($data[$this->name]))
+            {
+                $this->value = $data[$this->name];
+            }
+            else
+            {
+                $this->value = explode(",", $data[$this->name]);
+            }
+        }
+        else
+        {
+            $this->value = [];
+        }
+    }
+
+    function pushToModel()
+    {
+        $this->model->setAttribute($this->name, $this->value);
     }
 
 
@@ -94,14 +118,6 @@ class Tree extends Field implements WizardableField, FormControl{
 
 
 
-    function  getValueForDb()
-    {
-        $val = $this->getValue();
-        if (is_string($val))
-        {
-            return explode(',',$val);
-        }
-    }
 
     public function getOptions()
     {

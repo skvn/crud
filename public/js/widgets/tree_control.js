@@ -34,7 +34,7 @@
 
                 }
 
-                console.log(value);
+                //console.log(value);
                 $('#hidden_'+control_id).val(value);
 
 
