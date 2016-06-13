@@ -37,7 +37,7 @@ class Number extends Field implements WizardableField, FormControl, FormControlF
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/number.twig";
+        return "crud::crud.fields.number";
     }
 
     public function wizardDbType()
@@ -47,7 +47,7 @@ class Number extends Field implements WizardableField, FormControl, FormControlF
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/number.twig";
+        return "crud::wizard.blocks.fields.number";
     }
 
 

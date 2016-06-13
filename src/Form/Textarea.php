@@ -33,7 +33,7 @@ class TextArea extends Field implements WizardableField, FormControl, FormContro
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/textarea.twig";
+        return "crud::crud.fields.textarea";
     }
 
     function controlWidgetUrl():string
@@ -50,7 +50,7 @@ class TextArea extends Field implements WizardableField, FormControl, FormContro
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/textarea.twig";
+        return "crud::wizard.blocks.fields.textarea";
     }
 
 

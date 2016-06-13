@@ -68,7 +68,7 @@ class Tree extends Field implements WizardableField, FormControl{
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/tree.twig";
+        return "crud::crud.fields.tree";
     }
 
     function controlWidgetUrl():string
@@ -110,7 +110,7 @@ class Tree extends Field implements WizardableField, FormControl{
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/tree.twig";
+        return "crud::wizard.blocks.fields.tree";
     }
 
 

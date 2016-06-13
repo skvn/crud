@@ -21,12 +21,12 @@ class MultiFile extends Field implements WizardableField, FormControl{
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/multi_file.twig";
+        return "crud::crud.fields.multi_file";
     }
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/multi_file.twig";
+        return "crud::wizard.blocks.fields.multi_file";
     }
 
 

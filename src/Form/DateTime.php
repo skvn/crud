@@ -51,7 +51,7 @@ class DateTime extends Field implements WizardableField, FormControl
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/date_time.twig";
+        return "crud::crud.fields.date_time";
     }
 
     function controlValidateConfig():bool
@@ -66,7 +66,7 @@ class DateTime extends Field implements WizardableField, FormControl
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/date_time.twig";
+        return "crud::wizard.blocks.fields.date_time";
     }
 
     function wizardCaption()

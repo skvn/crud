@@ -193,34 +193,11 @@
         {
             var args = elem.data('args') || {};
 
-            // if (elem.data('collect_rows'))
-            // {
-            //     var tbl = $('table[data-list_table_ref='+elem.data('collect_rows')+']');
-            //     if (tbl.length <= 0)
-            //     {
-            //         alert('Таблица данных не найдена');
-            //         return;
-            //     }
-            //     var ids = [];
-            //     $('input[data-rel=row]', tbl).each(function(){
-            //         if ($(this).prop('checked'))
-            //         {
-            //             ids.push($(this).val());
-            //         }
-            //     })
-            //     if (ids.length <= 0)
-            //     {
-            //         alert(i18n.say('no_item_selected'));
-            //         return;
-            //     }
-            //     args['ids'] = ids;
-            // }
-
             args['command'] = elem.attr('href');
             args['id'] = parseInt(elem.data('id'))>0?parseInt(elem.data('id')):-1;
             args['model'] = elem.data('model');
             args['scope'] = elem.data('scope');
-            $("input", elem.parents("form:first")).each(function(){
+            $("input,select", elem.parents("form")).each(function(){
                 args[$(this).attr('name')] = $(this).val();
             });
             
@@ -242,15 +219,6 @@
             }
 
 
-            // if (actions[i]['params'])
-            // {
-            //     var add = actions[i]['params'];
-            //     for (var n in rowData)
-            //     {
-            //         add = add.replace('%'+n, rowData[n]);
-            //     }
-            //     com_url = com_url + '&' +add;
-            // }
             $.post(com_url, args, function (res)
             {
                 if (res.success)
@@ -268,7 +236,10 @@
                     {
                         eval(elem.data('callback'));
                     }
-                    crud.trigger('crud.reload', res);
+                    else
+                    {
+                        crud.trigger('crud.reload', res);
+                    }
                 }
                 else
                 {

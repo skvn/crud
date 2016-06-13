@@ -135,7 +135,7 @@ class Range extends Field implements WizardableField, FormControl, FormControlFi
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/range.twig";
+        return "crud::crud.fields.range";
     }
 
     public function wizardDbType()
@@ -145,7 +145,7 @@ class Range extends Field implements WizardableField, FormControl, FormControlFi
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/range.twig";
+        return "crud::wizard.blocks.fields.range";
     }
 
 

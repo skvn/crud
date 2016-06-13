@@ -20,12 +20,12 @@ class Image extends File implements WizardableField, FormControl{
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/image.twig";
+        return "crud::crud.fields.image";
     }
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/image.twig";
+        return "crud::wizard.blocks.fields.image";
     }
 
 

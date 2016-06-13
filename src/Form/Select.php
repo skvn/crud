@@ -46,7 +46,7 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/select.twig";
+        return "crud::crud.fields.select";
     }
 
     function controlWidgetUrl():string
@@ -93,7 +93,7 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/select.twig";
+        return "crud::wizard.blocks.fields.select";
     }
 
 

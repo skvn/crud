@@ -69,7 +69,7 @@ class Tags extends Field implements WizardableField, FormControl {
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/tags.twig";
+        return "crud::crud.fields.tags";
     }
 
     function controlWidgetUrl():string
@@ -110,7 +110,7 @@ class Tags extends Field implements WizardableField, FormControl {
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/tags.twig";
+        return "crud::wizard.blocks.fields.tags";
     }
 
 

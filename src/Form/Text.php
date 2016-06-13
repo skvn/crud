@@ -47,12 +47,12 @@ class Text extends Field implements WizardableField, FormControl, FormControlFil
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/text.twig";
+        return "crud::crud.fields.text";
     }
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/text.twig";
+        return "crud::wizard.blocks.fields.text";
     }
 
 

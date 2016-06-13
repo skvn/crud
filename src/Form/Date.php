@@ -42,7 +42,7 @@ class Date extends Field implements FormControl{
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/date.twig";
+        return "crud::crud.fields.date";
     }
 
     function controlWidgetUrl():string
@@ -58,7 +58,7 @@ class Date extends Field implements FormControl{
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/date.twig";
+        return "crud::wizard.blocks.fields.date";
     }
 
     function wizardCaption()

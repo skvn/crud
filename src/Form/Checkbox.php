@@ -27,7 +27,7 @@ class Checkbox extends Field implements WizardableField, FormControl, FormContro
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/checkbox.twig";
+        return "crud::crud.fields.checkbox";
     }
 
     function controlWidgetUrl():string
@@ -42,7 +42,7 @@ class Checkbox extends Field implements WizardableField, FormControl, FormContro
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/checkbox.twig";
+        return "crud::wizard.blocks.fields.checkbox";
     }
 
     function wizardCaption()

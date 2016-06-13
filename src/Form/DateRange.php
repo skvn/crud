@@ -53,7 +53,7 @@ class DateRange extends Range implements WizardableField, FormControl
 
     function controlTemplate():string
     {
-        return "crud::crud/fields/date_range.twig";
+        return "crud::crud.fields.date_range";
     }
 
     public function wizardDbType()
@@ -63,7 +63,7 @@ class DateRange extends Range implements WizardableField, FormControl
 
     function wizardTemplate()
     {
-        return "crud::wizard/blocks/fields/date_range.twig";
+        return "crud::wizard.blocks.fields.date_range";
     }
 
     function wizardCaption()
