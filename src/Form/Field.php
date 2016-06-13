@@ -93,6 +93,11 @@ abstract class Field
         return (!empty($this->config['filter_column'])?$this->config['filter_column']:$this->field);
     }
 
+    function setFilterColumnName($col)
+    {
+        $this->config['filter_column'] = $col;
+    }
+
 
 
 

@@ -5,10 +5,10 @@ use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
-use Skvn\Crud\Contracts\FormControlFiltrable;
+use Skvn\Crud\Contracts\FormControlFilterable;
 
 
-class Number extends Field implements WizardableField, FormControl, FormControlFiltrable{
+class Number extends Field implements WizardableField, FormControl, FormControlFilterable{
 
     use WizardCommonFieldTrait;
     use FormControlCommonTrait;

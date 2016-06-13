@@ -31,7 +31,7 @@
 {% endmacro %}
 
 {% macro filters(crudObj) %}
-    {% if crudObj.getFilterColumns() %}
+    {% if crudObj.getList().hasFilter() %}
         <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-heading"><a data-toggle="collapse" href="#filter_panel_{{ crudObj.classViewName }}_{{ crudObj.scope }}"><i class="icon fa fa-filter"></i> {{ trans('crud::messages.filter_list') }}</a></div>

@@ -19,7 +19,7 @@ class ListHandler {
     protected $default_column = ["title" => "", "width" => "", "orderable" => "0", "searchable" => "0", "filterable" => "0", "invisible" => "0", "data" => ""];
     protected $columns = [];
     protected $all_columns = [];
-    protected $filter;
+    protected $filter = null;
 
     public function __construct(CrudModel $parentInstance, $options=[])
     {
@@ -114,64 +114,56 @@ class ListHandler {
         return $this->options[$opt] ?? $default;
     }
 
-//    public  function appendConditions($conditions)
-//    {
-//        return $conditions;
-//    }
-//
-//    public  function preApplyConditions($coll, $conditions)
-//    {
-//        return $conditions;
-//    }
-
-    public function initFilter()
-    {
-        $filter =  Filter::create($this->model, $this->model->getScope());
-        $this->setFilter($filter);
-        return $this;
-    }
-
-    public function setFilter(Filter $filterObj)
-    {
-        $this->filter = $filterObj;
-        //$this->filter->setModel($this->model);
-        return $this;
-    }
-
     public  function getFilter()
     {
         if (!$this->filter)
         {
-            throw new \InvalidArgumentException("Filter object is not set");
+            $cols = [];
+            foreach ($this->columns as $column)
+            {
+                if (!empty($column['filterable']))
+                {
+                    $cols[$column['data']] = $column['data'];
+                    if ($fld = $this->model->getField($column['data']))
+                    {
+                        if (!empty($fld['field']))
+                        {
+                            $cols[$column['data']] = $fld['field'];
+                        }
+                    }
+                }
+            }
+            foreach ($this->options['filter'] ?? [] as $column)
+            {
+                if (!array_key_exists($column, $cols) && $fld = $this->model->getField())
+                {
+                    $cols[$column] = $fld['field'];
+                }
+            }
+            $this->filter = Filter :: create([
+                'model' => $this->model,
+                'defaults' => $this->options['filter_default'] ?? [],
+                'filters' => $cols
+            ])->fill();
+//            $this->filter = Filter :: create()
+//                            ->setModel($this->model)
+//                            ->setDefaults($this->options['filter_default'] ?? [])
+//                            ->setFilters($cols)
+//                            ->fill();
         }
         return $this->filter;
     }
 
-    public function getFilterColumns()
+    public function hasFilter()
     {
-        if ($this->filter)
-        {
-            return $this->filter->filters;
-        }
+        return !empty($this->getFilter()->filters);
     }
 
-    public function fillFilter($scope, $input)
+    public function fillFilter($input)
     {
-        $this->initFilter($scope);
-
-        return $this->filter->fill($input, true);
+        return $this->getFilter()->fill($input);
     }
 
-
-    function getDefaultFilter()
-    {
-        if (!empty($this->options['filter_default']))
-        {
-            return $this->options['filter_default'];
-        }
-
-        return [];
-    }
 
     function getParam($prop = '')
     {

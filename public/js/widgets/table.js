@@ -21,7 +21,7 @@
                 col['orderable'] = c.data('list_orderable') == '1';
                 if (obj.col_list.length == 0)
                 {
-                    if (c.data('list_ctype') === "checkbox")
+                    if (col.ctype === "checkbox")
                     {
                         col.fnCreatedCell = function(td, cellData, rowData, row, col){
                             $(td).html('<input data-widget="crud_checkbox" class="i-checks" data-rel="row" type="checkbox" value="' + cellData + '">').data('id',cellData)
@@ -48,7 +48,7 @@
                         $(td).attr('id', c.data('list_data')+'_'+rowData.id).data('ref', c.data('list_data')).attr('data-ref', c.data('list_data'));
                     }
 
-                    if (c.data('list_ctype') === "actions")
+                    if (col.ctype === "actions")
                     {
 
                         col.fnCreatedCell = function(td, cellData, rowData, row, col){

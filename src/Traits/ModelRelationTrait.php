@@ -153,21 +153,6 @@ trait ModelRelationTrait
 
     }
 
-
-
-//    protected   function resolveColumnByRelationName($col)
-//    {
-//        foreach ($this->config['fields'] as $col_name => $desc)
-//        {
-//            if (!empty($desc['relation_name']) &&  $desc['relation_name'] == $col)
-//            {
-//                $desc['column_index'] = $col_name;
-//                return $desc;
-//            }
-//        }
-//
-//    }
-
     function resolveListRelation($alias)
     {
         if (strpos($alias,'::') !== false)

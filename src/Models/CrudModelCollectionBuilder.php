@@ -171,9 +171,8 @@ class CrudModelCollectionBuilder
         {
             return $this;
         }
-        $this->model->initFilter();
         $methodCond = camel_case('append_' . $this->model->getScope() . '_conditions');
-        $conditions = $this->model->getFilter()->getConditions();
+        $conditions = $this->model->getList()->getFilter()->getConditions();
         if (method_exists($this->model, $methodCond))
         {
             $conditions= $this->model->$methodCond($conditions);

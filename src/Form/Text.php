@@ -4,11 +4,11 @@
 use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
-use Skvn\Crud\Contracts\FormControlFiltrable;
+use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
-class Text extends Field implements WizardableField, FormControl, FormControlFiltrable{
+class Text extends Field implements WizardableField, FormControl, FormControlFilterable{
 
     
     use WizardCommonFieldTrait;
@@ -26,7 +26,7 @@ class Text extends Field implements WizardableField, FormControl, FormControlFil
     {
         if (!empty($this->value))
         {
-            $col = $this->filterColumnName();
+            $col = $this->getFilterColumnName();
             $value = str_replace(['*', '?'], ['%', '_'], $this->value);
             if (strpos($value, "~") === 0)
             {

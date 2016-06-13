@@ -4,10 +4,10 @@
 use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
-use Skvn\Crud\Contracts\FormControlFiltrable;
+use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
-class Checkbox extends Field implements WizardableField, FormControl, FormControlFiltrable
+class Checkbox extends Field implements WizardableField, FormControl, FormControlFilterable
 {
     use WizardCommonFieldTrait;
     use FormControlCommonTrait;

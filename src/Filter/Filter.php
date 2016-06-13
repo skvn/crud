@@ -4,169 +4,132 @@
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Form\Form;
 use Skvn\Crud\Form\Field;
-use Skvn\Crud\Contracts\FormControlFiltrable;
+use Skvn\Crud\Contracts\FormControlFilterable;
+use Illuminate\Container\Container;
+use Skvn\Crud\Exceptions\Exception;
 
 class Filter {
 
 
-    static  $instances = [];
 
-    public $filters;
-    protected $model, $crudObj,$form, $session, $defaults;
+    public $filters = [];
+    protected $model;
+    protected $form;
+    protected $app;
+    protected $defaults = [];
 
-    public function __construct(CrudModel $model)
+    public function __construct()
     {
-        $this->session = app()['session'];
-        $this->setModel($model);
+        $this->app = Container :: getInstance();
     }
 
-    public static  function create(CrudModel $model, $scope)
+    static function create($args = [])
     {
-        $key = $model->classShortName . "_" . $scope;
-        //$context = implode(':',$context_params);
-        if (empty(self :: $instances[$key]))
+        $filter = new self();
+        foreach ($args as $k => $v)
         {
-            $instances[$key] =  new Filter($model, $scope);
+            $method = camel_case('set_' . $k);
+            if (!method_exists($filter, $method))
+            {
+                throw new Exception("No " . $k . " argument exists for filter " . get_class($filter));
+            }
+            $filter->$method($v);
         }
+        return $filter;
 
-        return $instances[$key];
     }
-
 
     public function setModel(CrudModel $crudObj)
     {
-        $this->model = $crudObj->classShortName;
-        $this->crudObj = $crudObj;
-        $this->initFilterColumns();
-        $this->fillFromStorage();
+        $this->model = $crudObj;
+        return $this;
     }
 
-    public function fillFromStorage()
+    function setDefaults($defaults)
     {
-        if ($this->session->has($this->getStorageKey()))
-        {
-            $this->fill($this->session->get($this->getStorageKey()));
-
-        }
-        else
-        {
-            $this->fill($this->crudObj->getListDefaultFilter());
-        }
+        $this->defaults = $defaults;
+        return $this;
     }
 
-    public function initFilterColumns()
+    function addFilter($name, $field = null)
     {
-        $filters = $this->crudObj->getFilterConfig();
-        $this->defaults = $this->crudObj->getListDefaultFilter();
-
-        if ($filters)
+        $col = $this->model->getField($name);
+        if (!$col)
         {
-            foreach ($filters as $column_name)
+            return;
+        }
+        $control = Form :: getControlByType($col['type']);
+        if (!$control instanceof FormControlFilterable)
+        {
+            return;
+        }
+        $col['required'] = false;
+        $col['name'] = $name;
+        $col['field'] = $field ?? $name;
+        if ($col['type'] == Field :: SELECT)
+        {
+            $col['multiple'] = true;
+        }
+        if (isset($this->defaults[$name]))
+        {
+            $col['default'] = is_array($this->defaults[$name]) ? implode(",", $this->defaults[$name]) : $this->defaults[$name];
+        }
+        $filter = Form :: createControl($this->model, $col);
+        if (!empty($field) && $field != $name)
+        {
+            $filter->setFilterColumnName($field);
+        }
+        $this->filters[] = $filter;
+        return $this;
+    }
+
+    function setFilters($filters)
+    {
+        $this->filters = [];
+        foreach ($filters as $fname => $ffield)
+        {
+            $this->addFilter($fname, $ffield);
+        }
+        return $this;
+    }
+
+    function fill($input = [])
+    {
+        $stored = $this->app['session']->get($this->getStorageKey()) ?? [];
+        $store = [];
+        $data = array_merge($this->defaults, $stored);
+        foreach ($this->filters as $filter)
+        {
+            $filter->setValue($data[$filter->name] ?? null);
+            if (!empty($input))
             {
-                if ($field_description = $this->initOneFilterColumn($column_name))
-                {
-                    $this->filters[$column_name] = $field_description;
-                }
+                $filter->pullFromData($input);
+                $store[$filter->name] = $filter->getValue();
             }
         }
-    }
-
-    public function initOneFilterColumn($column_name)
-    {
-        if ($field_description = $this->crudObj->getField($column_name))
+        if (!empty($store))
         {
-            $control = Form :: getControlByType($field_description['type']);
-            if (!$control instanceof FormControlFiltrable)
-            {
-                return false;
-            }
-
-            $field_description['required'] = 0;
-            if ($field_description['type'] == Field::SELECT)
-            {
-                $field_description['multiple'] = 1;
-            }
-
-            $this->appendColumnDefaults($column_name, $field_description);
-
-            return $field_description;
+            $this->app['session']->put($this->getStorageKey(), $store);
         }
-    }
-    
-    private function appendColumnDefaults($column_name, $field_description)
-    {
-        if (!empty($this->defaults[$column_name]))
-        {
-            $field_description['default'] = (is_array($this->defaults[$column_name])?implode(',',$this->defaults[$column_name]):$this->defaults[$column_name]);
-        }
-
-        return $field_description;
-    }
-
-    public function fill($input, $andStore=false)
-    {
-        $storeData = [];
-        if ($this->filters  && is_array($this->filters ))
-        {
-            $form = $this->getForm($input, true);
-            foreach ($this->filters as $k => $filterCol)
-            {
-                $value = $form->fields[$k]->getValue();
-                $storeData[$form->fields[$k]->getField()] = $value;
-                $this->filters[$k]['value'] = $value;
-            }
-        }
-        //var_dump($storeData);
-
-        if ($andStore)
-        {
-            $this->store($storeData);
-        }
-    }
-
-    public function store($data)
-    {
-        $this->session->put($this->getStorageKey(),$data);
+        return $this;
     }
 
     public function getStorageKey()
     {
-        return 'crud_filter_'.$this->crudObj->classViewName . "_" . $this->crudObj->scope;
-    }
-
-    public function getForm($fillData=null, $renew=false)
-    {
-        if ($this->filters)
-        {
-            if (!$this->form || $renew)
-            {
-                //$this->form = new Form($this->crudObj, $this->filters, $fillData);
-                $this->form = Form :: create([
-                    'crudObj' => $this->crudObj,
-                    'config' => $this->filters,
-                    'data' => $fillData
-                ]);
-            }
-        }
-
-        return $this->form;
+        return 'crud_filter_'.$this->model->classViewName . "_" . $this->model->scope;
     }
 
     public function getConditions()
     {
         $filters = [];
-        if ($this->filters)
+        foreach ($this->filters as $filter)
         {
-            $form = $this->getForm();
-            foreach ($form->fields as $field)
+            if ($filter instanceof FormControlFilterable)
             {
-                if ($field instanceof FormControlFiltrable)
+                $c = $filter->getFilterCondition();
+                if ($c)
                 {
-                    $c = $field->getFilterCondition();
-                    if ($c)
-                    {
-                        $filters[$field->getField()] = $c;
-                    }
+                    $filters[$filter->getField()] = $c;
                 }
             }
         }

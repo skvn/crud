@@ -12,37 +12,6 @@ trait ModelFilterTrait
         return $conditions;
     }
 
-    public function initFilter()
-    {
-        return $this->getList()->initFilter();
-    }
-
-    public function setFilter(Filter $filterObj)
-    {
-        return $this->getList()->setFilter($filterObj);
-    }
-
-    public  function getFilter()
-    {
-        return $this->getList()->getFilter();
-    }
-
-    public function getFilterColumns()
-    {
-        return $this->getList()->getFilterColumns();
-    }
-
-    public function fillFilter($scope, $input)
-    {
-        return $this->getList()->fillFilter($scope, $input);
-    }
-
-
-    function getListDefaultFilter()
-    {
-        return $this->getList()->getDefaultFilter();
-    }
-
     function getAutocompleteList($query)
     {
         if (empty($this->config['title_field']))

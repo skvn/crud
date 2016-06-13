@@ -4,7 +4,7 @@ use Skvn\Crud\Form\Form;
 use Skvn\Crud\Form\Field;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Contracts\FormControlFiltrable;
+use Skvn\Crud\Contracts\FormControlFilterable;
 
 
 /**
@@ -417,7 +417,7 @@ class Wizard
         {
             if ($control instanceof WizardableField)
             {
-                if ($control instanceof FormControlFiltrable)
+                if ($control instanceof FormControlFilterable)
                 {
                     $types[$control->controlType()] = $control->wizardCaption();
                 }

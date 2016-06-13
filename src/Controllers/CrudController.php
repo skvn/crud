@@ -40,7 +40,6 @@ class CrudController extends Controller
     function crudIndex($model, $scope = CrudModel :: DEFAULT_SCOPE, $args = [])
     {
         $obj = CrudModel :: createInstance($model, $scope);
-        $obj->initFilter();
 
         $view = !empty($args['view']) ? $args['view'] : $obj->resolveView('index');
         return $this->view->make($view, ['crudObj'=>$obj]);
@@ -50,7 +49,6 @@ class CrudController extends Controller
     function crudPopupIndex($model, $scope = CrudModel :: DEFAULT_SCOPE, $args = [])
     {
         $obj = CrudModel :: createInstance($model, $scope);
-        $obj->initFilter();
 
         $view = !empty($args['view']) ? $args['view'] : $obj->resolveView('popup_index');
         return $this->view->make($view, ['crudObj'=>$obj]);
@@ -61,8 +59,6 @@ class CrudController extends Controller
     function crudTree($model, $scope = CrudModel :: DEFAULT_SCOPE)
     {
         $obj = CrudModel :: createInstance($model, $scope);
-
-        $obj->initFilter();
 
         if ($this->request->ajax())
         {
@@ -215,7 +211,7 @@ class CrudController extends Controller
         try {
             $obj = CrudModel :: createInstance($model, $scope);
 
-            $obj->fillFilter($scope, $this->request->all());
+            $obj->getList()->fillFilter($this->request->all());
 
             return ['success'=>true,'crud_model'=>$obj->classShortName,'scope'=>$scope];
 

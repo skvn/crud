@@ -1,7 +1,8 @@
 <?php namespace Skvn\Crud\Contracts;
 
-interface FormControlFiltrable
+interface FormControlFilterable
 {
     function getFilterCondition();
     function getFilterColumnName();
+    function setFilterColumnName($col);
 }
