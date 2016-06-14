@@ -28,6 +28,9 @@
         {% for tab_id,tab_info in crudForm.tabs %}
             {% if tab_info.acl|allowed('r') %}
                 <div class="tab-pane {{ active == 0 ? 'active' }}" id="{{ tab_id }}">
+                    {% if tab_info.view %}
+                        {% include tab_info.view %}
+                    {% endif %}
                     <fieldset style="padding-bottom: 20px; padding-top: 20px;">
                         {% for input in  crudForm.fields %}
                             {% if input.config.tab == tab_id %}

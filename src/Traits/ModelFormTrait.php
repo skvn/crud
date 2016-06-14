@@ -99,10 +99,13 @@ trait ModelFormTrait
             {
                 foreach ($form as $tab_alias=>$field_set)
                 {
-                    foreach ($field_set as $fname)
+                    if (is_array($field_set))
                     {
-                        $form_array[$fname] = $fields[$fname];
-                        $form_array[$fname]['tab'] = $tab_alias;
+                        foreach ($field_set as $fname)
+                        {
+                            $form_array[$fname] = $fields[$fname];
+                            $form_array[$fname]['tab'] = $tab_alias;
+                        }
                     }
                 }
 
