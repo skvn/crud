@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="form-group">
+        <div class="col col-xs-4">
+        {% include 'crud::wizard/blocks/fields/field_title' %}
+        </div>
+        <div class="col col-xs-4">
+        {% include 'crud::wizard/blocks/fields/field_hint' %}
+        </div>
+        <div class="col col-xs-2">
+        {% include 'crud::wizard/blocks/fields/field_required' %}
+        </div>
+    </div>
+</div>
+<div class="row">
+<div class="col col-xs-6">
+    <div class="form-group">
+        <input type="text" class="form-control" data-attr="name" name="fields[{{ ALIAS }}][method_options]" value="{{ fld.method_options }}" placeholder="Data provider method"  >
+        <span id="helpBlock" class="help-block">The name of the model method that provides edit options. See documentation for the details.</span>
+    </div>
+</div>
+</div>

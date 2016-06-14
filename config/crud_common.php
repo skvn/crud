@@ -27,6 +27,7 @@ return [
         Skvn\Crud\Form\Tags :: class,
         Skvn\Crud\Form\Textarea :: class,
         Skvn\Crud\Form\Text :: class,
-        Skvn\Crud\Form\Tree :: class
+        Skvn\Crud\Form\Tree :: class,
+        Skvn\Crud\Form\Radio :: class,
     ]
 ];

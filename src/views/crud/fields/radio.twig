@@ -1,0 +1,25 @@
+<div class="row" style="margin-top:15px;">
+<div class="col-lg-6">
+<div class="panel panel-default">
+    <div class="panel-heading" style="padding-top: 5px; padding-bottom: 0px;">{% include 'crud::crud/fields/label.twig' %}</div>
+    <div class="panel-body">
+{% if input.isGrouped %}
+    {% for gr in input.getOptions() %}
+
+            <label>{{ gr.title }}</label>
+            <hr />
+            {% for op in gr.options %}
+                <label><input type="radio" value="{{ op.value }}" {{ op.selected ? 'checked' }} {{ input.config.required ? 'required' }} name="{{ input.field }}" />{{ op.text }}</label>
+            {% endfor %}
+       {% endfor %}
+
+{% else %}
+
+    {% for op in input.getOptions() %}
+        <label><input type="radio" value="{{ op.value }}" {{ op.selected ? 'checked' }} {{ input.config.required ? 'required' }} name="{{ input.field }}" /> {{ op.text }}</label><br />
+    {% endfor %}
+{% endif %}
+    </div>
+</div>
+</div>
+</div>
