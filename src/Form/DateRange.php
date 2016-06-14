@@ -80,10 +80,10 @@ class DateRange extends Range implements WizardableField, FormControl
     public function wizardCallbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
     {
         $fieldConfig['db_type'] = $modelPrototype->column_types[$fieldConfig['fields'][0]];
-
-        $formats = $modelPrototype->wizard->getAvailableDateFormats();
+        $formats = $modelPrototype->wizard->getAvailableDateTimeFormats();
         $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];
         $fieldConfig['format'] = $formats[$fieldConfig['format']]['php'];
+
         unset($fieldConfig['property_name']);
 
     }
