@@ -27,6 +27,12 @@ class File extends Field implements WizardableField, FormControl
         $this->value = isset($data[$this->name]) ? $data[$this->name] : null;
     }
 
+    function pushToModel()
+    {
+        $this->model->setAttribute($this->name, $this->value);
+    }
+
+
 
     function controlType():string
     {

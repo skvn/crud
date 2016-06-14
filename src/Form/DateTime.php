@@ -43,6 +43,26 @@ class DateTime extends Field implements WizardableField, FormControl
         }
     }
 
+    function pullFromData(array $data)
+    {
+        if (isset($data[$this->field]))
+        {
+            if ($this->isInt())
+            {
+                $this->value = is_numeric($data[$this->field]) ? $data[$this->field] : strtotime($data[$this->field]);
+            }
+            else
+            {
+                $this->value = $data[$this->field];
+            }
+        }
+        else
+        {
+            $this->value = null;
+        }
+    }
+
+
 
     function controlType():string
     {

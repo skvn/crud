@@ -34,6 +34,25 @@ class Date extends Field implements FormControl{
         return $this->value;
     }
 
+    function pullFromData(array $data)
+    {
+        if (isset($data[$this->field]))
+        {
+            if ($this->isInt())
+            {
+                $this->value = is_numeric($data[$this->field]) ? $data[$this->field] : strtotime($data[$this->field]);
+            }
+            else
+            {
+                $this->value = $data[$this->field];
+            }
+        }
+        else
+        {
+            $this->value = null;
+        }
+    }
+
 
     function controlType():string
     {
