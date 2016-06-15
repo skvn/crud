@@ -124,7 +124,13 @@
                     $tpl_tab.find('div.sk-spinner').hide();
                     $tpl_tab.find('a').show().first().click();
                     $tab_cont.removeClass('veiled');
-                    $cont.find('form').first().crud_form();
+                    var frm = $cont.find('form').first();
+                    frm.crud_form();
+                    var handler = 'onShow_' + frm.data('crud_model') + '_' + frm.data('crud_scope');
+                    if (crud_actions[handler])
+                    {
+                        crud_actions[handler]($cont);
+                    }
                     self.trigger('crud.content_loaded', {cont: $cont});
 
                 });
