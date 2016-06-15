@@ -8,7 +8,9 @@
 <table class="table table-bordered table-striped"   data-rel="{{ f }}"  style="max-width: 1200px;">
 <tr data-rel="{{ f }}">
 <td style="width: 200px;"><b>{{ f }}</b></td>
-{% if not fld.relation %}
+{% set fldObj = modelObj.getFormField(fkey) %}
+
+{% if not fld.relation and fldObj.wizardTemplate() %}
 <td style="width: 250px;"><label>
 
 
@@ -24,13 +26,18 @@
 <td id="f_container_{{ f }}">
     {%  if fld.type %}
         {%  set ALIAS = f %}
-        {% include 'crud::wizard/blocks/fields/'~fld.type~'.twig' %}
+            {% include fldObj.wizardTemplate() %}
     {% endif %}
 </td>
 <td style="width: 80px;"><div id="f_cancel_{{ f }}" {%  if not fld.type  or fld.type == 'file'%}style="display: none"{% endif %}><a href="#" data-click="crud_action" data-field="{{ f }}" data-action="wizard_remove_parent" data-parent="table" data-confirm="Remove this editable field?" class="label label-danger">
-            <i class="fa fa-trash-o"></i> Cancel</a></div></td>
-{%  else  %}
+            <i class="fa fa-trash-o"></i> Delete</a></div></td>
+
+{%  elseif fld.relation  %}
     <td>Relation [{{ fld.type }}]</td>
+{% else  %}
+    <td>Custom, not supported by Wizard field [{{ fld.type }}]
+        <input type="hidden" name="fields[{{ f }}][type]" value="{{ fld.type }}" />
+    </td>
 {% endif %}
 
 </tr>

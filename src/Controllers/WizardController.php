@@ -3,6 +3,7 @@
 use Illuminate\Routing\Controller;
 use Skvn\Crud\Exceptions\Exception as CrudException;
 use Skvn\Crud\Exceptions\WizardException;
+use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Wizard\Migrator;
 use Skvn\Crud\Wizard\Wizard;
 use Skvn\Crud\Wizard\CrudModelPrototype;
@@ -81,7 +82,13 @@ class WizardController extends Controller {
             view()->share('alert', $alert);
         }
 
-        return view('crud::wizard/model', ['table'=>$table,'model'=>$model]);
+        $modelObj = CrudModel::createInstance($model['name']);
+        return view('crud::wizard/model', [
+                'table'=>$table,
+                'model'=>$model,
+                'modelObj'=>$modelObj,
+            ]
+        );
     }
 
 

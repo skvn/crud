@@ -303,6 +303,9 @@
 
         $('[data-toggle="tooltip"]').tooltip();
         adjust_step_height();
+        $('#f_container select').on('change', function () {
+            adjust_step_height()
+        });
 
         switch (stepIndex){
 
@@ -373,6 +376,7 @@
                         $('#f_container').find('tr[data-rel=' + $(this).val() + ']').hide();
                     }
                 });
+
                 
                 $('#field_existing').off('change');
                 $('#field_new').off('change');
@@ -474,6 +478,8 @@
 
                 init_draggable_fields();
                 update_form_stubs();
+
+                $('*[data-rel=list_cols]').sortable({handle:".drag_cols",cursor: "move",axis: "y"});
 
                 break;
 

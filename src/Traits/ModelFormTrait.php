@@ -61,7 +61,8 @@ trait ModelFormTrait
      */
     public  function getFormField($name)
     {
-        return $this->getForm()->getFieldByName($name);
+        return $this->getFieldsObjects(null)[$name];
+        //return $this->getForm()->getFieldByName($name);
     }
 
     

@@ -180,10 +180,10 @@ class Form {
 
 
     /**
-     * Return class name of the control by it's TYPE constant
+     * Return class instance of the control by it's TYPE constant
      *
      * @param string $type
-     * @return string|null
+     * @return FormControl|null
      */
     public static function getControlByType(string $type)
     {

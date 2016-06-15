@@ -1,20 +1,23 @@
 {# COlUMN#}
-<div class="form-inline" {% if column %} data-added="1" {% else %} style="display: none" id="col_tpl_{{ ALIAS }}" {% endif %} data-colidx="col_{{ NUM }}">
+<div data-rel="column" class="form-inline" {% if column %} data-added="1" {% else %} style="display: none" id="col_tpl_{{ ALIAS }}" {% endif %} data-colidx="col_{{ NUM }}">
     <table class="table table-striped table-condensed list_col_row" style="width: 80%">
         <tr>
+            <td style="width:20px;cursor: move" class="drag_cols" ><i class="fa fa-arrows-v"></i></td>
             <td style="width:350px;" nowrap="nowrap">
 
+                <label>Choose field
                 <select data-value="{{ column.data }}" class="form-control default_select" data-rel="field_select" data-list_col="data_col" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_col]" required data-change="crud_action" data-action="wizard_fill_column_title">
                     <option value="">Choose field</option>
                     {#<option value="id" {{ 'id' == column.data?'selected' }}>ID</option>#}
                     {%  for f, fld in model.fields %}
                         <option value="{{ f }}" {{ f == column.data?'selected' }}>{{ fld.title }}</option>
                     {% endfor %}
-                </select><br>
-                <b>Or</b><br>
+                </select>
+                </label>    <br>
+                <b>Or Enter model attribute name </b><br>
                 <input type="text" value="{{ column.data?wizard.resolveColDataProp(table,column.data) }}"  data-list_col="data" style="width:300px;" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][data]" placeholder="Enter model attribute name *" required >
                 <span data-rel="rel_container">
-                <b>Or</b><br>
+                <b>Or Choose relation</b><br>
                 {%  set res_rel = wizard.resolveColDataRelation(column.data) %}
                 <select class="form-control default_select"    data-list_col="data_rel" data-rel="list_relation" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_rel]" style="width: 200px; display: inline" required>
                     <option value="">Choose relation</option>
@@ -28,9 +31,22 @@
                 <input type="text" data-list_col="data_rel" value="{{ res_rel[1] }}" data-rel="list_relation_attr" style="width:130px; display: inline" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][data_rel_attr]" placeholder="Relation attribute"/>
             </td>
             <td valign="top" style="width:150px;">
-                <input type="text" data-rel="title" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][title]"  value="{{ column.title }}"  placeholder="Title *" required >
+                <label>Title
+                <input type="text" data-rel="title" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][title]"  value="{{ column.title }}"  placeholder="Title *" required style="width: 150px" >
+                </label>
+                <div>
+                    <label>
+                        Formatter
+                        <select class="form-control default_select" name="list[{{ ALIAS }}][columns][{{ NUM }}][format]" style="max-width: 150px;" >
+                            <option value="">No formatter</option>
+                            {%  for f in wizard.getAvailableFormatters(table) %}
+                                <option value="{{ f.name }}" {{ f.name == column.format?'selected' }}>{{ f.name }} ({{ f.description }})</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
             </td>
-            <td valign="top"  style="width:80px;"><input type="text" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][width]" value="{{ column.width }}" placeholder="Width"></td>
+            <td valign="top"  style="width:50px;"><label>Width<input type="text" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][width]" value="{{ column.width }}" placeholder="Width" style="width:50px"></label></td>
             <td  style="width:70px;">
                 <div class="checkbox">
                     <label>
@@ -46,17 +62,6 @@
                 </select>
             </td>
             <td  style="width:180px;">
-                <div>
-                    <label>
-                        Formatter
-                    <select class="form-control default_select" name="list[{{ ALIAS }}][columns][{{ NUM }}][format]" >
-                        <option value="">No formatter</option>
-                        {%  for f in wizard.getAvailableFormatters(table) %}
-                                <option value="{{ f.name }}" {{ f.name == column.format?'selected' }}>{{ f.name }} ({{ f.description }})</option>
-                        {% endfor %}
-                    </select>
-                    </label>
-                </div>
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" value="1" name="list[{{ ALIAS }}][columns][{{ NUM }}][invisible]" {{ column.invisible?'checked' }}  > Invisible

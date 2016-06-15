@@ -2,6 +2,7 @@
 
 
 
+use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Exceptions\WizardException;
 use Skvn\Crud\Form\Field;
 use Skvn\Crud\Form\Form;
@@ -19,6 +20,12 @@ class CrudModelPrototype
      * @var array
      */
     protected $config_data;
+
+    /**
+     * @var array
+     */
+    protected $old_config_data;
+
     /**
      * @var
      */
@@ -96,8 +103,9 @@ class CrudModelPrototype
         @mkdir(dirname($this->config_path));
         if (file_exists($this->config_path))
         {
-            $old_config = include $this->config_path;
-            $this->config_data = array_merge($old_config,$this->config_data);
+            $this->old_config_data = include $this->config_path;
+            $this->config_data = array_merge($this->old_config_data,$this->config_data);
+            //var_dump($this->config_data);
         }
 
         $this->processRelations();
@@ -293,6 +301,7 @@ class CrudModelPrototype
     private  function processFields()
     {
 
+
         $this->config_data['form_fields'] = [];
         //$fields_to_delete = [];
 
@@ -302,9 +311,27 @@ class CrudModelPrototype
             foreach ($this->config_data['fields'] as $k=> $f)
             {
 
-                if (!isset($this->column_types[$k]) && empty($f['relation']))
-                {
-                    $this->add_fields[$k] = $f; 
+                if (empty($f['relation'])) {
+                    if (empty($f['fields']) && empty($f['field'])) {
+                        if (!isset($this->column_types[$k])) {
+                            $this->add_fields[$k] = $f;
+                        }
+                    } elseif (! empty($f['field']))
+                    {
+                        if (!isset($this->column_types[$f['field']])) {
+                            $this->add_fields[$f['field']] = $f;
+                        }
+                    }
+                    elseif (! empty($f['fields']))
+                    {
+                        if (!isset($this->column_types[$f['fields'][0]])) {
+                            $this->add_fields[$f['fields'][0]] = $f;
+                        }
+                        if (!isset($this->column_types[$f['fields'][1]])) {
+                            $this->add_fields[$f['fields'][1]] = $f;
+                        }
+                    }
+
                 }
 
 
@@ -312,24 +339,42 @@ class CrudModelPrototype
                 {
                     $this->config_data['fields'][$k]['editable'] = 1;
                     $this->config_data['form_fields'][] = $k;
+
+                    if (!empty($f['property_name']))
+                    {
+                        $k = $f['property_name'];
+                    }
+
+                    if (!empty($f['rel_name']))
+                    {
+                        unset($f['rel_name']);
+                    }
+
+                    //process field config by field
+                    if ($control = Form::getControlByType($f['type']))
+                    {
+                        if ($control instanceof WizardableField) {
+                            $control->wizardCallbackFieldConfig($k, $f, $this);
+                            $control->wizardCallbackModelConfig($k, $f, $this);
+                        }
+                    }
+
                 }
 
-                //process field config by field
-                //
 
-                if (!empty($f['property_name']))
+
+
+                if (!empty($this->old_config_data['fields'][$k]))
                 {
-                    $k = $f['property_name'];
-                }
-                if ($control = Form::getControlByType($f['type']))
-                {
-                    $control->wizardCallbackFieldConfig($k,$f,$this);
-                    $control->wizardCallbackModelConfig($k,$f,$this);
+                    $this->config_data['fields'][$k] = array_merge($this->old_config_data['fields'][$k],$f);
+                } else {
+                    $this->config_data['fields'][$k] = $f;
                 }
 
-                $this->config_data['fields'][$k] = $f;
+
 
             }
+
 
 //            if (count($fields_to_delete))
 //            {
@@ -717,20 +762,24 @@ class CrudModelPrototype
             foreach ($this->add_fields as $fname=>$fdesc)
             {
                 if (!empty($fdesc['type'])) {
-                    $dbtype = $migrator->getColumDbTypeByEditType($fdesc['type']);
-                    if (!empty($dbtype)) {
-                        $columns[$fname] = $dbtype;
+                    if ($control = Form::getControlByType($fdesc['type'])) {
+                        if ($control instanceof WizardableField) {
+                            $dbtype = $migrator->getColumDbTypeByEditType($fdesc['type']);
+                            if (!empty($dbtype)) {
+                                $columns[$fname] = $dbtype;
+                            }
+                        }
                     }
                 }
             }
+
 
             if (count($columns)) {
                 if ($migrator->appendColumns($this->table, $columns)) {
                     $this->migrations_created = true;
                 }
             }
-            
-            
+
         }
     }//
 
