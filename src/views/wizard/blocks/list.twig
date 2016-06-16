@@ -91,13 +91,14 @@
                 <br clear="all" />
                 <div class="col-md-4">
                     <h5>Form fields</h5>
-                    <div id="list_form_{{ ALIAS }}"  data-rel="fields_form" data-list="{{ ALIAS }}"  class="list-group">
+                    <div id="list_form_{{ ALIAS }}" style="background-color:lightgrey; margin-bottom: 20px;"  data-rel="fields_form" data-list="{{ ALIAS }}"  class="list-group">
                         {% set used_fields = [] %}
                         {%  if list.form_tabbed %}
                             {%  for tab_alias, fields in list.form %}
                                 {% set tab = list.tabs[tab_alias] %}
                                 {%  include  'crud::wizard/blocks/fields/tab' %}
                                 {%  for f  in fields %}
+                                    {% set used_fields = used_fields|merge([f]) %}
                                     {% set fld = model.fields[f]  %}
                                     {%  include  'crud::wizard/blocks/fields/field_stub' %}
                                 {% endfor %}
@@ -106,6 +107,7 @@
                         {%  else  %}
 
                             {%  for f in list.form %}
+                                {% set used_fields = used_fields|merge([f]) %}
                                 {% set fld = model.fields[f]  %}
                                 {%  include  'crud::wizard/blocks/fields/field_stub' %}
                             {% endfor %}

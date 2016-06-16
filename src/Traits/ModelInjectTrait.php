@@ -139,6 +139,7 @@ trait ModelInjectTrait {
 
     protected  function onBeforeDelete()
     {
+        $this->processRelationsOndelete();
         return true;
     }
 

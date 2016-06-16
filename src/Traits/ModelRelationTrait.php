@@ -198,4 +198,8 @@ trait ModelRelationTrait
         return false;
     }
 
+    function processRelationsOndelete()
+    {
+        //FIXME
+    }
 }

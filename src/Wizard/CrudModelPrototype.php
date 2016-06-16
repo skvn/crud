@@ -434,10 +434,6 @@ class CrudModelPrototype
     }//
 
 
-
-
-
-
     /**
      * Prepare lists config
      *
@@ -459,6 +455,7 @@ class CrudModelPrototype
 
 
                     $form_tabs = json_decode($list['form_tabs'], true);
+                    //var_dump($form_tabs);
                     unset( $this->config_data['list'][$alias]['form_tabs']);
                     $tabs = [];
                     foreach ($form_tabs as $i=>$tab)
@@ -469,9 +466,12 @@ class CrudModelPrototype
                         } else {
                             $tab_alias = 'tab_'.$i;
                         }
-                        $tabs[$tab_alias] = ['title'=>$tab['title']];
-                        $this->config_data['list'][$alias]['form'][$tab_alias] = $tab['fields'];
+
+                        $oldTab = $this->old_config_data['scopes'][$alias]['tabs'][$tab_alias]??[];
+                        $tabs[$tab_alias] = array_merge(['title'=>$tab['title']],$oldTab);
+                        $this->config_data['list'][$alias]['form'][$tab_alias] = $tab['fields']??[];
                     }
+                    
                     $this->config_data['list'][$alias]['tabs'] = $tabs;
                     $this->config_data['list'][$alias]['form_tabbed'] = 1;
 

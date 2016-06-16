@@ -494,13 +494,15 @@
 
             $(this).sortable({
                 connectWith: "#list_form_"+$(this).data('list'),
+                tolerance: 'pointer',
                 update: function (event, ui) {
                     update_form_stubs();
                 }
             }).disableSelection();
 
             $("#list_form_"+$(this).data('list')).sortable({
-                connectWith: $(this)
+                connectWith: $(this),
+                tolerance: 'pointer'
             }).disableSelection();
 
         });
@@ -645,13 +647,12 @@
                                     tab.alias = $(this).data('alias');
                                 }
                                 var tab_fields = $(this).nextUntil('*[data-form_tab]','span');
-                                if (tab_fields.length)
-                                {
-                                    tab.fields = tab_fields.map(function (){if ($(this).data('rel')){return $(this).data('rel')}}).toArray();
-                                } else {
-                                    alert('Tab '+tab.title+' contains no fields');
-                                    was_error = true;
-                                }
+                                 if (tab_fields.length)
+                                 {
+                                     tab.fields = tab_fields.map(function (){if ($(this).data('rel')){return $(this).data('rel')}}).toArray();
+                                 } else {
+                                     tab.fields = [];
+                                 }
                                 tabs_arr.push(tab);
                             });
 
