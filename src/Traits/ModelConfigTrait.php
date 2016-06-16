@@ -77,7 +77,12 @@ trait ModelConfigTrait
 
     function getField($name)
     {
-        return $this->getFields($name);
+        $field = $this->getFields($name);
+        if (!isset($field['name']))
+        {
+            $field['name'] = $name;
+        }
+        return $field;
     }
 
     /**

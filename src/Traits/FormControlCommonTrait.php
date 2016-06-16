@@ -15,17 +15,20 @@ trait FormControlCommonTrait
     function pullFromModel()
     {
         $this->value = $this->model->getAttribute($this->field);
+        return $this;
     }
 
     function pullFromData(array $data)
     {
         $this->value = isset($data[$this->field]) ? $data[$this->field] : null;
+        return $this;
     }
 
 
     function pushToModel()
     {
         $this->model->setAttribute($this->field, $this->value);
+        return $this;
     }
 
     function getValue()
@@ -41,6 +44,7 @@ trait FormControlCommonTrait
     function setValue($val)
     {
         $this->value =  $val;
+        return $this;
     }
 
 }
