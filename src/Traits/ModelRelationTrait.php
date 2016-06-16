@@ -91,8 +91,15 @@ trait ModelRelationTrait
                                 }
                                 //$obj = $class::find($id);
                                 $obj = self :: createInstance($field['model'], null, $id);
-                                $obj->$col = null;
-                                $obj->save();
+                                if ($field['cascade'] ?? "nullify" === "destroy")
+                                {
+                                    $obj->delete();
+                                }
+                                else
+                                {
+                                    $obj->$col = null;
+                                    $obj->save();
+                                }
                             }
                         }
 
