@@ -188,6 +188,11 @@ class CrudModelPrototype
                 $rel_arr['field'] = $rel['local_key'];
             }
 
+            if (!empty($rel['on_delete'])) {
+
+                $rel_arr['on_delete'] = $rel['on_delete'];
+            }
+
 
 
 //            if (!empty($rel['local_key']))

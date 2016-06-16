@@ -4,7 +4,7 @@
     {%  if rel.model %}
         {% for col in wizard.getTableColumns(rel.model) %}
             {%  if col != 'id' %}
-            <option value="{{ col }}" {{ col == rel.ref_column?'selected' }}>{{ col }}</option>
+            <option value="{{ col }}" {{ col == rel.ref_column ?'selected' }}>{{ col }}</option>
             {% endif %}
         {% endfor %}
     {%  else  %}
@@ -12,4 +12,12 @@
     {% endif %}
 </select>
 </label>
+    <br />
+<label>On delete</label>
+    <select class="form-control default_select" data-attr="ref_column" name="relations[{{NUM}}][on_delete]"   >
+        {% for av, atext in wizard.getOndeleteActions() %}
+        <option value="{{ av }}" {{ av == rel.on_delete?'selected' }}>{{ atext }}</option>
+        {% endfor %}
+
+    </select>
 </td>

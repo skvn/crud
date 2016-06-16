@@ -11,7 +11,7 @@
                 <option value="">Choose Local key</option>
                 {% for f in wizard.getTableColumns(table) %}
                     {% if f != 'id' %}
-                        <option value="{{ f }}" {{ f == relation_key?'selected' }}>{{ f }}</option>
+                        <option value="{{ f }}" {{ f == rel.field ?'selected' }}>{{ f }}</option>
                     {% endif %}
                 {% endfor %}
             </select>

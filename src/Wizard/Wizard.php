@@ -659,6 +659,21 @@ class Wizard
         }
 
         return $formatters;
+    }//
+
+
+    public function getControlByType($type)
+    {
+        return Form::getControlByType($type);
+    }
+    public function getOndeleteActions()
+    {
+        return [
+            ''=>'No action',
+            'delete'=>'Cascade delete',
+            'set_null'=>'Set null',
+            
+        ];
     }
 
 }

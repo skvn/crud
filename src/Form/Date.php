@@ -1,11 +1,16 @@
 <?php namespace Skvn\Crud\Form;
 
+use Skvn\Crud\Contracts\WizardableField;
+use Skvn\Crud\Traits\WizardCommonFieldTrait;
+use Skvn\Crud\Wizard\CrudModelPrototype;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
-class Date extends Field implements FormControl{
 
+class Date extends Field implements WizardableField, FormControl{
+
+    use WizardCommonFieldTrait;
     use FormControlCommonTrait;
 
     function pullFromModel()

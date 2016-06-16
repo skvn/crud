@@ -8,11 +8,9 @@
 <table class="table table-bordered table-striped"   data-rel="{{ f }}"  style="max-width: 1200px;">
 <tr data-rel="{{ f }}">
 <td style="width: 200px;"><b>{{ f }}</b></td>
-{% set fldObj = modelObj.getFormField(fkey) %}
+{% if not fld.relation%}
 
-{% if not fld.relation and fldObj.wizardTemplate() %}
 <td style="width: 250px;"><label>
-
 
         <select name="fields[{{ f }}][type]" class="form-control default_select ftype" data-rel="{{ f }}"   data-change="crud_action" data-action="wizard_add_field"  style="display:inline; width:250px;"  >
             <option value="">Choose field type</option>
@@ -25,19 +23,20 @@
     </label></td>
 <td id="f_container_{{ f }}">
     {%  if fld.type %}
-        {%  set ALIAS = f %}
+        {% set fldObj = wizard.getControlByType(fld.type) %}
+        {% if fldObj.wizardTemplate() %}
+            {%  set ALIAS = f %}
             {% include fldObj.wizardTemplate() %}
+        {% else  %}
+            <td>Custom, not supported by Wizard field [{{ fld.type }}]
+                <input type="hidden" name="fields[{{ f }}][type]" value="{{ fld.type }}" />
+            </td>
+        {% endif %}
     {% endif %}
+
 </td>
 <td style="width: 80px;"><div id="f_cancel_{{ f }}" {%  if not fld.type  or fld.type == 'file'%}style="display: none"{% endif %}><a href="#" data-click="crud_action" data-field="{{ f }}" data-action="wizard_remove_parent" data-parent="table" data-confirm="Remove this editable field?" class="label label-danger">
             <i class="fa fa-trash-o"></i> Delete</a></div></td>
-
-{%  elseif fld.relation  %}
-    <td>Relation [{{ fld.type }}]</td>
-{% else  %}
-    <td>Custom, not supported by Wizard field [{{ fld.type }}]
-        <input type="hidden" name="fields[{{ f }}][type]" value="{{ fld.type }}" />
-    </td>
 {% endif %}
 
 </tr>
