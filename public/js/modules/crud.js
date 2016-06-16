@@ -327,6 +327,10 @@
             } else {
                 alert('Crud popup url not defined!');
             }
+        },
+        remove_parent_row: function(elem)
+        {
+            elem.parents("tr:first").remove();
         }
 
     };
