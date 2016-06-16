@@ -91,7 +91,7 @@ trait ModelRelationTrait
                                 }
                                 //$obj = $class::find($id);
                                 $obj = self :: createInstance($field['model'], null, $id);
-                                if ($field['on_delete'] ?? "set_null" === "delete")
+                                if (($field['on_delete'] ?? "set_null") === "delete")
                                 {
                                     $obj->delete();
                                 }
@@ -198,8 +198,50 @@ trait ModelRelationTrait
         return false;
     }
 
+
+
     function processRelationsOndelete()
     {
-        //FIXME
+
+        foreach ($this->config['fields'] as $fname=>$field)
+        {
+            if (!empty($field['relation']) && $field['relation'] == 'hasMany' && !empty($field['on_delete'])) {
+
+
+                if (!empty($field['ref_column'])) {
+                    $col = $field['ref_column'];
+                }  else {
+                    $col = $this->classViewName . '_id';
+                }
+                $relObjects = $this->$fname;
+                $relObjects->each(function ($item, $key) use ($field, $col) {
+
+                    if ($field['on_delete']  === "delete")
+                    {
+
+                        $item->delete();
+                    }
+                    else
+                    {
+                        $item->$col = null;
+                        $item->save();
+                    }
+                });
+            } else if (!empty($field['relation']) && $field['relation'] == 'hasOne' && !empty($field['on_delete'])) {
+
+                if ($field['on_delete']  === "delete")
+                {
+                    $this->$fname->delete();
+                }
+                else
+                {
+                    $col = $field['field'];
+                    $this->$fname->$col = null;
+                    $this->$fname->save();
+                }
+
+            }
+
+        }
     }
 }
