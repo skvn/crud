@@ -63,7 +63,7 @@ trait ModelRelationTrait
                         //$class = self :: resolveClass($formConf[$k]['model']);
                         if (is_array($v))
                         {
-                            $oldIds = $this->$k()->lists('id');
+                            $oldIds = $this->$k()->lists('id')->toArray();
                             foreach ($v as $id)
                             {
                                 //$obj = $class::find($id);
@@ -74,7 +74,7 @@ trait ModelRelationTrait
                         }
                         else
                         {
-                            $toUnlink = $this->$k()->lists('id');
+                            $toUnlink = $this->$k()->lists('id')->toArray();
                         }
 
                         if ($toUnlink && is_array($toUnlink))
