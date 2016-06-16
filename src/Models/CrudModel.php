@@ -70,6 +70,21 @@ abstract class CrudModel extends Model
         return $obj;
     }
 
+    static function createSelfInstance($scope = self :: DEFAULT_SCOPE, $id = null)
+    {
+        $class = get_called_class();
+        if (!empty($id))
+        {
+            $obj = $class::findOrNew((int)$id);
+        }
+        else
+        {
+            $obj = new $class();
+        }
+        $obj->setScope($scope);
+        return $obj;
+    }
+
     function getApp()
     {
         return $this->app;
