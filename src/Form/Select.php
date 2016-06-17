@@ -19,10 +19,28 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
 
     function pullFromModel()
     {
-        if (!in_array($this->name, $this->model->getHidden()))
+//        if (!in_array($this->name, $this->model->getHidden()))
+//        {
+//            $this->value = $this->model->getAttribute($this->field);
+//        }
+
+
+        if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
         {
-            $this->value = $this->model->getAttribute($this->field);
+            $this->value = $this->model->getRelationIds($this->getName());
         }
+        else if (!empty($this->config['relation'])
+            && $this->config['relation'] == CrudModel::RELATION_HAS_ONE)
+        {
+            $relation = $this->getName();
+            $this->value = $this->model->$relation->id;
+        }
+        else
+        {
+            $this->value = $this->model->getAttribute($this->getField());
+        }
+
+        return $this;
     }
 
     function getOutputValue():string
@@ -149,6 +167,7 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
 
     private function isSelected($idx)
     {
+        //var_dump(get_class($this->value));
         if (is_null($this->value))
         {
             return false;
@@ -189,23 +208,23 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
             }
         }
 
-        if (!$this->value)
-        {
-            if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
-            {
-                $this->value = $this->model->getRelationIds($this->getName());
-            }
-            else if (!empty($this->config['relation'])
-                && $this->config['relation'] == CrudModel::RELATION_HAS_ONE)
-            {
-                $relation = $this->getName();
-                $this->value = $this->model->$relation->id;
-            }
-            else
-            {
-                $this->value = $this->model->getAttribute($this->getField());
-            }
-        }
+//        if (!$this->value)
+//        {
+//            if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
+//            {
+//                $this->value = $this->model->getRelationIds($this->getName());
+//            }
+//            else if (!empty($this->config['relation'])
+//                && $this->config['relation'] == CrudModel::RELATION_HAS_ONE)
+//            {
+//                $relation = $this->getName();
+//                $this->value = $this->model->$relation->id;
+//            }
+//            else
+//            {
+//                $this->value = $this->model->getAttribute($this->getField());
+//            }
+//        }
 
         if ($this->isGrouped())
         {
