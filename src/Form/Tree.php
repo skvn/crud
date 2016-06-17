@@ -113,6 +113,11 @@ class Tree extends Field implements WizardableField, FormControl{
         return "crud::wizard.blocks.fields.tree";
     }
 
+    function wizardCaption()
+    {
+        return "Tree";
+    }
+
 
 
 

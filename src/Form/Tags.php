@@ -113,6 +113,11 @@ class Tags extends Field implements WizardableField, FormControl {
         return "crud::wizard.blocks.fields.tags";
     }
 
+    function wizardCaption()
+    {
+        return "Tags";
+    }
+
 
 
 } 

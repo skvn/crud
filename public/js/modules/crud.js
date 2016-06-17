@@ -296,28 +296,22 @@
                     if (elem.data('title')) {
                         $("h4", w).html(elem.data("title"));
                     }
-                    if (elem.data('report')) {
-                        $("input[name=type]", w).val(elem.data('report'))
-                    }
-                    if (elem.data('source')) {
-                        $("input[name=source]", w).val(elem.data('source'))
-                    }
                     if (crud_actions['onShow_' + popup]) {
                         crud_actions['onShow_' + popup]($('#' + popup));
                     }
-                    if (elem.data("onshow")) {
-                        switch (elem.data("onshow")) {
-                            case 'pass_row_ids':
-                                var ids = [];
-                                $('table input[data-rel=row]').each(function () {
-                                    if ($(this).prop('checked')) {
-                                        ids.push($(this).attr('value'));
-                                    }
-                                });
-                                $('input[name=row_ids]', w).val(ids.join(','));
-                                break;
-                        }
-                    }
+                    //if (elem.data("onshow")) {
+                    //    switch (elem.data("onshow")) {
+                    //        case 'pass_row_ids':
+                    //            var ids = [];
+                    //            $('table input[data-rel=row]').each(function () {
+                    //                if ($(this).prop('checked')) {
+                    //                    ids.push($(this).attr('value'));
+                    //                }
+                    //            });
+                    //            $('input[name=row_ids]', w).val(ids.join(','));
+                    //            break;
+                    //    }
+                    //}
                     //crud.init_ichecks(w);
                     if ($("form", w).attr('id') != 'crud_filter_form')
                     {
