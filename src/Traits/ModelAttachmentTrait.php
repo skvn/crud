@@ -124,7 +124,7 @@ trait ModelAttachmentTrait {
 
     public function deleteSingleAttach($args)
     {
-        if (!empty($args['field']) && empty($args['id']))
+        if (!empty($args['field']) && empty($args['delete_attach_id']))
         {
             $deleted = $this->getAttach($args['field'])->delete();
             //$attrValue = $this->getAttribute($args['field']);
@@ -132,9 +132,9 @@ trait ModelAttachmentTrait {
             $this->save();
             return $deleted;
         }
-        else if (!empty($args['field']) && !empty($args['id']))
+        else if (!empty($args['field']) && !empty($args['delete_attach_id']))
         {
-             CrudFile::destroy([$args['id']]);
+             CrudFile::destroy([$args['delete_attach_id']]);
              $meth = $args['field'];
              $this->$meth()->detach($args['id']);
         }

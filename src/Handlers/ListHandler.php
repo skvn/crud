@@ -135,7 +135,7 @@ class ListHandler {
             }
             foreach ($this->options['filter'] ?? [] as $column)
             {
-                if (!array_key_exists($column, $cols) && $fld = $this->model->getField())
+                if (!array_key_exists($column, $cols) && $fld = $this->model->getField($column))
                 {
                     $cols[$column] = $fld['field'];
                 }

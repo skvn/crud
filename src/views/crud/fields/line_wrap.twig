@@ -1,7 +1,7 @@
 {%  if input.config.type == 'multi_file' %}
     {% include input.getTemplate() %}
 {%  else  %}
-<div class="form-group " data-ref="{{ input.name }}">
+<div class="form-group" data-ref="{{ input.name }}">
 
     <div class="col-md-{{ COL_WIDTH?COL_WIDTH:12 }}">
      {% include input.controlTemplate() %}

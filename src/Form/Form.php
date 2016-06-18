@@ -155,15 +155,15 @@ class Form {
     public function __toString()
     {
         $app = Container :: getInstance();
-        $res = $app['view']->make('crud::crud/form', ['crudObj'=>$this->crudObj])->render();
+        $res = $app['view']->make('crud::crud/form', ['crudObj' => $this->crudObj])->render();
         return (string) $res;
     }
 
 
-    static function getAttachFields()
-    {
-
-    }
+//    static function getAttachFields()
+//    {
+//
+//    }
 
     
 
@@ -191,20 +191,20 @@ class Form {
 
     }
 
-    public function __isset($key)
-    {
-        return $this->crudObj->__isset($key);
-    }
-
-    public function __get($key)
-    {
-        return $this->crudObj->__get($key);
-    }
-
-    public function __set($key, $value)
-    {
-        $this->crudObj->__set($key, $value);
-    }
+//    public function __isset($key)
+//    {
+//        return $this->crudObj->__isset($key);
+//    }
+//
+//    public function __get($key)
+//    {
+//        return $this->crudObj->__get($key);
+//    }
+//
+//    public function __set($key, $value)
+//    {
+//        $this->crudObj->__set($key, $value);
+//    }
 
 
 

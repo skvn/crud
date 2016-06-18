@@ -58,10 +58,14 @@ trait ModelConfigTrait
             $this->table = $this->config['table'] ?? $this->classViewName;
         }
         $this->timestamps = $this->config['timestamps'] ?? false;
-        if (isset($this->config['authors']))
+        if ($this->timestamps)
         {
-            $this->track_authors = $this->config['authors'];
+            if (($this->config['timestamps_type'] ?? "int") === "int")
+            {
+                $this->dateFormat = 'U';
+            }
         }
+        $this->track_authors = $this->config['authors'] ?? false;
 
         $this->config['file_params'] = [];
     }

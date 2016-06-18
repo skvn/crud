@@ -90,6 +90,22 @@
                 return hval >>> 0;
             },
 
+            getActiveTab: function()
+            {
+                var c = $('div[data-tabs_container]');
+                if (c.length == 1)
+                {
+                    var ul = $(".nav.nav-tabs:first", c);
+                    var li = $("li.active", c);
+                    if (li.length > 0)
+                    {
+                        var tab_id = $("a[data-toggle]", li).attr('href');
+                        var tab = $(".tab-pane"+tab_id, c);
+                        return tab;
+                    }
+                }
+            },
+
             init_edit_tab: function(model, id, args)
             {
                 args = args || {};
@@ -202,7 +218,7 @@
             args['command'] = elem.attr('href');
             args['id'] = parseInt(elem.data('id'))>0?parseInt(elem.data('id')):-1;
             args['model'] = elem.data('model');
-            args['scope'] = elem.data('scope');
+            args['scope'] = elem.data('scope') ? elem.data('scope') : "default";
             $("input,select", elem.parents("form")).each(function(){
                 args[$(this).attr('name')] = $(this).val();
             });

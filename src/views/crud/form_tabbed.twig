@@ -18,7 +18,7 @@
         {% set active=0 %}
         {% for tab_id,tab_info in crudForm.tabs %}
             {% if tab_info.acl|allowed('r') %}
-                <li class="{{ active == 0 ? 'active' }}"><a href="#{{ tab_id }}" data-toggle="tab">{{ tab_info.title }}</a></li>
+                <li class="{{ active == 0 ? 'active' }}"><a href="#{{ crudObj.getKey() }}_{{ tab_id }}" data-toggle="tab" data-ref="{{ tab_id }}">{{ tab_info.title }}</a></li>
                 {% set active = 1 %}
             {% endif %}
         {% endfor %}
@@ -27,7 +27,7 @@
         {% set active = 0 %}
         {% for tab_id,tab_info in crudForm.tabs %}
             {% if tab_info.acl|allowed('r') %}
-                <div class="tab-pane {{ active == 0 ? 'active' }}" id="{{ tab_id }}">
+                <div class="tab-pane {{ active == 0 ? 'active' }}" id="{{ crudObj.getKey() }}_{{ tab_id }}">
                     {% if tab_info.view %}
                         {% include tab_info.view %}
                     {% endif %}

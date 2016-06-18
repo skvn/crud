@@ -25,8 +25,6 @@ abstract class CrudModel extends Model
     const RELATION_HAS_ONE = 'hasOne';
 
     const DEFAULT_SCOPE = 'default';
-    const CREATED_BY = "created_by";
-    const UPDATED_BY = "updated_by";
 
 
     protected $app;
@@ -90,39 +88,39 @@ abstract class CrudModel extends Model
         return $this->app;
     }
 
-    public function setCreatedAtAttribute($value)
-    {
-        $type = $this->confParam('timestamps_type');
-        if (!$type || $type == 'int')
-        {
-            if (is_object($value))
-            {
-                $value = $value->timestamp;
-            }
-            else
-            {
-                $value = strtotime($value);
-            }
-        }
-        $this->attributes['created_at'] = $value;
-    }
-
-    public function setUpdatedAtAttribute($value)
-    {
-        $type = $this->confParam('timestamps_type');
-        if (!$type || $type == 'int')
-        {
-            if (is_object($value))
-            {
-                $value = $value->timestamp;
-            }
-            else
-            {
-                $value = strtotime($value);
-            }
-        }
-        $this->attributes['updated_at'] = $value;
-    }
+//    public function setCreatedAtAttribute($value)
+//    {
+//        $type = $this->confParam('timestamps_type');
+//        if (!$type || $type == 'int')
+//        {
+//            if (is_object($value))
+//            {
+//                $value = $value->timestamp;
+//            }
+//            else
+//            {
+//                $value = strtotime($value);
+//            }
+//        }
+//        $this->attributes['created_at'] = $value;
+//    }
+//
+//    public function setUpdatedAtAttribute($value)
+//    {
+//        $type = $this->confParam('timestamps_type');
+//        if (!$type || $type == 'int')
+//        {
+//            if (is_object($value))
+//            {
+//                $value = $value->timestamp;
+//            }
+//            else
+//            {
+//                $value = strtotime($value);
+//            }
+//        }
+//        $this->attributes['updated_at'] = $value;
+//    }
 
     public function __call($method, $parameters)
     {

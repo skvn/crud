@@ -10,13 +10,6 @@
             var $form = this.element;
 
             //init controls
-            //crud.init_selects($form);
-            //crud.init_tag_inputs($form);
-            //crud.init_date_pickers($form);
-            //crud.init_html_editors($form);
-            //crud.init_ichecks($form);
-            //crud.init_widgets($form);
-            //$('input[type=text]:first', $form).focus();
             crud.trigger('form.init', {form: $form});
 
             //submit
@@ -113,18 +106,18 @@
 
 
             //events
-            $('.crud_checkbox', $form).on('change', function () {
-
-                var name = $(this).data('name');
-                var hidden = $form.find('input[name='+name+']');
-                if ($(this).prop('checked'))
-                {
-                    hidden.val('1');
-                } else
-                {
-                    hidden.val('0');
-                }
-            });
+            //$('.crud_checkbox', $form).on('change', function () {
+            //
+            //    var name = $(this).data('name');
+            //    var hidden = $form.find('input[name='+name+']');
+            //    if ($(this).prop('checked'))
+            //    {
+            //        hidden.val('1');
+            //    } else
+            //    {
+            //        hidden.val('0');
+            //    }
+            //});
 
             $('input[type=file]', $form).on('change', function (e) {
 
@@ -145,6 +138,7 @@
         {
             for (var i in names)
             {
+                //alert(names[i]+ ':' +$(".form-group[data-ref="+names[i]+"]", this.element).length);
                 $(".form-group[data-ref="+names[i]+"]", this.element).show();
             }
         },
@@ -175,14 +169,14 @@
 
                 if (only_children)
                 {
-                    var $tpl = $($('#'+tpl_id).html());
+                    var $tpl = $($('#'+tpl_id, crud.getActiveTab()).html());
                 } else {
-                    var $tpl = $('#'+tpl_id).clone(true).attr('id','');
+                    var $tpl = $('#'+tpl_id, crud.getActiveTab()).clone(true).attr('id','');
                 }
 
                 console.log($tpl);
 
-                var qtyAdded = $('#'+container_id).find('*[data-added]').length;
+                var qtyAdded = $('#'+container_id, crud.getActiveTab()).find('*[data-added]').length;
                 $tpl =  $($('<div>').append($tpl).html().replace(new RegExp("(\\[NUM\\])", 'g'),qtyAdded+1));
 
 
@@ -198,12 +192,16 @@
                         }
                     }
                 });
+                //$("*[data-widget]", $tpl).each(function(){
+                //    var meth = $(this).data('widget');
+                //    $(this)[meth]();
+                //});
                 $tpl.attr('data-added',1);
                 //calc order
-                var ord  = $('#'+container_id).find('*[data-order]:visible').length;
+                var ord  = $('#'+container_id, crud.getActiveTab()).find('*[data-order]:visible').length;
                 $tpl.find('*[data-order]').val((ord+1));
 
-                $tpl.appendTo($('#'+container_id)).show();
+                $tpl.appendTo($('#'+container_id, crud.getActiveTab())).show();
 
             }
         };
