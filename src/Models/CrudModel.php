@@ -30,7 +30,7 @@ abstract class CrudModel extends Model
     protected $app;
     protected $codeColumn = 'id';
 
-    protected $errors;
+    protected $errors = [];
     protected static $rules = array();
     protected static $messages = array();
     protected $validator;
@@ -206,7 +206,7 @@ abstract class CrudModel extends Model
         {
             return true;
         }
-        $this->setErrors($v->messages());
+        $this->setErrors($v->messages()->toArray());
         return false;
     }
 
@@ -218,6 +218,11 @@ abstract class CrudModel extends Model
     public function getErrors()
     {
         return $this->errors;
+    }
+
+    function addError($error)
+    {
+        $this->errors[] = $error;
     }
 
     public function hasErrors()

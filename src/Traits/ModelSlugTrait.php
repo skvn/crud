@@ -1,75 +1,88 @@
 <?php namespace Skvn\Crud\Traits;
 
 use Illuminate\Support\Str;
+use Skvn\Crud\Exceptions\UniqueException;
 
 trait ModelSlugTrait  {
 
-    protected  static  $slugColumn = 'slug';
+//    protected  static  $slugColumn = 'slug';
 
-//    public static function boot()
-//    {
-//
-//        //parent::boot();
-//        static::saving(function($instance)
-//        {
-//
-//            if (!$instance->getAttribute($instance->slugColumn))
-//            {
-//                $instance->setAttribute($instance->slugColumn, $instance->generateSlug());
-//            } else
-//            {
-//                $instance->setAttribute($instance->slugColumn, $instance->validateSlugUnique(
-//                    Str::slug(
-//                        $instance->getAttribute(
-//                            $instance->slugColumn
-//                        )
-//                    )
-//                )
-//                );
-//            }
-//        });
-//    }
 
     static function bootModelSlugTrait()
     {
         static :: saving(function($instance){
-            $instance->processSlug();
+            return $instance->processSlug();
         });
+    }
+
+    static function slugColumn()
+    {
+        return defined('static::SLUG') ? static :: SLUG : "slug";
     }
 
     protected function processSlug()
     {
-        if (!$this->getAttribute(static::$slugColumn))
-            {
-                $this->setAttribute(static::$slugColumn, $this->generateSlug());
-            } else
-            {
-                $this->setAttribute(static::$slugColumn, $this->validateSlugUnique(
-                    Str::slug($this->getAttribute(static::$slugColumn))
-                )
-                );
-            }
-
-        //parent::onBeforeSave();
-    }
-
-
-    protected  function generateSlug()
-    {
-        return $this->validateSlugUnique(
-                        Str::slug(
-                            $this->translitRussian($this->getTitle())
-                        )
-        );
-    }
-
-    private function validateSlugUnique($slug)
-    {
-        $id = $this->id?$this->id:0;
-        $count =  count(\DB::table($this->table)->where(static::$slugColumn, $slug)->where('id', '<>',$id)->get());
-        if ($count>0)
+        $column = static :: slugColumn();
+        if (defined('static::SLUG_IMMUTABLE') && $this->getOriginal($column))
         {
-            $slug .= ($count+1);
+            $this->setAttribute($column, $this->getOriginal($column));
+            return;
+        }
+        try
+        {
+            $this->setAttribute($column, $this->generateSlug($this->getAttribute($column)));
+        }
+        catch (UniqueException $e)
+        {
+            $this->addError($e->getMessage());
+            return false;
+        }
+
+    }
+
+
+    protected  function generateSlug($slug)
+    {
+        if (empty($slug))
+        {
+            $slug = defined('static::SLUG_SOURCE') ? $this->getAttribute(static :: SLUG_SOURCE) : $this->getTitle();
+            $slug = $this->translitRussian($slug);
+            $slug = Str :: slug($slug);
+        }
+        $slug = $this->generateUniqueSlug($slug);
+        return $slug;
+    }
+
+    private function generateUniqueSlug($slug)
+    {
+        $column = static :: slugColumn();
+        if (!preg_match("#^[a-zA-Z0-9_-]+$#", $slug))
+        {
+            if (defined('static::SLUG_FORCE_TRANSLIT'))
+            {
+                $slug = $this->translitRussian($slug);
+                $slug = Str :: slug($slug);
+            }
+            else
+            {
+                throw new UniqueException($column . " in model " . $this->classHortName . " not in URI format. Acceptable format is [a-zA-Z0-9_-]");
+
+            }
+        }
+
+        $id = $this->getKey() ? $this->getKey() : 0;
+        $exists = $this->app['db']->table($this->table)->where($column, 'like', $slug)->where('id', '<>', $id)->get();
+        if (count($exists) > 0)
+        {
+            if (defined('static::SLUG_GENERATE_NEXT'))
+            {
+                return $slug . '.' . (count($exists)+1);
+            }
+            if (defined('static::SLUG_GENERATE_ID') && $this->exists)
+            {
+                return $slug . '.' . $this->getKey();
+            }
+            throw new UniqueException($column . " column for model " . $this->classShortName . " is not unique");
         }
 
         return $slug;
@@ -81,7 +94,7 @@ trait ModelSlugTrait  {
         $arrRus = array('а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м',
             'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ь',
             'ы', 'ъ', 'э', 'ю', 'я',
-            'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', '�?', 'Й', 'К', 'Л', 'М',
+            'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М',
             'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ь',
             'Ы', 'Ъ', 'Э', 'Ю', 'Я');
         $arrEng = array('a', 'b', 'v', 'g', 'd', 'e', 'jo', 'zh', 'z', 'i', 'y', 'k', 'l', 'm',
@@ -110,7 +123,9 @@ trait ModelSlugTrait  {
 
     static function findBySlug($slug)
     {
-        return self::where(static::$slugColumn,'=',$slug)->first();
+        $class = get_called_class();
+        $column = $class :: slugColumn();
+        return $class :: where($column, $slug)->first();
     }
 
 

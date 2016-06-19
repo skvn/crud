@@ -188,7 +188,7 @@ class CrudController extends Controller
 
                 if (!$obj->save())
                 {
-                    return ['success'=>false,'error'=>implode("\n",array_values($obj->getErrors()->all()))];
+                    return ['success'=>false,'error'=>implode("\n",array_values($obj->getErrors()))];
                 }
 
 

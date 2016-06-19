@@ -24,7 +24,7 @@ trait ModelHistoryTrackTrait {
         {
             return;
         }
-        $track_cols = array_filter($this->getFields(), function ($item) { if (!empty($item['track_history'])) return true;});
+        $track_cols = array_filter($this->getFieldsByField(), function ($item) { if (!empty($item['track_history'])) return true;});
         $dirty = $this->getDirty();
         $changes = [];
         foreach ($dirty as $k=>$v)
@@ -42,7 +42,7 @@ trait ModelHistoryTrackTrait {
                 ];
             }
         }
-        if (empty($changes && $event_type == "delete"))
+        if (empty($changes) && $event_type == "delete")
         {
             foreach (array_keys($track_cols) as $col)
             {

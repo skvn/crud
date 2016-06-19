@@ -72,6 +72,16 @@ trait ModelConfigTrait
 
 
 
+    function getFieldsByField()
+    {
+        $list = [];
+        foreach ($this->config['fields'] as $fld)
+        {
+            $list[$fld['field']] = $fld;
+        }
+        return $list;
+    }
+
     public function getFields($prop='')
     {
         $form =  $this->confParam('fields');
