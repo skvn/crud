@@ -327,12 +327,12 @@ abstract class CrudModel extends Model
      */
     function getAvailFormatters()
     {
-        return listPublicMethods("#crudFormatValue([a-zA-Z]+)#");
+        return $this->listPublicMethods("#crudFormatValue([a-zA-Z]+)#");
     }
 
     function getAvailOptionGenerators()
     {
-        return listPublicMethods("#selectOptions([a-zA-Z]+)#");
+        return $this->listPublicMethods("#selectOptions([a-zA-Z]+)#");
     }
 
     function guessNewKey()
