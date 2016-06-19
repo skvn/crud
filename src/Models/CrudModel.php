@@ -295,19 +295,15 @@ abstract class CrudModel extends Model
         return date($args['format'] ?? 'd.m.Y', $val);
     }
 
-    /**
-     * Get All available formatters
-     *
-     * @return array
-     */
-    function getAvailFormatters()
+
+    protected function listPublicMethods($pattern)
     {
         $flist = [];
         $cls = new \ReflectionClass($this);
         $mlist = $cls->getMethods(\ReflectionMethod :: IS_PUBLIC);
         foreach ($mlist as $m)
         {
-            if (preg_match("#crudFormatValue([a-zA-Z]+)#", $m->name, $matches))
+            if (preg_match($pattern, $m->name, $matches))
             {
                 $desc = "";
                 $c = $m->getDocComment();
@@ -323,6 +319,20 @@ abstract class CrudModel extends Model
             }
         }
         return $flist;
+    }
+    /**
+     * Get All available formatters
+     *
+     * @return array
+     */
+    function getAvailFormatters()
+    {
+        return listPublicMethods("#crudFormatValue([a-zA-Z]+)#");
+    }
+
+    function getAvailOptionGenerators()
+    {
+        return listPublicMethods("#selectOptions([a-zA-Z]+)#");
     }
 
     function guessNewKey()
