@@ -19,6 +19,7 @@ class HistoryTrack extends Migration
             $table->integer('modified_by');
             $table->integer('date_modified');
             $table->string('field_name');
+            $table->text('field_old_value');
             $table->text('field_value');
 
         });
