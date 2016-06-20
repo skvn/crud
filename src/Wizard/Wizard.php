@@ -235,7 +235,9 @@ class Wizard
     {
         if (!isset($this->table_columns[$table]))
         {
-            $this->table_columns[$table] = $this->app['db']->connection()->getSchemaBuilder()->getColumnListing($table);
+            $cols = $this->app['db']->connection()->getSchemaBuilder()->getColumnListing($table);
+            sort($cols);
+            $this->table_columns[$table] = $cols;
         }
         return $this->table_columns[$table];
     }

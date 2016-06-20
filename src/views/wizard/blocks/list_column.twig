@@ -45,6 +45,18 @@
                         </select>
                     </label>
                 </div>
+                <div>
+                    <label>
+                        Database column {{ wiz_macros.help('Config/Scopes#list_column_definition','If column is not a table field. Used for filtering and sorting.') }}
+                        <select class="form-control default_select" name="list[{{ ALIAS }}][columns][{{ NUM }}][db_field]" style="max-width: 150px;" >
+                            <option value=""></option>
+                            {% for f in wizard.getTableColumns(table) %}
+                                <option value="{{ f }}"  {{ f==column.db_field?'selected' }}>{{ f }}</option>
+                            {% endfor %}
+                        </select>
+
+                    </label>
+                </div>
             </td>
             <td valign="top"  style="width:50px;"><label>Width<input type="text" class="form-control" name="list[{{ ALIAS }}][columns][{{ NUM }}][width]" value="{{ column.width }}" placeholder="Width" style="width:50px"></label></td>
             <td  style="width:70px;">
