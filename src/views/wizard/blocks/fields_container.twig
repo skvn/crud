@@ -8,6 +8,12 @@
             {% set used_fields = [] %}
             {%  for f, fld in model.fields %}
                     {% if not fld.relation %}
+                        {% set fkey   = f %}
+                        {%  set f = fld.field?fld.field:f %}
+                        {% set used_fields = used_fields|merge([f]) %}
+                        {% if fld.fields %}
+                            {% set used_fields = used_fields|merge(fld.fields) %}
+                        {% endif %}
                     {%  include  'crud::wizard/blocks/fields/field_row' %}
                     {% endif %}
             {% endfor %}
@@ -24,7 +30,7 @@
                     {% endif %}
                     {% endfor %}
                 </select>
-                Or add a  one <input type="text" style="display:inline; width:150px;" id="field_new" />
+                Or add a new one <input type="text" style="display:inline; width:150px;" id="field_new" />
                 <a href="#" class="btn btn-success"  data-click="crud_action" data-action="wizard_add_field_row" ><i class="fa fa-plus"></i> Add</a>
             </label>
 

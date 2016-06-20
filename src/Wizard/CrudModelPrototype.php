@@ -308,14 +308,16 @@ class CrudModelPrototype
 
 
         $this->config_data['form_fields'] = [];
-        //$fields_to_delete = [];
+        $fields_to_delete = [];
 
+        $fields = [];
         if (!empty($this->config_data['fields']))
         {
 
-            foreach ($this->config_data['fields'] as $k=> $f)
+            foreach ($this->config_data['fields'] as $key=> $f)
             {
 
+                $k = $key;
                 if (empty($f['relation'])) {
                     if (empty($f['fields']) && empty($f['field'])) {
                         if (!isset($this->column_types[$k])) {
@@ -345,15 +347,18 @@ class CrudModelPrototype
                     $this->config_data['fields'][$k]['editable'] = 1;
                     $this->config_data['form_fields'][] = $k;
 
-                    if (!empty($f['property_name']))
-                    {
-                        $k = $f['property_name'];
-                    }
+//                    if (!empty($f['property_name']))
+//                    {
+//                        $fields_to_delete[] = $k;
+//                        $k = $f['property_name'];
+//                    }
 
                     if (!empty($f['rel_name']))
                     {
                         unset($f['rel_name']);
                     }
+
+
 
                     //process field config by field
                     if ($control = Form::getControlByType($f['type']))
@@ -368,12 +373,11 @@ class CrudModelPrototype
 
 
 
-
                 if (!empty($this->old_config_data['fields'][$k]))
                 {
-                    $this->config_data['fields'][$k] = array_merge($this->old_config_data['fields'][$k],$f);
+                    $fields[$k] = array_merge($this->old_config_data['fields'][$k],$f);
                 } else {
-                    $this->config_data['fields'][$k] = $f;
+                    $fields[$k] = $f;
                 }
 
 
@@ -389,8 +393,9 @@ class CrudModelPrototype
 //                }
 //            }
 
-
         }
+
+        $this->config_data['fields'] = $fields;
     }//
 
     /**

@@ -96,7 +96,7 @@ class Date extends Field implements WizardableField, FormControl{
     }
 
 
-    public function wizardCallbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    public function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
     {
         $formats = $modelPrototype->wizard->getAvailableDateFormats();
         $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];

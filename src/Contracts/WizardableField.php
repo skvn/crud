@@ -57,7 +57,7 @@ interface WizardableField
      * @param CrudModelPrototype $modelPrototype
      * @return void
      */
-    public function wizardCallbackFieldConfig ($fieldKey,array &$fieldConfig,CrudModelPrototype $modelPrototype);
+    public function wizardCallbackFieldConfig (&$fieldKey,array &$fieldConfig,CrudModelPrototype $modelPrototype);
 
     /**
      * Apply actions to the model config array during setup in wizard

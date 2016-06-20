@@ -526,7 +526,9 @@
 
         $('#f_container table[data-rel]').each ( function () {
                 var title = $(this).find('input[data-rel=field_title]').val();
-                fields.push({value:$(this).data('rel'), text:title});
+                if (typeof title != 'undefined') {
+                    fields.push({value: $(this).data('rel'), text: title});
+                }
             }
         );
 

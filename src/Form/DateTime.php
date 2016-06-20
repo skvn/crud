@@ -94,7 +94,7 @@ class DateTime extends Field implements WizardableField, FormControl
         return "Date + Time";
     }
 
-    function wizardCallbackFieldConfig($fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
     {
         $formats = $modelPrototype->wizard->getAvailableDateFormats();
         $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];

@@ -52,9 +52,9 @@ trait WizardCommonFieldTrait
         return "---";
     }
 
-    public function wizardCallbackFieldConfig ($fieldKey,array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    public function wizardCallbackFieldConfig (&$fieldKey,array &$fieldConfig,  CrudModelPrototype $modelPrototype)
     {
-        //var_dump($fieldConfig);
+        
     }
 
 
