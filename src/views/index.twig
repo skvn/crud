@@ -1,6 +1,7 @@
 {% extends "crud::page.twig" %}
 {% import "crud::widgets/macro.twig" as widgets%}
 {%  set TITLE =crudObj.getListConfig('title')  %}
+{%  set PAGE_TITLE =crudObj.getListConfig('title')  %}
 {%  set DESCRIPTION =crudObj.getListConfig('description')  %}
 
 {% block content %}
