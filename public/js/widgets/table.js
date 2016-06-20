@@ -121,7 +121,7 @@
                                 }
                                 if (has_actions)
                                 {
-                                    + '</ul>'
+                                    buttons += '</ul>'
                                     + '</span>';
                                 }
                             }
