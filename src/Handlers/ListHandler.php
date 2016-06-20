@@ -20,6 +20,7 @@ class ListHandler {
     protected $columns = [];
     protected $all_columns = [];
     protected $filter = null;
+    protected $user_prefs = null;
 
     public function __construct(CrudModel $parentInstance, $options=[])
     {
@@ -27,6 +28,7 @@ class ListHandler {
         $this->model = $parentInstance;
         $this->options = $this->prepareOptions($options);
         $this->columns = $options['list'] ?? [];
+        $this->loadPrefs();
         if (!empty($this->options['multiselect']))
         {
             $this->prependColumn(['data' => $this->model->getKeyName(), 'width' => 30, 'ctype' => "checkbox"]);
@@ -65,23 +67,16 @@ class ListHandler {
                 unset($this->columns[$k]);
             }
         }
-        if ($this->app['auth']->check())
+        $cols = $this->filterColumns();
+        foreach($this->columns as $col)
         {
-            $user = $this->app['auth']->user();
-            if ($user instanceof \Skvn\Crud\Contracts\PrefSubject)
+            if (!empty($col['invisible']))
             {
-                $cols = $user->crudPrefFilterTableColumns($this->columns, $this->model);
-                foreach($this->columns as $col)
-                {
-                    if (!empty($col['invisible']))
-                    {
-                        $cols[] = $col;
-                    }
-                }
-                $this->all_columns = $this->columns;
-                $this->columns = $cols;
+                $cols[] = $col;
             }
         }
+        $this->all_columns = $this->columns;
+        $this->columns = $cols;
 
 
     }
@@ -90,6 +85,24 @@ class ListHandler {
     {
         return new self($parentInstance, $options);
     }
+
+    protected function filterColumns()
+    {
+        $cols = array();
+        foreach ($this->columns as $column)
+        {
+            if (!empty($column['ctype']) || $this->isColumnVisible($column['data']))
+            {
+                $cols[] = $column;
+            }
+        }
+        if (empty($cols))
+        {
+            return $this->columns;
+        }
+        return $cols;
+    }
+
 
     function appendColumn($col)
     {
@@ -236,7 +249,35 @@ class ListHandler {
 
     }
 
+    protected function loadPrefs()
+    {
+        $this->user_prefs = false;
+        if ($this->app['auth']->check())
+        {
+            $user = $this->app['auth']->user();
+            if ($user instanceof \Skvn\Crud\Contracts\PrefSubject)
+            {
+                $this->user_prefs = $user->crudPrefForModel(constant(get_class($user) . "::PREF_TYPE_COLUMN_LIST"), $this->model);
+            }
+        }
+    }
 
+    function isColumnVisible($column)
+    {
+        if (is_null($this->user_prefs))
+        {
+            $this->loadPrefs();
+        }
+        if (empty($this->user_prefs))
+        {
+            return true;
+        }
+        if (empty($this->user_prefs['columns']))
+        {
+            return true;
+        }
+        return in_array($column, $this->user_prefs['columns']);
+    }
 
 
 

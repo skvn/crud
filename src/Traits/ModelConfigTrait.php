@@ -14,7 +14,6 @@ trait ModelConfigTrait
     public $classViewName;
     public $scope = "default";
 
-    protected $list_prefs = null;
 
     /* Flag for tracking created_by  and updated_by */
     protected $track_authors = false;
@@ -249,36 +248,12 @@ trait ModelConfigTrait
         return $this->scope;
     }
 
-    public  function getListName()
-    {
-        return $this->scope ? $this->scope : self :: DEFAULT_SCOPE;
-    }
+//    public  function getListName()
+//    {
+//        return $this->scope ? $this->scope : self :: DEFAULT_SCOPE;
+//    }
 
 
-    function isColumnVisible($column)
-    {
-        if (is_null($this->list_prefs))
-        {
-            $this->list_prefs = false;
-            if ($this->app['auth']->check())
-            {
-                $user = $this->app['auth']->user();
-                if ($user instanceof \Skvn\Crud\Contracts\PrefSubject)
-                {
-                    $this->list_prefs = $user->crudPrefForModel(constant(get_class($user) . "::PREF_TYPE_COLUMN_LIST"), $this);
-                }
-            }
-        }
-        if (empty($this->list_prefs))
-        {
-            return true;
-        }
-        if (empty($this->list_prefs['columns']))
-        {
-            return true;
-        }
-        return in_array($column, $this->list_prefs['columns']);
-    }
 
 
 

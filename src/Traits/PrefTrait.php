@@ -7,22 +7,6 @@ trait PrefTrait
     protected $__prefs = null;
 
 
-    function crudPrefFilterTableColumns($columns, $model)
-    {
-        $cols = array();
-        foreach ($columns as $column)
-        {
-            if (!empty($column['ctype']) || $model->isColumnVisible($column['data']))
-            {
-                $cols[] = $column;
-            }
-        }
-        if (empty($cols))
-        {
-            return $columns;
-        }
-        return $cols;
-    }
 
     function crudPrefUI($type)
     {
@@ -89,7 +73,9 @@ trait PrefTrait
     {
         if (is_null($this->__prefs))
         {
+            $this->app['db']->setFetchMode(\PDO :: FETCH_CLASS);
             $this->__prefs = $this->app['db']->table('crud_user_pref')->where('user_id', $this->id)->get();
+            $this->app['db']->setFetchMode($this->app['config']->get('database.fetch'));
         }
         return $this->__prefs;
     }

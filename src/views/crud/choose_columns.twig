@@ -22,7 +22,7 @@
                                 {% if not c.ctype and not c.invisible%}
                                     {% if not c.acl or c.acl|allowed('r') %}
                                         <label class="control-label text-left">
-                                            <input class="i-checks" type="checkbox" name="pref[columns][]" value="{{ c.data }}" {{ crudObj.isColumnVisible(c.data) ? 'checked="checked"' }}/> {{ c.title }}
+                                            <input class="i-checks" type="checkbox" name="pref[columns][]" value="{{ c.data }}" {{ crudObj.getList().isColumnVisible(c.data) ? 'checked="checked"' }}/> {{ c.title }}
                                         </label><br />
                                     {% endif %}
                                 {% endif %}
