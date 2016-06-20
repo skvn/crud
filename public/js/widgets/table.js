@@ -68,15 +68,32 @@
                             if (tbl.data('list_single_actions') && tbl.data('list_single_actions').length) {
 
                                 var actions = tbl.data('list_single_actions');
-                                buttons += '<span class="dropdown  dropdown-kebab-pf" style="width:15px;margin-left:10px;">'
-                                    + '<button class="btn btn-link dropdown-toggle" type="button"  data-toggle="dropdown">'
-                                    + '<span class="fa fa-ellipsis-v" style="margin-bottom: 10px;"></span>'
-                                    + '</button>'
-                                    + '<ul class="dropdown-menu dropdown-menu-right" >';
-
+                                var has_actions = false;
+                                //buttons += '<span class="dropdown  dropdown-kebab-pf" style="width:15px;margin-left:10px;">'
+                                //    + '<button class="btn btn-link dropdown-toggle" type="button"  data-toggle="dropdown">'
+                                //    + '<span class="fa fa-ellipsis-v" style="margin-bottom: 10px;"></span>'
+                                //    + '</button>'
+                                //    + '<ul class="dropdown-menu dropdown-menu-right" >';
+                                console.log(rowData);
                                 for (var i=0; i<actions.length; i++)
                                 {
+                                    if (actions[i]['ifcolumn'])
+                                    {
+                                        if (!rowData[actions[i]['ifcolumn']])
+                                        {
+                                            continue;
+                                        }
+                                    }
 
+                                    if (!has_actions)
+                                    {
+                                        buttons += '<span class="dropdown  dropdown-kebab-pf" style="width:15px;margin-left:10px;">'
+                                            + '<button class="btn btn-link dropdown-toggle" type="button"  data-toggle="dropdown">'
+                                            + '<span class="fa fa-ellipsis-v" style="margin-bottom: 10px;"></span>'
+                                            + '</button>'
+                                            + '<ul class="dropdown-menu dropdown-menu-right" >';
+                                        has_actions = true;
+                                    }
 
                                     if (actions[i]['command'])
                                     {
@@ -102,9 +119,11 @@
                                         buttons += '<li role="separator" class="divider"></li>';
                                     }
                                 }
-
-                                + '</ul>'
-                                + '</span>';
+                                if (has_actions)
+                                {
+                                    + '</ul>'
+                                    + '</span>';
+                                }
                             }
                             $(td).html(buttons);
                         }
