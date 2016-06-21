@@ -472,7 +472,8 @@ class CrudModelPrototype
                             $tab_alias = 'tab_'.$i;
                         }
 
-                        $oldTab = $this->old_config_data['scopes'][$alias]['tabs'][$tab_alias]??[];
+                        $oldTab = $this->old_config_data['scopes'][$alias]['form'][$tab_alias]??[];
+                        unset($oldTab['fields']);
                         $tabs[$tab_alias] = array_merge(['title'=>$tab['title']],$oldTab);
                         $tabs[$tab_alias]['fields'] = $tab['fields']??[];
 
@@ -484,8 +485,6 @@ class CrudModelPrototype
 
                 }
 
-
-                
                 $searchable = 0;
                 //columns
                 if (!empty($list['columns']))
@@ -531,8 +530,6 @@ class CrudModelPrototype
                         {
                             $searchable = 1;
                         }
-
-
 
                         $cols[] = $column;
                     }
