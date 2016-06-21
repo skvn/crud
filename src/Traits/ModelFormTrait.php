@@ -70,10 +70,11 @@ trait ModelFormTrait
     {
         if (!empty($config['forceNew']) || !$this->form)
         {
+            $formConfig = $this->getFormConfig();
             $this->form = Form :: create([
                 'crudObj' => $this,
-                'config' => $this->getFormConfig(),
-                'tabs' => $this->getListConfig('tabs'),
+                'fields' => $formConfig['fields'],
+                'tabs' => $formConfig['tabs'],
                 'data' => !empty($config['fillData'])?$config['fillData']:null,
                 'props' => $config
             ]);
@@ -90,19 +91,26 @@ trait ModelFormTrait
     public function getFormConfig()
     {
         $form =  $this->getListConfig('form');
-        $tabbed = $this->getListConfig('form_tabbed');
+        $tabbed = $this->isFormTabbed();
         $form_array = [];
+        $tab_array = [];
         $fields = $this->getFields();
+
 
         if (is_array($form))
         {
             if ($tabbed)
             {
-                foreach ($form as $tab_alias=>$field_set)
+                foreach ($form as $tab_alias=>$tab)
                 {
-                    if (is_array($field_set))
+                    if (is_array($tab['fields']))
                     {
-                        foreach ($field_set as $fname)
+                        if (!isset($tab_array[$tab_alias]))
+                        {
+                            $tab_array[$tab_alias] = $tab;
+                            unset($tab_array[$tab_alias]['fields']);
+                        }
+                        foreach ($tab['fields'] as $fname)
                         {
                             $form_array[$fname] = $fields[$fname];
                             $form_array[$fname]['tab'] = $tab_alias;
@@ -119,7 +127,10 @@ trait ModelFormTrait
 
         }
 
-        return $form_array;
+        return [
+            'fields'=>$form_array,
+            'tabs'=>$tab_array
+        ];
     }
 
 
@@ -131,7 +142,7 @@ trait ModelFormTrait
             //$form = new Form($this, $this->getFields(), $fillData);
             $form = Form :: create([
                 'crudObj' => $this,
-                'config' => $this->getFields(),
+                'fields' => $this->getFields(),
                 'data' => $fillData
             ]);
             $this->form_fields_collection = $form->fields;

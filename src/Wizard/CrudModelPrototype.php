@@ -474,11 +474,13 @@ class CrudModelPrototype
 
                         $oldTab = $this->old_config_data['scopes'][$alias]['tabs'][$tab_alias]??[];
                         $tabs[$tab_alias] = array_merge(['title'=>$tab['title']],$oldTab);
-                        $this->config_data['list'][$alias]['form'][$tab_alias] = $tab['fields']??[];
+                        $tabs[$tab_alias]['fields'] = $tab['fields']??[];
+
                     }
-                    
-                    $this->config_data['list'][$alias]['tabs'] = $tabs;
-                    $this->config_data['list'][$alias]['form_tabbed'] = 1;
+
+                    $this->config_data['list'][$alias]['form'] = $tabs;
+                    //$this->config_data['list'][$alias]['tabs'] = $tabs;
+                   // $this->config_data['list'][$alias]['form_tabbed'] = 1;
 
                 }
 

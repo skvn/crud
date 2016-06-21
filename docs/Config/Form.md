@@ -65,21 +65,7 @@ To define a tabbed form you need to:
 
 The form tabs are defined via `tabs` property. It can be done in the global scope or in the list scope.
 
-Global scope example:
-
-```
-    //config/crud/crud_article.php
-    return [
-        "name" => "Article",
-        "title_field" => "title",
-        ...
-         "tabs" => [
-        	'tab_common' => ['title' => "Common information"],
-        	'tab_media' => ['title' => "Media"],
-            ...
-    	],
-```
-List  scope example:
+Example:
 
 ```
     //config/crud/crud_article.php
@@ -104,6 +90,7 @@ List  scope example:
 **Tab attributes** can be:
 - **title** - the title of the tab
 - **acl** - the [acl alias](Config/Acl#aliases) used to restrict acces for a form section
+- **view**  - path to the template
 
 
 #### Define form as multidimensional tab map

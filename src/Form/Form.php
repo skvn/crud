@@ -39,9 +39,9 @@ class Form {
     {
         $this->crudObj = isset($args['crudObj']) ? $args['crudObj'] : new CrudStubModel();
         $this->customProperties = isset($args['props']) ? $args['props'] : [];
-        if (!empty($args['config']) && is_array($args['config']))
+        if (!empty($args['fields']) && is_array($args['fields']))
         {
-            $this->setFields($args['config']);
+            $this->setFields($args['fields']);
         }
         if (!empty($args['data']) && is_array($args['data']))
         {
@@ -107,6 +107,7 @@ class Form {
 
     function setFields($fields)
     {
+        
         $this->fields = [];
         foreach ($fields as $col => $colConfig)
         {

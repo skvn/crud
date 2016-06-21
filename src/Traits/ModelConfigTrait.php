@@ -362,6 +362,17 @@ trait ModelConfigTrait
         return $key . "::" . $view;
     }//
 
+    public function isFormTabbed()
+    {
+        $form = $this->getListConfig('form');
+        if (isset($form[0]))
+        {
+            return false;
+        }
+        
+        return true;
+    }
+
     
 
 
