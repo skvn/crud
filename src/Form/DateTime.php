@@ -6,6 +6,7 @@ use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Wizard\CrudModelPrototype;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
+use Carbon\Carbon;
 
 
 class DateTime extends Field implements WizardableField, FormControl
@@ -35,6 +36,10 @@ class DateTime extends Field implements WizardableField, FormControl
 
         if ($this->isInt())
         {
+            if ($this->value instanceof Carbon)
+            {
+                return date($this->config['format'], $this->value->timestamp);
+            }
             return date($this->config['format'], $this->value);
         }
         else

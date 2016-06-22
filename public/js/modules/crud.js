@@ -90,8 +90,12 @@
                 return hval >>> 0;
             },
 
-            getActiveTab: function()
+            getActiveTab: function(elem)
             {
+                if (elem && elem.parents("div.modal-dialog").length > 0)
+                {
+                    return null;
+                }
                 var c = $('div[data-tabs_container]');
                 if (c.length == 1)
                 {

@@ -169,14 +169,14 @@
 
                 if (only_children)
                 {
-                    var $tpl = $($('#'+tpl_id, crud.getActiveTab()).html());
+                    var $tpl = $($('#'+tpl_id, crud.getActiveTab(elem)).html());
                 } else {
-                    var $tpl = $('#'+tpl_id, crud.getActiveTab()).clone(true).attr('id','');
+                    var $tpl = $('#'+tpl_id, crud.getActiveTab(elem)).clone(true).attr('id','');
                 }
 
-                console.log($tpl);
+                //console.log($tpl);
 
-                var qtyAdded = $('#'+container_id, crud.getActiveTab()).find('*[data-added]').length;
+                var qtyAdded = $('#'+container_id, crud.getActiveTab(elem)).find('*[data-added]').length;
                 $tpl =  $($('<div>').append($tpl).html().replace(new RegExp("(\\[NUM\\])", 'g'),qtyAdded+1));
 
 
@@ -198,10 +198,10 @@
                 //});
                 $tpl.attr('data-added',1);
                 //calc order
-                var ord  = $('#'+container_id, crud.getActiveTab()).find('*[data-order]:visible').length;
+                var ord  = $('#'+container_id, crud.getActiveTab(elem)).find('*[data-order]:visible').length;
                 $tpl.find('*[data-order]').val((ord+1));
 
-                $tpl.appendTo($('#'+container_id, crud.getActiveTab())).show();
+                $tpl.appendTo($('#'+container_id, crud.getActiveTab(elem))).show();
 
             }
         };

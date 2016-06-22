@@ -24,7 +24,8 @@
           "resources/bower_components/jquery.steps/demo/css/jquery.steps.css",
           "resources/bower_components/jquery-treetable/css/jquery.treetable.css",
           "resources/bower_components/datatables-treetable/css/treeTable.dataTables.css",
-          "resources/bower_components/datatables-treetable/css/treeTable.bootstrap.css"
+          "resources/bower_components/datatables-treetable/css/treeTable.bootstrap.css",
+          "resources/bower_components/datatables-rowreorder/css/rowReorder.css"
 
 
 
@@ -71,7 +72,8 @@
           "resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
           "resources/bower_components/jstree/dist/jstree.min.js",
           "resources/bower_components/jquery-treetable/jquery.treetable.js",
-          "resources/bower_components/datatables-treetable/js/dataTables.treeTable.js"
+          "resources/bower_components/datatables-treetable/js/dataTables.treeTable.js",
+          "resources/bower_components/datatables-rowreorder/js/dataTables.rowReorder.js"
 
         ],
       "vendor_js_src": [
@@ -103,7 +105,8 @@
         "resources/bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js",
         "resources/bower_components/jstree/dist/jstree.js",
         "resources/bower_components/jquery-treetable/jquery.treetable.js",
-        "resources/bower_components/datatables-treetable/js/dataTables.treeTable.js"
+        "resources/bower_components/datatables-treetable/js/dataTables.treeTable.js",
+        "resources/bower_components/datatables-rowreorder/js/dataTables.rowReorder.js"
 
       ],
 

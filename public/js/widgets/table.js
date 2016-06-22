@@ -150,8 +150,11 @@
                 serverSide: true,
 
                 ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), uri_params: tbl.data('list_uri_params')}),
-                //columns: crud_cols,
                 order: order,
+                //rowReorder: {
+                //    update: false,
+                //    dataSrc: 'id'
+                //},
                 autoWidth: false,
                 columns: this.col_list,
                 language: {
@@ -206,6 +209,18 @@
                 crud.trigger('crud.edit_element', { id: $('td:first', $(this)).data('id'), table: tbl})
                 //crud.init_modal($(this).find('td').first().data('id'));
             });
+            //tbl.on('row-reorder.dt', function ( e, diff, edit)
+            //{
+            //    alert(diff);
+            //    alert(edit);
+            //    console.log(diff);
+            //    console.log(edit);
+            //
+            //    if (diff.length > 0)
+            //    {
+            //        alert($('td[data-id]', diff[0].node).data('id') + '<->' + $('td[data-id]', diff[diff.length-1].node).data('id'));
+            //    }
+            //} );
             if (tbl.data('form_type') == 'tabs')
             {
                 var id = crud.loc.hash.substr(1);

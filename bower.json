@@ -24,6 +24,7 @@
     "jquery-validation": "^1.15.0",
     "datatables-treetable": "*",
     "datatables": "latest",
+    "datatables-rowreorder": "*",
     "dt": "https://github.com/skvn/dt.git"
   }
 }
