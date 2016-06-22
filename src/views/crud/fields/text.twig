@@ -1,8 +1,7 @@
 {% include 'crud::crud/fields/label.twig' %}
-<input class="form-control"
-       placeholder="{{ input.config.placeholder }}" {{ input.config.required ? 'required' }} {{ input.config.readonly ? 'readonly="readonly"' }}
-       name="{{ input.name }}"
+<input {{ input.config.extra|raw }} class="form-control"
+        {{ input.config.required ? 'required' }}    name="{{ input.name }}"
        type="text"
        value="{{ input.getValue() }}"
-       {{ input.config.disable_autocomplete ? 'autocomplete="off"' }} data-default="{{ input.config.default }}"
+       data-default="{{ input.config.default }}"
         />
