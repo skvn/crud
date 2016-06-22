@@ -594,6 +594,13 @@
                 // Disable validation on fields that are disabled or hidden.
                 form.validate().settings.ignore = ":disabled,:hidden";
 
+                var errored = form.find('.error');
+                if (errored.length)
+                {
+                    $('html, body').animate({ scrollTop: errored.first().offset().top - 50 }, 500);
+                    errored.first().focus();
+                }
+
                 // Start validation; Prevent going forward if false
                 return form.valid();
             },
@@ -679,14 +686,20 @@
                     form.submit();
                 }
             }
-        }).validate({
-            errorPlacement: function (error, element)
+        }).validate(
             {
-                element.before(error);
-            },
-            rules: {
+                invalidHandler: function(event, validator) {
+                    if (validator.numberOfInvalids()) {
+                        $('html, body').animate({scrollTop: $(validator.errorList[0].element).offset().top - 50}, 500);
+                    }
+                },
+                errorPlacement: function (error, element)
+                {
+                    element.before(error);
+                },
+                rules: {
 
-            }
+                }
         });
 
     }

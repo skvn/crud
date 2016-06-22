@@ -2,7 +2,7 @@
     <div class="checkbox">
         <label for="{{ input.getUniqueId() }}">
             <input data-widget="crud_checkbox" class="crud_checkbox i-checks" id="{{  input.getUniqueId() }}" data-name="{{ input.name }}"    type="checkbox"  {{ input.getValue()>0?'checked':''}} />
-            <input type="hidden" name="{{ input.field }}" id="_{{  input.model.id }}"  value="{{ input.getValue() }}"  data-default="{{ input.config.default }}" />
+            <input type="hidden" {{ input.config.extra|raw }} name="{{ input.field }}" id="_{{  input.model.id }}"  value="{{ input.getValue() }}"  data-default="{{ input.config.default }}" />
             <span>{{ input.config.title }}</span>
         </label>
     </div>

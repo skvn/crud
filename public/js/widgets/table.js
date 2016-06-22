@@ -101,11 +101,11 @@
                                         buttons += '<li><a href="'+actions[i]['command']+'" data-model="'+tbl.data('crud_table')+'" data-scope="'+tbl.data('crud_scope')+'" data-id="'+rowData.id+'" data-click="crud_action" data-action="crud_command" '+ (actions[i]['confirm'] ? 'data-confirm="'+actions[i]['confirm']+'"' : '') +'>';
                                     } else if (actions[i]['event'])
                                     {
-                                        buttons += '<li><a href="#" data-model="'+tbl.data('crud_table')+'" data-scope="'+tbl.data('crud_scope')+'" data-id="'+rowData.id+'" data-click="crud_event" data-event="'+actions[i]['event']+'" >';
+                                        buttons += '<li><a href="#" data-model="'+tbl.data('crud_table')+'" data-scope="'+tbl.data('crud_scope')+'" data-id="'+rowData.id+'" data-click="crud_event" data-event="'+actions[i]['event']+'" '+ (actions[i]['confirm'] ? 'data-confirm="'+actions[i]['confirm']+'"' : '') +'>';
                                     }
                                     else if (actions[i]['popup'])
                                     {
-                                        buttons += '<li><a href="'+actions[i]['popup']+'"  data-title="'+actions[i]['title']+'" data-model="'+tbl.data('crud_table')+'" data-id="'+rowData.id+'" data-scope="'+tbl.data('crud_scope')+'" data-click="crud_popup" data-popup="'+actions[i]['popup_id']+'" data-event="'+actions[i]['event']+'" >';
+                                        buttons += '<li><a href="'+actions[i]['popup']+'"  data-title="'+actions[i]['title']+'" data-model="'+tbl.data('crud_table')+'" data-id="'+rowData.id+'" data-scope="'+tbl.data('crud_scope')+'" data-click="crud_popup" data-popup="'+actions[i]['popup_id']+'" data-event="'+actions[i]['event']+'" '+ (actions[i]['confirm'] ? 'data-confirm="'+actions[i]['confirm']+'"' : '') +'>';
                                     }
 
 

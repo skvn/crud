@@ -21,6 +21,8 @@
     <div class="form-group">
         <label>
             Or Modal URL *  <input type="text"  class="form-control" value="{{ action.popup }}"  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][popup]">
+        </label>
+        <label>
             Popup ID:<input type="text"  class="form-control" value="{{ action.popup_id }}"  name="list[{{ ALIAS }}][list_actions][{{ NUM }}][popup_id]">
         </label>
     </div>
@@ -35,6 +37,10 @@
     </div>
 
     <div class="form-group">
+        <label>
+            Confirm <input type="text"  class="form-control" value="{{ action.confirm }}" name="list[{{ ALIAS }}][list_actions][{{ NUM }}][confirm]">
+        </label>
+
         <label>
             Appears if column <input type="text"  class="form-control" value="{{ action.ifcolumn }}" name="list[{{ ALIAS }}][list_actions][{{ NUM }}][ifcolumn]">
             is not empty

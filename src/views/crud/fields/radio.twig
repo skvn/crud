@@ -9,14 +9,14 @@
             <label>{{ gr.title }}</label>
             <hr />
             {% for op in gr.options %}
-                <label><input type="radio" value="{{ op.value }}" {{ op.selected ? 'checked' }} {{ input.config.required ? 'required' }} name="{{ input.field }}" />{{ op.text }}</label>
+                <label><input type="radio" {{ input.config.extra|raw }} value="{{ op.value }}" {{ op.selected ? 'checked' }} {{ input.config.required ? 'required' }} name="{{ input.field }}" />{{ op.text }}</label>
             {% endfor %}
        {% endfor %}
 
 {% else %}
 
     {% for op in input.getOptions() %}
-        <label><input type="radio" value="{{ op.value }}" {{ op.selected ? 'checked' }} {{ input.config.required ? 'required' }} name="{{ input.field }}" /> {{ op.text }}</label><br />
+        <label><input type="radio" {{ input.config.extra|raw }} value="{{ op.value }}" {{ op.selected ? 'checked' }} {{ input.config.required ? 'required' }} name="{{ input.field }}" /> {{ op.text }}</label><br />
     {% endfor %}
 {% endif %}
     </div>
