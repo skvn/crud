@@ -187,7 +187,7 @@ trait ModelRelationTrait
 
     function getCrudRelation($name)
     {
-        if (array_key_exists($name, $this->config['fields']))
+        if (array_key_exists($name, $this->config['fields'] ?? []))
         {
             $col = $this->getField($name);
             if (!empty($col['relation']))
@@ -203,7 +203,7 @@ trait ModelRelationTrait
     function processRelationsOndelete()
     {
 
-        foreach ($this->config['fields'] as $fname=>$field)
+        foreach ($this->config['fields'] ?? [] as $fname=>$field)
         {
             if (!empty($field['relation']) && $field['relation'] == 'hasMany' && !empty($field['on_delete'])) {
 
