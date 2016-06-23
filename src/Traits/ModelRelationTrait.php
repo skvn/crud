@@ -131,12 +131,10 @@ trait ModelRelationTrait
             case self::RELATION_BELONGS_TO:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],$relAttributes['column_index'], null, $method);
                 return $this->$relType(self :: resolveClass($relAttributes['model']), $relAttributes['field'], null, $method);
-                break;
 
             case self::RELATION_HAS_ONE:
                 $ref_col = (!empty($relAttributes['ref_column'])?$relAttributes['ref_column']:null);
                 return $this->$relType(self :: resolveClass($relAttributes['model']),  $ref_col);
-                break;
 
             case self::RELATION_BELONGS_TO_MANY:
                 //return $this->$relType('\App\Model\\'.$relAttributes['model'],null, null, null, $method);
@@ -144,16 +142,21 @@ trait ModelRelationTrait
                 $pivot_self_column = (!empty($relAttributes['pivot_self_key'])?$relAttributes['pivot_self_key']:null);
                 $pivot_foreign_column = (!empty($relAttributes['pivot_foreign_key'])?$relAttributes['pivot_foreign_key']:null);
                 return $this->$relType(self :: resolveClass($relAttributes['model']), $pivot_table, $pivot_self_column, $pivot_foreign_column, $method);
-                break;
 
             case self::RELATION_HAS_MANY:
                 $ref_col = (!empty($relAttributes['ref_column'])?$relAttributes['ref_column']:null);
-                return $this->$relType(self :: resolveClass($relAttributes['model']), $ref_col );
-                break;
+                $rel = $this->$relType(self :: resolveClass($relAttributes['model']), $ref_col );
+                if (!empty($relAttributes['sort']))
+                {
+                    foreach ($relAttributes['sort'] as $col => $dir)
+                    {
+                        $rel->orderBy($col, $dir);
+                    }
+                }
+                return $rel;
 
             default:
                 return $this->$relType(self :: resolveClass($relAttributes['model']));
-                break;
 
 
         }

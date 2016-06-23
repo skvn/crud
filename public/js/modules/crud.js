@@ -109,6 +109,51 @@
                     }
                 }
             },
+            addModelParams: function(args, elem)
+            {
+                args['id'] = elem.data('id');
+                args['model'] = elem.data('model') || "";
+                args['scope'] = elem.data('scope') ? elem.data('scope') : "default";
+                var tbl = elem.parents("table[data-crud_table]:first");
+                if (tbl.length)
+                {
+                    if (!args['model'] && tbl.data('crud_table'))
+                    {
+                        args['model'] = tbl.data('crud_table');
+                        if (tbl.data('crud_scope'))
+                        {
+                            args['scope'] = tbl.data('crud_scope');
+                        }
+                    }
+                    if (!args['id'])
+                    {
+                        var row = elem.parents('tr:first');
+                        if (row.length)
+                        {
+                            if (row.data('id'))
+                            {
+                                args['id'] = row.data['id'];
+                            }
+                            else
+                            {
+                                var cell = $("td[data-id]:first", row);
+                                if (cell.length && cell.data('id'))
+                                {
+                                    args['id'] = cell.data('id');
+                                }
+                            }
+                        }
+                    }
+                }
+
+                args['id'] = parseInt(args['id']);
+                if (!args['id'])
+                {
+                    args['id'] = -1;
+                }
+                return args;
+
+            },
 
             init_edit_tab: function(model, id, args)
             {
@@ -220,9 +265,7 @@
             var args = elem.data('args') || {};
 
             args['command'] = elem.attr('href');
-            args['id'] = parseInt(elem.data('id'))>0?parseInt(elem.data('id')):-1;
-            args['model'] = elem.data('model');
-            args['scope'] = elem.data('scope') ? elem.data('scope') : "default";
+            args = crud.addModelParams(args, elem);
             $("input,select", elem.parents("form")).each(function(){
                 args[$(this).attr('name')] = $(this).val();
             });
