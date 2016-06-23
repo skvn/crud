@@ -14,7 +14,7 @@
 </label>
     <br />
 <label>On delete</label>
-    <select class="form-control default_select" data-attr="ref_column" name="relations[{{NUM}}][on_delete]"   >
+    <select class="form-control default_select"  name="relations[{{NUM}}][on_delete]"   >
         {% for av, atext in wizard.getOndeleteActions() %}
         <option value="{{ av }}" {{ av == rel.on_delete?'selected' }}>{{ atext }}</option>
         {% endfor %}
