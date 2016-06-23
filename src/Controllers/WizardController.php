@@ -35,6 +35,7 @@ class WizardController extends Controller {
 
         \View::share('cmsHelper', $this->cmsHelper);
         \View::share('wizard', $this->wizard);
+        \View::share('config', $this->app['config']);
         
     }
 

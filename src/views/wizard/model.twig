@@ -55,7 +55,13 @@
 
                     <div class="form-group">
                         <label for="acl">Acl</label>
-                        <input type="text" class="form-control" id="acl"  name="acl"  value="{{ model.acl }}" />
+                        {#<input type="text" class="form-control" id="acl"  name="acl"  value="{{ model.acl }}" />#}
+                        <select class="form-control default_select" id="acl" name="acl"  style="width:250px;"  >
+                            <option value="">Choose acl</option>
+                            {% for acl, acl_title in config.acl.acls %}
+                                <option value="{{ acl }}" {{ model.acl==acl?'selected' }}>{{ acl_title }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
 
                     <div class="form-group">
