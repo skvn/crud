@@ -126,6 +126,11 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
     public function getOptions()
     {
         $opts = [];
+        if (!empty($this->config['remote']))
+        {
+            return $this->getSelectedOptions();
+        }
+
         if (!empty($this->config['method_options']))
         {
             //$this->value = $this->model->getAttribute($this->getField());
@@ -166,25 +171,44 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
 
     }
 
-    private function isSelected($idx)
+    private function getValueAsArray()
     {
-        //var_dump(get_class($this->value));
         if (is_null($this->value))
         {
-            return false;
+            return [];
         }
+
         if (is_array($this->value))
         {
-            return in_array($idx, $this->value);
+            return $this->value;
         }
-
-        if (is_object($this->value) && ($this->value instanceof Collection))
+        if ($this->value instanceof Collection)
         {
-            $val = $this->value->toArray();
-            return in_array($idx, $val);
+            return $this->value->toArray();
         }
 
-        return $idx == $this->value;
+        return [$this->value];
+    }
+
+    private function isSelected($idx)
+    {
+        $value = $this->getValueAsArray();
+        return in_array($idx, $value);
+
+    }
+
+    private function getSelectedOptions()
+    {
+        if (is_null($this->value))
+        {
+            return [];
+        }
+
+
+        $class = CrudModel :: resolveClass($this->config['model']);
+        $obj = new $class();
+        $coll = $obj->find($this->getValueAsArray());
+        return $this->flatOptions($coll, $obj);
     }
 
     private function getModelOptions()
@@ -209,23 +233,6 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
             }
         }
 
-//        if (!$this->value)
-//        {
-//            if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
-//            {
-//                $this->value = $this->model->getRelationIds($this->getName());
-//            }
-//            else if (!empty($this->config['relation'])
-//                && $this->config['relation'] == CrudModel::RELATION_HAS_ONE)
-//            {
-//                $relation = $this->getName();
-//                $this->value = $this->model->$relation->id;
-//            }
-//            else
-//            {
-//                $this->value = $this->model->getAttribute($this->getField());
-//            }
-//        }
 
         if ($this->isGrouped())
         {

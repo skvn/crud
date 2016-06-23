@@ -25,7 +25,8 @@
           "resources/bower_components/jquery-treetable/css/jquery.treetable.css",
           "resources/bower_components/datatables-treetable/css/treeTable.dataTables.css",
           "resources/bower_components/datatables-treetable/css/treeTable.bootstrap.css",
-          "resources/bower_components/datatables-rowreorder/css/rowReorder.css"
+          "resources/bower_components/datatables-rowreorder/css/rowReorder.css",
+          "resources/bower_components/select2/dist/css/select2.min.css"
 
 
 
@@ -73,7 +74,8 @@
           "resources/bower_components/jstree/dist/jstree.min.js",
           "resources/bower_components/jquery-treetable/jquery.treetable.js",
           "resources/bower_components/datatables-treetable/js/dataTables.treeTable.js",
-          "resources/bower_components/datatables-rowreorder/js/dataTables.rowReorder.js"
+          "resources/bower_components/datatables-rowreorder/js/dataTables.rowReorder.js",
+          "resources/bower_components/select2/dist/js/select2.full.min.js"
 
         ],
       "vendor_js_src": [
@@ -106,7 +108,8 @@
         "resources/bower_components/jstree/dist/jstree.js",
         "resources/bower_components/jquery-treetable/jquery.treetable.js",
         "resources/bower_components/datatables-treetable/js/dataTables.treeTable.js",
-        "resources/bower_components/datatables-rowreorder/js/dataTables.rowReorder.js"
+        "resources/bower_components/datatables-rowreorder/js/dataTables.rowReorder.js",
+        "resources/bower_components/select2/dist/js/select2.full.js"
 
       ],
 
@@ -115,11 +118,13 @@
           "resources/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js",
           "resources/bower_components/bootstrap-select/js/i18n/defaults-ru_RU.js",
           "resources/bower_components/summernote/dist/lang/summernote-ru-RU.js",
-          "resources/bower_components/bootstrapvalidator/dist/js/language/ru_RU.js"
+          "resources/bower_components/bootstrapvalidator/dist/js/language/ru_RU.js",
+          "resources/bower_components/select2/dist/js/i18n/ru.js"
         ],
         "en": [
           "resources/bower_components/bootstrap-select/js/i18n/defaults-en_US.js",
-          "resources/bower_components/bootstrapvalidator/dist/js/language/en_US.js"
+          "resources/bower_components/bootstrapvalidator/dist/js/language/en_US.js",
+          "resources/bower_components/select2/dist/js/i18n/en.js"
         ]
       }
 

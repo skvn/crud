@@ -11,7 +11,7 @@
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 limit: 5,
                 remote: {
-                    url: crud.format_setting("model_autocomplete_url", {model: this.element.data('model'), scope: form.data('crud_scope')}),
+                    url: crud.format_setting("model_autocomplete_url", {model: this.element.data('model')}),
                     replace: function(url, query) {
                         return url + "?q=" + query;
                     }

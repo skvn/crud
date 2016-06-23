@@ -34,7 +34,8 @@ $adm_route_params['middleware'][] = 'Skvn\Crud\Middleware\ModelAcl';
 
 Route::group($adm_route_params, function() {
     Route::get('crud/{model}/tree/{scope}',                         array('as' => 'crud_tree',                  'uses' => 'CrudController@crudTree'));
-    Route::get('crud/{model}/autocomplete/{scope}',                 array('as' => 'crud_autocomplete',          'uses' => 'CrudController@crudAutocompleteList'));
+    Route::get('crud/{model}/autocomplete',                         array('as' => 'crud_autocomplete',          'uses' => 'CrudController@crudAutocompleteList'));
+    Route::get('crud/{model}/select_options',                       array('as' => 'crud_select_options',        'uses' => 'CrudController@crudAutocompleteSelectOptions'));
     Route::get('crud/{model}/tree_options',                         array('as' => 'crud_tree_options',          'uses' => 'CrudController@crudTreeOptions'));
     Route::post('crud/{model}/move_tree',                           array('as' => 'crud_move_tree',             'uses' => 'CrudController@crudTreeMove'));
     Route::get('crud/{model}',                                      array('as' => 'crud_index',                 'uses' => 'CrudController@crudIndex'));

@@ -75,10 +75,24 @@ class CrudController extends Controller
 
 
 
-    function crudAutocompleteList($model, $scope)
+    function crudAutocompleteList($model)
     {
-        $obj = CrudModel :: createInstance($model, $scope);
-        return $obj->getAutocompleteList(\Request::get('q'));
+        $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE);
+        return array_values($obj->getAutocompleteList(\Request::get('q')));
+    }
+
+    function crudAutocompleteSelectOptions($model)
+    {
+        $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE);
+        $res = $obj->getAutocompleteList(\Request::get('q'));
+        $items = [];
+        foreach ($res as $k=>$v)
+        {
+            $items[] = ['id'=>$k,'text'=>$v];
+        }
+        return [
+            'results' =>$items
+        ];
     }
 
     function crudList($model, $scope)
@@ -310,6 +324,14 @@ class CrudController extends Controller
         $obj = CrudModel :: createInstance($model,CrudModel :: DEFAULT_SCOPE, $this->request->get('id'));
         $fObj = $obj->getForm()->getFieldByName($this->request->get('field'));
         return $fObj->getOptions();
+
+    }
+
+    function crudSearchOptions($model)
+    {
+        $obj = CrudModel :: createInstance($model,CrudModel :: DEFAULT_SCOPE, $this->request->get('id'));
+        $fObj = $obj->getForm()->getFieldByName($this->request->get('field'));
+        return $fObj->getSearchOptions($this->request->get('query'));
 
     }
 

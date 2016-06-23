@@ -21,8 +21,9 @@ trait ModelFilterTrait
 
         if (!empty($query))
         {
+            
             return self::where($this->config['title_field'], 'LIKE', $query . '%')
-                ->pluck($this->config['title_field']);
+                ->pluck($this->config['title_field'],$this->getKeyName())->toArray();
         }
 
         return [];

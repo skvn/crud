@@ -10,7 +10,8 @@
         model_move_tree_url: '/admin/crud/{model}/move_tree',
         model_tree_url: '/admin/crud/{model}/tree/{scope}',
         model_tree_options_url: '/admin/crud/{model}/tree_options?id={id}&field={field}',
-        model_autocomplete_url: '/admin/crud/{model}/autocomplete/{scope}',
+        model_autocomplete_url: '/admin/crud/{model}/autocomplete',
+        model_select_options_url: '/admin/crud/{model}/select_options',
         model_command_url: '/admin/crud/{model}/{id}/command/{command}?scope={scope}',
 
     };
