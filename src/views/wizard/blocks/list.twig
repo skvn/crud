@@ -15,6 +15,9 @@
         </div>
         <div class="panel-body">
             <div class="col col-lg-12">
+
+                <div class="row">
+                <div class="col-lg-4">
                 <div class="form-group">
                     <label class="checkbox-inline">
                         <input type="checkbox" value="1" {{ list.multiselect?'checked' }}  id="list[{{ ALIAS }}][multiselect]" name="list[{{ ALIAS }}][multiselect]"  />
@@ -56,6 +59,23 @@
                         <b>Allow show/hide columns</b>
                     </label>
                 </div>
+                </div>
+                <div class="col-lg-8">
+                    <h3>Default sort options</h3>
+                    <div id="list_sorts_{{ ALIAS }}">
+                        {% if list.sort %}
+                            {%  set NUM =  0 %}
+                            {%  for sort_column,sort_order in list.sort %}
+                                {% include 'crud::wizard/blocks/list_sort_row.twig' %}
+                                {%  set NUM=(NUM+1)  %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <a href="#" class="btn btn-primary"  data-click="crud_action"  data-action="wizard_add_list_col" data-skip_arr="1" data-fragment="sort_tpl_{{ ALIAS }}" data-container="list_sorts_{{ ALIAS }}"><i class="fa fa-plus"></i> Add sort option</a>
+
+                </div>
+                </div>
+
                 <div class="hr-line-dashed"></div>
                 <h3>Columns</h3>
 
@@ -166,6 +186,7 @@
         {%  set NUM = "[NUM]" %}
         {% include 'crud::wizard/blocks/list_column' %}
         {% include 'crud::wizard/blocks/list_action' %}
+        {% include 'crud::wizard/blocks/list_sort_row' %}
 
     </div>
 {%  if not list %}

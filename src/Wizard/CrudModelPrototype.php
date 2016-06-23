@@ -458,6 +458,19 @@ class CrudModelPrototype
             foreach ($this->config_data['list'] as $alias=>$list)
             {
 
+                //sort
+                if (!empty($list['sort']))
+                {
+                    $sort = [];
+                    foreach ($list['sort'] as $row)
+                    {
+                        if (!empty($row['column'])) {
+                            $sort[$row['column']] = $row['order'];
+                        }
+                    }
+
+                    $this->config_data['list'][$alias]['sort'] = $sort;
+                }
                 //form
                 if (empty($list['form_tabs']) && !empty($list['form'])) {
 

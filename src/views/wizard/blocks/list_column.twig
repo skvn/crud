@@ -66,13 +66,7 @@
                     </label>
                 </div>
             </td>
-            <td style="width:150px;!important;" {%  if not column.orderable %}class="collapse"{% endif %}  id="def_order_{{ NUM }}">
-                <select class="form-control default_select" name="list[{{ ALIAS }}][columns][{{ NUM }}][default_order]" >
-                    <option value="">Default order</option>
-                    <option value="asc" {{ column.default_order == "asc"?'selected' }}>Ascending</option>
-                    <option value="desc" {{ column.default_order == "desc"?'selected' }}>Descending</option>
-                </select>
-            </td>
+
             <td  style="width:180px;">
                 <div class="checkbox">
                     <label>
