@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use Skvn\Crud\Exceptions\UniqueException;
+use Skvn\Crud\Exceptions\ConfigException;
 
 trait ModelSlugTrait  {
 
@@ -18,6 +19,22 @@ trait ModelSlugTrait  {
     static function slugColumn()
     {
         return defined('static::SLUG') ? static :: SLUG : "slug";
+    }
+
+    function getFrontUrlAttribute()
+    {
+        if (!defined('static::SLUG_URL'))
+        {
+            throw new ConfigException("Url pattern not defained");
+        }
+        if ($this->getAttribute(static :: slugColumn()))
+        {
+            return sprintf(static :: SLUG_URL, $this->getAttribute(static :: slugColumn()));
+        }
+        else
+        {
+            return sprintf(static :: SLUG_URL, $this->getKey());
+        }
     }
 
     protected function processSlug()

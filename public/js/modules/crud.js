@@ -133,7 +133,7 @@
                         {
                             if (row.data('id'))
                             {
-                                args['id'] = row.data['id'];
+                                args['id'] = row.data('id');
                             }
                             else
                             {
@@ -143,6 +143,25 @@
                                     args['id'] = cell.data('id');
                                 }
                             }
+                        }
+                    }
+                }
+                var frm = elem.parents("form[data-crud_model]:first");
+                if (frm.length)
+                {
+                    if (!args['model'] && frm.data('crud_model'))
+                    {
+                        args['model'] = frm.data('crud_model');
+                        if (frm.data('crud_scope'))
+                        {
+                            args['scope'] = frm.data('crud_scope');
+                        }
+                    }
+                    if (!args['id'])
+                    {
+                        if (frm.data('crud_id'))
+                        {
+                            args['id'] = frm.data('crud_id');
                         }
                     }
                 }

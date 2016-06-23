@@ -89,6 +89,11 @@ class Common extends Twig_Extension
         return $model->resolveView($view);
     }
 
+    function absoluteUrl($url)
+    {
+        return $this->app['config']->get('app.url') . $url;
+    }
+
     public function getFilters()
     {
         return [
@@ -97,6 +102,7 @@ class Common extends Twig_Extension
             new Twig_SimpleFilter('model_view', [$this, 'modelView']),
             new Twig_SimpleFilter('is_numeric', [$this, 'isNumeric']),
             new Twig_SimpleFilter('array_value', [$this, 'arrayValue']),
+            new Twig_SimpleFilter('abs_url', [$this, 'absoluteUrl'])
         ];
     }
 

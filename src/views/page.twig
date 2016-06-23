@@ -106,7 +106,7 @@
 <!-- ASSETS -->
 {% if config_get('crud_common.assets.js') %}
 {% for js in  config_get('crud_common.assets.js')%}
-<script src="{{ js }}" ></script>
+    <script src="{{ js|asset }}" ></script>
 {% endfor %}
 {% endif %}
 
