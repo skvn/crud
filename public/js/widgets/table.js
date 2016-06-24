@@ -333,7 +333,14 @@
             if (res.success)
             {
                 //$('.crud_table').DataTable().ajax.reload(null, false);
-                $('table[data-crud_table]').DataTable().ajax.reload(null, false);
+                $('table[data-crud_table]').each(function(){
+                    var t = $(this);
+                    if (res.crud_table && res.crud_table != t.data('crud_table'))
+                    {
+                        return;
+                    }
+                    t.DataTable().ajax.reload(null, false);
+                });
             }
         });
 
