@@ -30,5 +30,6 @@ return [
         Skvn\Crud\Form\Text :: class,
         Skvn\Crud\Form\Tree :: class,
         Skvn\Crud\Form\Radio :: class,
+        Skvn\Crud\Form\EntitySelect :: class,
     ]
 ];

@@ -126,10 +126,10 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
     public function getOptions()
     {
         $opts = [];
-        if (!empty($this->config['remote']))
-        {
-            return $this->getSelectedOptions();
-        }
+//        if (!empty($this->config['remote']))
+//        {
+//            return $this->getSelectedOptions();
+//        }
 
         if (!empty($this->config['method_options']))
         {

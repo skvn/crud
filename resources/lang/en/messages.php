@@ -31,7 +31,8 @@ return [
 	'close' => 'Close',
 	'search' => 'Search',
 	'yes' => 'Yes',
-	'no' => 'No'
+	'no' => 'No',
+	'choose' => 'Choose'
 
 
 

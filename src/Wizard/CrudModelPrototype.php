@@ -182,12 +182,12 @@ class CrudModelPrototype
                     $rel_arr['required'] = 1;
                 }
 
-                if (!empty($rel['remote']))
-                {
-                    $rel_arr['remote'] = 1;
-                } else {
-                    $rel_arr['remote'] = 0;
-                }
+//                if (!empty($rel['remote']))
+//                {
+//                    $rel_arr['remote'] = 1;
+//                } else {
+//                    $rel_arr['remote'] = 0;
+//                }
             }
 
             if (!empty($rel['local_key'])) {

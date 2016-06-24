@@ -14,11 +14,7 @@
             <option value="{{ k }}" {{ rel.type==k?'selected' }}>{{ v }}</option>
         {% endfor %}
     </select>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" value="1" name="relations[{{NUM}}][remote]" {{ rel.remote?'checked' }}  > Remote options
-            </label>
-        </div>
+
     </div>
     <div class="col col-xs-4">
         <input type="text"  class="form-control" data-attr="find" name="relations[{{NUM}}][find]" value="{{ rel.find }}" placeholder="Data find method [Optional]"  ><br />
