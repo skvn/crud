@@ -1,12 +1,10 @@
 {%  if input.config.type == 'multi_file' %}
     {% include input.getTemplate() %}
 {%  else  %}
-<div class="form-group" data-ref="{{ input.name }}">
-
-    <div class="col-md-{{ COL_WIDTH?COL_WIDTH:12 }}">
-     {% include input.controlTemplate() %}
-    </div>
-
+<div class="row">
+<div class="col-md-{{ COL_WIDTH?COL_WIDTH:12 }}" data-ref="{{ input.name }}" style="margin-top: 10px;">
+   {% include input.controlTemplate() %}
+</div>
 </div>
 
 {% endif %}
