@@ -60,7 +60,7 @@
             //modules: {
             //AnchorDialog: getAnchorDialog()
             //},
-            height: 500, linksArray: crud.win.crudAttachOptions
+            height: elem.data('height'), linksArray: crud.win.crudAttachOptions
         });
     }
 
@@ -72,7 +72,7 @@
         //}
         tinymce.init({
             selector: elem.attr('id'),
-            height: 430,
+            height: elem.data('height'),
             toolbar: "paste  | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | code",
             plugins: ["image", "link", "media", "code"] ,
             paste_as_text: true,

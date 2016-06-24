@@ -1,8 +1,14 @@
 {% include 'crud::crud/fields/label.twig' %}
 {% if input.config.editor_type %}
-<div style="height: 600px;">
+
 {% endif %}
-<textarea {{ input.config.extra|raw }} data-widget="crud_editor" data-type="{{ input.config.editor_type }}" {{ input.config.rows ? ('rows="'~input.config.rows~'"')|raw }} class="form-control" {{ input.config.required ? 'required' }} name="{{ input.name }}" id="{{ input.getUniqueId() }}"  >{{ input.getValue()}}</textarea>
+<textarea {{ input.config.extra|raw }}
+        data-widget="crud_editor"
+        data-height="{{ input.config.height?input.config.height:500 }}"
+        data-type="{{ input.config.editor_type }}"
+        class="form-control" {{ input.config.required ? 'required' }}
+        name="{{ input.name }}"
+        id="{{ input.getUniqueId() }}"  >{{ input.getValue()}}</textarea>
 {% if input.config.editor_type %}
-</div>
+
 {% endif %}

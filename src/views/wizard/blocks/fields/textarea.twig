@@ -7,12 +7,17 @@
         {% include 'crud::wizard/blocks/fields/field_hint' %}
     </div>
     <div class="col col-xs-2">
-        <div class="checkbox">
             <label>
-                <input type="checkbox" value="1" name="fields[{{ ALIAS }}][editor]"  {{ fld.editor?'checked' }} data-toggle="collapse" data-target="#ed_type_{{ ALIAS }}" > WYSIWYG editor
+                Height <input type="number" value="{{ fld.height?fld.height:500 }}" step="1" name="fields[{{ ALIAS }}][height]" style="width: 50px;"                        >
             </label>
-        </div>
     </div>
+    {#<div class="col col-xs-2">#}
+        {#<div class="checkbox">#}
+            {#<label>#}
+                {#<input type="checkbox" value="1" name="fields[{{ ALIAS }}][editor]"  {{ fld.editor?'checked' }} data-toggle="collapse" data-target="#ed_type_{{ ALIAS }}" > WYSIWYG editor#}
+            {#</label>#}
+        {#</div>#}
+    {#</div>#}
     <div class="col col-xs-2">
         {% include 'crud::wizard/blocks/fields/field_required' %}
     </div>

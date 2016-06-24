@@ -60,9 +60,10 @@ class TextArea extends Field implements WizardableField, FormControl, FormContro
     }
 
 
-
-
-
+    public function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig, CrudModelPrototype $modelPrototype)
+    {
+        unset($fieldConfig['editor']);
+    }
 
     public  function wizardCallbackModelConfig($fieldKey,array &$modelConfig,CrudModelPrototype $modelPrototype)
     {
