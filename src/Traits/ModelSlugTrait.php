@@ -145,5 +145,15 @@ trait ModelSlugTrait  {
         return $class :: where($column, $slug)->first();
     }
 
+    function slugTransliterate($args = [])
+    {
+        if (!empty($args['source']) && !empty($args[$args['source']]))
+        {
+            $slug = $this->translitRussian($args[$args['source']]);
+            $slug = Str :: slug($slug);
+            return $slug;
+        }
+    }
+
 
 }

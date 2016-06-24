@@ -107,7 +107,6 @@ class Form {
 
     function setFields($fields)
     {
-        
         $this->fields = [];
         foreach ($fields as $col => $colConfig)
         {
