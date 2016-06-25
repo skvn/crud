@@ -30,13 +30,17 @@ abstract class CrudModel extends Model
     protected $app;
     protected $codeColumn = 'id';
 
+    private $guessed_id = 0;
+
     protected $errors = [];
     protected static $rules = array();
     protected static $messages = array();
     protected $validator;
+    public $timestamps = false;
+    protected $ttmestamps_type = "timestamp";
 
 
-    public function __construct(array $attributes = array(), $validator = null)
+    public function __construct(array $attributes = array()/*, $validator = null*/)
     {
         $this->app = Container :: getInstance();
         $this->bootIfNotBooted();
@@ -44,7 +48,8 @@ abstract class CrudModel extends Model
         parent::__construct($attributes);
         $this->postconstruct();
 
-        $this->validator = $validator ?: $this->app['validator'];
+//        $this->validator = $validator ?: $this->app['validator'];
+        $this->validator = $this->app['validator'];
     }
 
     static function resolveClass($model)

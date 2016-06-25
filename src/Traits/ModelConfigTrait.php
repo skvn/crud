@@ -4,6 +4,7 @@ use Skvn\Crud\Form\Form;
 use Skvn\Crud\Exceptions\ConfigException;
 use Skvn\Crud\Models\CrudFile;
 use Skvn\Crud\Handlers\ListHandler;
+use Illuminate\Support\Arr;
 
 
 trait ModelConfigTrait
@@ -19,7 +20,6 @@ trait ModelConfigTrait
     protected $track_authors = false;
     protected $listObj = null;
 
-    private $guessed_id = 0;
 
 
     public static function bootModelConfigTrait()
@@ -56,14 +56,15 @@ trait ModelConfigTrait
         {
             $this->table = $this->config['table'] ?? $this->classViewName;
         }
-        $this->timestamps = $this->config['timestamps'] ?? false;
-        if ($this->timestamps)
-        {
-            if (($this->config['timestamps_type'] ?? "int") === "int")
-            {
-                $this->dateFormat = 'U';
-            }
-        }
+        //$this->timestamps = $this->config['timestamps'] ?? false;
+//        if ($this->timestamps)
+//        {
+//            //if (($this->config['timestamps_type'] ?? "int") === "int")
+//            if ($this->timestamps_type == "int")
+//            {
+//                $this->dateFormat = 'U';
+//            }
+//        }
         $this->track_authors = $this->config['authors'] ?? false;
 
         $this->config['file_params'] = [];
@@ -81,12 +82,12 @@ trait ModelConfigTrait
         return $list;
     }
 
-    public function getFields($prop='')
-    {
-        $form =  $this->confParam('fields');
-
-        return $prop ? (isset($form[$prop]) ? $form[$prop] : null) : $form;
-    }
+//    public function getFields($prop='')
+//    {
+//        $form =  $this->confParam('fields');
+//
+//        return $prop ? (isset($form[$prop]) ? $form[$prop] : null) : $form;
+//    }
 
     function getField($name, $throw = false)
     {
@@ -116,12 +117,12 @@ trait ModelConfigTrait
      */
     public function confParam($key, $default = null)
     {
-        
-        if (strpos($key, '.') === false) {
-            return (!empty($this->config[$key]) ? $this->config[$key] : $default);
-        } else {
-            return $this->app['config']->get('crud.' . $this->getTable() . '.' . $key, $default);
-        }
+        return Arr :: get($this->config, $key, $default);
+//        if (strpos($key, '.') === false) {
+//            return (!empty($this->config[$key]) ? $this->config[$key] : $default);
+//        } else {
+//            return $this->app['config']->get('crud.' . $this->getTable() . '.' . $key, $default);
+//        }
         
     }
 
