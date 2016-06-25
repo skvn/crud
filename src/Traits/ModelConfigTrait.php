@@ -88,14 +88,22 @@ trait ModelConfigTrait
         return $prop ? (isset($form[$prop]) ? $form[$prop] : null) : $form;
     }
 
-    function getField($name)
+    function getField($name, $throw = false)
     {
-        $field = $this->getFields($name);
-        if (!isset($field['name']))
+        $field = $this->config['fields'][$name] ?? [];
+        if (empty($field) && $throw)
         {
-            $field['name'] = $name;
+            throw new ConfigException('Field ' . $name . ' on ' . $this->classShortName . ' do not exist');
         }
+        $field['name'] = $name;
         return $field;
+
+//        $field = $this->getFields($name);
+//        if (!isset($field['name']))
+//        {
+//            $field['name'] = $name;
+//        }
+//        return $field;
     }
 
     /**
@@ -362,16 +370,16 @@ trait ModelConfigTrait
         return $key . "::" . $view;
     }//
 
-    public function isFormTabbed()
-    {
-        $form = $this->getListConfig('form');
-        if (isset($form[0]))
-        {
-            return false;
-        }
-        
-        return true;
-    }
+//    public function isFormTabbed()
+//    {
+//        $form = $this->getListConfig('form');
+//        if (isset($form[0]))
+//        {
+//            return false;
+//        }
+//
+//        return true;
+//    }
 
     
 

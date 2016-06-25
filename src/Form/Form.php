@@ -86,11 +86,15 @@ class Form {
 //        return $control;
     }
 
-    function addField($name, $config)
+    function addField($name, $config, $tab = null)
     {
         if (empty($config['name']))
         {
             $config['name'] = $name;
+        }
+        if (!empty($tab))
+        {
+            $config['tab'] = $tab;
         }
         $this->config[$name] = $config;
         $this->fields[$name] = self :: createControl($this->crudObj, $config);
@@ -98,10 +102,10 @@ class Form {
         {
             $this->fields[$name]->setValue($config['value']);
         }
-        if (!$this->crudObj->getField($name))
-        {
-            $this->crudObj->addFormField($name, isset($config['title']) ? $config['title'] : '', isset($config['type']) ? $config['type'] : "text", $config);
-        }
+//        if (!$this->crudObj->getField($name))
+//        {
+//            $this->crudObj->addFormField($name, isset($config['title']) ? $config['title'] : '', isset($config['type']) ? $config['type'] : "text", $config);
+//        }
         return $this;
     }
 
@@ -121,10 +125,20 @@ class Form {
         return $this;
     }
 
+    function addTab($tab_index, $tab)
+    {
+        $this->tabs[$tab_index] = $tab;
+    }
+
     function setTabs($tabs)
     {
         $this->tabs = $tabs;
         return $this;
+    }
+
+    function hasTabs()
+    {
+        return !empty($this->tabs);
     }
 
     function import($data)
