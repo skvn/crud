@@ -1,8 +1,8 @@
 {% extends "crud::page.twig" %}
 {% import "crud::widgets/macro.twig" as widgets%}
-{%  set TITLE =crudObj.getListConfig('title')  %}
-{%  set PAGE_TITLE =crudObj.getListConfig('title')  %}
-{%  set DESCRIPTION =crudObj.getListConfig('description')  %}
+{%  set TITLE =crudList.getParam('title')  %}
+{%  set PAGE_TITLE =crudList.getParam('title')  %}
+{%  set DESCRIPTION =crudList.getParam('description')  %}
 
 {% block content %}
 
@@ -19,7 +19,7 @@
         {#<li><a href="#">Home</a></li>#}
         {#<li>Basic</li>#}
     {#</ol>#}
-    <h1>{{ TITLE }} {% if crudObj.getListConfig('buttons.single_edit') %}<a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> {{ trans('crud::messages.add') }} {{ crudObj.confParam('ent_name_v') }}</a>{% endif %}</h1>
+    <h1>{{ TITLE }} {% if crudList.getParam('buttons.single_edit') %}<a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> {{ trans('crud::messages.add') }} {{ crudObj.confParam('ent_name_v') }}</a>{% endif %}</h1>
 
 {% endblock %}
 

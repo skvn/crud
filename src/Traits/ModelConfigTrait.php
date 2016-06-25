@@ -135,10 +135,15 @@ trait ModelConfigTrait
         return $this->listObj;
     }
 
-    public function getListConfig($prop='')
+    function scopeParam($key, $default = null)
     {
-        return $this->getList()->getParam($prop);
+        return $this->config['scopes'][$this->scope][$key] ?? $default;
     }
+
+//    public function getListConfig($prop='')
+//    {
+//        return $this->getList()->getParam($prop);
+//    }
 
     function getTreeConfig($prop = '')
     {

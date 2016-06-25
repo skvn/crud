@@ -1,9 +1,9 @@
 <div class="pull-right">
-    {% if crudObj.getListConfig('buttons.customize_columns') %}
+    {% if crudObj.getList().getParam('buttons.customize_columns') %}
         <a href="#" title="{{ trans('crud::messages.configure_cols') }}" data-click="crud_action" data-action="open_popup" data-popup="crud_table_columns" data-uri="{{ route('crud_table_columns') }}" data-model="{{ crudObj.classViewName }}" data-context="{{ crudObj.scope }}"><i class="fa fa-gear"></i></a>&nbsp;
     {% endif %}
     <a href="#" title="{{ trans('crud::messages.refresh_list') }}" data-click="crud_action" data-action="refresh_table" data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}"><i class="fa fa-refresh"></i></a>
-    {% if crudObj.getListConfig('buttons.export_excel') %}
+    {% if crudObj.getList().getParam('buttons.export_excel') %}
         <a  href="{{ route('crud_list_excel', {'model': crudObj.classViewName, 'scope': crudObj.scope}) }}{{ crudObj.flat_tree_uri_params }}"><i class="fa fa-file-excel-o"></i></a>
     {% endif %}
 </div>

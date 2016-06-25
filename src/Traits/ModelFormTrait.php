@@ -65,7 +65,7 @@ trait ModelFormTrait
                 'props' => $args
             ]);
 
-            $config = $this->getListConfig('form');
+            $config = $this->scopeParam('form');
             $plain = isset($config[0]);
             foreach ($config as $idx => $fld)
             {

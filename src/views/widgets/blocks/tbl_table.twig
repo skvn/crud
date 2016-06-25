@@ -18,19 +18,19 @@
        data-list_table_ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}"
        data-crud_table="{{ crudObj.classViewName }}"
        data-crud_scope="{{ crudObj.scope }}"
-       data-crud_noedit="{{ not crudObj.getListConfig('buttons.single_edit') }}"
-       data-btn_edit="{{ crudObj.getListConfig('buttons.single_edit') }}"
-       data-btn_delete="{{ crudObj.getListConfig('buttons.single_delete') }}"
-       data-form_type="{{ crudObj.getListConfig('edit_tab')?'tabs':'popup' }}"
-       data-list_type="{{ crudObj.getListConfig('type')?crudObj.getListConfig('type'):'dt' }}"
-       data-list_single_actions='{{ crudObj.getListConfig('list_single_actions')|json_encode|raw }}'
-       data-searchable="{{ crudObj.getListConfig('searchable') }}"
+       data-crud_noedit="{{ not crudObj.getList().getParam('buttons.single_edit') }}"
+       data-btn_edit="{{ crudObj.getList().getParam('buttons.single_edit') }}"
+       data-btn_delete="{{ crudObj.getList().getParam('buttons.single_delete') }}"
+       data-form_type="{{ crudObj.scopeParam('edit_tab')?'tabs':'popup' }}"
+       data-list_type="{{ crudObj.scopeParam('type')?crudObj.scopeParam('type'):'dt' }}"
+       data-list_single_actions='{{ crudObj.getList().getParam('list_single_actions')|json_encode|raw }}'
+       data-searchable="{{ crudObj.getList().getParam('searchable') }}"
        data-key_name="{{ crudObj.getKeyName() }}"
        {{ crudObj.isTree()?('data-parent_id="'~crudObj.getColumnTreePid()~'"')|raw }}
 
 >
     <thead>
-    {% for c in crudObj.getListConfig('list') %}
+    {% for c in crudObj.getList().getColumns() %}
         {% if not c.invisible %}
         <th {{ c.width ? ('width="'~c.width~'px"')|raw }}
                 data-list_ctype="{{ c.ctype }}"

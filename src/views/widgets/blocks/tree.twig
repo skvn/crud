@@ -1,3 +1,10 @@
 <div class="text-right"><input id="search_{{ crudObj.classViewName }}_{{ crudObj.scope }}" ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}" placeholder="Поиск" /></div>
-<div data-list_table_ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-crud_tree="{{ crudObj.classViewName }}" data-crud_scope="{{ crudObj.scope }}" data-btn_edit="{{ crudObj.getListConfig('buttons.single_edit') }}" data-btn_delete="{{ crudObj.getListConfig('buttons.single_delete') }}" data-form_type="{{ crudObj.getListConfig('edit_tab')?'tabs':'popup' }}" data-tree_pid_column="{{ crudObj.getColumnTreePid() }}" >
+<div
+        data-list_table_ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}"
+        data-crud_tree="{{ crudObj.classViewName }}"
+        data-crud_scope="{{ crudObj.scope }}"
+        data-btn_edit="{{ crudObj.getList().getParam('buttons.single_edit') }}"
+        data-btn_delete="{{ crudObj.getList().getParam('buttons.single_delete') }}"
+        data-form_type="{{ crudObj.getList().getParam('edit_tab')?'tabs':'popup' }}"
+        data-tree_pid_column="{{ crudObj.getColumnTreePid() }}" >
 </div>

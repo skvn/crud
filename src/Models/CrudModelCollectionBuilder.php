@@ -15,10 +15,10 @@ class CrudModelCollectionBuilder
     {
         $this->app = Container :: getInstance();
         $this->model = $model;
-        $this->columns = $this->model->getListConfig('list');
+        $this->columns = $this->model->getList()->getColumns();
         $this->params = $args;
-        $this->params['buttons'] = $this->model->getListConfig('buttons');
-        $this->params['sort'] = $this->model->getListConfig('sort');
+        $this->params['buttons'] = $this->model->getList()->getParam('buttons');
+        $this->params['sort'] = $this->model->getList()->getParam('sort');
         if (!isset($this->params['view_type']))
         {
             $this->params['view_type'] = "";
@@ -35,7 +35,7 @@ class CrudModelCollectionBuilder
 
     static function createDataTables(CrudModel $model, $args = [])
     {
-        $listType = $model->getListConfig('type');
+        $listType = $model->getList()->getParam('type');
         if ($listType && $listType == 'dt_tree') {
             $args['view_type'] = "data_tables_tree";
         } else {

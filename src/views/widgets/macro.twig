@@ -1,6 +1,6 @@
 {% macro table(crudObj) %}
 
-    {%  if  crudObj.getListConfig('edit_tab') %}
+    {%  if  crudObj.getList().getParam('edit_tab') %}
         <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.scope }}">
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-id="list"> <i class="fa fa-list"></i> {{ trans('crud::messages.list') }}</a></li>
@@ -58,7 +58,7 @@
         {{ crudObj.setScope(scope) }}
     {% endif %}
 
-    {%  if  crudObj.getListConfig('edit_tab') %}
+    {%  if  crudObj.getList().getParam('edit_tab') %}
         <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.scope }}">
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}"> <i class="fa fa-list"></i></a></li>

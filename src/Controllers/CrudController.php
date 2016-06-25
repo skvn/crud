@@ -42,7 +42,7 @@ class CrudController extends Controller
         $obj = CrudModel :: createInstance($model, $scope);
 
         $view = !empty($args['view']) ? $args['view'] : $obj->resolveView('index');
-        return $this->view->make($view, ['crudObj'=>$obj]);
+        return $this->view->make($view, ['crudObj'=>$obj, 'crudList' => $obj->getList()]);
 
     }//
 
@@ -51,7 +51,7 @@ class CrudController extends Controller
         $obj = CrudModel :: createInstance($model, $scope);
 
         $view = !empty($args['view']) ? $args['view'] : $obj->resolveView('popup_index');
-        return $this->view->make($view, ['crudObj'=>$obj]);
+        return $this->view->make($view, ['crudObj'=>$obj, 'crudList' => $obj->getList()]);
 
     }//
 
@@ -181,7 +181,7 @@ class CrudController extends Controller
             }
         }
 
-        $edit_view = $obj->getListConfig('edit_tab')?'tab':'edit';
+        $edit_view = $obj->scopeParam('edit_tab')?'tab':'edit';
         return $this->view->make($obj->resolveView($edit_view),['crudObj'=>$obj, 'crudForm' => $obj->getForm(), 'id'=>$id,'scope'=>$obj->getScope(), 'form_tabbed'=>$obj->getForm()->hasTabs()]);
 
     }

@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-lg-12">
         {%  if crudObj.isTree()%}
-            {%  if crudObj.getListConfig('type') == 'dt_tree' %}
+            {%  if crudList.getParam('type') == 'dt_tree' %}
                 {{ widgets.table(crudObj) }}
             {% else  %}
                 {{ widgets.tree(crudObj) }}

@@ -177,6 +177,10 @@ class ListHandler {
         return $this->getFilter()->fill($input);
     }
 
+    function getColumns()
+    {
+        return $this->columns;
+    }
 
     function getParam($prop = '')
     {

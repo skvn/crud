@@ -1,10 +1,10 @@
-{% if crudObj.getListConfig('buttons.mass_delete') %}
+{% if crudObj.getList().getParam('buttons.mass_delete') %}
     {% if (not crudObj.confParam('acl')) or crudObj.confParam('acl')|allowed('d') %}
         <a href="#" class="btn btn-danger crud_delete" disabled data-click="crud_action" data-action="table_mass_delete" data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}">{{ trans('crud::messages.delete_selected') }}</a>
     {% endif %}
 {% endif %}
 
-{% set mass_actions = crudObj.getListConfig('list_mass_actions') %}
+{% set mass_actions = crudObj.getList().getParam('list_mass_actions') %}
 {%  if mass_actions %}
 {%  for a in mass_actions %}
     <a
