@@ -1,2 +1,4 @@
+{% import "crud::crud.fields.macro" as controls %}
 {% include 'crud::crud/fields/label.twig' %}
-<input {{ input.config.extra|raw }} class="form-control" style="width: 100px;" name="{{ input.name }}"  {{ input.config.max?'max='~input.config.max~'' }} min="{{ input.config.min?input.config.min:'0' }}"  type="number" step="{{ input.config.step?input.config.step:'1' }}" value="{{ input.getValue() }}"  data-default="{{ input.getDefaultTo() }}" >
+{{ controls.number(input) }}
+

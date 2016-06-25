@@ -1,7 +1,3 @@
+{% import "crud::crud.fields.macro" as controls %}
 {% include 'crud::crud/fields/label.twig' %}
-<input {{ input.config.extra|raw }} class="form-control"
-        {{ input.config.required ? 'required' }}    name="{{ input.name }}"
-       type="text"
-       value="{{ input.getValue() }}"
-       data-default="{{ input.config.default }}"
-        />
+{{ controls.text(input) }}

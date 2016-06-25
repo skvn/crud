@@ -1,14 +1,3 @@
+{% import "crud::crud.fields.macro" as controls %}
 {% include 'crud::crud/fields/label.twig' %}
-{% if input.config.editor_type %}
-
-{% endif %}
-<textarea {{ input.config.extra|raw }}
-        data-widget="crud_editor"
-        data-height="{{ input.config.height?input.config.height:500 }}"
-        data-type="{{ input.config.editor_type }}"
-        class="form-control" {{ input.config.required ? 'required' }}
-        name="{{ input.name }}"
-        id="{{ input.getUniqueId() }}"  >{{ input.getValue()}}</textarea>
-{% if input.config.editor_type %}
-
-{% endif %}
+{{ controls.textarea(input) }}

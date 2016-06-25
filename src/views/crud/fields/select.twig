@@ -1,30 +1,4 @@
+{% import "crud::crud.fields.macro" as controls %}
 {% include 'crud::crud/fields/label.twig' %}
 <br />
-<select {{ input.config.extra|raw }}
-        data-model="{{ input.config.model }}"
-        data-widget="crud_select"
-        data-default="{{ input.config.default }}"
-        data-grouped="{{ input.isGrouped?'1':'0' }}"
-        class="form-control"
-        data-placeholder="-- {{ trans('crud::messages.choose') }}"
-        {{ input.config.required ? 'required' }}
-        name="{{ input.field }}{{input.config.multiple?'[]'}}" {{ input.config.multiple ? 'multiple' }}  >
-    <option value="">-- {{ trans('crud::messages.choose') }}</option>
-
-{% if input.isGrouped %}
-    {% for gr in input.getOptions() %}
-        <optgroup label="{{ gr.title }}">
-            {% for op in gr.options %}
-                <option value="{{ op.value }}" data-group="{{ gr.title }}" {{ op.selected ? 'selected' }}>{{ op.text }}</option>
-            {% endfor %}
-        </optgroup>
-       {% endfor %}
-
-{% else %}
-
-    {% for op in input.getOptions() %}
-        <option value="{{ op.value }}" {{ op.selected ? 'selected' }}>{{ op.text }}</option>
-    {% endfor %}
-
-{% endif %}
-</select>
+{{ controls.select(input) }}

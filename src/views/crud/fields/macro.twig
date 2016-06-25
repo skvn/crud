@@ -1,0 +1,107 @@
+{% macro control(input) %}
+    {% import _self as controls %}
+
+    {% if input.config.type == 'checkbox' %}
+        {{ controls.checkbox(input) }}
+    {% elseif input.config.type == 'ent_select' %}
+        {{ controls.ent_select(input) }}
+    {% elseif input.config.type == 'number' %}
+        {{ controls.number(input) }}
+    {% elseif input.config.type == 'select' %}
+        {{ controls.select(input) }}
+    {% elseif input.config.type == 'text' %}
+        {{ controls.text(input) }}
+    {% elseif input.config.type == 'textarea' %}
+        {{ controls.textarea(input) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro checkbox(input) %}
+    <input data-widget="crud_checkbox" class="crud_checkbox i-checks" id="{{  input.getUniqueId() }}" data-name="{{ input.name }}"    type="checkbox"  {{ input.getValue()>0?'checked':''}} />
+    <input type="hidden" {{ input.config.extra|raw }} name="{{ input.field }}" id="_{{  input.model.id }}"  value="{{ input.getValue() }}"  data-default="{{ input.config.default }}" />
+{% endmacro %}
+
+{% macro ent_select(input) %}
+    <select {{ input.config.extra|raw }}
+            data-model="{{ input.config.model }}"
+            data-widget="crud_ent_select"
+            data-default="{{ input.config.default }}"
+            class="form-control"
+            data-placeholder="-- Выберите"
+            {{ input.config.required ? 'required' }}
+            name="{{ input.field }}{{input.config.multiple?'[]'}}" {{ input.config.multiple ? 'multiple' }} style="min-width:300px" >
+
+        {% for op in input.getOptions() %}
+            <option value="{{ op.value }}" {{ op.selected ? 'selected' }}>{{ op.text }}</option>
+        {% endfor %}
+    </select>
+{% endmacro %}
+
+{% macro number(input) %}
+    <input {{ input.config.extra|raw }}
+           class="form-control"
+           style="width: 100px;"
+           name="{{ input.name }}"
+           {{ input.config.max?'max='~input.config.max~'' }}
+           min="{{ input.config.min?input.config.min:'0' }}"
+           type="number"
+           step="{{ input.config.step?input.config.step:'1' }}"
+           value="{{ input.getValue() }}"
+           data-default="{{ input.getDefaultTo() }}" >
+{% endmacro %}
+
+{% macro select(input) %}
+    <select {{ input.config.extra|raw }}
+            data-model="{{ input.config.model }}"
+            data-widget="crud_select"
+            data-default="{{ input.config.default }}"
+            data-grouped="{{ input.isGrouped?'1':'0' }}"
+            class="form-control"
+            data-placeholder="-- {{ trans('crud::messages.choose') }}"
+            {{ input.config.required ? 'required' }}
+            name="{{ input.field }}{{input.config.multiple?'[]'}}" {{ input.config.multiple ? 'multiple' }}  >
+        <option value="">-- {{ trans('crud::messages.choose') }}</option>
+
+        {% if input.isGrouped %}
+            {% for gr in input.getOptions() %}
+                <optgroup label="{{ gr.title }}">
+                    {% for op in gr.options %}
+                        <option value="{{ op.value }}" data-group="{{ gr.title }}" {{ op.selected ? 'selected' }}>{{ op.text }}</option>
+                    {% endfor %}
+                </optgroup>
+            {% endfor %}
+
+        {% else %}
+
+            {% for op in input.getOptions() %}
+                <option value="{{ op.value }}" {{ op.selected ? 'selected' }}>{{ op.text }}</option>
+            {% endfor %}
+
+        {% endif %}
+    </select>
+{% endmacro %}
+
+{% macro text(input) %}
+    <input {{ input.config.extra|raw }} class="form-control"
+            {{ input.config.required ? 'required' }}    name="{{ input.name }}"
+                                        type="text"
+                                        value="{{ input.getValue() }}"
+                                        data-default="{{ input.config.default }}"
+    />
+{% endmacro %}
+
+{% macro textarea(input) %}
+    {% if input.config.editor_type %}
+
+    {% endif %}
+    <textarea {{ input.config.extra|raw }}
+            data-widget="crud_editor"
+            data-height="{{ input.config.height?input.config.height:500 }}"
+            data-type="{{ input.config.editor_type }}"
+            class="form-control" {{ input.config.required ? 'required' }}
+            name="{{ input.name }}"
+            id="{{ input.getUniqueId() }}"  >{{ input.getValue()}}</textarea>
+    {% if input.config.editor_type %}
+
+    {% endif %}
+{% endmacro %}

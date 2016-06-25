@@ -1,17 +1,5 @@
+{% import "crud::crud.fields.macro" as controls %}
 {% include 'crud::crud/fields/label.twig' %}
 <br />
-<select {{ input.config.extra|raw }}
-        data-model="{{ input.config.model }}"
-        data-widget="crud_ent_select"
-        data-default="{{ input.config.default }}"
-        class="form-control"
-        data-placeholder="-- Выберите"
-        {{ input.config.required ? 'required' }}
-        name="{{ input.field }}{{input.config.multiple?'[]'}}" {{ input.config.multiple ? 'multiple' }} style="min-width:300px" >
+{{ controls.ent_select(input) }}
 
-    {% for op in input.getOptions() %}
-        <option value="{{ op.value }}" {{ op.selected ? 'selected' }}>{{ op.text }}</option>
-    {% endfor %}
-
-
-</select>
