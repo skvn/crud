@@ -342,6 +342,7 @@ class CrudModelCollectionBuilder
 
         if (!empty($this->params['order']))
         {
+            $this->collectionQuery->getQuery()->orders = [];
             $order = $this->params['order'];
             if (is_array($order))
             {

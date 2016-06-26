@@ -40,6 +40,10 @@ class DateTime extends Field implements WizardableField, FormControl
             {
                 return date($this->config['format'], $this->value->timestamp);
             }
+            if (time() - $this->value < 2)
+            {
+                return "";
+            }
             return date($this->config['format'], $this->value);
         }
         else
