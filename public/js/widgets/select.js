@@ -8,6 +8,10 @@
 
             });
 
+        },
+        refresh: function()
+        {
+            this.element.selectpicker('refresh');
         }
     });
 })(jQuery, CRUD, window)
