@@ -16,21 +16,25 @@ class Date extends Field implements WizardableField, FormControl{
     function pullFromModel()
     {
         $this->value = $this->model->getAttribute($this->field);
-        if (!$this->value)
-        {
-            if ($this->isInt())
-            {
-                $this->value = time();
-            }
-            else
-            {
-                $this->value = (new \DateTime('now'));
-            }
-        }
+//        if (!$this->value)
+//        {
+//            if ($this->isInt())
+//            {
+//                $this->value = time();
+//            }
+//            else
+//            {
+//                $this->value = (new \DateTime('now'));
+//            }
+//        }
     }
 
     function getOutputValue():string
     {
+        if (empty($this->value))
+        {
+            return null;
+        }
         if ($this->isInt())
         {
             return date($this->config['format'], $this->value);
@@ -41,7 +45,7 @@ class Date extends Field implements WizardableField, FormControl{
 
     function pullFromData(array $data)
     {
-        if (isset($data[$this->field]))
+        if (!empty($data[$this->field]))
         {
             if ($this->isInt())
             {
