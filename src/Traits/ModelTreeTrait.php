@@ -19,7 +19,7 @@ Page::find(2)->getTreeDepth()
 */
 
 
-trait TreeTrait  {
+trait ModelTreeTrait  {
 
     //protected $columnTreePid = 'tree_pid';
     //protected $columnTreeOrder = 'tree_order';

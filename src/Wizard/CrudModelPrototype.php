@@ -581,6 +581,10 @@ class CrudModelPrototype
                     }
                 }
 
+                if (empty($this->config_data['is_tree']) && isset($this->config_data['list'][$alias]['list_type']))
+                {
+                    unset($this->config_data['list'][$alias]['list_type']);
+                }
 
             }
 

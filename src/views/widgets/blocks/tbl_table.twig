@@ -1,4 +1,4 @@
-{% if crudObj.getList().getParam('type') == 'dt_flat' %}
+{% if crudObj.getList().getParam('list_type') == 'dt_flat' %}
 <ol class="breadcrumb">
     {% for bc in crudObj.breadcrumbs %}
         <li>
@@ -22,7 +22,7 @@
        data-btn_edit="{{ crudObj.getList().getParam('buttons.single_edit') }}"
        data-btn_delete="{{ crudObj.getList().getParam('buttons.single_delete') }}"
        data-form_type="{{ crudObj.scopeParam('edit_tab')?'tabs':'popup' }}"
-       data-list_type="{{ crudObj.scopeParam('type')?crudObj.scopeParam('type'):'dt' }}"
+       data-list_type="{{ crudObj.scopeParam('list_type')?crudObj.scopeParam('list_type'):'dt' }}"
        data-list_single_actions='{{ crudObj.getList().getParam('list_single_actions')|json_encode|raw }}'
        data-searchable="{{ crudObj.getList().getParam('searchable') }}"
        data-key_name="{{ crudObj.getKeyName() }}"

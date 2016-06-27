@@ -77,9 +77,9 @@
                     <div data-rel="is_tree" {{ model.tree?'':'style="display:none;"' }}>
                         <label>
                             List type
-                            <select name="list[{{ ALIAS }}][type]"  class="form-control default_select" style="width:250px;">
+                            <select name="list[{{ ALIAS }}][list_type]"  class="form-control default_select" style="width:250px;">
                                 {% for op_val, op_text in wizard.getAvailableTreeLists() %}
-                                    <option value="{{ op_val }}" {{ list.type==op_val?'selected' }}>{{ op_text }}</option>
+                                    <option value="{{ op_val }}" {{ list.list_type==op_val?'selected' }}>{{ op_text }}</option>
                                 {% endfor %}
                             </select>
                         </label>

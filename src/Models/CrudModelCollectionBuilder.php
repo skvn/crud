@@ -35,7 +35,7 @@ class CrudModelCollectionBuilder
 
     static function createDataTables(CrudModel $model, $args = [])
     {
-        $listType = $model->getList()->getParam('type');
+        $listType = $model->getList()->getParam('list_type');
         if ($listType && $listType == 'dt_tree') {
             $args['view_type'] = "data_tables_tree";
         } else {
@@ -192,15 +192,15 @@ class CrudModelCollectionBuilder
             }
         }
 
-        if (isset ($this->params[$this->model->getColumnTreePid()]))
-        {
-            $root = $this->params[$this->model->getColumnTreePid()];
-            if (intval($root) <= 0)
-            {
-                $root = $this->model->rootId();
-            }
-            $conditions[$this->model->getColumnTreePid()]['cond'] = [$this->model->getColumnTreePid(), '=', $root];
+        if ($this->model->isTree()) {
+            if (isset ($this->params[$this->model->getColumnTreePid()])) {
+                $root = $this->params[$this->model->getColumnTreePid()];
+                if (intval($root) <= 0) {
+                    $root = $this->model->rootId();
+                }
+                $conditions[$this->model->getColumnTreePid()]['cond'] = [$this->model->getColumnTreePid(), '=', $root];
 
+            }
         }
 
         //\Log :: info($conditions, ['browsify' => 1]);
