@@ -650,6 +650,12 @@ class Wizard
     }
 
 
+    /**
+     * Get available formatters for model by it's table name
+     *
+     * @param $table
+     * @return array
+     */
     public function getAvailableFormatters($table)
     {
         $formatters = [];
@@ -664,10 +670,22 @@ class Wizard
     }//
 
 
+    /**
+     * Get control instance by type alias
+     *
+     * @param $type
+     * @return null|\Skvn\Crud\Contracts\FormControl
+     */
     public function getControlByType($type)
     {
         return Form::getControlByType($type);
     }
+
+    /**
+     * Get select options for on_delete select
+     *
+     * @return array
+     */
     public function getOndeleteActions()
     {
         return [
@@ -676,6 +694,24 @@ class Wizard
             'set_null'=>'Set null',
             
         ];
+    }
+
+
+    /**
+     * Get available options for audit trail
+     * 
+     * @return array
+     */
+    public function getTrackHistoryOptions()
+    {
+
+        return [
+            ''=>'Do not track',
+            'detail'=>'Detailed',
+            'summary'=>'Summary',
+
+        ];
+
     }
 
 }

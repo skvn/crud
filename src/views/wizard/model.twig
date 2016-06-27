@@ -5,7 +5,7 @@
 
         .wizard > .content
         {
-            min-height: 700px;;
+            min-height: 750px;;
         }
 
         .wizard > .content > .body
@@ -38,7 +38,7 @@
                 <div class="panel-body">
             <div class="row">
 
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                     <div class="form-group">
                         <label for="name">Model name *</label>
                         <input type="text" class="form-control" id="name" data-model_name="1" name="name" value="{{ model.name }}" disabled />
@@ -92,14 +92,21 @@
                         <label for="ent_name_v">(Russian only) Model entity name (Винительный падеж)</label>
                         <input type="text" class="form-control" id="ent_name_v" name="ent_name_v"  value="{{ model.ent_name_v }}" />
                     </div>
-
-
-
                     <div class="form-group">
                         <label for="dialog_width">Modal dialog width (optional)</label>
                         <input type="text" class="form-control" id="dialog_width" name="dialog_width" value="{{ model.dialog_width }}"  />
                     </div>
 
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="dialog_width">Audit trail. Track model changes</label>
+                        <select name="track_history" id="track_history" class="form-control default_select" style="width:250px;">
+                            {% for op_val, op_text in wizard.getTrackHistoryOptions() %}
+                                <option value="{{ op_val }}" {{ model.track_history==op_val?'selected' }}>{{ op_text }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
 
             </div>

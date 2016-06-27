@@ -37,7 +37,12 @@ abstract class CrudModel extends Model
     protected static $messages = array();
     protected $validator;
     public $timestamps = false;
-    protected $ttmestamps_type = "timestamp";
+
+    /**
+     * Flag for tracking created_by and updated_by attributes
+     * @var bool
+     */
+    public $trackAuthors = false;
 
 
     public function __construct(array $attributes = array()/*, $validator = null*/)

@@ -16,8 +16,7 @@ trait ModelConfigTrait
     public $scope = "default";
 
 
-    /* Flag for tracking created_by  and updated_by */
-    protected $track_authors = false;
+    
     protected $listObj = null;
 
 
@@ -65,7 +64,7 @@ trait ModelConfigTrait
 //                $this->dateFormat = 'U';
 //            }
 //        }
-        $this->track_authors = $this->config['authors'] ?? false;
+        //$this->track_authors = $this->config['authors'] ?? false;
 
         $this->config['file_params'] = [];
     }
