@@ -154,7 +154,7 @@ trait ModelInjectTrait {
         $const = ($op == "create") ? "static::CREATED_BY" : "static::UPDATED_BY";
         $fld = ($op == "create") ? "created_by" : "updated_by";
         $prop = defined($const) ? constant($const) : $fld;
-        if ($this->track_authors && $this->app['auth']->check())
+        if ($this->trackAuthors && $this->app['auth']->check())
         {
             $this->$prop = $this->app['auth']->user()->id;
         }
