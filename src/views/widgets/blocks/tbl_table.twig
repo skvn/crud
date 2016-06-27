@@ -1,4 +1,4 @@
-{% if crudObj.getTreeConfig('use_list') %}
+{% if crudObj.getList().getParam('type') == 'dt_flat' %}
 <ol class="breadcrumb">
     {% for bc in crudObj.breadcrumbs %}
         <li>

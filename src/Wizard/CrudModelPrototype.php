@@ -600,6 +600,10 @@ class CrudModelPrototype
             $this->config_data['traits'][] = $this->app['config']['crud_common.history_trait'];
         }
 
+        if (!empty($this->config_data['is_tree'])) {
+            $this->config_data['traits'][] = $this->app['config']['crud_common.tree_trait'];
+        }
+
 
     }//
 
@@ -642,11 +646,17 @@ class CrudModelPrototype
         }
         if (!empty($this->config_data['is_tree']))
         {
-            $conf['tree'] = 1;
-            $conf['tree_level_column'] = "tree_level";
-            $conf['tree_path_column'] = "tree_path";
-            $conf['tree_pid_column'] = "tree_pid";
-            $conf['tree_order_column'] = "tree_order";
+            if (empty($this->old_config_data['tree'])) {
+                $conf['tree'] =
+                    [
+                        'level_column' => "tree_level",
+                        'path_column' => "tree_path",
+                        'pid_column' => "tree_pid",
+                        'order_column' => "tree_order"
+                    ];
+            } else {
+                $conf['tree'] = $this->old_config_data['tree'];
+            }
         }
         if (!empty($this->config_data['acl']))
         {

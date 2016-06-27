@@ -166,7 +166,7 @@ trait ModelConfigTrait
 
     function isTree()
     {
-        return !empty($this->config['tree']) && !$this->getTreeConfig('use_list');
+        return !empty($this->config['tree'])/* && !$this->getTreeConfig('use_list')*/;
     }
 
     function getDescribedColumnValue($col, $format = false, $format_args = [])

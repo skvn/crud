@@ -47,11 +47,13 @@
 
                     <div class="form-group">
                         <label class="checkbox-inline">
-                            <input type="checkbox"  id="is_tree" value="1" name="is_tree" {{ model.tree ? 'checked' }}  />
+                            <input type="checkbox" onchange="$('div[data-rel=is_tree]').toggle();"  id="is_tree" value="1" name="is_tree" {{ model.tree ? 'checked' }}  />
                             <b>Model is tree <span class="text-danger">If the table doesn't contain `tree_path`, `tree_order`,
                                     `tree_pid`, `tree_depth` columns - a migration will be created</span></b>
                         </label>
                     </div>
+
+
 
                     <div class="form-group">
                         <label for="acl">Acl</label>

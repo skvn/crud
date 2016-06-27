@@ -714,4 +714,21 @@ class Wizard
 
     }
 
+    /**
+     * Get available options for tree list
+     *
+     * @return array
+     */
+    public function getAvailableTreeLists()
+    {
+
+        return [
+            'jstree'=>'JSTree',
+            'dt_tree'=>'DataTables tree grid',
+            'dt_flat'=>'Datatables flat grid with breadcrumbs',
+
+        ];
+
+    }
+
 }

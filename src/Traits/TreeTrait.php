@@ -416,8 +416,9 @@ trait TreeTrait  {
 
     function saveTree($input)
     {
-        if ($this->id == $this->rootId())
+        if ($this->id == $this->rootId() || (!isset($input[$this->getColumnTreePid()])))
         {
+
             // no tree actions on root
             //$this->fill($input);
             return $this->save();
@@ -426,10 +427,7 @@ trait TreeTrait  {
         $treeAction = $input['tree_action'] ?? '';
 
         $oldParent = $this->getAttribute($this->getColumnTreePid());
-        if (!isset($input[$this->getColumnTreePid()]))
-        {
-            $input[$this->getColumnTreePid()] = $this->rootId();
-        }
+
         $parent = $input[$this->getColumnTreePid()];
 
         if (empty($parent))

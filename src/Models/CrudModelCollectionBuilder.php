@@ -145,11 +145,6 @@ class CrudModelCollectionBuilder
             $basic->orderBy($this->model->getColumnTreePath() , 'asc');
             $basic->orderBy($this->model->getColumnTreeOrder(), 'asc');
 
-            if (isset ($this->params['parent_id']))
-            {
-                $basic->where($this->model->getColumnTreePid(), $this->params['parent_id']);
-            }
-
         }
         else
         {
@@ -167,10 +162,10 @@ class CrudModelCollectionBuilder
 
     function applyContextFilter()
     {
-        if ($this->model->isTree())
-        {
-            return $this;
-        }
+//        if ($this->model->isTree())
+//        {
+//            return $this;
+//        }
         $methodCond = camel_case('append_' . $this->model->getScope() . '_conditions');
         $conditions = $this->model->getList()->getFilter()->getConditions();
         if (method_exists($this->model, $methodCond))
@@ -196,6 +191,18 @@ class CrudModelCollectionBuilder
                 $conditions[] = ['cond' => $c];
             }
         }
+
+        if (isset ($this->params[$this->model->getColumnTreePid()]))
+        {
+            $root = $this->params[$this->model->getColumnTreePid()];
+            if (intval($root) <= 0)
+            {
+                $root = $this->model->rootId();
+            }
+            $conditions[$this->model->getColumnTreePid()]['cond'] = [$this->model->getColumnTreePid(), '=', $root];
+
+        }
+
         //\Log :: info($conditions, ['browsify' => 1]);
         if (is_array($conditions))
         {

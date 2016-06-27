@@ -10,7 +10,7 @@
 
 
                 <input type="text" class="form-control" id="list[{{ ALIAS }}][title]" name="list[{{ ALIAS }}][title]" value="{{ list.title }}" placeholder="List title" value="_TITLE_" required />
-                <input type="text" class="form-control" id="list[{{ ALIAS }}][description]" name="list[{{ ALIAS }}][description]"  value="{{ list.description }}" placeholder="List short description" required  />
+                {#<input type="text" class="form-control" id="list[{{ ALIAS }}][description]" name="list[{{ ALIAS }}][description]"  value="{{ list.description }}" placeholder="List short description" required  />#}
             </h3>
         </div>
         <div class="panel-body">
@@ -72,6 +72,18 @@
                         {% endif %}
                     </div>
                     <a href="#" class="btn btn-primary"  data-click="crud_action"  data-action="wizard_add_list_col" data-skip_arr="1" data-fragment="sort_tpl_{{ ALIAS }}" data-container="list_sorts_{{ ALIAS }}"><i class="fa fa-plus"></i> Add sort option</a>
+
+                    <hr />
+                    <div data-rel="is_tree" {{ model.tree?'':'style="display:none;"' }}>
+                        <label>
+                            List type
+                            <select name="list[{{ ALIAS }}][type]"  class="form-control default_select" style="width:250px;">
+                                {% for op_val, op_text in wizard.getAvailableTreeLists() %}
+                                    <option value="{{ op_val }}" {{ list.type==op_val?'selected' }}>{{ op_text }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
 
                 </div>
                 </div>
