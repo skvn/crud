@@ -192,7 +192,7 @@ class CrudModelCollectionBuilder
             }
         }
 
-        if (isset ($this->params[$this->model->getColumnTreePid()]))
+        if ($this->model->isTree() && isset ($this->params[$this->model->getColumnTreePid()]))
         {
             $root = $this->params[$this->model->getColumnTreePid()];
             if (intval($root) <= 0)
