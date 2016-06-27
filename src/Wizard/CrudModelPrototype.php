@@ -595,28 +595,10 @@ class CrudModelPrototype
     private function prepareConfigData()
     {
 
+
         if (!empty($this->config_data['track_history'])) {
             $this->config_data['traits'][] = $this->app['config']['crud_common.history_trait'];
         }
-
-//        //track timestamps?
-//        if (isset($this->column_types['created_at']) && isset($this->column_types['updated_at']))
-//        {
-//            if ($this->column_types['created_at'] == 'int' && $this->column_types['updated_at']=='int')
-//            {
-//                $this->config_data['timestamps'] = 'int';
-//            } else {
-//                $this->config_data['timestamps'] = $this->column_types['created_at'];
-//            }
-//        }
-//
-//        //track author?
-//        if (isset($this->column_types['created_by']) && isset($this->column_types['updated_by']))
-//        {
-//
-//             $this->config_data['track_author'] = 1;
-//
-//        }
 
 
     }//
@@ -690,10 +672,10 @@ class CrudModelPrototype
 //            $conf['timestamps'] = true;
 //            $conf['timestamps_type'] = $this->config_data['timestamps'];
 //        }
-//        if (!empty($this->config_data['track_authors']))
-//        {
-//            $conf['authors'] = true;
-//        }
+        if (!empty($this->config_data['track_history']))
+        {
+            $conf['track_history'] = $this->config_data['track_history'];
+        }
 
 
         if (!empty($this->config_data['list']))
