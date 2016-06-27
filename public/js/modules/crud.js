@@ -323,7 +323,16 @@
                     }
                     else if (elem.data('callback'))
                     {
-                        eval(elem.data('callback'));
+                        var idx = 'callback_' + elem.data('callback');
+                        if (typeof(crud_actions[idx]) != "undefined")
+                        {
+                            res['elem'] = elem;
+                            crud_actions[idx](res);
+                        }
+                        else
+                        {
+                            eval(elem.data('callback'));
+                        }
                     }
                     else
                     {

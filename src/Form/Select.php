@@ -197,19 +197,19 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
 
     }
 
-    private function getSelectedOptions()
-    {
-        if (is_null($this->value))
-        {
-            return [];
-        }
-
-
-        $class = CrudModel :: resolveClass($this->config['model']);
-        $obj = new $class();
-        $coll = $obj->find($this->getValueAsArray());
-        return $this->flatOptions($coll, $obj);
-    }
+//    private function getSelectedOptions()
+//    {
+//        if (is_null($this->value))
+//        {
+//            return [];
+//        }
+//
+//
+//        $class = CrudModel :: resolveClass($this->config['model']);
+//        $obj = new $class();
+//        $coll = $obj->find($this->getValueAsArray());
+//        return $this->flatOptions($coll, $obj);
+//    }
 
     private function getModelOptions()
     {
@@ -303,7 +303,7 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
                     $pref .= $o->internal_code . '. ';
                 }
             }
-            $options[] = ['value' => $o->id, 'text' => $pref . $o->getTitle(), 'selected' => $this->isSelected($o->id)];
+            $options[] = ['value' => $o->getKey(), 'text' => $pref . $o->getTitle(), 'selected' => $this->isSelected($o->getKey())];
         }
         return $options;
     }

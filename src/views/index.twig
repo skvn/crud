@@ -19,7 +19,13 @@
         {#<li><a href="#">Home</a></li>#}
         {#<li>Basic</li>#}
     {#</ol>#}
-    <h1>{{ TITLE }} {% if crudList.getParam('buttons.single_edit') %}<a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> {{ trans('crud::messages.add') }} {{ crudObj.confParam('ent_name_v') }}</a>{% endif %}</h1>
+    <h1>{{ TITLE }}
+        {% if crudList.getParam('buttons.single_edit') %}
+            {% if not crudList.getParam('noadd') %}
+                <a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> {{ trans('crud::messages.add') }} {{ crudObj.confParam('ent_name_v') }}</a>
+            {% endif %}
+        {% endif %}
+    </h1>
 
 {% endblock %}
 

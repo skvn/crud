@@ -270,6 +270,17 @@ abstract class CrudModel extends Model
         return $this->crudFormatValue('<strong>%s</strong>', [$val]);
     }
 
+    /**
+     * Email value as mailto link
+     *
+     * @param $val
+     * @param array $args
+     * @return string
+     */
+    function crudFormatValueMailto($val, $args = [])
+    {
+        return $this->crudFormatValue('<a href="mailto:%s">%s</a>', [$val, $val]);
+    }
 
     /**
      * Make an activity icon out of the boolean or 1/0 value
