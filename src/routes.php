@@ -20,6 +20,7 @@ Route::group($adm_route_params, function() {
     Route::get('crud_setup/get_field_row/{name}',                   array(                                      'uses' => 'WizardController@getFieldRowTpl'));
     Route::post('crud_setup/migration/create',                      array('as'=>'wizard_migrate_create',        'uses' => 'WizardController@migrationCreate'));
     Route::any('crud_setup/table_cols/{table}',                     array(                                      'uses' => 'WizardController@getTableColumns'));
+    Route::any('crud_setup/model_cols/{model}',                     array(                                      'uses' => 'WizardController@getModelColumns'));
     Route::any('crud_setup/menu',                                   array('as' => 'wizard_menu',                'uses' => 'WizardController@menu'));
     Route::any('crud_setup/{table}',                                array('as' => 'wizard_model',               'uses' => 'WizardController@model'));
     Route::any('crud_setup',                                        array('as' => 'wizard_index',               'uses' => 'WizardController@index'));

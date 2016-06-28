@@ -246,6 +246,79 @@
                 elem.parents('div[data-relation]').first().remove();
                 adjust_step_height()
             },
+
+            wizard_sort_options_popup: function (elem)
+            {
+                var model = '';
+                if (elem.data('model'))
+                {
+                    model = elem.data('model');
+                } else if (elem.data('model_field')) {
+                    model = $(elem.data('model_field')).val();
+                }
+
+
+                if (model != '')
+                {
+                    $.get('/admin/crud_setup/model_cols/'+model, function(fields) {
+
+                        var options = "<option value=''>Choose column</option>";
+                        for (var i in fields)
+                        {
+                            options += "<option value='" + fields[i] + "'>" + fields[i] + "</option>";
+                        }
+
+                        $('#sort_options').find('select[data-rel=column]').html(options);
+
+                        var $cop = $(elem.data('current_options_container'));
+                        if ($cop.val())
+                        {
+                            var existing = JSON.parse($cop.val());
+                            for (var i in existing )
+                            {
+                                var row = $('#sort_options_tpl').clone().attr('id','');
+                                row.attr('data-added', 1);
+                                row.find('select').eq(0).val(i);
+                                row.find('select').eq(1).val(existing[i]);
+                                row.appendTo($('#sort_options_container')).show();
+                            }
+                        }
+                        $('#sort_options').attr('data-cop_container',elem.data('current_options_container'));
+                        $('#sort_options').attr('data-display_container', elem.data('display_container'));
+
+                        $('#sort_options').modal({keyboard: false, show: true, backdrop: 'static'});
+                        
+                    }, 'json');
+                }
+            },
+
+            wizard_sort_options_save: function (elem)
+            {
+
+                var $cop = $($('#sort_options').attr('data-cop_container'));
+                var $disp = $($('#sort_options').attr('data-display_container'));
+
+                var $cols = $('#sort_options').find('select[name="popup_sort_option_col[]"]');
+                var $orders = $('#sort_options').find('select[name="popup_sort_option_order[]"]');
+                var sort_options = {};
+                $disp.html('');
+                $cols.each(function (i) {
+
+                    var col = $(this).val();
+                    if (col)
+                    {
+                        var order = $orders.eq(i).val();
+                        sort_options[col] = order;
+                        $disp.append($('<li>'+col+':'+order+'</li>'));
+
+                    }
+                });
+                if (sort_options) {
+                    $cop.val(JSON.stringify(sort_options));
+                }
+                $('#sort_options').modal('hide');
+            },
+            
             wizard_toggle_rel_pivot: function (elem) {
 
                 if (elem.prop('checked'))
@@ -283,8 +356,6 @@
                                     $(this).html(options);
 
                                 });
-
-
                             }
                         }, 'json');
 

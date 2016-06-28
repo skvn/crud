@@ -184,6 +184,7 @@
 {% block modals %}
     {#<script src="{{ 'js/plugins/staps/jquery.steps.js'|asset }}"></script>#}
     {#<script src="{{ 'js/plugins/validate/jquery.validate.min.js'|asset }}"></script>#}
+    {% include 'crud::wizard/blocks/sort_popup' %}
     <script src="{{ 'js/modules/wizard.js'|asset }}"></script>
     <script>
         var models = {{ wizard.getAllModelColumns()|json_encode|raw }};

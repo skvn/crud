@@ -1,0 +1,21 @@
+<b>Default sort options</b><br>
+<div id="sort_relation_{{NUM}}">
+    <div style="display: none">
+                    <textarea name="relations[{{NUM}}][sort]" id="relations_{{NUM}}_sort">
+                        {{ rel.sort|json_encode }}
+                    </textarea>
+    </div>
+    <div id="sort_relation_display_{{NUM}}">
+        {% if rel.sort %}
+            {%  for sort_column,sort_order in rel.sort %}
+                <li>{{ sort_column }}: {{ sort_order }}</li>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+</div>
+{% set sort_cop_container="#relations_"~NUM~"_sort" %}
+            {% set sort_display_container="#sort_relation_display_"~NUM %}
+            {% set sort_model="" %}
+            {% set sort_model_field="#relations_"~NUM~"_model" %}
+            {% include 'crud::wizard/blocks/sort_options_control' %}

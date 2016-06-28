@@ -467,22 +467,27 @@ class Wizard
     /**
      * Get an array of all columns for all crud-models
      *
+     * @param $forModel
      * @return array
      */
-    function getAllModelColumns()
+    function getAllModelColumns($forModel=null)
     {
         $ret = [];
         $configs = $this->getCrudConfigs();
         foreach ($configs as $model=>$cfg)
         {
             $ret[snake_case($model)] = $this->getTableColumns($cfg['table']);
+            if ($forModel && snake_case($model) == snake_case($forModel))
+            {
+                return $ret[snake_case($model)];
+            }
         }
         return $ret;
 
     }//
 
     /**
-     * @return array List of availabe date formats in php and js forms
+     * @return array List of available date formats in php and js forms
      */
     function getAvailableDateFormats()
     {
@@ -576,7 +581,7 @@ class Wizard
         $configs = $this->getCrudConfigs();
         foreach ($configs as $conf)
         {
-            
+
             $rels = $this->getModelRelations($conf['table']);
             foreach ($rels as $relation)
             {
@@ -590,6 +595,23 @@ class Wizard
 
         return $tables;
     }//
+
+    public function getPossiblePivotTables()
+    {
+        $all = $this->getTables();
+        $pivot = $this->getAllPivotTables();
+        $ret = [];
+        foreach ($all as $table)
+        {
+            if (strpos($table,'_') !== false && !in_array($table, $pivot))
+            {
+                $ret[] = $table;
+            }
+        }
+
+        return $ret;
+
+    }
 
     function getAllLists()
     {

@@ -162,12 +162,10 @@ class CrudModelPrototype
                 $rel_arr['pivot_foreign_key'] = $rel['pivot_foreign_key'];
             }
 
-
             if (!empty($rel['ref_column']))
             {
                 $rel_arr['ref_column'] = $rel['ref_column'];
             }
-
 
             if (!empty($rel['editable']))
             {
@@ -182,12 +180,6 @@ class CrudModelPrototype
                     $rel_arr['required'] = 1;
                 }
 
-//                if (!empty($rel['remote']))
-//                {
-//                    $rel_arr['remote'] = 1;
-//                } else {
-//                    $rel_arr['remote'] = 0;
-//                }
             }
 
             if (!empty($rel['local_key'])) {
@@ -200,21 +192,22 @@ class CrudModelPrototype
                 $rel_arr['on_delete'] = $rel['on_delete'];
             }
 
-
-
-//            if (!empty($rel['local_key']))
-//            {
-//                $key = $rel['local_key'];
-//
-//            } else {
-//                $key = $rel_arr['relation_name'];
-//            }
-
             $key = $rel_arr['relation_name'];
             unset($rel_arr['relation_name']);
+
+            if (!empty($rel['sort']))
+            {
+                $sort = json_decode($rel['sort'], true);
+                \Log :: info($sort, ['browsify' => 1]);
+
+                if (is_array($sort) && count($sort))
+                {
+                    $rel_arr['sort'] = $sort;
+                }
+
+            }
             $this->config_data['fields'][$key] = $rel_arr;
 
-            //\Log :: info(print_r($rel_arr,1), ['browsify' => true]);
         }
 
 

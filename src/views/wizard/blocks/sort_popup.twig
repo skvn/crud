@@ -1,0 +1,55 @@
+<div id="sort_options" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Change sort options</h4>
+            </div>
+
+            <div class="modal-body">
+                <div id="sort_options_container"></div>
+
+                <div class="row" id="sort_options_tpl" style="display: none">
+                <div class="col-lg-5">
+                    <label>
+                        Sort column
+                        <select  class="form-control default_select" name="popup_sort_option_col[]" data-rel="column">
+                            <option value="">Choose column</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="col-lg-5 col-offset-1">
+                    <label>
+                        Direction
+                        <select class="form-control default_select" name="popup_sort_option_order[]"  >
+
+                            <option value="asc" {{ sort_order == "asc"?'selected' }}>Ascending</option>
+                            <option value="desc" {{ sort_order == "desc"?'selected' }}>Descending</option>
+                        </select>
+                    </label>
+                    <button  data-click="crud_action"  data-parent=".row" data-action="wizard_remove_parent" data-confirm="Remove this sort option?" class="label btn-inverse label-danger pull-right">
+                        <i class="fa fa-trash-o"></i> Remove</button>
+                </div>
+
+                </div>
+                <a href="#" class="btn btn-success"
+                   data-click="crud_action"
+                   data-action="wizard_add_list_col"
+                   data-skip_arr="1"
+                   data-fragment="sort_options_tpl"
+                   data-container="sort_options_container">
+                    <i class="fa fa-plus"></i> Add sort option</a>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-primary"
+                        data-click="crud_action"
+                        data-action="wizard_sort_options_save"
+                >Apply</button>
+            </div>
+
+
+        </div>
+</div>
+</div>

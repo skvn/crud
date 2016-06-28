@@ -119,6 +119,13 @@ class WizardController extends Controller {
 
         return $this->wizard->getTableColumns($table);
     }
+
+
+    function getModelColumns($model)
+    {
+
+        return $this->wizard->getAllModelColumns($model);
+    }
     
     function getFieldRowTpl($field_name)
     {

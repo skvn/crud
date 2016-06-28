@@ -141,19 +141,13 @@ trait ModelRelationTrait
                 $pivot_table = (!empty($relAttributes['pivot_table'])?$relAttributes['pivot_table']:null);
                 $pivot_self_column = (!empty($relAttributes['pivot_self_key'])?$relAttributes['pivot_self_key']:null);
                 $pivot_foreign_column = (!empty($relAttributes['pivot_foreign_key'])?$relAttributes['pivot_foreign_key']:null);
-                return $this->$relType(self :: resolveClass($relAttributes['model']), $pivot_table, $pivot_self_column, $pivot_foreign_column, $method);
+                $rel = $this->$relType(self :: resolveClass($relAttributes['model']), $pivot_table, $pivot_self_column, $pivot_foreign_column, $method);
+                return $this->sortRelation($rel, $relAttributes);
 
             case self::RELATION_HAS_MANY:
                 $ref_col = (!empty($relAttributes['ref_column'])?$relAttributes['ref_column']:null);
                 $rel = $this->$relType(self :: resolveClass($relAttributes['model']), $ref_col );
-                if (!empty($relAttributes['sort']))
-                {
-                    foreach ($relAttributes['sort'] as $col => $dir)
-                    {
-                        $rel->orderBy($col, $dir);
-                    }
-                }
-                return $rel;
+                return $this->sortRelation($rel, $relAttributes);
 
             default:
                 return $this->$relType(self :: resolveClass($relAttributes['model']));
@@ -163,6 +157,18 @@ trait ModelRelationTrait
 
     }
 
+    function sortRelation($relation, $relConfig)
+    {
+        if (!empty($relConfig['sort']))
+        {
+            foreach ($relConfig['sort'] as $col => $dir)
+            {
+                $relation->orderBy($col, $dir);
+            }
+        }
+
+        return $relation;
+    }
     function resolveListRelation($alias)
     {
         if (strpos($alias,'::') !== false)

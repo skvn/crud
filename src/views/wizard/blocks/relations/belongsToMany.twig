@@ -7,9 +7,10 @@
         {%  if not rel %}
         {% include 'crud::wizard/blocks/relations/choose_relation_model' %}
         {%  else %}
-           <td width="150"><label>Model<br /><input type="text" class="form-control" name="relations[{{NUM}}][model]" value="{{ rel.model }}" readonly /></label></td>
+           <td width="150"><label>Model<br />
+                   <input type="text" class="form-control" name="relations[{{NUM}}][model]" value="{{ rel.model }}" readonly id="relations_{{NUM}}_model" /></label></td>
         {% endif %}
-        <td style="width: 300px;">
+        <td>
 
             {%  if not rel %}
             <div class="checkbox"><label><input type="radio" value="0" name="relations[{{NUM}}][pivot]" data-pivot="pivot_{{NUM}}" checked  data-change="crud_action" data-action="wizard_toggle_rel_pivot"  /><b>Generate pivot table</b></label></div>
@@ -17,10 +18,8 @@
             <div id="pivot_{{NUM}}" style="display: none">
                 <select class="form-control" data-attr="relation_table" name="relations[{{NUM}}][pivot_table]"  data-change="crud_action" data-action="wizard_change_pivot_table" required >
                     <option value="">Choose Pivot table</option>
-                    {% for table in wizard.getTables() %}
-                        {% if '_' in table %}
+                    {% for table in wizard.getPossiblePivotTables() %}
                             <option value="{{ table }}">{{ table }}</option>
-                        {% endif %}
                     {% endfor %}
                 </select>
                 <label> Self key:<br />
@@ -45,7 +44,9 @@
             {%  endif %}
         </td>
 
-        <td></td>
+        <td>
+            {% include 'crud::wizard/blocks/relations/sort_block' %}
+        </td>
     </tr>
     <tr>
         {% set multiple = true %}
