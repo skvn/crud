@@ -576,7 +576,7 @@ class Wizard
         $configs = $this->getCrudConfigs();
         foreach ($configs as $conf)
         {
-
+            
             $rels = $this->getModelRelations($conf['table']);
             foreach ($rels as $relation)
             {

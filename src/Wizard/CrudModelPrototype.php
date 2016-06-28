@@ -591,7 +591,6 @@ class CrudModelPrototype
     protected  function recordConfig()
     {
 
-
         $conf = json_encode($this->buildConfig(), JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES + JSON_UNESCAPED_UNICODE);
         $conf = str_replace(['{', '}'], ['[', ']'], $conf);
         $conf = str_replace('":', '" =>', $conf);
