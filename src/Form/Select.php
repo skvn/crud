@@ -350,6 +350,15 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
             $fieldKey = $fieldConfig['property_name'];
             unset($fieldConfig['property_name']);
         }
+
+        if (!empty($fieldConfig['relation'])) {
+            if (in_array($fieldConfig['relation'], [
+                \Skvn\Crud\Models\CrudModel::RELATION_BELONGS_TO_MANY,
+                \Skvn\Crud\Models\CrudModel::RELATION_HAS_MANY
+            ])) {
+                $fieldConfig['multiple'] = true;
+            }
+        }
     }
 
 } 

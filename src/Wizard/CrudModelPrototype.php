@@ -241,29 +241,7 @@ class CrudModelPrototype
                 }
             }
         }
-//        if (!empty($this->config_data['single_files']))
-//        {
-//
-//            foreach ($this->config_data['single_files'] as $fname =>$fdata)
-//            {
-//                if (!empty($fdata['use'])) {
-//
-//                }
-//
-//            }
-//        }
-//
-//        if (!empty($this->config_data['multi_files']))
-//        {
-//
-//
-//            foreach ($this->config_data['multi_files'] as $fdata)
-//            {
-//                if ($fdata && is_array($fdata)) {
-//                    $this->addFileField(array_merge(['multi' => 1], $fdata));
-//                }
-//            }
-//        }
+
     }
 
     /**
@@ -348,24 +326,15 @@ class CrudModelPrototype
 
                 }
 
-
                 if (!empty($f['type']))
                 {
                     $this->config_data['fields'][$k]['editable'] = 1;
                     $this->config_data['form_fields'][] = $k;
 
-//                    if (!empty($f['property_name']))
-//                    {
-//                        $fields_to_delete[] = $k;
-//                        $k = $f['property_name'];
-//                    }
-
                     if (!empty($f['rel_name']))
                     {
                         unset($f['rel_name']);
                     }
-
-
 
                     //process field config by field
                     if ($control = Form::getControlByType($f['type']))
@@ -392,14 +361,6 @@ class CrudModelPrototype
             }
 
 
-//            if (count($fields_to_delete))
-//            {
-//                foreach ($fields_to_delete as $k)
-//                {
-//                    unset($this->config_data['fields'][$k]);
-//                }
-//            }
-
         }
 
         $this->config_data['fields'] = $fields;
@@ -419,8 +380,7 @@ class CrudModelPrototype
                 $filter_fields = [];
                 foreach ($fields as $k=>$f) {
                     if (!empty($f['type'])) {
-                        //$key = $list_alias . '_filter_' . $k;
-
+                       
                         $field = $f;
                         $field['column'] = $k;
 
@@ -437,9 +397,7 @@ class CrudModelPrototype
                     }
 
                 }
-                //$this->config_data['list'][$list_alias]['filter'] = var_export($filter_fields, 1);
-                //$this->config_data['list'][$list_alias]['filter'] = $filter_fields;
-
+                
             }
 
         }
