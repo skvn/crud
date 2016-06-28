@@ -91,9 +91,7 @@
 {% endmacro %}
 
 {% macro textarea(input) %}
-    {% if input.config.editor_type %}
 
-    {% endif %}
     <textarea {{ input.config.extra|raw }}
             data-widget="crud_editor"
             data-height="{{ input.config.height?input.config.height:500 }}"
@@ -101,7 +99,5 @@
             class="form-control" {{ input.config.required ? 'required' }}
             name="{{ input.name }}"
             id="{{ input.getUniqueId() }}"  >{{ input.getValue()}}</textarea>
-    {% if input.config.editor_type %}
 
-    {% endif %}
 {% endmacro %}

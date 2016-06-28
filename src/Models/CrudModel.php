@@ -98,39 +98,6 @@ abstract class CrudModel extends Model
         return $this->app;
     }
 
-//    public function setCreatedAtAttribute($value)
-//    {
-//        $type = $this->confParam('timestamps_type');
-//        if (!$type || $type == 'int')
-//        {
-//            if (is_object($value))
-//            {
-//                $value = $value->timestamp;
-//            }
-//            else
-//            {
-//                $value = strtotime($value);
-//            }
-//        }
-//        $this->attributes['created_at'] = $value;
-//    }
-//
-//    public function setUpdatedAtAttribute($value)
-//    {
-//        $type = $this->confParam('timestamps_type');
-//        if (!$type || $type == 'int')
-//        {
-//            if (is_object($value))
-//            {
-//                $value = $value->timestamp;
-//            }
-//            else
-//            {
-//                $value = strtotime($value);
-//            }
-//        }
-//        $this->attributes['updated_at'] = $value;
-//    }
 
     public function __call($method, $parameters)
     {

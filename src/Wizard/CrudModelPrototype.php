@@ -653,7 +653,7 @@ class CrudModelPrototype
             if (empty($this->old_config_data['tree'])) {
                 $conf['tree'] =
                     [
-                        'level_column' => "tree_level",
+                        'depth_column' => "tree_level",
                         'path_column' => "tree_path",
                         'pid_column' => "tree_pid",
                         'order_column' => "tree_order"

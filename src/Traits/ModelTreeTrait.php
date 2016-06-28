@@ -19,6 +19,8 @@ Page::find(2)->getTreeDepth()
 */
 
 
+use Skvn\Crud\Exceptions\ConfigException;
+
 trait ModelTreeTrait  {
 
     //protected $columnTreePid = 'tree_pid';
@@ -302,27 +304,6 @@ trait ModelTreeTrait  {
         //return $this->columnTreeDepth;
     }
 
-//    public function setColumnTreePid($name)
-//    {
-//        $this->columnTreePid = $name;
-//    }
-//
-//    public function setColumnTreeOrder($name)
-//    {
-//        $this->columnTreeOrder = $name;
-//    }
-//
-//    public function setColumnTreePath($name)
-//    {
-//        $this->columnTreePath = $name;
-//    }
-//
-//    public function setColumnTreeDepth($name)
-//    {
-//        $this->columnTreeDepth = $name;
-//    }
-
-
     protected function processSiblingOf($sibling, $op)
     {
         if ($this->exists and $this->isAncestor($sibling)) throw new \Exception('Cant move Ancestor to Descendant');
@@ -496,13 +477,6 @@ trait ModelTreeTrait  {
         {
             return static :: ROOT_ID;
         }
-        else if (defined('static::ROOT_ENV'))
-        {
-            return env(static :: ROOT_ENV);
-        }
-        else
-        {
-            return 1;
-        }
+        throw new ConfigException;
     }
 }
