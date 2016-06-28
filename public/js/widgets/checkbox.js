@@ -17,6 +17,7 @@
                         } else {
                             hidden.val('0');
                         }
+                        hidden.trigger('change');
                     }
                 }
                 var disabled = true;

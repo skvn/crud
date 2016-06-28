@@ -388,26 +388,12 @@
                     if (elem.data('title')) {
                         $("h4", w).html(elem.data("title"));
                     }
-                    if (crud_actions['onShow_' + popup]) {
-                        crud_actions['onShow_' + popup]($('#' + popup));
-                    }
-                    //if (elem.data("onshow")) {
-                    //    switch (elem.data("onshow")) {
-                    //        case 'pass_row_ids':
-                    //            var ids = [];
-                    //            $('table input[data-rel=row]').each(function () {
-                    //                if ($(this).prop('checked')) {
-                    //                    ids.push($(this).attr('value'));
-                    //                }
-                    //            });
-                    //            $('input[name=row_ids]', w).val(ids.join(','));
-                    //            break;
-                    //    }
-                    //}
-                    //crud.init_ichecks(w);
                     if ($("form", w).attr('id') != 'crud_filter_form')
                     {
                         $("form", w).crud_form();
+                    }
+                    if (crud_actions['onShow_' + popup]) {
+                        crud_actions['onShow_' + popup]($('#' + popup));
                     }
                 });
             } else {

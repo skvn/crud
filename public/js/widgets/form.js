@@ -128,7 +128,7 @@
                 $("input[data-title_for='"+$(this).attr('name')+"']", $form).val(name);
             });
 
-            $($form).on('change', 'select', function(e){
+            $($form).on('change', 'select,input', function(e){
                 crud.trigger('form.change', {form: $form, elem: $(this)});
             });
 
@@ -139,14 +139,14 @@
             for (var i in names)
             {
                 //alert(names[i]+ ':' +$(".form-group[data-ref="+names[i]+"]", this.element).length);
-                $(".form-group[data-ref="+names[i]+"]", this.element).show();
+                $(".row[data-ref="+names[i]+"]", this.element).show();
             }
         },
         hideFields: function(names)
         {
             for (var i in names)
             {
-                $(".form-group[data-ref="+names[i]+"]", this.element).hide();
+                $(".row[data-ref="+names[i]+"]", this.element).hide();
             }
         }
     });
