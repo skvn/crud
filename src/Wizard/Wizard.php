@@ -566,6 +566,7 @@ class Wizard
             {
                 if (!empty($field['relation']))
                 {
+                    $field['relation_name'] = $k;
                     $ret[$k] = $field;
                 }
             }
@@ -649,7 +650,7 @@ class Wizard
         $conf = $this->getModelConfig($table);
         if ($conf && !empty($conf['fields']))
         {
-            if (!key_exists($data_alias,$conf['fields']))
+            if (!key_exists($data_alias,$conf['fields']) && !strpos($data_alias,'::'))
             {
                 return $data_alias;
             }

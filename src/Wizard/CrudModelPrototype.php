@@ -198,7 +198,7 @@ class CrudModelPrototype
             if (!empty($rel['sort']))
             {
                 $sort = json_decode($rel['sort'], true);
-                \Log :: info($sort, ['browsify' => 1]);
+                //\Log :: info($sort, ['browsify' => 1]);
 
                 if (is_array($sort) && count($sort))
                 {
