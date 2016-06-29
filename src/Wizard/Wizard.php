@@ -692,6 +692,19 @@ class Wizard
         return $formatters;
     }//
 
+    /**
+     * Get available slect options providers for model
+     *
+     * @param $table
+     * @return array
+     */
+    public function getAvailableSelectOptionsProviders($model)
+    {
+        $obj = CrudModel::createInstance($model);
+        return $obj->getAvailOptionGenerators();
+
+    }//
+
 
     /**
      * Get control instance by type alias

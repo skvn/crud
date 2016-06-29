@@ -126,31 +126,16 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
     public function getOptions()
     {
         $opts = [];
-//        if (!empty($this->config['remote']))
-//        {
-//            return $this->getSelectedOptions();
-//        }
 
-        if (!empty($this->config['method_options']))
+        if (!empty($this->config['find']) && empty($this->config['model']))
         {
-            //$this->value = $this->model->getAttribute($this->getField());
-            $opts = [];
-            $method = $this->config['method_options'];
+
+            $method = "selectOptions" . studly_case($this->config['find']);
             if (method_exists($this->model, $method))
             {
-                foreach ($this->model->$method() as $k => $v)
-                {
-                    $opts[] = ['value' => $k, 'text' => $v];
-                }
+                $opts = $this->model->$method();
             }
-            else
-            {
-                $method = "selectOptions" . studly_case($this->config['method_options']);
-                if (method_exists($this->model, $method))
-                {
-                    $opts = $this->model->$method();
-                }
-            }
+
         }
         elseif (!empty($this->config['model']))
         {
@@ -165,7 +150,6 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
             $opts[$idx]['selected'] = $this->isSelected($opt['value']);
         }
 
-        
         //return array_merge($options, $opts);
         return $opts;
 
@@ -218,8 +202,8 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
         $modelObj = new $class();
         if (!empty($this->config['find']))
         {
-            $method = $this->config['find'];
-            $collection = $modelObj->$method();
+            $method = $method = "selectOptions" . studly_case($this->config['find']);
+            return $modelObj->$method();
         }
         else
         {

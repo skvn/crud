@@ -1,3 +1,4 @@
+{% import "crud::wizard/macro.twig" as wiz_macros%}
 <td colspan="5" >
     <div class="col col-xs-1">
     <div class="checkbox">
@@ -17,8 +18,16 @@
 
     </div>
     <div class="col col-xs-4">
-        <input type="text"  class="form-control" data-attr="find" name="relations[{{NUM}}][find]" value="{{ rel.find }}" placeholder="Data find method [Optional]"  ><br />
-        <span id="helpBlock" class="help-block">The name of the relation model method that provides edit options. <a href="{{ DOCS_URL }}/Config/Relations#options_providers">See documentation for the details.</a></span><br />
+        <label>Data provider method {{ wiz_macros.help('Config/Relations#options_providers') }}</label>
+        <select class="form-control default_select" name="relations[{{NUM}}][find]" data-rel="dp_method"  >
+        <option value="">No method</option>
+            {%  if rel.model %}
+            {%  for f in wizard.getAvailableSelectOptionsProviders(rel.model) %}
+                <option value="{{ f.name }}" {{ f.name == rel.find?'selected' }}>{{ f.name }} ({{ f.description }})</option>
+            {% endfor %}
+            {% endif %}
+        </select>
+
 
         <div class="checkbox">
             <label>

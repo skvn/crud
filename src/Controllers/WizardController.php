@@ -126,7 +126,12 @@ class WizardController extends Controller {
 
         return $this->wizard->getAllModelColumns($model);
     }
-    
+
+
+    function getWizardMethod($method)
+    {
+        return $this->wizard->$method(...\Request::get('args',[]));
+    }
     function getFieldRowTpl($field_name)
     {
         return view('crud::wizard/blocks/fields/field_row', ['f'=>$field_name]);

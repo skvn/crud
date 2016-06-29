@@ -129,9 +129,10 @@ class Tree extends Field implements WizardableField, FormControl{
         $class = CrudModel :: resolveClass($this->config['model']);
         $modelObj = new $class();
 
-        if (!empty($this->config['find']))
+        if (!empty($this->config['find']) && !empty($this->config['model']))
         {
-            $method = $this->config['find'];
+            $method =  $method = "selectOptions" . studly_case($this->config['find']);
+
             $val = $this->getValue();
             if (!is_array($val))
             {
@@ -151,9 +152,10 @@ class Tree extends Field implements WizardableField, FormControl{
             return CrudModelCollectionBuilder :: createTree($modelObj)
                         ->fetch();
         }
-        elseif (!empty($this->config['method_options']))
+        elseif (!empty($this->config['find']) && empty($this->config['model']))
         {
-            return $this->model->{$this->config['method_options']}($this->getName());
+            $method =  $method = "selectOptions" . studly_case($this->config['find']);
+            return $this->model->{$method}($this->getName());
         }
 
     }

@@ -1,5 +1,6 @@
 <?php namespace Skvn\Crud\Helper;
 
+use Illuminate\Support\Collection;
 use Skvn\Crud\Models\CrudModel;
 
 class CrudHelper {
@@ -64,6 +65,15 @@ class CrudHelper {
     function getModelInstance($model, $scope = CrudModel :: DEFAULT_SCOPE, $id = null)
     {
         return CrudModel :: createInstance($model, $scope, $id);
+    }
+
+    function getSelectOptionsByCollection(Collection $collection, $valueField='id', $textField='title')
+    {
+        return $collection->map(function ($item, $key) use ($valueField, $textField) {
+            return ['value'=>$item->$valueField,'text'=>$item->$textField];
+        })
+            ->all();
+
     }
 
 }

@@ -214,7 +214,8 @@
             {
 
                 if (elem.val()) {
-                    var $target = elem.parents('table').first().find('select[data-attr=ref_column]');
+                    var $parent = elem.parents('table').first();
+                    var $target = $parent.find('select[data-attr=ref_column]');
 
                     if ($target.length) {
                         var fields = win.models[elem.val()];
@@ -233,6 +234,18 @@
                             $target.focus();
                         }
                     }
+                    
+                    //fill dp
+                    $.get('/admin/crud_setup/wizard/getAvailableSelectOptionsProviders',{args:[elem.val()]}, function(fields) {
+
+                        var options = "<option value=''>No method</option>";
+                        for (var i in fields) {
+                            options += "<option value='" + fields[i]['name'] + "'>" + fields[i]['name'] + "("+fields[i]['description'] +")</option>";
+                        }
+
+                        $parent.find('select[data-rel=dp_method]').html(options);
+                    });
+
                 }
             },
 

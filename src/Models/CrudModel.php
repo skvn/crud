@@ -323,6 +323,11 @@ abstract class CrudModel extends Model
         return $this->listPublicMethods("#crudFormatValue([a-zA-Z]+)#");
     }
 
+    /**
+     * Get all available select options providers
+     *
+     * @return array
+     */
     function getAvailOptionGenerators()
     {
         return $this->listPublicMethods("#selectOptions([a-zA-Z]+)#");

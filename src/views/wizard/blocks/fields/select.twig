@@ -14,7 +14,13 @@
 <div class="row">
     <div class="col col-xs-6">
         <label> Data provider method
-        <input type="text" class="form-control" data-attr="name" name="fields[{{ ALIAS }}][method_options]" value="{{ fld.method_options }}" placeholder="Data provider method"  >
+            <select class="form-control default_select" name="fields[{{ ALIAS }}][find]"  >
+                <option value="">No method</option>
+                {%  for f in wizard.getAvailableSelectOptionsProviders(model.name) %}
+                    <option value="{{ f.name }}" {{ f.name == fld.find?'selected' }}>{{ f.name }} ({{ f.description }})</option>
+                {% endfor %}
+            </select>
+
         <span id="helpBlock" class="help-block">The name of the model method that provides edit options. See documentation for the details.</span>
         </label>
     </div>
