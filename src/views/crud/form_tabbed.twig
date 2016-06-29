@@ -14,6 +14,7 @@
     <input type="hidden" id="tree_action" name="tree_action" value=""/>
     <input type="hidden" name="scope" value="{{ crudObj.scope }}"/>
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+    <div class="pull-left"  style="width:80%">
     <ul class="nav nav-tabs">
         {% set active=0 %}
         {% for tab_id,tab_info in crudForm.tabs %}
@@ -23,6 +24,24 @@
             {% endif %}
         {% endfor %}
     </ul>
+    </div>
+    <div class="pull-right">
+        {% if crudObj.confParam('acl')|allowed('u') %}
+            <div class="btn-group">
+                <button class="btn btn-success" type="submit" data-close="0"> <i class="fa fa-save"></i> {{ trans('crud::messages.save') }}</button>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-menu btn-actions" style="padding: 0px;">
+                    <div class="btn-group-vertical">
+                        <button class="btn btn-primary" type="submit" data-close="1"> <i class="fa fa-save"></i> {{ trans('crud::messages.save_close') }}</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <button type="button" class="btn btn-default" data-click="crud_event" data-event="crud.cancel_edit" data-rel="{{ crudObj.view_ref }}"><i class="fa fa-sign-out"></i> {{ trans('crud::messages.cancel') }}</button>
+    </div>
+<br clear="all" />
     <div class="tab-content">
         {% set active = 0 %}
         {% for tab_id,tab_info in crudForm.tabs %}
@@ -44,13 +63,6 @@
         {% endfor %}
     </div>
 
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-click="crud_event" data-event="crud.cancel_edit" data-rel="{{ crudObj.view_ref }}">{{ trans('crud::messages.cancel') }}</button>
-        {% if crudObj.confParam('acl')|allowed('u') %}
-            <button class="btn btn-success" type="submit" data-close="1">{{ trans('crud::messages.save_close') }}</button>
-            <button class="btn btn-primary" type="submit" data-close="0">{{ trans('crud::messages.save') }}</button>
-        {% endif %}
-        {% include 'crud::blocks/progress_bar.twig' %}
-    </div>
+    {%  include 'crud::crud/form_buttons.twig' %}
 
 </form>

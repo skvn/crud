@@ -1,0 +1,17 @@
+<div class="col-md-12 modal-footer" style="margin-bottom: 30px; margin-top: 30px; text-align: right">
+    {% if crudObj.confParam('acl')|allowed('u') %}
+        <div class="btn-group">
+            <button class="btn btn-success" type="submit" data-close="0"> <i class="fa fa-save"></i> {{ trans('crud::messages.save') }}</button>
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-menu btn-actions" style="padding: 0px;">
+                <div class="btn-group-vertical">
+                    <button class="btn btn-primary" type="submit" data-close="1"> <i class="fa fa-save"></i> {{ trans('crud::messages.save_close') }}</button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <button type="button" class="btn btn-default" data-click="crud_event" data-event="crud.cancel_edit" data-rel="{{ crudObj.view_ref }}"><i class="fa fa-sign-out"></i> {{ trans('crud::messages.cancel') }}</button>
+    {% include 'crud::blocks/progress_bar.twig' %}
+</div>

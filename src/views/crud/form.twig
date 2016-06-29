@@ -4,15 +4,9 @@
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
 
     {%  include 'crud::crud/fields.twig' %}
+    {%  include 'crud::crud/form_buttons.twig' %}
 
-        <div class="col-md-10 modal-footer" style="margin-bottom: 30px; margin-top: 30px; text-align: left">
-        <button type="button" class="btn btn-default" data-click="crud_event" data-event="crud.cancel_edit" data-rel="{{ crudObj.view_ref }}">{{ trans('crud::messages.cancel') }}</button>
-        {% if crudObj.confParam('acl')|allowed('u') %}
-            <button class="btn btn-success" type="submit" data-close="1">{{ trans('crud::messages.save_close') }}</button>
-            <button class="btn btn-primary" type="submit" data-close="0">{{ trans('crud::messages.save') }}</button>
-        {% endif %}
-        {% include 'crud::blocks/progress_bar.twig' %}
-        </div>
+
 
 
 

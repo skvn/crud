@@ -228,9 +228,7 @@
                 var url = this.format_setting("model_edit_url", {model: model, id: id, scope:scope});
 
                 $('#crud_form').html('');
-                if (!$('#crud_form').is(':visible')) {
-                    $('#crud_form').modal('show');
-                }
+
                 var self = this;
                 $('#crud_form').load(url, function (res)
                 {
@@ -240,6 +238,7 @@
                         $('#crud_form').modal('hide');
                         return;
                     }
+                    $('#crud_form').modal('show');
                     var frm = $('form:first', $('#crud_form'));
                     frm.crud_form();
                     var handler = 'onShow_' + frm.data('crud_model') + '_' + frm.data('crud_scope');
