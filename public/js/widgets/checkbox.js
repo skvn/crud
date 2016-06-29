@@ -8,9 +8,11 @@
                 increaseArea: '20%'
             }).on('ifChanged', function ()
             {
-                var name = $(this).data('name');
-                if (name) {
-                    var hidden = $(this).parents('form').first().find('input[name=' + name + ']');
+                //var name = $(this).data('name');
+                //if (name) {
+                    //var hidden = $(this).parents('form').first().find('input[name=' + name + ']');
+                    //console.log($(this).parent().parent());
+                    var hidden = $('input[type=hidden]', $(this).parent().parent());
                     if (hidden.length) {
                         if ($(this).prop('checked')) {
                             hidden.val('1');
@@ -19,7 +21,7 @@
                         }
                         hidden.trigger('change');
                     }
-                }
+                //}
                 var disabled = true;
                 $(this).parents('table').find('tr td input.i-checks').each(function () {
                     if ($(this).prop('checked'))

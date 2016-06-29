@@ -222,7 +222,8 @@ class AttachmentHandler {
                 if ($k>0 && !in_array($k,$this->processedIds))
                 {
                     $obj = $this->createAttachInstance($k, true);
-                    $obj->update(['title'=>$v]);
+                    $obj->title = $v;
+                    $obj->save();
                 }
             }
         }
