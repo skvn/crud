@@ -28,11 +28,11 @@ trait ModelAttachmentTrait {
         {
             foreach ($this->config['fields'] as $name => $field)
             {
-                if (!empty($field['type']) && in_array($field['type'], [Field :: FILE, Field :: IMAGE]))
+                if (!empty($field['type']) && in_array($field['type'], [Field :: FILE, Field :: IMAGE, Field ::MULTI_FILE]))
                 {
                     $this->setAttach($name, $field);
-                    $this->fillable[] = $name;
-                    $this->fillable[] = $field['field'];
+                    //$this->fillable[] = $name;
+                    //$this->fillable[] = $field['field'];
                 }
             }
         }
@@ -134,9 +134,12 @@ trait ModelAttachmentTrait {
         }
         else if (!empty($args['field']) && !empty($args['delete_attach_id']))
         {
-             CrudFile::destroy([$args['delete_attach_id']]);
-             $meth = $args['field'];
-             $this->$meth()->detach($args['id']);
+            $class = $this->getFilesConfig("any", "class");
+            $obj = $class :: find($args['delete_attach_id']);
+            $obj->delete();
+//             CrudFile::destroy([$args['delete_attach_id']]);
+//             $meth = $args['field'];
+//             $this->$meth()->detach($args['id']);
         }
     }
 

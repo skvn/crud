@@ -1,6 +1,6 @@
 {% if input.config.acl|allowed %}
     {%  if input.config.type == 'multi_file' %}
-        {% include input.getTemplate() %}
+        {% include input.controlTemplate() %}
     {%  else  %}
     <div class="row" data-ref="{{ input.name }}">
         <div class="col-md-{{ COL_WIDTH?COL_WIDTH:12 }}" style="margin-top: 10px;">

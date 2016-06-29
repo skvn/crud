@@ -161,6 +161,10 @@ class Form {
     {
         foreach ($this->fields as $field)
         {
+            if (!empty($field->config['acl']) && !Container :: getInstance()['skvn.cms']->checkAcl($field->config['acl'], "u"))
+            {
+                continue;
+            }
             $field->pushToModel();
         }
     }

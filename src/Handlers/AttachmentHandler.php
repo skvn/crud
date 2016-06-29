@@ -7,6 +7,7 @@ use Skvn\Crud\Models\CrudModel;
 use Illuminate\Container\Container;
 
 
+
 class AttachmentHandler {
 
 
@@ -111,10 +112,10 @@ class AttachmentHandler {
     {
         $this->initSelfInstance();
         $prop = $this->parentPropName;
-        if ($this->multi)
-        {
-            $ids = $this->parentInstance->$prop->lists('id')->all();
-        }
+//        if ($this->multi)
+//        {
+//            $ids = $this->parentInstance->$prop->lists('id')->all();
+//        }
 
         foreach ($files as $k=> $file)
         {
@@ -132,21 +133,25 @@ class AttachmentHandler {
 
                 if (!$this->multi) {
                     $this->parentInstance->nullifyAttachQueue();
-                    $this->parentInstance->update([$this->parentFieldName => $instance->id]);
+                    $this->parentInstance->setAttribute($this->parentFieldName, $instance->getKey());
+                    $this->parentInstance->save();
+                    //$this->parentInstance->update([$this->parentFieldName => $instance->id]);
                 } else {
-                    if (!in_array($instance->id,$ids))
-                    {
-                        $ids[] =  $instance->id;
-                    }
+                    $instance->setAttribute($this->options['ref_column'], $this->parentInstance->getKey());
+                    $instance->save();
+//                    if (!in_array($instance->id,$ids))
+//                    {
+//                        $ids[] =  $instance->id;
+//                    }
                 }
             }
         }
 
-        if ($this->multi) {
-            if (count($ids)) {
-                $this->parentInstance->$prop()->sync($ids);
-            }
-        }
+//        if ($this->multi) {
+//            if (count($ids)) {
+//                $this->parentInstance->$prop()->sync($ids);
+//            }
+//        }
     }
 
     function deleteAll($parentSave = true)
