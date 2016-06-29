@@ -238,7 +238,9 @@
                         $('#crud_form').modal('hide');
                         return;
                     }
-                    $('#crud_form').modal('show');
+                    if (!$('#crud_form').hasClass('in')) {
+                        $('#crud_form').modal('show');
+                    }
                     var frm = $('form:first', $('#crud_form'));
                     frm.crud_form();
                     var handler = 'onShow_' + frm.data('crud_model') + '_' + frm.data('crud_scope');
