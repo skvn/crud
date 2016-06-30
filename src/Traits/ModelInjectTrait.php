@@ -81,11 +81,18 @@ trait ModelInjectTrait {
     public static function bootCrud()
     {
         static::saved(function($instance) {
-
+            if ($instance->eventsDisabled)
+            {
+                return true;
+            }
             return $instance->onAfterSave();
         });
         static::saving(function($instance)
         {
+            if ($instance->eventsDisabled)
+            {
+                return true;
+            }
             if ($instance->validate())
             {
                 $instance->crudHandleTrackAuthors("update");
@@ -96,22 +103,38 @@ trait ModelInjectTrait {
 
         static::creating(function($instance)
         {
+            if ($instance->eventsDisabled)
+            {
+                return true;
+            }
             $instance->crudHandleTrackAuthors("create");
             return $instance->onBeforeCreate();
         });
 
         static::created(function($instance)
         {
+            if ($instance->eventsDisabled)
+            {
+                return true;
+            }
             return $instance->onAfterCreate();
         });
 
         static::deleting(function($instance)
         {
+            if ($instance->eventsDisabled)
+            {
+                return true;
+            }
             return $instance->onBeforeDelete();
         });
 
         static::deleted(function($instance)
         {
+            if ($instance->eventsDisabled)
+            {
+                return true;
+            }
             return $instance->onAfterDelete();
         });
     }

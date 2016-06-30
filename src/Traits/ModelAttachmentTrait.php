@@ -128,8 +128,9 @@ trait ModelAttachmentTrait {
         {
             $deleted = $this->getAttach($args['field'])->delete();
             //$attrValue = $this->getAttribute($args['field']);
-            $this->setAttribute($this->attachedFiles[$args['field']]->getOption('field'),0);
-            $this->save();
+            //$this->update([$this->attachedFiles[$args['field']]->getOption('field') => 0]);
+            $this->setAttribute($this->attachedFiles[$args['field']]->getOption('field'),null);
+            $this->saveDirect();
             return $deleted;
         }
         else if (!empty($args['field']) && !empty($args['delete_attach_id']))

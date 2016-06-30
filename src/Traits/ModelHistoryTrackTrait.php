@@ -7,12 +7,24 @@ trait ModelHistoryTrackTrait {
     static function bootModelHistoryTrackTrait()
     {
         static :: updated(function($instance){
+            if ($instance->eventsDisabled)
+            {
+                return true;
+            }
             $instance->processHistoryEvent("update");
         });
         static :: created(function($instance){
+            if ($instance->eventsDisabled)
+            {
+                return true;
+            }
             $instance->processHistoryEvent("create");
         });
         static :: deleted(function($instance){
+            if ($instance->eventsDisabled)
+            {
+                return true;
+            }
             $instance->processHistoryEvent("delete");
         });
     }

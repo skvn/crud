@@ -37,6 +37,7 @@ abstract class CrudModel extends Model
     protected static $messages = array();
     protected $validator;
     public $timestamps = false;
+    protected $eventsDisabled = false;
 
     /**
      * Flag for tracking created_by and updated_by attributes
@@ -92,6 +93,16 @@ abstract class CrudModel extends Model
         $obj->setScope($scope);
         return $obj;
     }
+
+
+    function saveDirect()
+    {
+        $this->eventsDisabled = true;
+        $result = parent :: save();
+        $this->eventsDisabled = false;
+        return $result;
+    }
+
 
     function getApp()
     {

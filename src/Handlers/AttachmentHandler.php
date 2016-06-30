@@ -134,7 +134,7 @@ class AttachmentHandler {
                 if (!$this->multi) {
                     $this->parentInstance->nullifyAttachQueue();
                     $this->parentInstance->setAttribute($this->parentFieldName, $instance->getKey());
-                    $this->parentInstance->save();
+                    $this->parentInstance->saveDirect();
                     //$this->parentInstance->update([$this->parentFieldName => $instance->id]);
                 } else {
                     $instance->setAttribute($this->options['ref_column'], $this->parentInstance->getKey());
@@ -173,8 +173,9 @@ class AttachmentHandler {
         }
 
         if ($parentSave) {
+//            $this->parentInstance->update([$this->parentFieldName => null]);
             $this->parentInstance->setAttribute($this->parentFieldName, null);
-            $this->parentInstance->save();
+            $this->parentInstance->saveDirect();
         }
 
     }

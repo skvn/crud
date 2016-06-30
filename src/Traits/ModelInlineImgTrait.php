@@ -48,6 +48,10 @@ trait ModelInlineImgTrait {
             $instance->appendInlineImgConfig();
         });
         static::saving(function($instance) {
+            if ($instance->eventsDisabled)
+            {
+                return true;
+            }
             foreach ($instance->inlimgCols as $attr)
             {
                 $instance->setAttribute($attr, $instance->processInlineImgs($instance->getAttribute($attr)));

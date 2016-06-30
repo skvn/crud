@@ -15,6 +15,10 @@ trait ModelRelationTrait
         });
 
         static :: saved(function ($instance){
+            if ($instance->eventsDisabled)
+            {
+                return true;
+            }
             $instance->saveRelations();
         });
     }
