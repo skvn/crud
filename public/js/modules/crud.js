@@ -54,7 +54,10 @@
             },
             format_setting: function(key, args)
             {
-                var str = settings[key] || "";
+                return this.format_string(settings[key] || "", args);
+            },
+            format_string: function(str, args)
+            {
                 for (var i in args)
                 {
                     str = str.replace('{' + i + '}', args[i] || "");

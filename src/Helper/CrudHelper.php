@@ -52,20 +52,20 @@ class CrudHelper {
         return $data;
     }
 
-    function resolveModelView(CrudModel $model, $view)
-    {
-        return $model->resolveView($view);
-    }
-
-    function getModelClass($model)
-    {
-        return CrudModel :: resolveClass($model);
-    }
-
-    function getModelInstance($model, $scope = CrudModel :: DEFAULT_SCOPE, $id = null)
-    {
-        return CrudModel :: createInstance($model, $scope, $id);
-    }
+//    function resolveModelView(CrudModel $model, $view)
+//    {
+//        return $model->resolveView($view);
+//    }
+//
+//    function getModelClass($model)
+//    {
+//        return CrudModel :: resolveClass($model);
+//    }
+//
+//    function getModelInstance($model, $scope = CrudModel :: DEFAULT_SCOPE, $id = null)
+//    {
+//        return CrudModel :: createInstance($model, $scope, $id);
+//    }
 
     function getSelectOptionsByCollection(Collection $collection, $valueField='id', $textField='title')
     {
