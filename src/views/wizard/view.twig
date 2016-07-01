@@ -1,0 +1,202 @@
+{% extends "crud::page" %}
+{% block head %}
+    {#<link href="{{ 'css/plugins/steps/jquery.steps.css'|asset }}" rel="stylesheet">#}
+    <style>
+
+        .wizard > .content
+        {
+            min-height: 750px;;
+        }
+
+        .wizard > .content > .body
+        {
+            height: auto;
+        }
+        .wizard > .steps > ul > li
+        {
+            width: 20%;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+{% if not alert  %}
+
+<div class="row">
+    <div class="col-lg-12">
+
+    <form id="form"  class="wizard-big" method="post">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="table" value="{{ table }}" />
+        <input type="hidden" name="acl" value="{{ model.acl }}" />
+        <h1>General</h1>
+        <fieldset>
+
+            <h2 style="margin-top: 0px;">General Settings</h2>
+            <div class="panel panel-default">
+                <div class="panel-body">
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="name">Model name *</label>
+                        <input type="text" class="form-control" id="name" data-model_name="1" name="name" value="{{ model.name }}" disabled />
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" onchange="$('div[data-rel=is_tree]').toggle();"  id="is_tree" value="1" name="is_tree" {{ model.tree ? 'checked' }}  />
+                            <b>Model is tree <span class="text-danger">If the table doesn't contain `tree_path`, `tree_order`,
+                                    `tree_pid`, `tree_depth` columns - a migration will be created</span></b>
+                        </label>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="acl">Acl</label>
+                        {#<input type="text" class="form-control" id="acl"  name="acl"  value="{{ model.acl }}" />#}
+                        <select class="form-control default_select" id="acl" name="acl"  style="width:250px;"  >
+                            <option value="">Choose acl</option>
+                            {% for acl, acl_title in config.acl.acls %}
+                                <option value="{{ acl }}" {{ model.acl==acl?'selected' }}>{{ acl_title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ent_name">Entity name *</label>
+                        <input type="text" class="form-control" id="ent_name" name="ent_name" value="{{ model.ent_name }}" required  />
+                    </div>
+                    <div class="form-group">
+                        <label for="title_field">Title field</label>
+                        <select class="form-control default_select" id="title_field" name="title_field"  style="width:250px;"  >
+                            <option value="">Choose database table field</option>
+                            {% for f in wizard.getTableColumns(table) %}
+                                  <option value="{{ f }}" {{ model.title_field==f?'selected' }}>{{ f }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <div class="help-block">DB table field that serves as title or name of the entity</div>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <label for="ent_name_r">(Russian only) Model entity name (Родительный падеж)</label>
+                        <input type="text" class="form-control" id="ent_name_r" name="ent_name_r" value="{{ model.ent_name_r }}" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ent_name_v">(Russian only) Model entity name (Винительный падеж)</label>
+                        <input type="text" class="form-control" id="ent_name_v" name="ent_name_v"  value="{{ model.ent_name_v }}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="dialog_width">Modal dialog width (optional)</label>
+                        <input type="text" class="form-control" id="dialog_width" name="dialog_width" value="{{ model.dialog_width }}"  />
+                    </div>
+
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="dialog_width">Audit trail. Track model changes</label>
+                        <select name="track_history" id="track_history" class="form-control default_select" style="width:250px;">
+                            {% for op_val, op_text in wizard.getTrackHistoryOptions() %}
+                                <option value="{{ op_val }}" {{ model.track_history==op_val?'selected' }}>{{ op_text }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+            </div>
+        </fieldset>
+
+        <h1>Relations</h1>
+        {% include 'crud::wizard/blocks/relations_container' %}
+
+        <h1>Editable Form Fields</h1>
+        {% include 'crud::wizard/blocks/fields_container' %}
+
+        {#<h1>Files</h1>#}
+        {#{% include 'crud::wizard/blocks/files' %}#}
+
+        <h1>Scopes (List & Form)</h1>
+        <fieldset>
+
+            <div class="row">
+                <div class="col-lg-12"  >
+                    <div id="lists_container">
+                        {%  if model.scopes %}
+                            {%  for ALIAS, list in  model.scopes%}
+                                {% include 'crud::wizard/blocks/list' %}
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                    <label>
+
+                        <input  type="text" class="form-control" id="list_alias" style="width:300px;" placeholder="Enter scope name" />
+
+                        <a href="#" class="btn btn-success" data-click="crud_action" data-action="wizard_add_list" ><i class="fa fa-plus"></i> Add scope</a>
+
+                    </label>
+                </div>
+
+            </div>
+        </fieldset>
+
+
+    </form>
+</div>
+</div>
+
+
+    {# TEMPLATES#}
+
+    {# LIST #}
+    {%  set list_alias = null %}
+    {%  set list = null %}
+    {%  set ALIAS = "_ALIAS_" %}
+    {% include 'crud::wizard/blocks/list' %}
+    {# RELATIONS#}
+    {% include 'crud::wizard/blocks/relations' %}
+    {# FIELDS#}
+    {% include 'crud::wizard/blocks/fields' %}
+    {# FILTERS#}
+    {% include 'crud::wizard/blocks/filter_fields' %}
+
+    {# END TEMPLATES#}
+
+{% else %}
+
+    <div class="alert alert-danger" role="alert">{{ alert }}</div>
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block modals %}
+    {#<script src="{{ 'js/plugins/staps/jquery.steps.js'|asset }}"></script>#}
+    {#<script src="{{ 'js/plugins/validate/jquery.validate.min.js'|asset }}"></script>#}
+    {% include 'crud::wizard/blocks/sort_popup' %}
+    <script src="{{ 'js/modules/wizard.js'|asset }}"></script>
+    <script>
+        var models = {{ wizard.getAllModelColumns()|json_encode|raw }};
+    </script>
+{% endblock %}
+
+{% block bc %}
+<ol class="breadcrumb">
+    <li><a href="{{ route('wizard_index') }}">Models index</a></li>
+    <li>Configure model "{{ model.name }}"</li>
+</ol>
+
+{% endblock %}
+
+

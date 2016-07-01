@@ -1,7 +1,6 @@
 <?php  namespace Skvn\Crud\Traits;
 
-use Skvn\Crud\Wizard\Wizard;
-use Skvn\Crud\Wizard\CrudModelPrototype;
+
 
 trait WizardCommonFieldTrait
 {
@@ -52,13 +51,13 @@ trait WizardCommonFieldTrait
         return "---";
     }
 
-    public function wizardCallbackFieldConfig (&$fieldKey,array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    public function wizardCallbackFieldConfig (&$fieldKey,array &$fieldConfig,   $modelPrototype)
     {
         
     }
 
 
-    public function wizardCallbackModelConfig($fieldKey,  array &$modelConfig, CrudModelPrototype $modelPrototype)
+    public function wizardCallbackModelConfig($fieldKey,  array &$modelConfig,  $modelPrototype)
     {
 
     }

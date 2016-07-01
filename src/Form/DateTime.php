@@ -3,7 +3,6 @@
 
 use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
-use Skvn\Crud\Wizard\CrudModelPrototype;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 use Carbon\Carbon;
@@ -106,7 +105,7 @@ class DateTime extends Field implements WizardableField, FormControl
         return "Date + Time";
     }
 
-    function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig,  $modelPrototype)
     {
         $formats = $modelPrototype->wizard->getAvailableDateTimeFormats();
         $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];

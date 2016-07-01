@@ -1,8 +1,7 @@
 <?php namespace Skvn\Crud\Contracts;
 
 
-use Skvn\Crud\Wizard\CrudModelPrototype;
-use Skvn\Crud\Wizard\Wizard;
+
 
 interface WizardableField
 {
@@ -54,19 +53,19 @@ interface WizardableField
      *
      * @param strinf $fieldKey
      * @param array $fieldConfig
-     * @param CrudModelPrototype $modelPrototype
+     * @param  $modelPrototype
      * @return void
      */
-    public function wizardCallbackFieldConfig (&$fieldKey,array &$fieldConfig,CrudModelPrototype $modelPrototype);
+    public function wizardCallbackFieldConfig (&$fieldKey,array &$fieldConfig, $modelPrototype);
 
     /**
      * Apply actions to the model config array during setup in wizard
      *
      * @param strinf $fieldKey
      * @param array $modelConfig     
-     * @param CrudModelPrototype $modelPrototype
+     * @param  $modelPrototype
      * @return void
      */
-    public function wizardCallbackModelConfig($fieldKey,array &$modelConfig,CrudModelPrototype $modelPrototype);
+    public function wizardCallbackModelConfig($fieldKey,array &$modelConfig, $modelPrototype);
 
 }

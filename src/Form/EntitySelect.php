@@ -9,7 +9,6 @@ use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
-use Skvn\Crud\Wizard\CrudModelPrototype;
 
 
 class EntitySelect extends Field implements WizardableField, FormControl

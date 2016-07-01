@@ -2,7 +2,6 @@
 
 use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
-use Skvn\Crud\Wizard\CrudModelPrototype;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
@@ -100,7 +99,7 @@ class Date extends Field implements WizardableField, FormControl{
     }
 
 
-    public function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    public function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig, $modelPrototype)
     {
         $formats = $modelPrototype->wizard->getAvailableDateFormats();
         $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];

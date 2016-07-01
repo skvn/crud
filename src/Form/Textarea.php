@@ -3,7 +3,6 @@
 
 use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
-use Skvn\Crud\Wizard\CrudModelPrototype;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
@@ -60,12 +59,12 @@ class TextArea extends Field implements WizardableField, FormControl, FormContro
     }
 
 
-    public function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig, CrudModelPrototype $modelPrototype)
+    public function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig,  $modelPrototype)
     {
         unset($fieldConfig['editor']);
     }
 
-    public  function wizardCallbackModelConfig($fieldKey,array &$modelConfig,CrudModelPrototype $modelPrototype)
+    public  function wizardCallbackModelConfig($fieldKey,array &$modelConfig, $modelPrototype)
     {
         if (!empty($modelConfig['fields'][$fieldKey]['editor']))
         {

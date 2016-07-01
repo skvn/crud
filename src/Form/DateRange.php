@@ -3,7 +3,6 @@
 
 use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
-use Skvn\Crud\Wizard\CrudModelPrototype;
 use Skvn\Crud\Contracts\FormControl;
 
 
@@ -77,7 +76,7 @@ class DateRange extends Range implements WizardableField, FormControl
 
 
 
-    public function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig,  CrudModelPrototype $modelPrototype)
+    public function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig,   $modelPrototype)
     {
         $fieldConfig['db_type'] = $modelPrototype->column_types[$fieldConfig['fields'][0]];
         $formats = $modelPrototype->wizard->getAvailableDateTimeFormats();
