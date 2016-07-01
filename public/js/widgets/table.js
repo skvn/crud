@@ -74,7 +74,7 @@
                                 //    + '<span class="fa fa-ellipsis-v" style="margin-bottom: 10px;"></span>'
                                 //    + '</button>'
                                 //    + '<ul class="dropdown-menu dropdown-menu-right" >';
-                                console.log(rowData);
+                                //console.log(rowData);
                                 for (var i=0; i<actions.length; i++)
                                 {
                                     if (actions[i]['ifcolumn'])
@@ -106,6 +106,15 @@
                                     else if (actions[i]['popup'])
                                     {
                                         buttons += '<li><a href="'+actions[i]['popup']+'"  data-title="'+actions[i]['title']+'" data-model="'+tbl.data('crud_table')+'" data-id="'+rowData.id+'" data-scope="'+tbl.data('crud_scope')+'" data-click="crud_popup" data-popup="'+actions[i]['popup_id']+'" data-event="'+actions[i]['event']+'" '+ (actions[i]['confirm'] ? 'data-confirm="'+actions[i]['confirm']+'"' : '') +'>';
+                                    }
+                                    else if (actions[i]['url'])
+                                    {
+                                        var strargs = {
+                                            model : tbl.data('crud_table'),
+                                            id: rowData.id,
+                                            scope: tbl.data('crud_scope')
+                                        };
+                                        buttons += '<li><a href="'+crud.format_string(actions[i]['url'], strargs)+'"  data-title="'+actions[i]['title']+'"  target="_blank" '+ (actions[i]['confirm'] ? 'data-confirm="'+actions[i]['confirm']+'"' : '') +'>';
                                     }
 
 

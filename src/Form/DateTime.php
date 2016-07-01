@@ -35,7 +35,7 @@ class DateTime extends Field implements WizardableField, FormControl
     {
         if (empty($this->value))
         {
-            return null;
+            return "";
         }
         if ($this->isInt())
         {

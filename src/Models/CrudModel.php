@@ -299,6 +299,26 @@ abstract class CrudModel extends Model
         return date($args['format'] ?? 'd.m.Y', $val);
     }
 
+    /**
+     * Remove tags and truncate to $args[length]
+     *
+     * @param $val
+     * @param array $args
+     */
+    function crudFormatValueTruncate($val, $args = [])
+    {
+        $val = strip_tags($val);
+        if (!empty($args['length']))
+        {
+            if (mb_strlen($val) > $args['length'])
+            {
+                $val = mb_substr($val, 0, $args['length']) . "...";
+            }
+        }
+        return $val;
+    }
+
+
 
     protected function listPublicMethods($pattern)
     {

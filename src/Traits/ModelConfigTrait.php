@@ -185,7 +185,7 @@ trait ModelConfigTrait
                 try
                 {
                     $relObj = $this->$rel;
-                    $value = $relObj->$attr;
+                    $value = is_object($relObj) ? $relObj->$attr : "";
                     if (!empty($format))
                     {
                         $method = "crudFormatValue" . camel_case($format);
