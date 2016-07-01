@@ -58,6 +58,10 @@ class Filter {
         {
             return;
         }
+        if ($col['type'] == "date")
+        {
+            $col['type'] = "date_range";
+        }
         $control = Form :: getControlByType($col['type']);
         if (!$control instanceof FormControlFilterable)
         {

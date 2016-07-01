@@ -136,8 +136,13 @@ class ListHandler {
             {
                 if (!empty($column['filterable']))
                 {
+                    $rel = $this->model->resolveListRelation($column['data']);
+                    if ($rel !== false)
+                    {
+                        $column['data'] = $rel[0];
+                    }
                     $cols[$column['data']] = $column['data'];
-                    if ($fld = $this->model->getField($column['data']))
+                    if ($fld = $this->model->getField($column['data'], true))
                     {
                         if (!empty($fld['field']))
                         {
