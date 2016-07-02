@@ -3,7 +3,7 @@
 use \Illuminate\Database\Eloquent\Model;
 use Skvn\Crud\Traits\ModelInjectTrait;
 use Skvn\Crud\Traits\ModelConfigTrait;
-use Skvn\Crud\Traits\ModelRelationTrait;
+//use Skvn\Crud\Traits\ModelRelationTrait;
 use Skvn\Crud\Traits\ModelFilterTrait;
 use Skvn\Crud\Traits\ModelFormTrait;
 use Skvn\Crud\Exceptions\NotFoundException;
@@ -14,15 +14,15 @@ abstract class CrudModel extends Model
 {
     use ModelInjectTrait;
     use ModelConfigTrait;
-    use ModelRelationTrait;
+//    use ModelRelationTrait;
     use ModelFilterTrait;
     use ModelFormTrait;
 
 
-    const RELATION_BELONGS_TO_MANY = 'belongsToMany';
-    const RELATION_BELONGS_TO = 'belongsTo';
-    const RELATION_HAS_MANY = 'hasMany';
-    const RELATION_HAS_ONE = 'hasOne';
+//    const RELATION_BELONGS_TO_MANY = 'belongsToMany';
+//    const RELATION_BELONGS_TO = 'belongsTo';
+//    const RELATION_HAS_MANY = 'hasMany';
+//    const RELATION_HAS_ONE = 'hasOne';
 
     const DEFAULT_SCOPE = 'default';
 
@@ -38,6 +38,8 @@ abstract class CrudModel extends Model
     protected $validator;
     public $timestamps = false;
     protected $eventsDisabled = false;
+    public $crudRelations;
+
 
     /**
      * Flag for tracking created_by and updated_by attributes
@@ -52,6 +54,8 @@ abstract class CrudModel extends Model
         $this->bootIfNotBooted();
         $this->preconstruct();
         parent::__construct($attributes);
+        $this->crudRelations = new Relations($this);
+
         $this->postconstruct();
 
 //        $this->validator = $validator ?: $this->app['validator'];
@@ -112,9 +116,13 @@ abstract class CrudModel extends Model
 
     public function __call($method, $parameters)
     {
-        if ($col = $this->getCrudRelation($method))
+//        if ($col = $this->getCrudRelation($method))
+//        {
+//                return $this->createCrudRelation($col, $method);
+//        }
+        if ($this->crudRelations->has($method))
         {
-                return $this->createCrudRelation($col, $method);
+            return $this->crudRelations->getRelation($method);
         }
         return parent::__call($method, $parameters);
     }
@@ -141,13 +149,10 @@ abstract class CrudModel extends Model
 
     public function getAttribute($key)
     {
-        if ($this->getCrudRelation($key))
+        if ($this->crudRelations->has($key))
+        //if ($this->getCrudRelation($key))
         {
-            if ( ! array_key_exists($key, $this->relations))
-            {
-                $camelKey = camel_case($key);
-                return $this->getRelationshipFromMethod($key, $camelKey);
-            }
+            return $this->crudRelations->get($key);
         }
 
         return parent::getAttribute($key);
@@ -155,6 +160,11 @@ abstract class CrudModel extends Model
 
     function setAttribute($key, $value)
     {
+        if ($this->crudRelations->has($key))
+        {
+            $this->crudRelations[$key]->set($value);
+            return;
+        }
         if ($this->callSetters($key, $value) === true)
         {
             return;

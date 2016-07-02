@@ -25,12 +25,13 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
 //        }
 
 
-        if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
+        if ($this->model->crudRelations->isMany($this->getName()))
+        //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
         {
-            $this->value = $this->model->getRelationIds($this->getName());
+            $this->value = $this->model->crudRelations->getIds($this->getName());
         }
         else if (!empty($this->config['relation'])
-            && $this->config['relation'] == CrudModel::RELATION_HAS_ONE)
+            && $this->config['relation'] == "hasOne")
         {
             $relation = $this->getName();
             $this->value = $this->model->$relation->id;
@@ -303,7 +304,8 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
             return;
         }
         $join = null;
-        if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
+        if ($this->model->crudRelations->isMany($this->getName()))
+        //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
         {
             $join = $this->name;
             $col = snake_case(class_basename($this->config['model'])).'_id';
@@ -336,8 +338,8 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
 
         if (!empty($fieldConfig['relation'])) {
             if (in_array($fieldConfig['relation'], [
-                \Skvn\Crud\Models\CrudModel::RELATION_BELONGS_TO_MANY,
-                \Skvn\Crud\Models\CrudModel::RELATION_HAS_MANY
+                "belongsToMany",
+                "hasMany"
             ])) {
                 $fieldConfig['multiple'] = true;
             }

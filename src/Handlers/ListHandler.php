@@ -136,10 +136,10 @@ class ListHandler {
             {
                 if (!empty($column['filterable']))
                 {
-                    $rel = $this->model->resolveListRelation($column['data']);
+                    $rel = $this->model->crudRelations->resolveReference($column['data']);
                     if ($rel !== false)
                     {
-                        $column['data'] = $rel[0];
+                        $column['data'] = $rel['rel'];
                     }
                     $cols[$column['data']] = $column['data'];
                     if ($fld = $this->model->getField($column['data'], true))

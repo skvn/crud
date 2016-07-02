@@ -85,6 +85,7 @@ trait ModelInjectTrait {
             {
                 return true;
             }
+            $instance->crudRelations->save();
             return $instance->onAfterSave();
         });
         static::saving(function($instance)
@@ -126,7 +127,12 @@ trait ModelInjectTrait {
             {
                 return true;
             }
-            return $instance->onBeforeDelete();
+            $check = $instance->onBeforeDelete();
+            if ($check !== false)
+            {
+                $instance->crudRelations->delete();
+            }
+            return $check;
         });
 
         static::deleted(function($instance)
@@ -162,7 +168,6 @@ trait ModelInjectTrait {
 
     protected  function onBeforeDelete()
     {
-        $this->processRelationsOndelete();
         return true;
     }
 

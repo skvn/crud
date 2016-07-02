@@ -137,7 +137,7 @@ class AttachmentHandler {
                     $this->parentInstance->saveDirect();
                     //$this->parentInstance->update([$this->parentFieldName => $instance->id]);
                 } else {
-                    $instance->setAttribute($this->options['ref_column'], $this->parentInstance->getKey());
+                    $instance->setAttribute($this->options['field'], $this->parentInstance->getKey());
                     $instance->save();
 //                    if (!in_array($instance->id,$ids))
 //                    {

@@ -21,12 +21,13 @@ class EntitySelect extends Field implements WizardableField, FormControl
     {
 
 
-        if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
+        if ($this->model->crudRelations->isMany($this->getName()))
+        //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
         {
-            $this->value = $this->model->getRelationIds($this->getName());
+            $this->value = $this->model->crudRelations->getIds($this->getName());
         }
         else if (!empty($this->config['relation'])
-            && $this->config['relation'] == CrudModel::RELATION_HAS_ONE)
+            && $this->config['relation'] == "hasOne")
         {
             $relation = $this->getName();
             $this->value = $this->model->$relation->id;

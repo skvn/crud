@@ -18,13 +18,14 @@ class Tree extends Field implements WizardableField, FormControl{
 
     function pullFromModel()
     {
-        if ($this->model->isManyRelation($this->config['relation']))
+        if ($this->model->crudRelations->isMany($this->getName()))
+        //if ($this->model->isManyRelation($this->config['relation']))
         {
-            $this->value =  $this->model->getRelationIds($this->name)->toArray();
+            $this->value =  $this->model->crudRelations->getIds($this->name)->toArray();
         }
         else
         {
-            if ($this->config['relation'] == CrudModel::RELATION_HAS_ONE)
+            if ($this->config['relation'] == "hasOne")
             {
                 $relation = $this->name;
                 $this->value = [$this->$relation->getKey()];

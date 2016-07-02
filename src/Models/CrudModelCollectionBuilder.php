@@ -99,9 +99,10 @@ class CrudModelCollectionBuilder
         $joins =[];
         foreach ($this->columns as $listCol)
         {
-            if ($relSpl = $this->model->resolveListRelation($listCol['data']))
+            //if ($relSpl = $this->model->resolveListRelation($listCol['data']))
+            if ($relSpl = $this->model->crudRelations->resolveReference($listCol['data']))
             {
-                $joins[$relSpl[0]] = function ($query) {};
+                $joins[$relSpl['rel']] = function ($query) {};
             }
         }
         if (method_exists($this->model, $method))

@@ -18,7 +18,7 @@ class Tags extends Field implements WizardableField, FormControl {
     {
         $class = CrudModel :: resolveClass($this->config['model']);
         $dummyModel = new $class();
-        $ids = $this->model->getRelationIds($this->name);
+        $ids = $this->model->crudRelations->getIds($this->name);
         if (count($ids))
         {
             $collection = $class::findMany($ids);

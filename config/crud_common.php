@@ -32,5 +32,12 @@ return [
         Skvn\Crud\Form\Tree :: class,
         Skvn\Crud\Form\Radio :: class,
         Skvn\Crud\Form\EntitySelect :: class,
+    ],
+
+    'relations' => [
+        'hasOne' => Skvn\Crud\Models\RelationHasOne :: class,
+        'hasMany' => Skvn\Crud\Models\RelationHasMany :: class,
+        'belongsTo' => Skvn\Crud\Models\RelationBelongsTo :: class,
+        'belongsToMany' => Skvn\Crud\Models\RelationBelongsToMany :: class,
     ]
 ];

@@ -172,10 +172,10 @@ trait ModelConfigTrait
     function getDescribedColumnValue($col, $format = false, $format_args = [])
     {
         $value = null;
-        if ($relSpl = $this->resolveListRelation($col))
+        if ($relSpl = $this->crudRelations->resolveReference($col))
         {
-            $rel = $relSpl[0];
-            $attr = $relSpl[1];
+            $rel = $relSpl['rel'];
+            $attr = $relSpl['attr'];
             if (method_exists($this, 'hasAttach') && $this->hasAttach($rel))
             {
                 $value = $this->getAttach($rel)->$attr;
