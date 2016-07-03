@@ -214,7 +214,15 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
             }
             else
             {
-                $collection = $class::all();
+                $query = $class :: query();
+                if (!empty($this->config['sort']))
+                {
+                    foreach ($this->config['sort'] as $c => $d)
+                    {
+                        $query->orderBy($c, $d);
+                    }
+                }
+                $collection = $query->get();
             }
         }
 
