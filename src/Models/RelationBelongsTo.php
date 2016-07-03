@@ -13,13 +13,26 @@ class RelationBelongsTo extends Relation
         return false;
     }
 
-    function delete()
+    function delete($id = null)
     {
-
+        if (($this->config['on_delete'] ?? false) === "delete")
+        {
+            $this->get()->delete();
+        }
+        if (!is_null($id))
+        {
+            $this->model->setAttribute($this->relation->getForeignField(), null);
+            $this->model->saveDirect();
+        }
     }
 
     function save()
     {
 
+    }
+
+    function getIds()
+    {
+        return $this->model->getAttribute($this->config['field']);
     }
 }

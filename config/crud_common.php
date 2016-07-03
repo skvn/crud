@@ -36,7 +36,9 @@ return [
 
     'relations' => [
         'hasOne' => Skvn\Crud\Models\RelationHasOne :: class,
+        'hasFile' => Skvn\Crud\Models\RelationHasFile :: class,
         'hasMany' => Skvn\Crud\Models\RelationHasMany :: class,
+        'hasManyFiles' => Skvn\Crud\Models\RelationHasManyFiles :: class,
         'belongsTo' => Skvn\Crud\Models\RelationBelongsTo :: class,
         'belongsToMany' => Skvn\Crud\Models\RelationBelongsToMany :: class,
     ]

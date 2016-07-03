@@ -18,7 +18,7 @@ class File extends Field implements WizardableField, FormControl
     {
         if ($this->model->getAttribute($this->field))
         {
-            $this->value = $this->model->getAttach($this->name);
+            $this->value = $this->model->getAttribute($this->name);
         }
     }
 

@@ -14,7 +14,7 @@ class RelationHasOne extends Relation
         return false;
     }
 
-    function delete()
+    function delete($id = null)
     {
         if (($this->config['on_delete'] ?? null) === "delete")
         {
@@ -32,5 +32,10 @@ class RelationHasOne extends Relation
         $obj = CrudModel :: createInstance($this->config['model'], null, $this->dirtyValue);
         $obj->setAttribute($this->config['field'], $this->model->getKey());
         $obj->save();
+    }
+
+    function getIds()
+    {
+        return $this->get()->getKey();
     }
 }

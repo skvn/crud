@@ -18,7 +18,7 @@ class RelationBelongsToMany extends Relation
         return true;
     }
 
-    function delete()
+    function delete($id = null)
     {
 
     }
@@ -33,6 +33,10 @@ class RelationBelongsToMany extends Relation
         {
             $this->relation->sync([]);
         }
+    }
 
+    function getIds()
+    {
+        return $this->get()->lists($this->createRelatedModel()->getKeyName())->all();
     }
 }

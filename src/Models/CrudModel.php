@@ -423,4 +423,18 @@ abstract class CrudModel extends Model
         return $this->$command($args);
     }
 
+    public function deleteAttachedModel($args)
+    {
+        $rel = $args['delete_attach_rel'] ?? false;
+        if ($rel)
+        {
+            if (empty($args['delete_attach_id']))
+            {
+                $args['delete_attach_id'] = -1;
+            }
+            $this->crudRelations[$rel]->delete($args['delete_attach_id']);
+        }
+    }
+
+
 }

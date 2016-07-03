@@ -60,9 +60,15 @@ abstract class Relation
         $this->isDirty = false;
     }
 
+    function createRelatedModel()
+    {
+        return CrudModel :: createInstance($this->config['model']);
+    }
+
 
     abstract function create();
     abstract function isMany();
-    abstract function delete();
+    abstract function delete($id = null);
     abstract function save();
+    abstract function getIds();
 }

@@ -15,12 +15,19 @@ class RelationHasMany extends Relation
         return true;
     }
 
-    function delete()
+    function delete($id = null)
     {
         $col = $this->relation->getForeignKey();
         $delete = $this->config['on_delete'] ?? false;
-        $this->get()->each(function ($item, $key) use ($delete, $col) {
+        $this->get()->each(function ($item, $key) use ($delete, $col, $id) {
 
+            if (!is_null($id))
+            {
+                if ($item->getKey() != $id)
+                {
+                    return;
+                }
+            }
             if ($delete  === "delete")
             {
                 $item->delete();
@@ -77,6 +84,11 @@ class RelationHasMany extends Relation
             }
         }
 
+    }
+
+    function getIds()
+    {
+        return $this->get()->lists($this->createRelatedModel()->getKeyName())->all();
     }
 
 }

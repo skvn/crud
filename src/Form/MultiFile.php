@@ -15,7 +15,7 @@ class MultiFile extends Field implements WizardableField, FormControl{
 
     function pullFromModel()
     {
-        $this->value = $this->model->getAttach($this->name);
+        $this->value = $this->model->getAttribute($this->name);
         return $this;
     }
 
@@ -54,7 +54,7 @@ class MultiFile extends Field implements WizardableField, FormControl{
 
     function getExisting()
     {
-        return $this->model->getAttach($this->getName());
+        return $this->model->getAttribute($this->getName());
     }
 
 

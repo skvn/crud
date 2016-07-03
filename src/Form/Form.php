@@ -27,7 +27,6 @@ class Form {
     public $tabs = [];
 
     public $customProperties;
-    //public $visibleFields;
 
     /**
      * Form constructor.
@@ -81,9 +80,6 @@ class Form {
     {
         $class = get_class(self :: $controls[$config['type']]);
         return $class :: create()->setConfig($config)->setModel($model);
-//        $control = new $class($config);
-//        $control->setModel($model);
-//        return $control;
     }
 
     function addField($name, $config, $tab = null)
@@ -153,7 +149,6 @@ class Form {
     function load($data)
     {
         $this->import($data);
-        //$this->crudObj->fillFromRequest($data);
         $this->sync();
     }
 
@@ -177,13 +172,6 @@ class Form {
         return (string) $res;
     }
 
-
-//    static function getAttachFields()
-//    {
-//
-//    }
-
-    
 
     /**
      * Return One field object by it's field name
@@ -209,20 +197,6 @@ class Form {
 
     }
 
-//    public function __isset($key)
-//    {
-//        return $this->crudObj->__isset($key);
-//    }
-//
-//    public function __get($key)
-//    {
-//        return $this->crudObj->__get($key);
-//    }
-//
-//    public function __set($key, $value)
-//    {
-//        $this->crudObj->__set($key, $value);
-//    }
 
 
 

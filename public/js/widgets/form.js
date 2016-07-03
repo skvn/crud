@@ -58,7 +58,7 @@
                                         crud.trigger("crud.reload", res);
                                         crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
                                         //alert(1);
-                                        crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
+                                        //crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
 
                                     }
                                     $form.trigger('reset');

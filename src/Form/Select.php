@@ -19,27 +19,28 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
 
     function pullFromModel()
     {
+        $this->value = $this->model->crudRelations->has($this->getName()) ? $this->model->crudRelations[$this->getName()]->getIds() : $this->model->getAttribute($this->getField());
 //        if (!in_array($this->name, $this->model->getHidden()))
 //        {
 //            $this->value = $this->model->getAttribute($this->field);
 //        }
 
 
-        if ($this->model->crudRelations->isMany($this->getName()))
-        //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
-        {
-            $this->value = $this->model->crudRelations->getIds($this->getName());
-        }
-        else if (!empty($this->config['relation'])
-            && $this->config['relation'] == "hasOne")
-        {
-            $relation = $this->getName();
-            $this->value = $this->model->$relation->id;
-        }
-        else
-        {
-            $this->value = $this->model->getAttribute($this->getField());
-        }
+//        if ($this->model->crudRelations->isMany($this->getName()))
+//        //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
+//        {
+//            $this->value = $this->model->crudRelations->getIds($this->getName());
+//        }
+//        else if (!empty($this->config['relation'])
+//            && $this->config['relation'] == "hasOne")
+//        {
+//            $relation = $this->getName();
+//            $this->value = $this->model->$relation->id;
+//        }
+//        else
+//        {
+//            $this->value = $this->model->getAttribute($this->getField());
+//        }
 
         return $this;
     }
@@ -203,7 +204,7 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
         if (!empty($this->config['find']))
         {
             $method = $method = "selectOptions" . studly_case($this->config['find']);
-            return $modelObj->$method();
+            return $modelObj->$method($this->model);
         }
         else
         {

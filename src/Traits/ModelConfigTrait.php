@@ -55,16 +55,6 @@ trait ModelConfigTrait
         {
             $this->table = $this->config['table'] ?? $this->classViewName;
         }
-        //$this->timestamps = $this->config['timestamps'] ?? false;
-//        if ($this->timestamps)
-//        {
-//            //if (($this->config['timestamps_type'] ?? "int") === "int")
-//            if ($this->timestamps_type == "int")
-//            {
-//                $this->dateFormat = 'U';
-//            }
-//        }
-        //$this->track_authors = $this->config['authors'] ?? false;
 
         $this->config['file_params'] = [];
     }
@@ -81,13 +71,6 @@ trait ModelConfigTrait
         return $list;
     }
 
-//    public function getFields($prop='')
-//    {
-//        $form =  $this->confParam('fields');
-//
-//        return $prop ? (isset($form[$prop]) ? $form[$prop] : null) : $form;
-//    }
-
     function getField($name, $throw = false)
     {
         $field = $this->config['fields'][$name] ?? [];
@@ -97,13 +80,6 @@ trait ModelConfigTrait
         }
         $field['name'] = $name;
         return $field;
-
-//        $field = $this->getFields($name);
-//        if (!isset($field['name']))
-//        {
-//            $field['name'] = $name;
-//        }
-//        return $field;
     }
 
     /**
@@ -117,12 +93,6 @@ trait ModelConfigTrait
     public function confParam($key, $default = null)
     {
         return Arr :: get($this->config, $key, $default);
-//        if (strpos($key, '.') === false) {
-//            return (!empty($this->config[$key]) ? $this->config[$key] : $default);
-//        } else {
-//            return $this->app['config']->get('crud.' . $this->getTable() . '.' . $key, $default);
-//        }
-        
     }
 
     function getList()
@@ -138,11 +108,6 @@ trait ModelConfigTrait
     {
         return $this->config['scopes'][$this->scope][$key] ?? $default;
     }
-
-//    public function getListConfig($prop='')
-//    {
-//        return $this->getList()->getParam($prop);
-//    }
 
     function getTreeConfig($prop = '')
     {
@@ -176,30 +141,30 @@ trait ModelConfigTrait
         {
             $rel = $relSpl['rel'];
             $attr = $relSpl['attr'];
-            if (method_exists($this, 'hasAttach') && $this->hasAttach($rel))
+//            if (method_exists($this, 'hasAttach') && $this->hasAttach($rel))
+//            {
+//                $value = $this->getAttach($rel)->$attr;
+//            }
+//            else
+//            {
+            try
             {
-                $value = $this->getAttach($rel)->$attr;
-            }
-            else
-            {
-                try
+                $relObj = $this->$rel;
+                $value = is_object($relObj) ? $relObj->$attr : "";
+                if (!empty($format))
                 {
-                    $relObj = $this->$rel;
-                    $value = is_object($relObj) ? $relObj->$attr : "";
-                    if (!empty($format))
+                    $method = "crudFormatValue" . camel_case($format);
+                    if (method_exists($relObj, $method))
                     {
-                        $method = "crudFormatValue" . camel_case($format);
-                        if (method_exists($relObj, $method))
-                        {
-                            $value = $relObj->$method($value, $format_args);
-                        }
+                        $value = $relObj->$method($value, $format_args);
                     }
                 }
-                catch (\Exception $e)
-                {
-                    $value = "(not found)" . $e->getMessage() . ":" . $e->getFile() . ":" . $e->getLine();
-                }
             }
+            catch (\Exception $e)
+            {
+                $value = "(not found)" . $e->getMessage() . ":" . $e->getFile() . ":" . $e->getLine();
+            }
+//            }
         }
         else
         {
@@ -261,20 +226,10 @@ trait ModelConfigTrait
         return $this->scope;
     }
 
-//    public  function getListName()
-//    {
-//        return $this->scope ? $this->scope : self :: DEFAULT_SCOPE;
-//    }
-
-
-
-
-
     static function fileParams()
     {
         return [];
     }
-
 
     function getFilesConfig($name, $param = null)
     {
@@ -291,8 +246,6 @@ trait ModelConfigTrait
             ];
             $conf = array_merge($conf, static :: fileParams());
             $conf['instance_id'] = $this->exists ? $this->getKey() : $this->guessNewKey();
-            //$obj = new $conf['class']();
-            //$conf['table'] = $obj->getTable();
 
             $md5 = md5($name);
             $replace = [
@@ -374,19 +327,5 @@ trait ModelConfigTrait
         }
         return $key . "::" . $view;
     }//
-
-//    public function isFormTabbed()
-//    {
-//        $form = $this->getListConfig('form');
-//        if (isset($form[0]))
-//        {
-//            return false;
-//        }
-//
-//        return true;
-//    }
-
-    
-
 
 }

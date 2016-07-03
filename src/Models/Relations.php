@@ -91,13 +91,7 @@ class Relations implements ArrayAccess
 
     function getIds($name)
     {
-        $data = $this->get($name)->lists('id');
-        if (is_object($data) && ($data instanceof Collection))
-        {
-            $data = $data->all();
-        }
-
-        return $data;
+        return $this->define($name)->getIds();
     }
 
     function isMany($name)

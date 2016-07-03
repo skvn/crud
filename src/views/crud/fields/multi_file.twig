@@ -31,7 +31,7 @@
                                     <input class="form-control"  data-title_for="{{ input.name }}[{{ fileObj.id }}]" name="{{ input.name }}_title[{{ fileObj.id }}]" value="{{ fileObj.title }}"  type="text">
                                 </td>
                                 <td>
-                                    <a class="badge badge-danger" href="delete_single_attach" data-model="{{ input.classViewName }}" data-id="{{ input.model.getKey() }}" data-confirm="{{ trans('crud::messages.really_delete') }} {{ trans('crud::messages.file') }}?" data-args='{"field":"{{ input.name }}","delete_attach_id":"{{ fileObj.id }}" }'  data-click="crud_action" data-action="crud_command" data-callback="elem.parent().parent().remove();"><i class="fa fa-times-circle"></i> {{ trans('crud::messages.delete') }}</a>
+                                    <a class="badge badge-danger" href="delete_attached_model" data-model="{{ input.classViewName }}" data-id="{{ input.model.getKey() }}" data-confirm="{{ trans('crud::messages.really_delete') }} {{ trans('crud::messages.file') }}?" data-args='{"delete_attach_rel":"{{ input.name }}","delete_attach_id":"{{ fileObj.id }}" }'  data-click="crud_action" data-action="crud_command" data-callback="elem.parent().parent().remove();"><i class="fa fa-times-circle"></i> {{ trans('crud::messages.delete') }}</a>
                                 </td>
                             </tr>
                         {% endfor %}
