@@ -22,7 +22,11 @@ class RelationHasFile extends Relation
     {
         if (($this->config['on_delete'] ?? false) === "delete")
         {
-            $this->get()->delete();
+            $obj = $this->get();
+            if ($obj)
+            {
+                $obj->delete();
+            }
         }
         if (!is_null($id))
         {
