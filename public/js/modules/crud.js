@@ -233,8 +233,11 @@
                 $('#crud_form').html('');
 
                 var self = this;
+                $.ajaxSetup({sync: false});
                 $('#crud_form').load(url, function (res)
                 {
+                    $('.modal-backdrop').remove();
+                    $.ajaxSetup({async: true});
                     if (res == 'Access denied')
                     {
                         alert('Недостаточно прав доступа');
