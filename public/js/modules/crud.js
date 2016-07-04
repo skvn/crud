@@ -233,10 +233,12 @@
                 $('#crud_form').html('');
 
                 var self = this;
-                $.ajaxSetup({sync: false});
-                $('#crud_form').load(url, function (res)
+                $.ajaxSetup({sync: false, context: this.doc.body});
+                //$('#crud_form').load(url, function (res)
+                $.get(url, {}, function(res)
                 {
-                    $('.modal-backdrop').remove();
+                    $('#crud_form').html(res);
+                    //$('.modal-backdrop').remove();
                     $.ajaxSetup({async: true});
                     if (res == 'Access denied')
                     {
@@ -245,7 +247,9 @@
                         return;
                     }
                     if (!$('#crud_form').hasClass('in')) {
+                        //alert('show');
                         $('#crud_form').modal('show');
+                        //alert('after_show');
                     }
                     var frm = $('form:first', $('#crud_form'));
                     frm.crud_form();

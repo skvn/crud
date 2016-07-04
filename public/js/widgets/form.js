@@ -36,6 +36,7 @@
                         type: $form.attr('method'),
                         url: $form.attr('action'),
                         dataType: 'json',
+                        context: crud.doc.body,
                         success: function(res){
                             crud.trigger('form.after_submit', {form: $form})
                             //crud.toggle_form_progress($form);
@@ -55,7 +56,12 @@
                                     else
                                     {
                                         crud.trigger("crud.reload", res);
-                                        crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
+                                        var ref = $form.data('crud_model') + '_' + $form.data('crud_scope');
+                                        var table = $('*[data-list_table_ref='+ref+']');
+                                        if (table.data('form_type') == 'tabs')
+                                        {
+                                            crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
+                                        }
                                         crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
 
                                     }
@@ -222,7 +228,8 @@
             } else {
                 //alert('hide');
                 $('form[data-rel='+data.rel+']').parents(".modal:first").modal('hide');
-                $('.modal-backdrop').remove();
+                //alert('after hide');
+                //$('.modal-backdrop').remove();
             }
 
         });
