@@ -29,7 +29,7 @@ trait ModelSlugTrait  {
     {
         if (!defined('static::SLUG_URL'))
         {
-            throw new ConfigException("Url pattern not defained");
+            throw new ConfigException("Url pattern not defined");
         }
         if ($this->getAttribute(static :: slugColumn()))
         {

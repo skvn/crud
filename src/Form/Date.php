@@ -4,6 +4,7 @@ use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
+use Carbon\Carbon;
 
 
 
@@ -30,6 +31,10 @@ class Date extends Field implements WizardableField, FormControl{
 
     function getOutputValue():string
     {
+        if ($this->value instanceof Carbon)
+        {
+            return date($this->config['format'], $this->value->timestamp);
+        }
         if (empty($this->value))
         {
             return null;
