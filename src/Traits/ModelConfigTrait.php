@@ -134,65 +134,58 @@ trait ModelConfigTrait
         return !empty($this->config['tree'])/* && !$this->getTreeConfig('use_list')*/;
     }
 
-    function getDescribedColumnValue($col, $format = false, $format_args = [])
-    {
-        $value = null;
-        if ($relSpl = $this->crudRelations->resolveReference($col))
-        {
-            $rel = $relSpl['rel'];
-            $attr = $relSpl['attr'];
-//            if (method_exists($this, 'hasAttach') && $this->hasAttach($rel))
+//    function getDescribedColumnValue($col, $format = false, $format_args = [])
+//    {
+//        $value = null;
+//        if ($relSpl = $this->crudRelations->resolveReference($col))
+//        {
+//            $rel = $relSpl['rel'];
+//            $attr = $relSpl['attr'];
+//            try
 //            {
-//                $value = $this->getAttach($rel)->$attr;
+//                $relObj = $this->$rel;
+//                $value = is_object($relObj) ? $relObj->$attr : "";
+//                if (!empty($format))
+//                {
+//                    $method = "crudFormatValue" . camel_case($format);
+//                    if (method_exists($relObj, $method))
+//                    {
+//                        $value = $relObj->$method($value, $format_args);
+//                    }
+//                }
 //            }
-//            else
+//            catch (\Exception $e)
 //            {
-            try
-            {
-                $relObj = $this->$rel;
-                $value = is_object($relObj) ? $relObj->$attr : "";
-                if (!empty($format))
-                {
-                    $method = "crudFormatValue" . camel_case($format);
-                    if (method_exists($relObj, $method))
-                    {
-                        $value = $relObj->$method($value, $format_args);
-                    }
-                }
-            }
-            catch (\Exception $e)
-            {
-                $value = "(not found)" . $e->getMessage() . ":" . $e->getFile() . ":" . $e->getLine();
-            }
+//                $value = "(not found)" . $e->getMessage() . ":" . $e->getFile() . ":" . $e->getLine();
 //            }
-        }
-        else
-        {
-            if ($this->__isset($col))
-            {
-                $form_config = $this->getField($col);
-                if ($form_config && !empty($form_config['type']))
-                {
-                    $form_config['name'] = $col;
-                    $field = Form :: createControl($this, $form_config);
-                    $value = $field->getOutputValue();
-                }
-                else
-                {
-                    $value = $this->$col;
-                }
-                if (!empty($format))
-                {
-                    $method = "crudFormatValue" . camel_case($format);
-                    if (method_exists($this, $method))
-                    {
-                        $value = $this->$method($value, $format_args);
-                    }
-                }
-            }
-        }
-        return $value;
-    }
+//        }
+//        else
+//        {
+//            if ($this->__isset($col))
+//            {
+//                $form_config = $this->getField($col);
+//                if ($form_config && !empty($form_config['type']))
+//                {
+//                    $form_config['name'] = $col;
+//                    $field = Form :: createControl($this, $form_config);
+//                    $value = $field->getOutputValue();
+//                }
+//                else
+//                {
+//                    $value = $this->$col;
+//                }
+//                if (!empty($format))
+//                {
+//                    $method = "crudFormatValue" . camel_case($format);
+//                    if (method_exists($this, $method))
+//                    {
+//                        $value = $this->$method($value, $format_args);
+//                    }
+//                }
+//            }
+//        }
+//        return $value;
+//    }
 
 
     public function setScope($scope = null)

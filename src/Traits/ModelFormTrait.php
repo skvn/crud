@@ -2,60 +2,13 @@
 
 
 use Skvn\Crud\Form\Form;
+use Illuminate\Support\Str;
 
 trait ModelFormTrait
 {
 
-    //protected $form_fields_collection;
     public $form = null;
 
-
-    /**
-     * Add field on the fly to the 'fields' array
-     *
-     * @param $fieldName
-     * @param $fieldLabel
-     * @param $fieldType
-     * @param $fieldConfig
-     */
-//    public function addFormField($fieldName,$fieldLabel,  $fieldType=null, $fieldConfig=[]){
-//
-//        if (empty($this->config['fields']))
-//        {
-//            $this->config['fields'] = [];
-//        }
-//
-//        if (empty($this->config['form']))
-//        {
-//            $this->config['form'] = [];
-//        }
-//
-//        if (empty($fieldType))
-//        {
-//            $fieldType = "text";
-//        }
-//        $params = ['type'=>$fieldType];
-//
-//        if (!empty($fieldLabel))
-//        {
-//            $params['title'] = $fieldLabel;
-//        }
-//        $this->config['fields'][$fieldName] = $params + $fieldConfig;
-//        $this->config['form'][] = $fieldName;
-//    }
-
-
-    /**
-     * Return one form field object by name
-     *
-     * @param $name
-     */
-//    public  function getFormField($name)
-//    {
-//        return $this->getFieldsObjects(null)[$name];
-//    }
-
-    
     public function getForm($args = [])
     {
         if (!$this->form)
@@ -90,14 +43,6 @@ trait ModelFormTrait
             {
                 $this->form->import($args['fillData']);
             }
-
-//            $this->form = Form :: create([
-//                'crudObj' => $this,
-//                'fields' => $formConfig['fields'],
-//                'tabs' => $formConfig['tabs'],
-//                'data' => !empty($config['fillData'])?$config['fillData']:null,
-//                'props' => $config
-//            ]);
         }
 
         return $this->form;
@@ -108,63 +53,53 @@ trait ModelFormTrait
         $this->form = $form;
     }
 
-//    public function getFormConfig()
-//    {
-//        $form =  $this->getListConfig('form');
-//        $tabbed = !isset($form[0]);
-//        $form_array = [];
-//        $tab_array = [];
-//
-//        if (is_array($form))
-//        {
-//            if ($tabbed)
-//            {
-//                foreach ($form as $tab_alias=>$tab)
-//                {
-//                    if (is_array($tab['fields']))
-//                    {
-//                        if (!isset($tab_array[$tab_alias]))
-//                        {
-//                            $tab_array[$tab_alias] = $tab;
-//                            unset($tab_array[$tab_alias]['fields']);
-//                        }
-//                        foreach ($tab['fields'] as $fname)
-//                        {
-//                            $form_array[$fname] = $this->getField($fname);
-//                            $form_array[$fname]['tab'] = $tab_alias;
-//                        }
-//                    }
-//                }
-//            } else {
-//
-//                foreach ($form as $fname) {
-//                    $form_array[$fname] = $this->getField($fname);
-//                }
-//            }
-//        }
-//
-//        return [
-//            'fields'=>$form_array,
-//            'tabs'=>$tab_array
-//        ];
-//    }
+    function formatted($col, $args = [])
+    {
+        $rel = $this->crudRelations->resolveReference($col);
+        if ($rel !== false)
+        {
+            try
+            {
+                $relObj = $this->{$rel['rel']};
+                if (!is_object($relObj))
+                {
+                    return "";
+                }
+                $value = $relObj->{$rel['attr']};
+            }
+            catch (\Exception $e)
+            {
+                return "(not found)" . $e->getMessage() . ":" . $e->getFile() . ":" . $e->getLine();
+            }
+        }
+        elseif ($this->__isset($col))
+        {
+            $field = $this->getField($col);
+            if (!empty($field['type']))
+            {
+                $control = Form :: createControl($this, $field);
+                $value = $control->getOutputValue();
+            }
+            else
+            {
+                $value = $this->$col;
+            }
+        }
+        else
+        {
+            return null;
+        }
+        if (!empty($args['formatter']))
+        {
+            $formatter = "crudFormatValue" . Str :: camel($args['formatter']);
+            if (method_exists($this, $formatter))
+            {
+                $value = $this->$formatter($value, $args);
+            }
+        }
 
-
-     
-//    public function getFieldsObjects($fillData=null)
-//    {
-//        if (!$this->form_fields_collection)
-//        {
-//            $form = Form :: create([
-//                'crudObj' => $this,
-//                'fields' => $this->getFields(),
-//                'data' => $fillData
-//            ]);
-//            $this->form_fields_collection = $form->fields;
-//        }
-//
-//        return $this->form_fields_collection;
-//    }
+        return $value;
+    }
 
     
 

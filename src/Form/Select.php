@@ -259,11 +259,11 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
             {
                 foreach ($dataCols as $col)
                 {
-                    $data[$col] = $o->getDescribedColumnValue($col);
+                    $data[$col] = $o->formatted($col);
                 }
             }
             $option = ['value' => $o->id, 'text' =>$o->internal_code.'. '.  $o->title, 'selected' => $this->isSelected($o->id),'data'=>$data];
-            $grVal = $o->getDescribedColumnValue($groupBy);
+            $grVal = $o->formatted($groupBy);
             if (empty($options[$grVal]))
             {
                 $options[$grVal] = ['title'=>$grVal,'options'=>[]];

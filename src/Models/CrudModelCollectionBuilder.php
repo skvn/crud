@@ -374,7 +374,16 @@ class CrudModelCollectionBuilder
             foreach ($columns as $col)
             {
                 $row[$col['data']] = '';
-                $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'] ?? false, $col['format_args'] ?? []);
+                $args = [];
+                if (!empty($col['format']))
+                {
+                    $args['formatter'] = $col['format'];
+                }
+                if (!empty($col['format_args']))
+                {
+                    $args = array_merge($args, $col['format_args']);
+                }
+                $row[$col['data']] = $obj->formatted($col['data'], $args);
             }
 //            foreach ($this->columns as $col)
 //            {
@@ -433,7 +442,16 @@ class CrudModelCollectionBuilder
             foreach ($columns as $col)
             {
                 $row[$col['data']] = '';
-                $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'] ?? false, $col['format_args'] ?? []);
+                $args = [];
+                if (!empty($col['format']))
+                {
+                    $args['formatter'] = $col['format'];
+                }
+                if (!empty($col['format_args']))
+                {
+                    $args = array_merge($args, $col['format_args']);
+                }
+                $row[$col['data']] = $obj->formatted($col['data'], $args);
             }
 //            foreach ($this->columns as $col)
 //            {
@@ -476,7 +494,7 @@ class CrudModelCollectionBuilder
             {
                 foreach ($this->columns as $col)
                 {
-                    $text .= " <span class=\"badge\">".$row->getDescribedColumnValue($col['data'])."</span>";
+                    $text .= " <span class=\"badge\">".$row->formatted($col['data'])."</span>";
                 }
             }
             if (!empty($this->params['buttons']['single_edit']))
@@ -514,7 +532,7 @@ class CrudModelCollectionBuilder
                     continue;
                 }
                 $row[$col['data']] = '';
-                $row[$col['data']] = strip_tags(preg_replace('#\<sup.+</sup>#Us', '', $obj->getDescribedColumnValue($col['data'])));
+                $row[$col['data']] = strip_tags(preg_replace('#\<sup.+</sup>#Us', '', $obj->formatted($col['data'])));
 
             }
             $data[] = $row;
