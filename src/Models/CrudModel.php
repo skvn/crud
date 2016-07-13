@@ -30,6 +30,11 @@ abstract class CrudModel extends Model
     protected $app;
     protected $codeColumn = 'id';
 
+    protected $config;
+    public $classShortName;
+    public $classViewName;
+
+
     private $guessed_id = 0;
 
     protected $errors = [];
@@ -48,17 +53,44 @@ abstract class CrudModel extends Model
     public $trackAuthors = false;
 
 
-    public function __construct(array $attributes = array()/*, $validator = null*/)
+    public function __construct(array $attributes = array())
     {
         $this->app = Container :: getInstance();
         $this->bootIfNotBooted();
+
+        $this->classShortName = class_basename($this);
+        $this->classViewName = snake_case($this->classShortName);
+        $this->config = $this->app['config']->get('crud.'.(!empty($this->table) ? $this->table : $this->classViewName));
+        $this->config['class_name'] = $this->classViewName;
+        if (empty($this->table))
+        {
+            $this->table = $this->config['table'] ?? $this->classViewName;
+        }
+        $this->config['file_params'] = [];
+
+        if (!empty($this->config['fields']))
+        {
+            foreach ($this->config['fields'] as $name => $col)
+            {
+                $this->config['fields'][$name] = $this->configureField($name, $col);
+//                if (empty($col['field']))
+//                {
+//                    $col['field'] = $name;
+//                }
+//                if (!empty($col['hint_default']) && !empty($col['hint']) &&  $col['hint'] === 'auto')
+//                {
+//                    $col['hint'] = $this->classShortName.'_fields_'.$name;
+//                }
+//                $this->config['fields'][$name] = $col;
+            }
+        }
+
         $this->preconstruct();
         parent::__construct($attributes);
         $this->crudRelations = new Relations($this);
 
         $this->postconstruct();
 
-//        $this->validator = $validator ?: $this->app['validator'];
         $this->validator = $this->app['validator'];
     }
 

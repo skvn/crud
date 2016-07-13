@@ -71,6 +71,15 @@ class Form {
         return self :: $controls;
     }
 
+    static function getAvailControl($type)
+    {
+        if (!isset(self :: $controls[$type]))
+        {
+            throw new ConfigException("Invalid control `".$type."`");
+        }
+        return self :: $controls[$type];
+    }
+
     static function create($args = [])
     {
         return new self($args);
@@ -81,6 +90,17 @@ class Form {
         $class = get_class(self :: $controls[$config['type']]);
         return $class :: create()->setConfig($config)->setModel($model);
     }
+
+//    static function configureModel(CrudModel $model, $config)
+//    {
+//        self :: $controls[$config['type']]->configureModel($model, $config);
+//    }
+
+//    static function configureModel(CrudModel $model, $config)
+//    {
+//        $class = get_class(self :: $controls[$config['type']]);
+//        $class :: configureModel($model)
+//    }
 
     function addField($name, $config, $tab = null)
     {

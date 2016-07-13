@@ -64,6 +64,11 @@ abstract class Field
         return $this;
     }
 
+    function configureModel(CrudModel $model, array $config)
+    {
+        return $config;
+    }
+
     function getName()
     {
         return $this->name;

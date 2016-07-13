@@ -10,9 +10,9 @@ use Illuminate\Support\Arr;
 trait ModelConfigTrait
 {
 
-    protected $config;
-    public $classShortName;
-    public $classViewName;
+//    protected $config;
+//    public $classShortName;
+//    public $classViewName;
     public $scope = "default";
 
 
@@ -21,66 +21,66 @@ trait ModelConfigTrait
 
 
 
-    public static function bootModelConfigTrait()
-    {
-        static::registerPreconstruct(function($instance){
-            $instance->initConfig();
-        });
-    }
+//    public static function bootModelConfigTrait()
+//    {
+//        static::registerPreconstruct(function($instance){
+//            $instance->initConfig();
+//        });
+//    }
 
 
-    protected function initConfig()
-    {
-        $this->classShortName = class_basename($this);
-        $this->classViewName = snake_case($this->classShortName);
-        $this->config = $this->app['config']->get('crud.'.(!empty($this->table) ? $this->table : $this->classViewName));
-        $this->config['class_name'] = $this->classViewName;
-        if (!empty($this->config['fields']))
-        {
-            foreach ($this->config['fields'] as $name => $col)
-            {
-                if (empty($col['field']))
-                {
-                    $col['field'] = $name;
-                }
-                if (!empty($col['hint_default']) && !empty($col['hint']) &&  $col['hint'] === 'auto')
-                {
-                    $col['hint'] = $this->classShortName.'_fields_'.$name;
-                }
-                $this->config['fields'][$name] = $col;
-            }
-        }
+//    protected function initConfig()
+//    {
+//        $this->classShortName = class_basename($this);
+//        $this->classViewName = snake_case($this->classShortName);
+//        $this->config = $this->app['config']->get('crud.'.(!empty($this->table) ? $this->table : $this->classViewName));
+//        $this->config['class_name'] = $this->classViewName;
+//        if (empty($this->table))
+//        {
+//            $this->table = $this->config['table'] ?? $this->classViewName;
+//        }
+//        $this->config['file_params'] = [];
+//
+//        if (!empty($this->config['fields']))
+//        {
+//            foreach ($this->config['fields'] as $name => $col)
+//            {
+//                if (empty($col['field']))
+//                {
+//                    $col['field'] = $name;
+//                }
+//                if (!empty($col['hint_default']) && !empty($col['hint']) &&  $col['hint'] === 'auto')
+//                {
+//                    $col['hint'] = $this->classShortName.'_fields_'.$name;
+//                }
+//                $this->config['fields'][$name] = $col;
+//            }
+//        }
+//
+//    }
 
-        if (empty($this->table))
-        {
-            $this->table = $this->config['table'] ?? $this->classViewName;
-        }
-
-        $this->config['file_params'] = [];
-    }
 
 
-
-    function getFieldsByField()
-    {
-        $list = [];
-        foreach ($this->config['fields'] as $fld)
-        {
-            $list[$fld['field']] = $fld;
-        }
-        return $list;
-    }
-
-    function getField($name, $throw = false)
-    {
-        $field = $this->config['fields'][$name] ?? [];
-        if (empty($field) && $throw)
-        {
-            throw new ConfigException('Field ' . $name . ' on ' . $this->classShortName . ' do not exist');
-        }
-        $field['name'] = $name;
-        return $field;
-    }
+//    function getFieldsByField()
+//    {
+//        $list = [];
+//        foreach ($this->config['fields'] as $fld)
+//        {
+//            $list[$fld['field']] = $fld;
+//        }
+//        return $list;
+//    }
+//
+//    function getField($name, $throw = false)
+//    {
+//        $field = $this->config['fields'][$name] ?? [];
+//        if (empty($field) && $throw)
+//        {
+//            throw new ConfigException('Field ' . $name . ' on ' . $this->classShortName . ' do not exist');
+//        }
+//        $field['name'] = $name;
+//        return $field;
+//    }
 
     /**
      * @param $key
@@ -93,6 +93,21 @@ trait ModelConfigTrait
     public function confParam($key, $default = null)
     {
         return Arr :: get($this->config, $key, $default);
+    }
+
+    function setDates($dates)
+    {
+        if (!is_array($dates))
+        {
+            $dates = [$dates];
+        }
+        foreach ($dates as $d)
+        {
+            if (!in_array($d, $this->dates))
+            {
+                $this->dates[] = $d;
+            }
+        }
     }
 
     function getList()

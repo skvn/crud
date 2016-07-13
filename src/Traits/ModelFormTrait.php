@@ -9,6 +9,47 @@ trait ModelFormTrait
 
     public $form = null;
 
+
+    function getFieldsByField()
+    {
+        $list = [];
+        foreach ($this->config['fields'] as $fld)
+        {
+            $list[$fld['field']] = $fld;
+        }
+        return $list;
+    }
+
+    function getField($name, $throw = false)
+    {
+        $field = $this->config['fields'][$name] ?? [];
+        if (empty($field) && $throw)
+        {
+            throw new ConfigException('Field ' . $name . ' on ' . $this->classShortName . ' do not exist');
+        }
+        $field['name'] = $name;
+        return $field;
+    }
+
+    protected function configureField($name, $config)
+    {
+        $config['name'] = $name;
+        if (empty($config['field']))
+        {
+            $config['field'] = $name;
+        }
+        if (empty($config['type']))
+        {
+            return $config;
+        }
+        if (!empty($config['hint_default']) && !empty($config['hint']) &&  $config['hint'] === 'auto')
+        {
+            $config['hint'] = $this->classShortName.'_fields_'.$name;
+        }
+        return Form :: getAvailControl($config['type'])->configureModel($this, $config);
+    }
+
+
     public function getForm($args = [])
     {
         if (!$this->form)

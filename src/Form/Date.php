@@ -4,6 +4,7 @@ use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
+use Skvn\Crud\Models\CrudModel;
 use Carbon\Carbon;
 
 
@@ -16,6 +17,10 @@ class Date extends Field implements WizardableField, FormControl{
     function pullFromModel()
     {
         $this->value = $this->model->getAttribute($this->field);
+        if ($this->value && $this->value->timestamp < 10)
+        {
+            $this->value = null;
+        }
 //        if (!$this->value)
 //        {
 //            if ($this->isInt())
@@ -31,39 +36,47 @@ class Date extends Field implements WizardableField, FormControl{
 
     function getOutputValue():string
     {
-        if ($this->value instanceof Carbon)
-        {
-            return date($this->config['format'], $this->value->timestamp);
-        }
         if (empty($this->value))
         {
             return null;
         }
-        if ($this->isInt())
-        {
-            return date($this->config['format'], $this->value);
-        }
-
-        return $this->value;
+        return $this->value->format($this->config['format']);
+//        if ($this->value instanceof Carbon)
+//        {
+//            return date($this->config['format'], $this->value->timestamp);
+//        }
+//        if ($this->isInt())
+//        {
+//            return date($this->config['format'], $this->value);
+//        }
+//
+//        return $this->value;
     }
 
     function pullFromData(array $data)
     {
         if (!empty($data[$this->field]))
         {
-            if ($this->isInt())
-            {
-                $this->value = is_numeric($data[$this->field]) ? $data[$this->field] : strtotime($data[$this->field]);
-            }
-            else
-            {
-                $this->value = $data[$this->field];
-            }
+            $this->value = Carbon :: parse($data[$this->field]);
+//            if ($this->isInt())
+//            {
+//                $this->value = is_numeric($data[$this->field]) ? $data[$this->field] : strtotime($data[$this->field]);
+//            }
+//            else
+//            {
+//                $this->value = $data[$this->field];
+//            }
         }
         else
         {
             $this->value = null;
         }
+    }
+
+    function configureModel(CrudModel $model, array $config)
+    {
+        $model->setDates($config['field']);
+        return $config;
     }
 
 
