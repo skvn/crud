@@ -3,6 +3,7 @@
 
 use Skvn\Crud\Form\Form;
 use Illuminate\Support\Str;
+use Skvn\Crud\Exceptions\ConfigException;
 
 trait ModelFormTrait
 {

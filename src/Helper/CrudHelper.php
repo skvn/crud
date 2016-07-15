@@ -52,28 +52,28 @@ class CrudHelper {
         return $data;
     }
 
-//    function resolveModelView(CrudModel $model, $view)
-//    {
-//        return $model->resolveView($view);
-//    }
-//
-//    function getModelClass($model)
-//    {
-//        return CrudModel :: resolveClass($model);
-//    }
-//
-//    function getModelInstance($model, $scope = CrudModel :: DEFAULT_SCOPE, $id = null)
-//    {
-//        return CrudModel :: createInstance($model, $scope, $id);
-//    }
-
-    function getSelectOptionsByCollection(Collection $collection, $valueField='id', $textField='title')
+    function getSelectOptionsByCollection(Collection $collection, $valueField='id', $textField='title', $groupField = null)
     {
-        return $collection->map(function ($item, $key) use ($valueField, $textField) {
-            return ['value'=>$item->$valueField,'text'=>$item->$textField];
-        })
-            ->all();
+        $opts = [];
+        foreach ($collection as $item)
+        {
+            if (is_null($groupField))
+            {
+                $opts[] = ['value' => $item->$valueField, 'text' => $item->$textField];
+            }
+            else
+            {
+                if (!isset($opts[$item[$groupField]]))
+                {
+                    $opts[$item[$groupField]] = ['title' => $item[$groupField], 'options' => []];
+                }
+                $opts[$item[$groupField]]['options'][] = ['value' => $item[$valueField], 'text' => $item[$textField]];
+            }
+        }
 
+        return $opts;
     }
+
+
 
 }

@@ -146,9 +146,22 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
         {
             $opts = array();
         }
-        foreach ($opts as $idx => $opt)
+        if ($this->isGrouped())
         {
-            $opts[$idx]['selected'] = $this->isSelected($opt['value']);
+            foreach ($opts as $gid => $g)
+            {
+                foreach ($g['options'] as $iid => $opt)
+                {
+                    $opts[$gid]['options'][$iid]['selected'] = $this->isSelected($opt['value']);
+                }
+            }
+        }
+        else
+        {
+            foreach ($opts as $idx => $opt)
+            {
+                $opts[$idx]['selected'] = $this->isSelected($opt['value']);
+            }
         }
 
         //return array_merge($options, $opts);

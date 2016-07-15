@@ -22,7 +22,7 @@
                         {%  for fileObj in  input.getExisting() %}
                             <tr >
                                 <td>
-                                    <a class="badge badge-primary" href="{{ fileObj.getAttribute('download_link') }}"><i class="fa fa-paperclip"></i> {{ fileObj.getAttribute('file_name') }} ({{ fileObj.getAttribute('file_size')|readable_filesize}})</a>
+                                    <a class="badge badge-primary" href="{{ fileObj.getAttribute('download_link') }}" target="_blank"><i class="fa fa-paperclip"></i> {{ fileObj.getAttribute('file_name') }} ({{ fileObj.getAttribute('file_size')|readable_filesize}})</a>
                                 </td>
                                 <td>
                                     <input class="form-control"  name="{{ input.name }}[{{ fileObj.id }}]" type="file">
