@@ -26,6 +26,16 @@ class RelationBelongsTo extends Relation
         }
     }
 
+    function get()
+    {
+        $val = parent :: get();
+        if (is_null($val))
+        {
+            return CrudModel :: createInstance($this->config['model']);
+        }
+        return $val;
+    }
+
     function save()
     {
 

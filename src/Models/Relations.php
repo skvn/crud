@@ -40,6 +40,23 @@ class Relations implements ArrayAccess
         return $this->relations[$name];
     }
 
+    function undef($name)
+    {
+        if ($this->defined($name))
+        {
+            unset($this->relations[$name]);
+        }
+    }
+
+    function undefAll()
+    {
+        $this->model->setRelations([]);
+        foreach ($this->relations as $r => $rel)
+        {
+            $this->undef($r);
+        }
+    }
+
     function getRelation($name)
     {
         return $this->define($name)->getRelation();

@@ -52,14 +52,19 @@ class CrudHelper {
         return $data;
     }
 
-    function getSelectOptionsByCollection(Collection $collection, $valueField='id', $textField='title', $groupField = null)
+    function getSelectOptionsByCollection(Collection $collection, $valueField='id', $textField='title', $groupField = null, $appendParams = [])
     {
         $opts = [];
         foreach ($collection as $item)
         {
             if (is_null($groupField))
             {
-                $opts[] = ['value' => $item->$valueField, 'text' => $item->$textField];
+                $opt = ['value' => $item->$valueField, 'text' => $item->$textField];
+                foreach ($appendParams as $p)
+                {
+                    $opt[$p] = $item->$p;
+                }
+                $opts[] = $opt;
             }
             else
             {
@@ -67,7 +72,12 @@ class CrudHelper {
                 {
                     $opts[$item[$groupField]] = ['title' => $item[$groupField], 'options' => []];
                 }
-                $opts[$item[$groupField]]['options'][] = ['value' => $item[$valueField], 'text' => $item[$textField]];
+                $opt = ['value' => $item[$valueField], 'text' => $item[$textField]];
+                foreach ($appendParams as $p)
+                {
+                    $opt[$p] = $item[$p];
+                }
+                $opts[$item[$groupField]]['options'][] = $opt;
             }
         }
 

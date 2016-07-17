@@ -83,8 +83,26 @@ class CrudController extends Controller
 
     function crudAutocompleteSelectOptions($model)
     {
+        $params = $this->request->all();
         $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE);
-        $res = $obj->getAutocompleteList(\Request::get('q'));
+        $class = CrudModel :: resolveClass($model);
+
+        if (!($obj->confParam('title_field')))
+        {
+            throw new CrudException('Unable to init AutocompleteList: title_field is not configured');
+        }
+
+
+        if (method_exists($obj, 'scopeAutocomplete'))
+        {
+            $query = $class :: autocomplete($params)->where($obj->confParam('title_field'), 'like', $params['q'] . '%');
+        }
+        else
+        {
+            $query = $class :: where($obj->confParam('title_field'), 'like', $params['q'] . '%');
+        }
+        $res = $query->pluck($obj->confParam('title_field'), $obj->getKeyName())->toArray();
+        //$res = $obj->getAutocompleteList(\Request::get('q'));
         $items = [];
         foreach ($res as $k=>$v)
         {

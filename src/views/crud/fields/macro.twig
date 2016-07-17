@@ -29,7 +29,7 @@
             class="form-control"
             data-placeholder="-- Выберите"
             {{ input.config.required ? 'required' }}
-            name="{{ input.field }}{{input.config.multiple?'[]'}}" {{ input.config.multiple ? 'multiple' }} style="min-width:300px" >
+            name="{{ input.field }}{{input.config.multiple?'[]'}}" {{ input.config.multiple ? 'multiple' }} style="min-width:300px; width: 100%;" >
 
         {% for op in input.getOptions() %}
             <option value="{{ op.value }}" {{ op.selected ? 'selected' }}>{{ op.text }}</option>
@@ -74,7 +74,7 @@
         {% else %}
 
             {% for op in input.getOptions() %}
-                <option value="{{ op.value }}" {{ op.selected ? 'selected' }}>{{ op.text }}</option>
+                <option value="{{ op.value }}" {{ op.selected ? 'selected' }} {{ input.getDataAttrs(op)|raw }}>{{ op.text }}</option>
             {% endfor %}
 
         {% endif %}

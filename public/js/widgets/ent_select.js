@@ -9,10 +9,18 @@
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
-                            return {
+                            var args = {
                                 q: params.term, // search term
-                                page: params.page
+                                page: params.page,
                             };
+                            for (var i in this.data())
+                            {
+                                if (i.indexOf('url_') === 0)
+                                {
+                                    args[i.replace('url_', '')] = this.data(i);
+                                }
+                            }
+                            return args;
                         },
                         cache: true
                     },

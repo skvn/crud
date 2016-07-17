@@ -19,23 +19,24 @@ class EntitySelect extends Field implements WizardableField, FormControl
 
     function pullFromModel()
     {
+        $this->value = $this->model->crudRelations->has($this->getName()) ? $this->model->crudRelations[$this->getName()]->getIds() : $this->model->getAttribute($this->getField());
 
 
-        if ($this->model->crudRelations->isMany($this->getName()))
-        //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
-        {
-            $this->value = $this->model->crudRelations->getIds($this->getName());
-        }
-        else if (!empty($this->config['relation'])
-            && $this->config['relation'] == "hasOne")
-        {
-            $relation = $this->getName();
-            $this->value = $this->model->$relation->id;
-        }
-        else
-        {
-            $this->value = $this->model->getAttribute($this->getField());
-        }
+//        if ($this->model->crudRelations->isMany($this->getName()))
+//        //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
+//        {
+//            $this->value = $this->model->crudRelations->getIds($this->getName());
+//        }
+//        else if (!empty($this->config['relation'])
+//            && $this->config['relation'] == "hasOne")
+//        {
+//            $relation = $this->getName();
+//            $this->value = $this->model->$relation->id;
+//        }
+//        else
+//        {
+//            $this->value = $this->model->getAttribute($this->getField());
+//        }
 
         return $this;
     }

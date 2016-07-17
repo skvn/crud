@@ -1,6 +1,7 @@
 <?php namespace Skvn\Crud\Models;
 
 use Illuminate\Container\Container;
+use Illuminate\Support\Str;
 
 
 class CrudModelCollectionBuilder
@@ -90,12 +91,11 @@ class CrudModelCollectionBuilder
             $this->collectionQuery = $this->model->newQuery();
             return $this;
         }
-        $scope = $this->model->getScope();
-        if (!empty($scope))
-        {
-            $method = camel_case('get_' . $scope . '_list_collection');
-            $method_query = camel_case('get_' . $scope . '_list_query');
-        }
+//        if (!empty($scope))
+//        {
+//            $method = camel_case('get_' . $scope . '_list_collection');
+//            $method_query = camel_case('get_' . $scope . '_list_query');
+//        }
         $joins =[];
         foreach ($this->columns as $listCol)
         {
@@ -105,14 +105,19 @@ class CrudModelCollectionBuilder
                 $joins[$relSpl['rel']] = function ($query) {};
             }
         }
-        if (method_exists($this->model, $method))
+        $scope = $this->model->getScope();
+        if (method_exists($this->model, 'scope' . Str :: studly($scope)))
         {
-            $this->collectionQuery = $this->model->$method($joins);
+            $this->collectionQuery = $this->model->{Str :: camel($scope)}();
         }
-        else if (method_exists($this->model, $method_query))
-        {
-            $this->collectionQuery = $this->model->$method_query($joins);
-        }
+//        if (method_exists($this->model, $method))
+//        {
+//            $this->collectionQuery = $this->model->$method($joins);
+//        }
+//        else if (method_exists($this->model, $method_query))
+//        {
+//            $this->collectionQuery = $this->model->$method_query($joins);
+//        }
         else
         {
             $this->collectionQuery = $this->createBasicListQuery($joins);

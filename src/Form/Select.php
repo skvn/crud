@@ -209,11 +209,25 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
 //        return $this->flatOptions($coll, $obj);
 //    }
 
+    function getDataAttrs($option)
+    {
+        $data = [];
+        foreach ($option as $k => $v)
+        {
+            if (!in_array($k, ['value', 'text']))
+            {
+                $data[] = 'data-' . $k . '="'.$v.'"';
+            }
+        }
+        return implode(" ", $data);
+    }
+
     private function getModelOptions()
     {
         $class = CrudModel :: resolveClass($this->config['model']);
 
-        $modelObj = new $class();
+        $modelObj = CrudModel :: createInstance($this->config['model'], null, is_numeric($this->value) ? $this->value : null);
+        //$modelObj = new $class();
         if (!empty($this->config['find']))
         {
             $method = $method = "selectOptions" . studly_case($this->config['find']);

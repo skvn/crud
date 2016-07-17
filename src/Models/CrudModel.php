@@ -4,7 +4,7 @@ use \Illuminate\Database\Eloquent\Model;
 use Skvn\Crud\Traits\ModelInjectTrait;
 use Skvn\Crud\Traits\ModelConfigTrait;
 //use Skvn\Crud\Traits\ModelRelationTrait;
-use Skvn\Crud\Traits\ModelFilterTrait;
+//use Skvn\Crud\Traits\ModelFilterTrait;
 use Skvn\Crud\Traits\ModelFormTrait;
 use Skvn\Crud\Exceptions\NotFoundException;
 
@@ -15,7 +15,7 @@ abstract class CrudModel extends Model
     use ModelInjectTrait;
     use ModelConfigTrait;
 //    use ModelRelationTrait;
-    use ModelFilterTrait;
+//    use ModelFilterTrait;
     use ModelFormTrait;
 
 
@@ -213,6 +213,11 @@ abstract class CrudModel extends Model
     {
         $param = $this->confParam('title_field', 'title');
         return $this->getAttribute($param);
+    }
+
+    function getSelfAttribute()
+    {
+        return $this;
     }
 
     function checkAcl($access = "")
@@ -467,6 +472,17 @@ abstract class CrudModel extends Model
             $this->crudRelations[$rel]->delete($args['delete_attach_id']);
         }
     }
+
+    public  function appendConditions($conditions)
+    {
+        return $conditions;
+    }
+
+    public  function preApplyConditions($coll, $conditions)
+    {
+        return $conditions;
+    }
+
 
 
 }
