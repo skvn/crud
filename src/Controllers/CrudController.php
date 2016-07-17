@@ -73,8 +73,6 @@ class CrudController extends Controller
 
     }//
 
-
-
     function crudAutocompleteList($model)
     {
         $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE);
@@ -101,12 +99,15 @@ class CrudController extends Controller
         {
             $query = $class :: where($obj->confParam('title_field'), 'like', $params['q'] . '%');
         }
-        $res = $query->pluck($obj->confParam('title_field'), $obj->getKeyName())->toArray();
+        //$attr = property_exists($obj, "autocompleteAttr") ? $obj->autocompleteAttr : $obj->confParam('title_field');
+        //var_dump($attr);
+        //$res = $query->pluck($obj->confParam('title_field'), $obj->getKeyName())->toArray();
         //$res = $obj->getAutocompleteList(\Request::get('q'));
+        $res = $query->get();
         $items = [];
-        foreach ($res as $k=>$v)
+        foreach ($res as $v)
         {
-            $items[] = ['id'=>$k,'text'=>$v];
+            $items[] = ['id' => $v->getKey(), 'text' => $v->getTitle()];
         }
         return [
             'results' =>$items

@@ -21,7 +21,29 @@
 
             $form.bootstrapValidator({
                 live: 'enabled',
-                trigger: null
+                trigger: null,
+                excluded: [
+                    function(e){
+                        var p = e.parents(".crud_validate:first");
+                        if (p.length)
+                        {
+                            return p.hasClass('hidden');
+                            //return !p.is(":visible");
+                        }
+                        if (e.is(':disabled'))
+                        {
+                            return true;
+                        }
+                        //if (e.is(':hidden'))
+                        //{
+                        //    return true;
+                        //}
+                        //if (!e.is(':visible'))
+                        //{
+                        //    return true;
+                        //}
+                    }
+                ]
             })
                 .on('success.form.bv', function(e)
                 {
