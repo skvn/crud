@@ -17,7 +17,7 @@
 	        "rcrowe/twigbridge": "^0.9.1",
         	"twig/extensions": "^1.3",
             "intervention/image": "^2.3",
-            "mk-j/php_xlsxwriter": "dev-master"
+            "mk-j/php_xlsxwriter": "^0.22"
 	},
 
     "autoload": {
