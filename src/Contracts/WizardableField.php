@@ -22,22 +22,14 @@ interface WizardableField
      */
     public function wizardIsForRelationOnly():bool;
 
-    /**
-     * Returns true if the  control can be used only for relation editing
-     *
-     * @return bool
-     */
-    public function wizardIsForRelation():bool;
-
-
-
 
     /**
-     * Returns true if the  control can be used for "many" - type relation editing
+     * Return an array of relations for which the control can be used
      *
-     * @return bool
+     * @return array
      */
-    public function wizardIsForManyRelation():bool;
+    public function wizardIsForRelations():array;
+
     
     /**
      * Get path to wizard template

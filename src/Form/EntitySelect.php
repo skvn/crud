@@ -81,25 +81,22 @@ class EntitySelect extends Field implements WizardableField, FormControl
         return true;
     }
 
-    /**
-     * Returns true if the  control can be used only for relation editing
-     *
-     * @return bool
-     */
-    public function wizardIsForRelation():bool
-    {
-        return true;
-    }
 
     /**
-     * Returns true if the  control can be used  for "many" - type relation editing
+     * Return an array of relations for which the control can be used
      *
-     * @return bool
+     * @return array
      */
-    public function wizardIsForManyRelation():bool
-    {
-        return true;
+    public function wizardIsForRelations():array {
+
+        return [
+            'hasOne',
+            'hasMany',
+            'belongsTo',
+            'belongsToMany',
+        ];
     }
+
 
     public function wizardDbType()
     {
