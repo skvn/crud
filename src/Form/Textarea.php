@@ -5,7 +5,7 @@ use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
-class TextArea extends Field implements  FormControl, FormControlFilterable{
+class Textarea extends Field implements  FormControl, FormControlFilterable{
 
 
     use FormControlCommonTrait;
