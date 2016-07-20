@@ -1,15 +1,14 @@
 <?php namespace Skvn\Crud\Form;
 
 
-use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\WizardCommonFieldTrait;
+
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
-class Checkbox extends Field implements WizardableField, FormControl, FormControlFilterable
+class Checkbox extends Field implements  FormControl, FormControlFilterable
 {
-    use WizardCommonFieldTrait;
+
     use FormControlCommonTrait;
 
     function getFilterCondition()
@@ -35,20 +34,7 @@ class Checkbox extends Field implements WizardableField, FormControl, FormContro
         return "js/widgets/checkbox.js";
     }
 
-    public function wizardDbType()
-    {
-        return 'boolean';
-    }
 
-    function wizardTemplate()
-    {
-        return "crud::wizard.blocks.fields.checkbox";
-    }
-
-    function wizardCaption()
-    {
-        return "Checkbox";
-    }
 
 
 }

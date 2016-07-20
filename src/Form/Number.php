@@ -1,16 +1,14 @@
 <?php namespace Skvn\Crud\Form;
 
 
-use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 use Skvn\Crud\Contracts\FormControlFilterable;
 
 
-class Number extends Field implements WizardableField, FormControl, FormControlFilterable{
+class Number extends Field implements  FormControl, FormControlFilterable{
 
-    use WizardCommonFieldTrait;
+
     use FormControlCommonTrait;
 
     function pullFromModel()
@@ -40,21 +38,7 @@ class Number extends Field implements WizardableField, FormControl, FormControlF
         return "crud::crud.fields.number";
     }
 
-    public function wizardDbType()
-    {
-        return 'integer';
-    }
 
-    function wizardTemplate()
-    {
-        return "crud::wizard.blocks.fields.number";
-    }
-
-
-    function wizardCaption()
-    {
-        return "Number input";
-    }
 
 
 }

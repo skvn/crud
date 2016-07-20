@@ -1,18 +1,16 @@
 <?php namespace Skvn\Crud\Form;
 
 
-use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\WizardCommonFieldTrait;
+
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 use Skvn\Crud\Models\CrudModel;
 use Carbon\Carbon;
 
 
-class DateTime extends Field implements WizardableField, FormControl
+class DateTime extends Field implements  FormControl
 {
 
-    use WizardCommonFieldTrait;
     use FormControlCommonTrait;
 
     function pullFromModel()
@@ -31,22 +29,6 @@ class DateTime extends Field implements WizardableField, FormControl
             return "";
         }
         return $this->value->format($this->config['format']);
-//        if ($this->isInt())
-//        {
-//            if ($this->value instanceof Carbon)
-//            {
-//                return date($this->config['format'], $this->value->timestamp);
-//            }
-//            if (time() - $this->value < 2)
-//            {
-//                return "";
-//            }
-//            return date($this->config['format'], $this->value);
-//        }
-//        else
-//        {
-//            return date($this->config['format'], strtotime($this->value));
-//        }
     }
 
     function pullFromData(array $data)
@@ -54,14 +36,6 @@ class DateTime extends Field implements WizardableField, FormControl
         if (!empty($data[$this->field]))
         {
             $this->value = Carbon :: parse($data[$this->field]);
-//            if ($this->isInt())
-//            {
-//                $this->value = is_numeric($data[$this->field]) ? $data[$this->field] : strtotime($data[$this->field]);
-//            }
-//            else
-//            {
-//                $this->value = $data[$this->field];
-//            }
         }
         else
         {
@@ -90,28 +64,7 @@ class DateTime extends Field implements WizardableField, FormControl
         return !empty($this->config['format']);
     }
 
-    public function wizardDbType()
-    {
-        return 'dateTime';
-    }
 
-    function wizardTemplate()
-    {
-        return "crud::wizard.blocks.fields.date_time";
-    }
-
-    function wizardCaption()
-    {
-        return "Date + Time";
-    }
-
-    function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig,  $modelPrototype)
-    {
-        $formats = $modelPrototype->wizard->getAvailableDateTimeFormats();
-        $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];
-        $fieldConfig['format'] = $formats[$fieldConfig['format']]['php'];
-        $fieldConfig['db_type'] = $modelPrototype->column_types[$fieldKey];
-    }
 
     private function isInt()
     {

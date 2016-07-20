@@ -1,19 +1,16 @@
 <?php namespace Skvn\Crud\Form;
 
 
-use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Illuminate\Support\Collection;
-use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
-class Tree extends Field implements WizardableField, FormControl{
+class Tree extends Field implements  FormControl{
 
 
-    use WizardCommonFieldTrait;
     use FormControlCommonTrait;
 
     function pullFromModel()
@@ -77,41 +74,6 @@ class Tree extends Field implements WizardableField, FormControl{
         return "js/widgets/tree_control.js";
     }
 
-
-    /**
-     * Returns true if the  control can be used only for relation editing only
-     *
-     * @return bool
-     */
-    public function wizardIsForRelationOnly():bool
-    {
-        return true;
-    }
-
-
-
-    function wizardTemplate()
-    {
-        return "crud::wizard.blocks.fields.tree";
-    }
-
-    function wizardCaption()
-    {
-        return "Tree";
-    }
-
-    /**
-     * Return an array of relations for which the control can be used
-     *
-     * @return array
-     */
-    public function wizardIsForRelations():array {
-
-        return [
-            'hasMany',
-            'belongsToMany',
-        ];
-    }
 
 
     public function getOptions()

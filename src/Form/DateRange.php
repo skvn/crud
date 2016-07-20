@@ -1,17 +1,16 @@
 <?php namespace Skvn\Crud\Form;
 
 
-use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\WizardCommonFieldTrait;
+
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 use Carbon\Carbon;
 
 
-class DateRange extends Field implements WizardableField, FormControl
+class DateRange extends Field implements  FormControl
 {
-    use WizardCommonFieldTrait;
+
     use FormControlCommonTrait;
 
     function pullFromModel()
@@ -163,38 +162,6 @@ class DateRange extends Field implements WizardableField, FormControl
     function controlTemplate():string
     {
         return "crud::crud.fields.date_range";
-    }
-
-    public function wizardDbType()
-    {
-        return '';
-    }
-
-    function wizardTemplate()
-    {
-        return "crud::wizard.blocks.fields.date_range";
-    }
-
-    function wizardCaption()
-    {
-        return "Date range";
-    }
-
-
-
-
-
-
-
-    public function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig,   $modelPrototype)
-    {
-        $fieldConfig['db_type'] = $modelPrototype->column_types[$fieldConfig['fields'][0]];
-        $formats = $modelPrototype->wizard->getAvailableDateTimeFormats();
-        $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];
-        $fieldConfig['format'] = $formats[$fieldConfig['format']]['php'];
-
-        unset($fieldConfig['property_name']);
-
     }
 
 

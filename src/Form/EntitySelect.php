@@ -1,42 +1,23 @@
 <?php namespace Skvn\Crud\Form;
 
 
-use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Illuminate\Support\Collection;
-use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
-class EntitySelect extends Field implements WizardableField, FormControl
+class EntitySelect extends Field implements  FormControl
 {
     
-    use WizardCommonFieldTrait;
+
     use FormControlCommonTrait;
 
     function pullFromModel()
     {
         $this->value = $this->model->crudRelations->has($this->getName()) ? $this->model->crudRelations[$this->getName()]->getIds() : $this->model->getAttribute($this->getField());
-
-
-//        if ($this->model->crudRelations->isMany($this->getName()))
-//        //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
-//        {
-//            $this->value = $this->model->crudRelations->getIds($this->getName());
-//        }
-//        else if (!empty($this->config['relation'])
-//            && $this->config['relation'] == "hasOne")
-//        {
-//            $relation = $this->getName();
-//            $this->value = $this->model->$relation->id;
-//        }
-//        else
-//        {
-//            $this->value = $this->model->getAttribute($this->getField());
-//        }
 
         return $this;
     }
@@ -68,51 +49,6 @@ class EntitySelect extends Field implements WizardableField, FormControl
     function controlWidgetUrl():string
     {
         return "js/widgets/ent_select.js";
-    }
-
-
-    /**
-     * Returns true if the  control can be used only for relation editing only
-     *
-     * @return bool
-     */
-    public function wizardIsForRelationOnly():bool
-    {
-        return true;
-    }
-
-
-    /**
-     * Return an array of relations for which the control can be used
-     *
-     * @return array
-     */
-    public function wizardIsForRelations():array {
-
-        return [
-            'hasOne',
-            'hasMany',
-            'belongsTo',
-            'belongsToMany',
-        ];
-    }
-
-
-    public function wizardDbType()
-    {
-        return 'integer';
-    }
-
-
-    function wizardTemplate()
-    {
-        return "crud::wizard.blocks.fields.select";
-    }
-
-
-    function wizardCaption()
-    {
-        return "Entity Select";
     }
 
 

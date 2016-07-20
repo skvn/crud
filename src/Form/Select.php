@@ -1,47 +1,22 @@
 <?php namespace Skvn\Crud\Form;
 
 
-use Skvn\Crud\Contracts\WizardableField;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Illuminate\Support\Collection;
-use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
-class Select extends Field implements WizardableField, FormControl, FormControlFilterable
+class Select extends Field implements  FormControl, FormControlFilterable
 {
-    
-    use WizardCommonFieldTrait;
+
     use FormControlCommonTrait;
 
     function pullFromModel()
     {
         $this->value = $this->model->crudRelations->has($this->getName()) ? $this->model->crudRelations[$this->getName()]->getIds() : $this->model->getAttribute($this->getField());
-//        if (!in_array($this->name, $this->model->getHidden()))
-//        {
-//            $this->value = $this->model->getAttribute($this->field);
-//        }
-
-
-//        if ($this->model->crudRelations->isMany($this->getName()))
-//        //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
-//        {
-//            $this->value = $this->model->crudRelations->getIds($this->getName());
-//        }
-//        else if (!empty($this->config['relation'])
-//            && $this->config['relation'] == "hasOne")
-//        {
-//            $relation = $this->getName();
-//            $this->value = $this->model->$relation->id;
-//        }
-//        else
-//        {
-//            $this->value = $this->model->getAttribute($this->getField());
-//        }
-
         return $this;
     }
 
@@ -73,52 +48,6 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
     {
         return "js/widgets/select.js";
     }
-
-
-    /**
-     * Returns true if the  control can be used only for relation editing only
-     *
-     * @return bool
-     */
-    public function wizardIsForRelationOnly():bool
-    {
-        return false;
-    }
-
-
-    /**
-     * Return an array of relations for which the control can be used
-     *
-     * @return array
-     */
-    public function wizardIsForRelations():array {
-
-        return [
-            'hasOne',
-            'hasMany',
-            'belongsTo',
-            'belongsToMany',
-        ];
-    }
-
-    public function wizardDbType()
-    {
-        return 'integer';
-    }
-
-
-    function wizardTemplate()
-    {
-        return "crud::wizard.blocks.fields.select";
-    }
-
-
-    function wizardCaption()
-    {
-        return "Select";
-    }
-
-
 
     public function getOptions()
     {
@@ -191,19 +120,7 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
 
     }
 
-//    private function getSelectedOptions()
-//    {
-//        if (is_null($this->value))
-//        {
-//            return [];
-//        }
-//
-//
-//        $class = CrudModel :: resolveClass($this->config['model']);
-//        $obj = new $class();
-//        $coll = $obj->find($this->getValueAsArray());
-//        return $this->flatOptions($coll, $obj);
-//    }
+
 
     function getDataAttrs($option)
     {
@@ -360,22 +277,5 @@ class Select extends Field implements WizardableField, FormControl, FormControlF
         ];
     }//
 
-    public function wizardCallbackFieldConfig (&$fieldKey,array &$fieldConfig,  $modelPrototype)
-    {
-        if (!empty($fieldConfig['property_name']))
-        {
-            $fieldKey = $fieldConfig['property_name'];
-            unset($fieldConfig['property_name']);
-        }
-
-        if (!empty($fieldConfig['relation'])) {
-            if (in_array($fieldConfig['relation'], [
-                "belongsToMany",
-                "hasMany"
-            ])) {
-                $fieldConfig['multiple'] = true;
-            }
-        }
-    }
 
 } 

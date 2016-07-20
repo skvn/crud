@@ -1,17 +1,13 @@
 <?php namespace Skvn\Crud\Form;
 
-
-use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\WizardCommonFieldTrait;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
 
-class Text extends Field implements WizardableField, FormControl, FormControlFilterable{
+class Text extends Field implements  FormControl, FormControlFilterable{
 
-    
-    use WizardCommonFieldTrait;
+
     use FormControlCommonTrait;
 
     function pullFromModel()
@@ -50,16 +46,6 @@ class Text extends Field implements WizardableField, FormControl, FormControlFil
         return "crud::crud.fields.text";
     }
 
-    function wizardTemplate()
-    {
-        return "crud::wizard.blocks.fields.text";
-    }
-
-
-    function wizardCaption()
-    {
-        return "Text input";
-    }
 
 
 }

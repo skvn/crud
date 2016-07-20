@@ -1,7 +1,6 @@
 <?php namespace Skvn\Crud\Form;
 
-use Skvn\Crud\Contracts\WizardableField;
-use Skvn\Crud\Traits\WizardCommonFieldTrait;
+
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 use Skvn\Crud\Models\CrudModel;
@@ -9,9 +8,9 @@ use Carbon\Carbon;
 
 
 
-class Date extends Field implements WizardableField, FormControl{
+class Date extends Field implements  FormControl{
 
-    use WizardCommonFieldTrait;
+
     use FormControlCommonTrait;
 
     function pullFromModel()
@@ -101,29 +100,12 @@ class Date extends Field implements WizardableField, FormControl{
     }
 
 
-    function wizardTemplate()
-    {
-        return "crud::wizard.blocks.fields.date";
-    }
-
-    function wizardCaption()
-    {
-        return "Date";
-    }
 
     private function isInt()
     {
         return (empty($this->config['db_type']) ||$this->config['db_type'] == 'int');
     }
 
-
-    public function wizardCallbackFieldConfig(&$fieldKey, array &$fieldConfig, $modelPrototype)
-    {
-        $formats = $modelPrototype->wizard->getAvailableDateFormats();
-        $fieldConfig['jsformat'] = $formats[$fieldConfig['format']]['js'];
-        $fieldConfig['format'] = $formats[$fieldConfig['format']]['php'];
-        $fieldConfig['db_type'] = $modelPrototype->column_types[$fieldKey];
-    }
 
 
 
