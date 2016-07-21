@@ -1,5 +1,5 @@
 <fieldset style="padding-bottom: 20px;">
-    {% for input in crudObj.getList().getFilter().filters %}
+    {% for input in list.getFilter().filters %}
         {% include 'crud::crud/fields/line_wrap.twig' %}
     {% endfor %}
 </fieldset>

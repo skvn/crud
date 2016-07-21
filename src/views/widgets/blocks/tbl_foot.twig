@@ -1,10 +1,10 @@
-{% if crudObj.getList().getParam('buttons.mass_delete') %}
-    {% if (not crudObj.confParam('acl')) or crudObj.confParam('acl')|allowed('d') %}
-        <a href="#" class="btn btn-danger crud_delete" disabled data-click="crud_action" data-action="table_mass_delete" data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}">{{ trans('crud::messages.delete_selected') }}</a>
+{% if list.getParam('buttons.mass_delete') %}
+    {% if (not list.model.confParam('acl')) or list.model.confParam('acl')|allowed('d') %}
+        <a href="#" class="btn btn-danger crud_delete" disabled data-click="crud_action" data-action="table_mass_delete" data-ref="{{ list.model.classViewName }}_{{ list.model.scope }}">{{ trans('crud::messages.delete_selected') }}</a>
     {% endif %}
 {% endif %}
 
-{% set mass_actions = crudObj.getList().getParam('list_mass_actions') %}
+{% set mass_actions = list.getParam('list_mass_actions') %}
 {%  if mass_actions %}
 {%  for a in mass_actions %}
     <a
@@ -14,8 +14,8 @@
         href="{{ a.href }}"
         data-mass_action="1"
         data-title="{{ a.title }}"
-        data-model="{{ crudObj.classViewName }}"
-        data-scope="{{ crudObj.scope }}"
+        data-model="{{ list.model.classViewName }}"
+        data-scope="{{ list.model.scope }}"
         data-click="{{ a.click }}"
         data-action="{{ a.action }}"
         data-popup="{{ a.popup_id }}"

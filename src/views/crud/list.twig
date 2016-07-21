@@ -6,13 +6,13 @@
     <div class="col-lg-12">
         {%  if crudObj.isTree()%}
             {%  if crudList.getParam('list_type') == 'dt_tree' or crudList.getParam('list_type') == 'dt_flat' %}
-                {{ widgets.table(crudObj) }}
+                {{ widgets.table(crudList) }}
             {% else  %}
                 {{ widgets.tree(crudObj) }}
             {% endif %}
 
         {%  else  %}
-            {{ widgets.table(crudObj) }}
+            {{ widgets.table(crudList) }}
         {% endif %}
     </div>
 </div>

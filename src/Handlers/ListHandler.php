@@ -8,7 +8,7 @@ use Skvn\Crud\Filter\Filter;
 class ListHandler {
 
 
-    protected $model;
+    public $model;
     protected $app;
     protected $default_options = [
         "title" => "", "description" => "", "multiselect" => "0",

@@ -5,7 +5,7 @@
     var settings = {
         model_edit_url: '/admin/crud/{model}/edit/{id}?scope={scope}',
         model_filter_url: '/admin/crud/{model}/filter/{scope}',
-        model_list_url: '/admin/crud/{model}/list/{scope}{uri_params}',
+        model_list_url: '/admin/crud/{model}/list/{scope}{url_params}',
         model_delete_url: '/admin/crud/{model}/delete',
         model_move_tree_url: '/admin/crud/{model}/move_tree',
         model_tree_url: '/admin/crud/{model}/tree/{scope}',
@@ -113,6 +113,17 @@
                     }
                 }
             },
+
+            getUrlParam: function(name, url, default_value)
+            {
+                if (!url) url = this.loc.href;
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"), results = regex.exec(url);
+                if (!results) return default_value;
+                if (!results[2]) return default_value;
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            },
+
             addModelParams: function(args, elem)
             {
                 args['id'] = elem.data('id');

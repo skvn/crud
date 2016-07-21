@@ -1,20 +1,20 @@
-{% macro table(crudObj) %}
+{% macro table(list) %}
 
-    {%  if  crudObj.getList().getParam('edit_tab') %}
-        <div class="tabs-container" data-tabs_container="{{ crudObj.classViewName }}" data-scope="{{ crudObj.scope }}">
+    {%  if  list.getParam('edit_tab') %}
+        <div class="tabs-container" data-tabs_container="{{ list.model.classViewName }}" data-scope="{{ list.model.scope }}">
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-id="list"> <i class="fa fa-list"></i> {{ trans('crud::messages.list') }}</a></li>
-                <li style="display: none" data-edit_tab_tpl="1"><div class="sk-spinner sk-spinner-pulse"></div><a style="display: none" data-toggle="tab"  data-id="" href="#tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}"> <i class="fa fa-edit"></i>[ID]&nbsp;&nbsp;&nbsp;<span class="text-danger" data-confirm=" {{ trans('crud::messages.close') }}?" data-click="crud_event" data-event="crud.cancel_edit" data-rel="[REL]" title=" {{ trans('crud::messages.close') }}" style="cursor:pointer"><i class="fa fa-times"></i></span></a></li>
+                <li class="active"><a data-toggle="tab" href="#tab-{{ list.model.classViewName }}_{{ list.model.scope }}" data-id="list"> <i class="fa fa-list"></i> {{ trans('crud::messages.list') }}</a></li>
+                <li style="display: none" data-edit_tab_tpl="1"><div class="sk-spinner sk-spinner-pulse"></div><a style="display: none" data-toggle="tab"  data-id="" href="#tab-{{ list.model.classViewName }}_{{ list.model.scope }}"> <i class="fa fa-edit"></i>[ID]&nbsp;&nbsp;&nbsp;<span class="text-danger" data-confirm=" {{ trans('crud::messages.close') }}?" data-click="crud_event" data-event="crud.cancel_edit" data-rel="[REL]" title=" {{ trans('crud::messages.close') }}" style="cursor:pointer"><i class="fa fa-times"></i></span></a></li>
 
 
             </ul>
 
             <div class="tab-content">
-                <div id="tab-{{ crudObj.classViewName }}_{{ crudObj.scope }}" class="tab-pane active">
+                <div id="tab-{{ list.model.classViewName }}_{{ list.model.scope }}" class="tab-pane active">
                     <div class="panel-body">
-                        {% include "widgets/blocks/tbl_head.twig"|model_view(crudObj) %}
-                        {% include "widgets/blocks/tbl_table.twig"|model_view(crudObj) %}
-                        {% include "widgets/blocks/tbl_foot.twig"|model_view(crudObj) %}
+                        {% include "widgets/blocks/tbl_head.twig"|model_view(list.model) %}
+                        {% include "widgets/blocks/tbl_table.twig"|model_view(list.model) %}
+                        {% include "widgets/blocks/tbl_foot.twig"|model_view(list.model) %}
 
                     </div>
                 </div>
@@ -24,9 +24,9 @@
         </div>
     {% else %}
 
-        {% include "widgets/blocks/tbl_head.twig"|model_view(crudObj) %}
-        {% include "widgets/blocks/tbl_table.twig"|model_view(crudObj) %}
-        {% include "widgets/blocks/tbl_foot.twig"|model_view(crudObj) %}
+        {% include "widgets/blocks/tbl_head.twig"|model_view(list.model) %}
+        {% include "widgets/blocks/tbl_table.twig"|model_view(list.model) %}
+        {% include "widgets/blocks/tbl_foot.twig"|model_view(list.model) %}
     {% endif  %}
 {% endmacro %}
 

@@ -1,4 +1,4 @@
-{% if crudObj.getList().getParam('list_type') == 'dt_flat' %}
+{% if list.getParam('list_type') == 'dt_flat' %}
 <ol class="breadcrumb">
     {% for bc in crudObj.breadcrumbs %}
         <li>
@@ -10,27 +10,31 @@
         </li>
     {% endfor %}
 </ol>
+<input type="button" href="tree_reorder_level" data-model="{{ list.model.classViewName }}" id="{{ list.model.classViewName }}_{{ list.model.scope }}_reorder_trigger" style="display: none;" data-click="crud_action" data-action="crud_command" />
 {% endif %}
 
 
 <table class="table table-striped table-bordered table-hover"
-       data-list_uri_params="{{ crudObj.flat_tree_uri_params }}"
-       data-list_table_ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}"
-       data-crud_table="{{ crudObj.classViewName }}"
-       data-crud_scope="{{ crudObj.scope }}"
-       data-crud_noedit="{{ not crudObj.getList().getParam('buttons.single_edit') }}"
-       data-btn_edit="{{ crudObj.getList().getParam('buttons.single_edit') }}"
-       data-btn_delete="{{ crudObj.getList().getParam('buttons.single_delete') }}"
-       data-form_type="{{ crudObj.scopeParam('edit_tab')?'tabs':'popup' }}"
-       data-list_type="{{ crudObj.scopeParam('list_type')?crudObj.scopeParam('list_type'):'dt' }}"
-       data-list_single_actions='{{ crudObj.getList().getParam('list_single_actions')|json_encode|raw }}'
-       data-searchable="{{ crudObj.getList().getParam('searchable') }}"
-       data-key_name="{{ crudObj.getKeyName() }}"
-       {{ crudObj.isTree()?('data-parent_id="'~crudObj.getColumnTreePid()~'"')|raw }}
+       data-list_url_params="{{ list.model.list_url_extra_params }}"
+       data-list_table_ref="{{ list.model.classViewName }}_{{ list.model.scope }}"
+       data-crud_table="{{ list.model.classViewName }}"
+       data-crud_scope="{{ list.model.scope }}"
+       data-crud_noedit="{{ not list.getParam('buttons.single_edit') }}"
+       data-btn_edit="{{ list.getParam('buttons.single_edit') }}"
+       data-btn_delete="{{ list.getParam('buttons.single_delete') }}"
+       data-form_type="{{ list.model.scopeParam('edit_tab')?'tabs':'popup' }}"
+       data-list_type="{{ list.model.scopeParam('list_type')?list.model.scopeParam('list_type'):'dt' }}"
+       {% if list.getParam('list_type') == 'dt_flat' %}
+       data-rows_draggable="{{ list.model.treeOrderColumn() }}"
+       {% endif %}
+       data-list_single_actions='{{ list.getParam('list_single_actions')|json_encode|raw }}'
+       data-searchable="{{ list.getParam('searchable') }}"
+       data-key_name="{{ list.model.getKeyName() }}"
+       {{ list.model.isTree()?('data-parent_id="'~list.model.treePidColumn()~'"')|raw }}
 
 >
     <thead>
-    {% for c in crudObj.getList().getColumns() %}
+    {% for c in list.getColumns() %}
         {% if not c.invisible %}
         <th {{ c.width ? ('width="'~c.width~'px"')|raw }}
                 data-list_ctype="{{ c.ctype }}"

@@ -25,6 +25,14 @@
                     {
                         col.fnCreatedCell = function(td, cellData, rowData, row, col){
                             $(td).html('<input data-widget="crud_checkbox" class="i-checks" data-rel="row" type="checkbox" value="' + cellData + '">').data('id',cellData)
+                            if (rowData['id'])
+                            {
+                                $(td).data('id',rowData['id']).attr('data-id', rowData['id']);
+                            }
+                            else
+                            {
+                                $(td).data('id',cellData).attr('data-id', cellData);
+                            }
                         }
                         //$('thead tr:first td:first',tbl).html('<input class="i-checks" type="checkbox">');
                     }
@@ -157,8 +165,10 @@
                 searching: tbl.data('searchable')?true:false,
                 processing: true,
                 serverSide: true,
+                pageLength: 30,
+                lengthMenu: [10, 30, 50, 100],
 
-                ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), uri_params: tbl.data('list_uri_params')}),
+                ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), url_params: tbl.data('list_url_params')}),
                 order: order,
                 //rowReorder: {
                 //    update: false,
@@ -170,9 +180,29 @@
                     url: "/vendor/crud/js/i18n/vendor/dataTables/"+win.CURRENT_LOCALE+".json"
                 },
                 rowCallback: rowCallBack
-
-
             };
+            if (tbl.data('rows_draggable'))
+            {
+                dtConfig.rowReorder = {
+                    update: false,
+                    dataSrc: tbl.data('rows.draggable'),
+                    selector: 'tr'
+                };
+                tbl.on('row-reorder.dt', function ( e, diff, edit)
+                {
+                    if (diff.length > 0)
+                    {
+                        var reorder = {};
+                        for (var i in diff)
+                        {
+                            reorder[$('td[data-id]', diff[i].node).data('id')] = diff[i].newPosition+1;
+                        }
+                        var trigger = $('#' + tbl.data('list_table_ref') + '_reorder_trigger');
+                        trigger.data('args', {'reorder': reorder}).click();
+                        //$('#trigger_reorder').data('args', {'reorder': reorder}).click();
+                    }
+                });
+            }
 
             if (tbl.data('list_type') == 'dt_tree')
             {

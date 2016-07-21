@@ -73,11 +73,11 @@ class CrudController extends Controller
 
     }//
 
-    function crudAutocompleteList($model)
-    {
-        $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE);
-        return array_values($obj->getAutocompleteList(\Request::get('q')));
-    }
+//    function crudAutocompleteList($model)
+//    {
+//        $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE);
+//        return array_values($obj->getAutocompleteList(\Request::get('q')));
+//    }
 
     function crudAutocompleteSelectOptions($model)
     {
@@ -190,6 +190,8 @@ class CrudController extends Controller
 
         $obj = CrudModel :: createInstance($model, $this->request->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
         $req = $this->request->all();
+        //var_dump($req);
+        //var_dump($obj->isFillable('parent_id'));
 
         foreach ($req as $k=>$v)
         {

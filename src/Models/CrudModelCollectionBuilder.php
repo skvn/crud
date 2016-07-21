@@ -148,8 +148,8 @@ class CrudModelCollectionBuilder
 
         if ($this->model->isTree())
         {
-            $basic->orderBy($this->model->getColumnTreePath() , 'asc');
-            $basic->orderBy($this->model->getColumnTreeOrder(), 'asc');
+            $basic->orderBy($this->model->treePathColumn() , 'asc');
+            $basic->orderBy($this->model->treeOrderColumn(), 'asc');
 
         }
         else
@@ -199,12 +199,12 @@ class CrudModelCollectionBuilder
         }
 
         if ($this->model->isTree()) {
-            if (isset ($this->params[$this->model->getColumnTreePid()])) {
-                $root = $this->params[$this->model->getColumnTreePid()];
+            if (isset ($this->params[$this->model->treePidColumn()])) {
+                $root = $this->params[$this->model->treePidColumn()];
                 if (intval($root) <= 0) {
                     $root = $this->model->rootId();
                 }
-                $conditions[$this->model->getColumnTreePid()]['cond'] = [$this->model->getColumnTreePid(), '=', $root];
+                $conditions[$this->model->treePidColumn()]['cond'] = [$this->model->treePidColumn(), '=', $root];
 
             }
         }
@@ -469,7 +469,7 @@ class CrudModelCollectionBuilder
 //                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'], $col['format_args'] ?? []);
 //                }
 //            }
-            $treeColumn = $obj->getColumnTreePid();
+            $treeColumn = $obj->treePidColumn();
             $row[$treeColumn] = $obj->$treeColumn;
             if ($obj->children_count>0)
             {
@@ -513,7 +513,7 @@ class CrudModelCollectionBuilder
             $node = [
                 'id'=>$row->id,
                 'text'=>$text,
-                'parent'=>($row->getAttribute($row->getColumnTreePid())==0?'#':$row->getAttribute($row->getColumnTreePid())),
+                'parent'=>($row->getAttribute($row->treePidColumn())==0?'#':$row->getAttribute($row->treePidColumn())),
             ];
             $ret[] = $node;
         }
