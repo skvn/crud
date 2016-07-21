@@ -1,6 +1,6 @@
 {% if list.getParam('buttons.mass_delete') %}
     {% if (not list.model.confParam('acl')) or list.model.confParam('acl')|allowed('d') %}
-        <a href="#" class="btn btn-danger crud_delete" disabled data-click="crud_action" data-action="table_mass_delete" data-ref="{{ list.model.classViewName }}_{{ list.model.scope }}">{{ trans('crud::messages.delete_selected') }}</a>
+        <a href="#" class="btn btn-danger crud_delete" disabled data-click="crud_action" data-action="table_mass_delete" data-ref="{{ list.ref_id }}">{{ trans('crud::messages.delete_selected') }}</a>
     {% endif %}
 {% endif %}
 
@@ -14,8 +14,8 @@
         href="{{ a.href }}"
         data-mass_action="1"
         data-title="{{ a.title }}"
-        data-model="{{ list.model.classViewName }}"
-        data-scope="{{ list.model.scope }}"
+        data-model="{{ list.modelClass }}"
+        data-scope="{{ list.scope }}"
         data-click="{{ a.click }}"
         data-action="{{ a.action }}"
         data-popup="{{ a.popup_id }}"

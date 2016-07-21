@@ -9,6 +9,10 @@ class ListHandler {
 
 
     public $model;
+    public $ref_id;
+    public $scope;
+    public $modelClass;
+
     protected $app;
     protected $default_options = [
         "title" => "", "description" => "", "multiselect" => "0",
@@ -26,6 +30,10 @@ class ListHandler {
     {
         $this->app = Container :: getInstance();
         $this->model = $parentInstance;
+        $this->ref_id = $this->model->classViewName . "_" . $this->model->getScope();
+        $this->scope = $this->model->getScope();
+        $this->modelClass = $this->model->classViewName;
+
         $this->options = $this->prepareOptions($options);
         $this->columns = $options['list'] ?? [];
         $this->loadPrefs();

@@ -1,9 +1,9 @@
 <div class="pull-right">
     {% if list.getParam('buttons.customize_columns') %}
-        <a href="#" title="{{ trans('crud::messages.configure_cols') }}" data-click="crud_action" data-action="open_popup" data-popup="crud_table_columns" data-uri="{{ route('crud_table_columns') }}" data-model="{{ list.model.classViewName }}" data-context="{{ list.model.scope }}"><i class="fa fa-gear"></i></a>&nbsp;
+        <a href="#" title="{{ trans('crud::messages.configure_cols') }}" data-click="crud_action" data-action="open_popup" data-popup="crud_table_columns" data-uri="{{ route('crud_table_columns') }}" data-model="{{ list.modelClass }}" data-context="{{ list.scope }}"><i class="fa fa-gear"></i></a>&nbsp;
     {% endif %}
-    <a href="#" title="{{ trans('crud::messages.refresh_list') }}" data-click="crud_action" data-action="refresh_table" data-ref="{{ list.model.classViewName }}_{{ list.model.scope }}"><i class="fa fa-refresh"></i></a>
+    <a href="#" title="{{ trans('crud::messages.refresh_list') }}" data-click="crud_action" data-action="refresh_table" data-ref="{{ list.ref_id }}"><i class="fa fa-refresh"></i></a>
     {% if list.getParam('buttons.export_excel') %}
-        <a  href="{{ route('crud_list_excel', {'model': list.model.classViewName, 'scope': list.model.scope}) }}{{ list.model.list_urli_extra_params }}"><i class="fa fa-file-excel-o"></i></a>
+        <a  href="{{ route('crud_list_excel', {'model': list.modelClass, 'scope': list.scope}) }}{{ list.model.list_urli_extra_params }}"><i class="fa fa-file-excel-o"></i></a>
     {% endif %}
 </div>

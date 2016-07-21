@@ -56,6 +56,13 @@
                         $(td).attr('id', c.data('list_data')+'_'+rowData.id).data('ref', c.data('list_data')).attr('data-ref', c.data('list_data'));
                     }
 
+                    if (col.ctype === "drag")
+                    {
+                        col.fnCreatedCell = function(td, cellData, rowData, row, col){
+                            $(td).addClass("reorder_rows").html('<i class="fa fa-arrows"></i>');
+                        }
+                    }
+
                     if (col.ctype === "actions")
                     {
 
@@ -186,7 +193,7 @@
                 dtConfig.rowReorder = {
                     update: false,
                     dataSrc: tbl.data('rows.draggable'),
-                    selector: 'tr'
+                    selector: 'td.reorder_rows'
                 };
                 tbl.on('row-reorder.dt', function ( e, diff, edit)
                 {

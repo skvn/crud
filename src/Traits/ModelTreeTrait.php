@@ -154,7 +154,7 @@ trait ModelTreeTrait
         return $this;
     }
 
-    function treeReorderLevel($args = [])
+    function treeReorderRows($args = [])
     {
         if (!empty($args['reorder']))
         {
@@ -162,8 +162,17 @@ trait ModelTreeTrait
             {
                 \DB :: table($this->getTable())->where('id', $id)->update([$this->treeOrderColumn() => $priority]);
             }
+            $row = \DB :: selectOne("select ".$this->getKeyName().", ".$this->treePidColumn()." from " . $this->getTable() . " where ".$this->getKeyName()."=? order by " . $this->treeOrderColumn(), [$id]);
+            $this->treeReorderLevel($row[$this->treePidColumn()]);
         }
     }
+
+    function treeReorderLevel($parent_id)
+    {
+        \DB :: statement('set @pri=0');
+        \DB :: statement('update '.$this->getTable().' set '.$this->treeOrderColumn().' = (@pri:=@pri+1) where '.$this->treePidColumn().'=? order by ' . $this->treeOrderColumn(), [$parent_id]);
+    }
+
 
 
 //    public function makePreviousSiblingOf($sibling)

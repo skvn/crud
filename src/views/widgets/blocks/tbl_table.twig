@@ -1,6 +1,6 @@
 {% if list.getParam('list_type') == 'dt_flat' %}
 <ol class="breadcrumb">
-    {% for bc in crudObj.breadcrumbs %}
+    {% for bc in list.model.breadcrumbs %}
         <li>
             {% if loop.last %}
                 {{ bc.title }}
@@ -10,20 +10,20 @@
         </li>
     {% endfor %}
 </ol>
-<input type="button" href="tree_reorder_level" data-model="{{ list.model.classViewName }}" id="{{ list.model.classViewName }}_{{ list.model.scope }}_reorder_trigger" style="display: none;" data-click="crud_action" data-action="crud_command" />
+<input type="button" href="tree_reorder_rows" data-model="{{ list.modelClass }}" id="{{ list.ref_id }}_reorder_trigger" style="display: none;" data-click="crud_action" data-action="crud_command" />
 {% endif %}
 
 
 <table class="table table-striped table-bordered table-hover"
        data-list_url_params="{{ list.model.list_url_extra_params }}"
-       data-list_table_ref="{{ list.model.classViewName }}_{{ list.model.scope }}"
-       data-crud_table="{{ list.model.classViewName }}"
-       data-crud_scope="{{ list.model.scope }}"
+       data-list_table_ref="{{ list.ref_id }}"
+       data-crud_table="{{ list.modelClass }}"
+       data-crud_scope="{{ list.scope }}"
        data-crud_noedit="{{ not list.getParam('buttons.single_edit') }}"
        data-btn_edit="{{ list.getParam('buttons.single_edit') }}"
        data-btn_delete="{{ list.getParam('buttons.single_delete') }}"
-       data-form_type="{{ list.model.scopeParam('edit_tab')?'tabs':'popup' }}"
-       data-list_type="{{ list.model.scopeParam('list_type')?list.model.scopeParam('list_type'):'dt' }}"
+       data-form_type="{{ list.getParam('edit_tab')?'tabs':'popup' }}"
+       data-list_type="{{ list.getParam('list_type')?list.getParam('list_type'):'dt' }}"
        {% if list.getParam('list_type') == 'dt_flat' %}
        data-rows_draggable="{{ list.model.treeOrderColumn() }}"
        {% endif %}
