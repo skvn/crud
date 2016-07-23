@@ -18,7 +18,7 @@ class Tree extends Field implements  FormControl{
         if ($this->model->crudRelations->isMany($this->getName()))
         //if ($this->model->isManyRelation($this->config['relation']))
         {
-            $this->value =  $this->model->crudRelations->getIds($this->name)->toArray();
+            $this->value =  $this->model->crudRelations->getIds($this->name);
         }
         else
         {
