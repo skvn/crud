@@ -184,7 +184,7 @@ abstract class CrudModel extends Model
         if ($this->crudRelations->has($key))
         //if ($this->getCrudRelation($key))
         {
-            return $this->crudRelations->get($key);
+            return $this->crudRelations->getAny($key);
         }
 
         return parent::getAttribute($key);

@@ -16,7 +16,20 @@ class Relations implements ArrayAccess
 
     function has($name)
     {
-        return array_key_exists("relation", $this->model->getField($name));
+        return array_key_exists("relation", $this->model->getField($this->stripName($name)[0]));
+    }
+
+    protected function stripName($name)
+    {
+        if (strpos($name, "_") !== false)
+        {
+            $split = explode('_', $name);
+            if (count($split) == 2 && in_array($split[1], ['ids', 'first']))
+            {
+                return $split;
+            }
+        }
+        return [$name, null];
     }
 
     function defined($name)
@@ -65,6 +78,21 @@ class Relations implements ArrayAccess
     function get($name)
     {
         return $this->define($name)->get();
+    }
+
+    function getAny($name)
+    {
+        $rel = $this->stripName($name);
+        switch ($rel[1])
+        {
+            case "ids":
+                return $this->getIds($rel[0]);
+            case "first":
+                return $this->get($rel[0])->first();
+            default:
+                return $this->get($rel[0]);
+
+        }
     }
 
     function set($name, $value)
