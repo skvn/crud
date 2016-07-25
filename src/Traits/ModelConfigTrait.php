@@ -95,6 +95,11 @@ trait ModelConfigTrait
         return Arr :: get($this->config, $key, $default);
     }
 
+    function getEntityNameAttribute()
+    {
+        return $this->confParam('ent_name');
+    }
+
     function setDates($dates)
     {
         if (!is_array($dates))

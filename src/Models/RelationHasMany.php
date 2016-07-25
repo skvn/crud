@@ -5,7 +5,7 @@ class RelationHasMany extends Relation
 
     function create()
     {
-        $this->relation = $this->model->HasMany(CrudModel :: resolveClass($this->config['model']), $this->config['field'] ?? null);
+        $this->relation = $this->model->hasMany(CrudModel :: resolveClass($this->config['model']), $this->config['field'] ?? null);
         $this->sort();
         return $this;
     }

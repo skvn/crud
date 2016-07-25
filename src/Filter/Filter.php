@@ -70,7 +70,7 @@ class Filter {
         $col['required'] = false;
         $col['name'] = $name;
         $col['field'] = $field ?? $name;
-        if ($col['type'] == Field :: SELECT)
+        if ($col['type'] == "select")
         {
             $col['multiple'] = true;
         }

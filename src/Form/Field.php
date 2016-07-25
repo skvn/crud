@@ -7,21 +7,21 @@ use Skvn\Crud\Models\CrudModel;
 abstract class Field
 {
 
-    const SELECT = 'select';
-    const TEXT = 'text';
-    const FILE = 'file';
-    const IMAGE = 'image';
-    const CHECKBOX = 'checkbox';
-    const MULTI_FILE = 'multi_file';
-    const TEXTAREA = 'textarea';
-    const DATE = 'date';
-    const DATE_TIME = 'date_time';
-    const RANGE = 'range';
-    const DATE_RANGE = 'date_range';
-    const NUMBER = 'number';
-    const DECIMAL = 'decimal';
-    const TAGS = 'tags';
-    const TREE = 'tree';
+//    const SELECT = 'select';
+//    const TEXT = 'text';
+//    const FILE = 'file';
+//    const IMAGE = 'image';
+//    const CHECKBOX = 'checkbox';
+//    const MULTI_FILE = 'multi_file';
+//    const TEXTAREA = 'textarea';
+//    const DATE = 'date';
+//    const DATE_TIME = 'date_time';
+//    const RANGE = 'range';
+//    const DATE_RANGE = 'date_range';
+//    const NUMBER = 'number';
+//    const DECIMAL = 'decimal';
+//    const TAGS = 'tags';
+//    const TREE = 'tree';
 
     const TYPE = "abstract";
 
@@ -48,10 +48,6 @@ abstract class Field
 
     function setConfig($config)
     {
-        if (empty($config['field']))
-        {
-            $config['field'] = $config['name'];
-        }
         $this->config = $config;
         $this->name = $config['name'];
         $this->field = $config['field'];
@@ -77,6 +73,11 @@ abstract class Field
     function getField()
     {
         return $this->field;
+    }
+
+    function setField($f)
+    {
+        return $this->field = $f;
     }
 
     function getConfig()

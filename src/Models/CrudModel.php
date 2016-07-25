@@ -14,15 +14,9 @@ abstract class CrudModel extends Model
 {
     use ModelInjectTrait;
     use ModelConfigTrait;
-//    use ModelRelationTrait;
-//    use ModelFilterTrait;
     use ModelFormTrait;
 
 
-//    const RELATION_BELONGS_TO_MANY = 'belongsToMany';
-//    const RELATION_BELONGS_TO = 'belongsTo';
-//    const RELATION_HAS_MANY = 'hasMany';
-//    const RELATION_HAS_ONE = 'hasOne';
 
     const DEFAULT_SCOPE = 'default';
 
@@ -73,15 +67,6 @@ abstract class CrudModel extends Model
             foreach ($this->config['fields'] as $name => $col)
             {
                 $this->config['fields'][$name] = $this->configureField($name, $col);
-//                if (empty($col['field']))
-//                {
-//                    $col['field'] = $name;
-//                }
-//                if (!empty($col['hint_default']) && !empty($col['hint']) &&  $col['hint'] === 'auto')
-//                {
-//                    $col['hint'] = $this->classShortName.'_fields_'.$name;
-//                }
-//                $this->config['fields'][$name] = $col;
             }
         }
 
@@ -148,10 +133,6 @@ abstract class CrudModel extends Model
 
     public function __call($method, $parameters)
     {
-//        if ($col = $this->getCrudRelation($method))
-//        {
-//                return $this->createCrudRelation($col, $method);
-//        }
         if ($this->crudRelations->has($method))
         {
             return $this->crudRelations->getRelation($method);
@@ -182,7 +163,6 @@ abstract class CrudModel extends Model
     public function getAttribute($key)
     {
         if ($this->crudRelations->has($key))
-        //if ($this->getCrudRelation($key))
         {
             return $this->crudRelations->getAny($key);
         }
@@ -219,6 +199,27 @@ abstract class CrudModel extends Model
     {
         return $this;
     }
+
+    public function getMorphClass()
+    {
+        if ($this->app['config']->get('crud_common.replace_morph_classes_with_basename'))
+        {
+            return $this->classShortName;
+        }
+        return parent :: getMorphClass();
+    }
+
+    public function getActualClassNameForMorph($class)
+    {
+        if ($this->app['config']->get('crud_common.replace_morph_classes_with_basename'))
+        {
+            return self :: resolveClass($class);
+        }
+        return parent :: getActualClassNameForMorph($class);
+    }
+
+
+
 
     function checkAcl($access = "")
     {

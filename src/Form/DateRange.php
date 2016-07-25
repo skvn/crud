@@ -21,6 +21,14 @@ class DateRange extends Field implements  FormControl
                 'from' => $this->model->getAttribute($this->config['fields'][0]),
                 'to' => $this->model->getAttribute($this->config['fields'][1])
             ];
+            if ($this->value['from'] && $this->value['from']->timestamp < 10)
+            {
+                $this->value['from'] = null;
+            }
+            if ($this->value['to'] && $this->value['to']->timestamp < 10)
+            {
+                $this->value['to'] = null;
+            }
             //$this->value = $this->model->getAttribute($this->config['fields'][0]) . "~" . $this->model->getAttribute($this->config['fields'][1]);
         }
     }
@@ -54,23 +62,22 @@ class DateRange extends Field implements  FormControl
         {
             if (isset($data[$this->getFromFieldName()]) || isset ($data[$this->getToFieldName()]))
             {
-                if (isset($data[$this->getFromFieldName()]))
+                if (!empty($data[$this->getFromFieldName()]))
                 {
                     $this->value['from'] = Carbon :: parse($data[$this->getFromFieldName()]);
                 }
-//                if (isset($data[$this->getFromFieldName()]))
-//                {
-//                    $from = strtotime($data[$this->getFromFieldName()]);
-//                }
-                if (isset($data[$this->getToFieldName()]))
+                else
+                {
+                    $this->value['from'] = null;
+                }
+                if (!empty($data[$this->getToFieldName()]))
                 {
                     $this->value['to'] = Carbon :: parse($data[$this->getToFieldName()]);
                 }
-//                if (isset($data[$this->getToFieldName()]))
-//                {
-//                    $to = strtotime($data[$this->getToFieldName()]);
-//                }
-                //$this->value = $from . '~' . $to;
+                else
+                {
+                    $this->value['to'] = null;
+                }
             }
         }
 

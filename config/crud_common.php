@@ -7,6 +7,7 @@ return [
     'app_title' => env('APPLICATION_TITLE', 'SkVn/CRUD application'),
     'auto_migrate_allowed' => env('AUTO_MIGRATE_EMABLED', true),
     'app_logo' => env('APPLICATION_LOGO', null),
+    'replace_morph_classes_with_basename' => false,
     'assets' => [
         'js' => [
          '/js/app.js'
@@ -32,6 +33,7 @@ return [
         Skvn\Crud\Form\Tree :: class,
         Skvn\Crud\Form\Radio :: class,
         Skvn\Crud\Form\EntitySelect :: class,
+        Skvn\Crud\Form\LinkedModelsTable :: class,
     ],
 
     'relations' => [
@@ -41,5 +43,7 @@ return [
         'hasManyFiles' => Skvn\Crud\Models\RelationHasManyFiles :: class,
         'belongsTo' => Skvn\Crud\Models\RelationBelongsTo :: class,
         'belongsToMany' => Skvn\Crud\Models\RelationBelongsToMany :: class,
+        'morphTo' => Skvn\Crud\Models\RelationMorphTo :: class,
+        'morphMany' => Skvn\Crud\Models\RelationMorphMany :: class,
     ]
 ];

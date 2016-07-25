@@ -11,6 +11,8 @@
         {{ controls.select(input) }}
     {% elseif input.config.type == 'text' %}
         {{ controls.text(input) }}
+    {% elseif input.config.type == 'date' %}
+        {{ controls.date(input) }}
     {% elseif input.config.type == 'textarea' %}
         {{ controls.textarea(input) }}
     {% endif %}
@@ -83,7 +85,7 @@
 
 {% macro text(input) %}
     <input {{ input.config.extra|raw }} class="form-control"
-            {{ input.config.required ? 'required' }}    name="{{ input.name }}"
+            {{ input.config.required ? 'required' }}    name="{{ input.field }}"
                                         type="text"
                                         value="{{ input.getValue() }}"
                                         data-default="{{ input.config.default }}"
@@ -97,7 +99,13 @@
             data-height="{{ input.config.height?input.config.height:500 }}"
             data-type="{{ input.config.editor_type }}"
             class="form-control" {{ input.config.required ? 'required' }}
-            name="{{ input.name }}"
+            name="{{ input.field }}"
             id="{{ input.getUniqueId() }}"  >{{ input.getValue()}}</textarea>
 
+{% endmacro %}
+
+{% macro date(input) %}
+    <div data-widget="crud_datetime" data-type="date" class="input-group date"  data-date-format="{{ input.config.jsformat }}">
+        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" {{ input.config.required ? 'required' }}  name="{{ input.field }}" value="{{ input.getValue() ? input.getValue()|date(input.config.format) }}"  data-default="{{ input.config.default }}" {{ input.config.extra|raw }}>
+    </div>
 {% endmacro %}
