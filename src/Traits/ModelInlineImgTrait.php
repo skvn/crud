@@ -29,7 +29,7 @@ trait ModelInlineImgTrait {
         {
             foreach ($this->config['fields'] as $name => $field)
             {
-                if (!empty($field['type']) && in_array($field['type'], [Field :: TEXTAREA]) && !empty($field['editor']))
+                if (!empty($field['type']) && in_array($field['type'], ["textarea"]) && !empty($field['editor']))
                 {
                     $cols[] = $name;
                 }
