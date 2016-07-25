@@ -23,13 +23,21 @@ class LinkedModelsTable extends Field implements FormControl
         $class = CrudModel :: resolveClass($this->config['model']);
         foreach ($data[$this->name] as $id => $entry)
         {
+            $valid = true;
             $obj = $id > 0 ? $class :: findOrFail($id) : new $class();
-            foreach ($this->getControls($obj) as $c)
+            foreach ($this->getControls($obj, false) as $c)
             {
                 $c->pullFromData($entry);
                 $c->pushToModel();
+                if ($c->config['required'] && !$c->getValue())
+                {
+                    $valid = false;
+                }
             }
-            $this->value->push($obj);
+            if ($valid)
+            {
+                $this->value->push($obj);
+            }
             //$obj->saveDirect();
         }
 
@@ -52,10 +60,9 @@ class LinkedModelsTable extends Field implements FormControl
         $this->model->setAttribute($this->name, $this->value);
     }
 
-    function getControls(CrudModel $model = null)
+    function getControls(CrudModel $model = null, $forView = true)
     {
         $controls = [];
-        $x = is_null($model);
         if (is_null($model))
         {
             $model = CrudModel :: createInstance($this->config['model']);;
@@ -63,9 +70,11 @@ class LinkedModelsTable extends Field implements FormControl
         foreach ($this->config['fields'] as $field)
         {
             $control = Form :: createControl($model, $model->getField($field));
-            if ($x)
+            if ($forView)
             {
-                $control->setField($this->name . '[-1][' . $control->config['name'] . ']');
+                $id = $model->exists ? $model->getKey() : -1;
+                $control->setField($this->name . '[' . $id . '][' . $control->config['name'] . ']');
+                $control->config['required'] = false;
             }
             $controls[] = $control;
         }

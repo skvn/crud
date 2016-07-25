@@ -44,7 +44,6 @@ class RelationMorphMany extends Relation
     function save()
     {
         if ($this->dirtyValue)
-        //if (is_array($this->dirtyValue))
         {
             $oldIds = $this->relation->lists('id')->toArray();
             $ids = [];
@@ -66,20 +65,22 @@ class RelationMorphMany extends Relation
 
         if ($toUnlink && is_array($toUnlink))
         {
-//            foreach ($toUnlink as $id)
-//            {
-//                $col = $this->relation->getForeignKey();
-//                $obj = CrudModel :: createInstance($this->config['model'], null, $id);
-//                if (($this->config['on_delete'] ?? false) === "delete")
-//                {
-//                    $obj->delete();
-//                }
-//                else
-//                {
-//                    $obj->$col = null;
-//                    $obj->save();
-//                }
-//            }
+            foreach ($toUnlink as $id)
+            {
+                $col_id = $this->relation->getForeignKey();
+                $col_class = $this->relation->getPlainMorphType();
+                $obj = CrudModel :: createInstance($this->config['model'], null, $id);
+                if (($this->config['on_delete'] ?? false) === "delete")
+                {
+                    $obj->delete();
+                }
+                else
+                {
+                    $obj->$col_id = null;
+                    $obj->$col_class = null;
+                    $obj->saveDirect();
+                }
+            }
         }
 
     }
