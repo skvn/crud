@@ -60,22 +60,24 @@ trait ModelFormTrait
                 'props' => $args
             ]);
 
-            $config = $this->scopeParam('form');
-            $plain = isset($config[0]);
-            foreach ($config as $idx => $fld)
-            {
-                if ($plain)
-                {
-                    $this->form->addField($fld, $this->getField($fld, true));
-                }
-                else
-                {
-                    $this->form->addTab($idx, array_filter($fld, function($k){return $k != "fields";}, ARRAY_FILTER_USE_KEY));
-                    if (!empty($fld['fields']))
-                    {
-                        foreach ($fld['fields'] as $field)
-                        {
-                            $this->form->addField($field, $this->getField($field, true), $idx);
+            $form_alias = $this->scopeParam('form');
+            if (!empty($form_alias)) {
+
+                $config = $this->confParam('forms.'.$form_alias);
+                if ($config) {
+                    $plain = isset($config[0]);
+                    foreach ($config as $idx => $fld) {
+                        if ($plain) {
+                            $this->form->addField($fld, $this->getField($fld, true));
+                        } else {
+                            $this->form->addTab($idx, array_filter($fld, function ($k) {
+                                return $k != "fields";
+                            }, ARRAY_FILTER_USE_KEY));
+                            if (!empty($fld['fields'])) {
+                                foreach ($fld['fields'] as $field) {
+                                    $this->form->addField($field, $this->getField($field, true), $idx);
+                                }
+                            }
                         }
                     }
                 }
