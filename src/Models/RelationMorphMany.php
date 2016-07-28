@@ -79,7 +79,7 @@ class RelationMorphMany extends Relation
                 {
                     $obj->$col_id = null;
                     $obj->$col_class = null;
-                    $obj->saveDirect();
+                    $obj->save();
                 }
             }
         }

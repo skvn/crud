@@ -31,7 +31,7 @@ class RelationHasFile extends Relation
         if (!is_null($id))
         {
             $this->model->setAttribute($this->relation->getForeignKey(), null);
-            $this->model->saveDirect();
+            $this->model->save();
         }
     }
 
@@ -46,7 +46,7 @@ class RelationHasFile extends Relation
             {
                 $obj->attachStoreFile($fileInfo, $this->model->getFilesConfig($fileInfo['originalName']));
                 $this->model->setAttribute($this->relation->getForeignKey(), $obj->getKey());
-                $this->model->saveDirect();
+                $this->model->save();
             }
         }
     }

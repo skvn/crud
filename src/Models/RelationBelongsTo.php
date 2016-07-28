@@ -22,7 +22,7 @@ class RelationBelongsTo extends Relation
         if (!is_null($id))
         {
             $this->model->setAttribute($this->relation->getForeignField(), null);
-            $this->model->saveDirect();
+            $this->model->save();
         }
     }
 

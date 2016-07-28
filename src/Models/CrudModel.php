@@ -36,7 +36,7 @@ abstract class CrudModel extends Model
     protected static $messages = array();
     protected $validator;
     public $timestamps = false;
-    protected $eventsDisabled = false;
+    //protected $eventsDisabled = false;
     public $crudRelations;
 
 
@@ -116,12 +116,21 @@ abstract class CrudModel extends Model
     }
 
 
-    function saveDirect()
+//    function saveDirect()
+//    {
+//        //$this->eventsDisabled = true;
+//        $result = parent :: save();
+//        //$this->eventsDisabled = false;
+//        return $result;
+//    }
+
+    function saveFull()
     {
-        $this->eventsDisabled = true;
-        $result = parent :: save();
-        $this->eventsDisabled = false;
-        return $result;
+        if ($this->save())
+        {
+            return $this->crudRelations->save();
+        }
+        return false;
     }
 
 

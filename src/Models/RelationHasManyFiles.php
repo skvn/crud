@@ -73,7 +73,7 @@ class RelationHasManyFiles extends Relation
                 {
                     $obj = $class :: findOrFail($iid);
                     $obj->title = $title;
-                    $obj->saveDirect();
+                    $obj->save();
                 }
             }
         }
