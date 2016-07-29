@@ -138,7 +138,7 @@ trait ModelTreeTrait
             {
                 $child->setAttribute($child->treePathColumn(), str_replace($this->getTreePath(), $parent->getTreePath() . $parent->getKey() . $this->treePathSeparator(), $child->getTreePath()));
                 $child->setAttribute($child->treeDepthColumn(), $parent->getTreeDepth() + 1 + ($child->getTreeDepth() - $this->getTreeDepth()));
-                $child->saveDirect();
+                $child->save();
             }
         }
 

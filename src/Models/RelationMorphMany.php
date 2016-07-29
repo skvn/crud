@@ -17,27 +17,29 @@ class RelationMorphMany extends Relation
 
     function delete($id = null)
     {
-//        $col = $this->relation->getForeignKey();
-//        $delete = $this->config['on_delete'] ?? false;
-//        $this->get()->each(function ($item, $key) use ($delete, $col, $id) {
-//
-//            if (!is_null($id))
-//            {
-//                if ($item->getKey() != $id)
-//                {
-//                    return;
-//                }
-//            }
-//            if ($delete  === "delete")
-//            {
-//                $item->delete();
-//            }
-//            else
-//            {
-//                $item->$col = null;
-//                $item->save();
-//            }
-//        });
+        $col_id = $this->relation->getForeignKey();
+        $col_class = $this->relation->getPlainMorphType();
+        $delete = $this->config['on_delete'] ?? false;
+        $this->get()->each(function ($item, $key) use ($delete, $col_id, $col_class, $id) {
+
+            if (!is_null($id))
+            {
+                if ($item->getKey() != $id)
+                {
+                    return;
+                }
+            }
+            if ($delete  === "delete")
+            {
+                $item->delete();
+            }
+            else
+            {
+                $item->$col_id = null;
+                $item->$col_class = null;
+                $item->save();
+            }
+        });
 
     }
 
@@ -49,7 +51,6 @@ class RelationMorphMany extends Relation
             $ids = [];
             foreach ($this->dirtyValue as $obj)
             {
-                //$obj = CrudModel :: createInstance($this->config['model'], null, $id);
                 if ($obj->exists)
                 {
                     $ids[] = $obj->getKey();
@@ -78,7 +79,7 @@ class RelationMorphMany extends Relation
                 {
                     $obj->$col_id = null;
                     $obj->$col_class = null;
-                    $obj->saveDirect();
+                    $obj->save();
                 }
             }
         }

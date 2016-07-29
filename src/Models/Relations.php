@@ -111,6 +111,7 @@ class Relations implements ArrayAccess
                 $relation->resetDirty();
             }
         }
+        return true;
     }
 
     function delete()

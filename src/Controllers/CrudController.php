@@ -218,10 +218,11 @@ class CrudController extends Controller
             if ($obj->isTree())
             {
                 $obj->saveTree($this->request->all());
+                $obj->crudRelations->save();
             } else {
                 //$obj->fillFromRequest($this->request->all());
 
-                if (!$obj->save())
+                if (!$obj->saveFull())
                 {
                     return ['success'=>false,'error'=>implode("\n",array_values($obj->getErrors()))];
                 }

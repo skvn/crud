@@ -12,10 +12,10 @@ trait ModelSlugTrait  {
     static function bootModelSlugTrait()
     {
         static :: saving(function($instance){
-            if ($instance->eventsDisabled)
-            {
-                return true;
-            }
+//            if ($instance->eventsDisabled)
+//            {
+//                return true;
+//            }
             return $instance->processSlug();
         });
     }
