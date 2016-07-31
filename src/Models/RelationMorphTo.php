@@ -15,26 +15,7 @@ class RelationMorphTo extends Relation
 
     function delete($id = null)
     {
-//        if (($this->config['on_delete'] ?? false) === "delete")
-//        {
-//            $this->get()->delete();
-//        }
-//        if (!is_null($id))
-//        {
-//            $this->model->setAttribute($this->relation->getForeignField(), null);
-//            $this->model->saveDirect();
-//        }
     }
-
-//    function get()
-//    {
-//        $val = parent :: get();
-//        if (is_null($val))
-//        {
-//            return CrudModel :: createInstance($this->config['model']);
-//        }
-//        return $val;
-//    }
 
     function save()
     {

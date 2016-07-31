@@ -47,7 +47,7 @@ class RelationMorphMany extends Relation
     {
         if ($this->dirtyValue)
         {
-            $oldIds = $this->relation->lists('id')->toArray();
+            $oldIds = $this->getIds();
             $ids = [];
             foreach ($this->dirtyValue as $obj)
             {
@@ -61,7 +61,7 @@ class RelationMorphMany extends Relation
         }
         else
         {
-            $toUnlink = $this->relation->lists('id')->toArray();
+            $toUnlink = $this->getIds();
         }
 
         if ($toUnlink && is_array($toUnlink))

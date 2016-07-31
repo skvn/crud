@@ -124,13 +124,18 @@ abstract class CrudModel extends Model
 //        return $result;
 //    }
 
-    function saveFull()
+//    function saveFull()
+//    {
+//        if ($this->save())
+//        {
+//            return $this->crudRelations->save();
+//        }
+//        return false;
+//    }
+
+    function saveRelations()
     {
-        if ($this->save())
-        {
-            return $this->crudRelations->save();
-        }
-        return false;
+        return $this->crudRelations->save();
     }
 
 

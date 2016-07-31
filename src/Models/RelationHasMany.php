@@ -45,7 +45,7 @@ class RelationHasMany extends Relation
     {
         if (is_array($this->dirtyValue))
         {
-            $oldIds = $this->relation->lists('id')->toArray();
+            $oldIds = $this->getIds();
             foreach ($this->dirtyValue as $id)
             {
                 $obj = CrudModel :: createInstance($this->config['model'], null, $id);
@@ -55,7 +55,7 @@ class RelationHasMany extends Relation
         }
         else
         {
-            $toUnlink = $this->relation->lists('id')->toArray();
+            $toUnlink = $this->getIds();
         }
 
         if ($toUnlink && is_array($toUnlink))
