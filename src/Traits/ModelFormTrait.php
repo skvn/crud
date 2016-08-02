@@ -26,7 +26,7 @@ trait ModelFormTrait
         $field = $this->config['fields'][$name] ?? [];
         if (empty($field) && $throw)
         {
-            throw new ConfigException('Field ' . $name . ' on ' . $this->classShortName . ' do not exist');
+            throw new ConfigException('Field ' . $name . ' on ' . $this->classShortName . ' is used in form but does not exist inside "fields"');
         }
         $field['name'] = $name;
         return $field;
