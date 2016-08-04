@@ -30,7 +30,7 @@
        data-list_single_actions='{{ list.getParam('list_single_actions')|json_encode|raw }}'
        data-searchable="{{ list.getParam('searchable') }}"
        data-key_name="{{ list.model.getKeyName() }}"
-       {{ list.model.isTree()?('data-parent_id="'~list.model.treePidColumn()~'"')|raw }}
+       {{ list.model.isTree() or list.model.hasParent() ?('data-parent_id="'~list.model.treePidColumn()~'"')|raw }}
 
 >
     <thead>

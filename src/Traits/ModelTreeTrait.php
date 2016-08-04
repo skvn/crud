@@ -196,7 +196,7 @@ trait ModelTreeTrait
         return $this->newQuery()->where($this->treePidColumn(), '=', $this->getTreePid());
     }
 
-    public function children($depth=null)
+    public function children($depth=1)
     {
 
         if ($depth == 1)
