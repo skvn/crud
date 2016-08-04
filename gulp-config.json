@@ -25,7 +25,7 @@
           "resources/bower_components/jquery-treetable/css/jquery.treetable.css",
           "resources/bower_components/datatables-treetable/css/treeTable.dataTables.css",
           "resources/bower_components/datatables-treetable/css/treeTable.bootstrap.css",
-          "resources/bower_components/datatables-rowreorder/css/rowReorder.css",
+          "resources/assets/css/rowReorder.css",
           "resources/bower_components/select2/dist/css/select2.css"
 
 
