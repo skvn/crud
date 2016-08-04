@@ -25,7 +25,7 @@
     "datatables-treetable": "*",
     "datatables": "latest",
     "datatables-rowreorder": "*",
-    "dt": "https://github.com/skvn/dt.git",
-    "select2": "^4.0.3"
+    "skvn-datatables": "https://github.com/skvn/dt.git",
+    "select2": "latest"
   }
 }
