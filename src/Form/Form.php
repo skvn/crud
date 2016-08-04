@@ -163,6 +163,13 @@ class Form {
         {
             $field->pullFromData($data);
         }
+        foreach ($this->crudObj->getHiddenFields() as $f)
+        {
+            if (isset($data[$f]))
+            {
+                $this->crudObj->$f = $data[$f];
+            }
+        }
         return $this;
     }
 

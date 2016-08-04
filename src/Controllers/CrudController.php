@@ -200,7 +200,6 @@ class CrudController extends Controller
 
         foreach ($req as $k=>$v)
         {
-
             if ($obj->isFillable($k))
             {
                 $obj->setAttribute($k,$v);

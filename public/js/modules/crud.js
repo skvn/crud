@@ -246,7 +246,8 @@
                 var self = this;
                 $.ajaxSetup({sync: false, context: this.doc.body});
                 //$('#crud_form').load(url, function (res)
-                $.get(url, {}, function(res)
+                var rargs = args.rargs?args.rargs:{};
+                $.get(url, rargs, function(res)
                 {
                     $('#crud_form').html(res);
                     //$('.modal-backdrop').remove();
