@@ -14,6 +14,9 @@
     <input type="hidden" id="tree_action" name="tree_action" value=""/>
     <input type="hidden" name="scope" value="{{ crudObj.scope }}"/>
     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+    {% for f in crudObj.getHiddenFields() %}
+        <input type="hidden" name="{{ f }}" value="{{ crudObj.getAttribute(f) }}" />
+    {% endfor %}
     <div class="pull-left"  style="width:80%">
     <ul class="nav nav-tabs">
         {% set active=0 %}

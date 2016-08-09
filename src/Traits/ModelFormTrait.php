@@ -145,6 +145,11 @@ trait ModelFormTrait
         return $value;
     }
 
+    function getHiddenFields()
+    {
+        return [];
+    }
+
     
 
 }
