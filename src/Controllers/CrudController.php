@@ -200,6 +200,7 @@ class CrudController extends Controller
 
         foreach ($req as $k=>$v)
         {
+
             if ($obj->isFillable($k))
             {
                 $obj->setAttribute($k,$v);
@@ -288,7 +289,7 @@ class CrudController extends Controller
 
         try {
             $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
-            $ret = $obj->crudExecuteCommand('crudCommand'.studly_case($command), $this->request->all());
+            $ret = $obj->crudExecuteCommand(camel_case($command), $this->request->all());
             return ['success'=>true, 'ret'=>$ret, 'message' => isset($ret['message']) ? $ret['message'] : null];
 
         } catch(\Exception $e)

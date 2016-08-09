@@ -426,15 +426,7 @@ abstract class CrudModel extends Model
         return $this->listPublicMethods("#selectOptions([a-zA-Z]+)#");
     }
 
-    /**
-     * Get all available list command methods
-     *
-     * @return array
-     */
-    function getAvailCommandMethods()
-    {
-        return $this->listPublicMethods("#crudCommand([a-zA-Z]+)#");
-    }
+
 
     function guessNewKey()
     {
