@@ -433,7 +433,7 @@ abstract class CrudModel extends Model
      */
     function getAvailCommandMethods()
     {
-        return $this->listPublicMethods("#listCommand([a-zA-Z]+)#");
+        return $this->listPublicMethods("#crudCommand([a-zA-Z]+)#");
     }
 
     function guessNewKey()
