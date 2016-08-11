@@ -426,6 +426,16 @@ abstract class CrudModel extends Model
         return $this->listPublicMethods("#selectOptions([a-zA-Z]+)#");
     }
 
+    /**
+     * Get all available scopes
+     *
+     * @return array
+     */
+    function getAvailScopes()
+    {
+        return $this->listPublicMethods("#scope([a-zA-Z]+)#");
+    }
+
 
 
     function guessNewKey()
@@ -498,6 +508,17 @@ abstract class CrudModel extends Model
     public  function preApplyConditions($coll, $conditions)
     {
         return $conditions;
+    }
+
+    /**
+     * Default model scope
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeDefault($query)
+    {
+        return $query;
     }
 
 
