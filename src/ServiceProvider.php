@@ -30,7 +30,7 @@ class ServiceProvider extends LServiceProvider {
 
         $this->app['view']->getFinder()->prependNamespace("crud", $paths);
 
-        $this->loadViewsFrom(__DIR__.'/views', 'crud');
+        $this->loadViewsFrom(dirname(__DIR__).'/resources/views', 'crud');
 
         // Routing
         include __DIR__ . DIRECTORY_SEPARATOR . 'routes.php';
