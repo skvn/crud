@@ -1,5 +1,6 @@
 <?php namespace Skvn\Crud\Models;
 
+
 use \Illuminate\Database\Eloquent\Model;
 use Skvn\Crud\Traits\ModelInjectTrait;
 use Skvn\Crud\Traits\ModelConfigTrait;
@@ -351,14 +352,22 @@ abstract class CrudModel extends Model
     }
 
     /**
-     * Format date from timestamp
+     * Format date from timestamp or Carbon instance
      *
      * @param $val
      * @param array $args
      */
     function crudFormatValueDate($val, $args = [])
     {
-        return date($args['format'] ?? 'd.m.Y', $val);
+        if (is_integer($val)) {
+
+            return date($args['format'] ?? 'd.m.Y', $val);
+
+        } elseif ($val instanceof \Carbon\Carbon ) {
+
+            return $val->format($args['format'] ?? 'd.m.Y');
+        }
+
     }
 
     /**
