@@ -59,7 +59,7 @@ class Select extends Field implements  FormControl, FormControlFilterable
             $method = "selectOptions" . studly_case($this->config['find']);
             if (method_exists($this->model, $method))
             {
-                $opts = $this->model->$method();
+                $opts = $this->formatOptionsArray($this->model->$method());
             }
 
         }
@@ -143,8 +143,8 @@ class Select extends Field implements  FormControl, FormControlFilterable
         //$modelObj = new $class();
         if (!empty($this->config['find']))
         {
-            $method = $method = "selectOptions" . studly_case($this->config['find']);
-            return $modelObj->$method($this->model);
+            $method = "selectOptions" . studly_case($this->config['find']);
+            return $this->formatOptionsArray($modelObj->$method($this->model));
         }
         else
         {
@@ -276,6 +276,42 @@ class Select extends Field implements  FormControl, FormControlFilterable
             'cond'=>[$col,$action, $this->value]
         ];
     }//
+
+    /**
+     * Thus method is used to ensure the correct format
+     * of options array.
+     *
+     * The selectOptionsXyz method can give arrays as $k=>$v
+     * But we need them in
+     * ['value'=>$k, 'text'=>$v]
+     * This method converts such arrays to the correct full format
+     *
+     *
+     * @param array $options
+     * @return array
+     */
+    function formatOptionsArray($options) : array {
+
+        if (!is_array($options) && !count($options))
+        {
+           return $options;
+        }
+
+
+        if (!isset($options[0]['value'])) {
+           $ret = [];
+           foreach ($options as $value => $text) {
+               $ret[] = [
+                    'value' => $value,
+                    'text' => $text
+                    ];
+           }
+
+           return $ret;
+        }
+
+        return $options;
+    }
 
 
 } 
