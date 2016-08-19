@@ -124,7 +124,7 @@ trait ModelConfigTrait
         return $this->listObj;
     }
 
-    function scopeParam($key, $default = null)
+    function getScopeParam($key, $default = null)
     {
         return $this->config['scopes'][$this->scope][$key] ?? $default;
     }

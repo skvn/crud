@@ -60,7 +60,7 @@ trait ModelFormTrait
                 'props' => $args
             ]);
 
-            $form_alias = $this->scopeParam('form');
+            $form_alias = $this->getScopeParam('form');
             if (!empty($form_alias)) {
 
                 $config = $this->confParam('forms.'.$form_alias);
