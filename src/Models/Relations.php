@@ -24,7 +24,7 @@ class Relations implements ArrayAccess
         if (strpos($name, "_") !== false)
         {
             $split = explode('_', $name);
-            if (count($split) == 2 && in_array($split[1], ['ids', 'first']))
+            if (count($split) == 2 && in_array($split[1], ['ids', 'first', 'count']))
             {
                 return $split;
             }
@@ -89,6 +89,8 @@ class Relations implements ArrayAccess
                 return $this->getIds($rel[0]);
             case "first":
                 return $this->get($rel[0])->first();
+            case "count":
+                return $this->get($rel[0])->count();
             default:
                 return $this->get($rel[0]);
 
