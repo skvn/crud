@@ -207,7 +207,7 @@ class CrudController extends Controller
             }
         }
 
-        $edit_view = $obj->scopeParam('edit_tab')?'tab':'edit';
+        $edit_view = $obj->getScopeParam('edit_tab')?'tab':'edit';
         return $this->view->make($obj->resolveView($edit_view),['crudObj'=>$obj, 'crudForm' => $obj->getForm(), 'id'=>$id,'scope'=>$obj->getScope(), 'form_tabbed'=>$obj->getForm()->hasTabs()]);
 
     }
