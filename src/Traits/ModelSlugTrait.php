@@ -146,7 +146,7 @@ trait ModelSlugTrait  {
     {
         $class = get_called_class();
         $column = $class :: slugColumn();
-        return $class :: where($column, $slug)->first();
+        return $class :: where($column, $slug)->firstOrFail();
     }
 
     function slugTransliterate($args = [])
