@@ -65,7 +65,7 @@ class CrudModel extends Model
         $class = self :: resolveClass($model);
         if (!empty($id))
         {
-            $obj = $class::firstOrNew(['id'=>(int)$id]);
+            $obj = $class::findOrNew((int)$id);
         }
         else
         {
