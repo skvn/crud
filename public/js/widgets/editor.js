@@ -388,20 +388,28 @@
 
     function bind_events()
     {
-        crud.bind("form.before_submit", function(data){
+        crud.bind("form.before_validate", function(data){
             $('textarea[data-widget=crud_editor]', data['form']).each(function(){
                 switch($(this).data('type'))
                 {
                     case 'mde':
                         if (mdes[this.id])
                         {
-                            $(this).val(mdes[this.id].value())
+                            alert('mde:' + mdes[this.id].value());
+                            $(this).val(mdes[this.id].value());
                         }
                     break;
                     case 'summernote':
-                        $(this).val($(this).summernote('code'));
+                        var v = $(this).summernote('code');
+                        if (v == '<p><br></p>')
+                        {
+                            v = '';
+                        }
+                        alert('sn:'+v);
+                        $(this).val(v);
                     break;
                 }
+                $(this).trigger('change');
             });
         });
     }

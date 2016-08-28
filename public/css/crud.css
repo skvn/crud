@@ -57,3 +57,6 @@
 .tt-suggestion.tt-cursor {
   background-color: #ccc;
 }
+.invalid_field {
+  background-color: red;
+}

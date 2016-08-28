@@ -12,3 +12,6 @@
 .CodeMirror {
     height: 450px;
 }
+.invalid_field {
+    background-color: red;
+}

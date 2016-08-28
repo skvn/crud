@@ -30,7 +30,7 @@
                 language: 'ru'
             }).on('changeDate', function(e) {
             // Revalidate the date field
-            $(this).parents('form:first').bootstrapValidator('revalidateField',$(this).find('input'));
+            //$(this).parents('form:first').bootstrapValidator('revalidateField',$(this).find('input'));
         });
     }
 
@@ -44,7 +44,7 @@
 
             }).on('dp.change', function(e) {
             // Revalidate the date field
-            $(this).parents('form:first').bootstrapValidator('revalidateField',$(this).find('input'));
+            //$(this).parents('form:first').bootstrapValidator('revalidateField',$(this).find('input'));
         });
     }
 })(jQuery, CRUD)

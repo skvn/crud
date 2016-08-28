@@ -17,7 +17,6 @@
           "resources/bower_components/simplemde/dist/simplemde.min.css",
           "resources/bower_components/summernote/dist/summernote.css",
           "resources/bower_components/tagmanager/tagmanager.css",
-          "resources/bower_components/bootstrapvalidator/dist/css/bootstrapValidator.min.css",
           "resources/bower_components/iCheck/skins/square/square.css",
           "resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css",
           "resources/bower_components/jstree/dist/themes/default/style.min.css",
@@ -69,7 +68,6 @@
           "resources/bower_components/jquery-ui/ui/minified/widget.min.js",
           "resources/bower_components/jquery-ui/ui/minified/mouse.min.js",
           "resources/bower_components/jquery-ui/ui/minified/sortable.min.js",
-          "resources/bower_components/bootstrapvalidator/dist/js/bootstrapValidator.min.js",
           "resources/bower_components/iCheck/icheck.min.js",
           "resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
           "resources/bower_components/jstree/dist/jstree.min.js",
@@ -103,7 +101,6 @@
         "resources/bower_components/jquery-ui/ui/widget.js",
         "resources/bower_components/jquery-ui/ui/mouse.js",
         "resources/bower_components/jquery-ui/ui/sortable.js",
-        "resources/bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js",
         "resources/bower_components/iCheck/icheck.js",
         "resources/bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js",
         "resources/bower_components/jstree/dist/jstree.js",
@@ -119,12 +116,10 @@
           "resources/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js",
           "resources/bower_components/bootstrap-select/js/i18n/defaults-ru_RU.js",
           "resources/bower_components/summernote/dist/lang/summernote-ru-RU.js",
-          "resources/bower_components/bootstrapvalidator/dist/js/language/ru_RU.js",
           "resources/bower_components/select2/dist/js/i18n/ru.js"
         ],
         "en": [
           "resources/bower_components/bootstrap-select/js/i18n/defaults-en_US.js",
-          "resources/bower_components/bootstrapvalidator/dist/js/language/en_US.js",
           "resources/bower_components/select2/dist/js/i18n/en.js"
         ]
       }

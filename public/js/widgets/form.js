@@ -11,6 +11,9 @@
 
             //init controls
             crud.trigger('form.init', {form: $form});
+            $("[required]", $form).each(function(){
+                $(this).removeAttr('required').attr('data-required',1).data('required', 1);
+            });
 
             //submit
             $('input[type=submit],button[type=submit]', $form).on('click', function () {
@@ -18,116 +21,196 @@
                 prepare_form(frm, $(this));
             });
 
-
-            $form.bootstrapValidator({
-                live: 'enabled',
-                trigger: null,
-                excluded: [
-                    function(e){
-                        var p = e.parents(".crud_validate:first");
-                        if (p.length)
-                        {
-                            return p.hasClass('hidden');
-                            //return !p.is(":visible");
-                        }
-                        if (e.is(':disabled'))
-                        {
-                            return true;
-                        }
-                        //if (e.is(':hidden'))
-                        //{
-                        //    return true;
-                        //}
-                        //if (!e.is(':visible'))
-                        //{
-                        //    return true;
-                        //}
-                    }
-                ]
-            })
-                .on('success.form.bv', function(e)
+            $form.on('submit', function(e){
+                e.preventDefault();
+                if (!validate_form($form))
                 {
+                    return;
+                }
+                $form.ajaxSubmit({
+                    type: $form.attr('method'),
+                    url: $form.attr('action'),
+                    dataType: 'json',
+                    context: crud.doc.body,
+                    success: function(res){
+                        crud.trigger('form.after_submit', {form: $form})
+                        //crud.toggle_form_progress($form);
+                        if (res.success)
+                        {
 
-                    e.preventDefault();
-                    crud.trigger("form.before_submit", {form: $form});
-                    //crud.toggle_editors_content($form);
-                    //crud.toggle_form_progress($form);
-                    //crud.init_form_progress($form);
-
-                    $form.ajaxSubmit({
-                        type: $form.attr('method'),
-                        url: $form.attr('action'),
-                        dataType: 'json',
-                        context: crud.doc.body,
-                        success: function(res){
-                            crud.trigger('form.after_submit', {form: $form})
-                            //crud.toggle_form_progress($form);
-                            if (res.success)
+                            if ($form.data('crud_model'))
                             {
+                                var ref_scope = $form.data('crud_model')+'_'+$form.data('crud_scope');
 
-                                if ($form.data('crud_model'))
+                                if ($form.data('close'))
                                 {
-                                    var ref_scope = $form.data('crud_model')+'_'+$form.data('crud_scope');
+                                    crud.trigger("crud.reload", res);
+                                    crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
 
-                                    if ($form.data('close'))
-                                    {
-                                        crud.trigger("crud.reload", res);
-                                        crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
-
-                                    }
-                                    else
-                                    {
-                                        crud.trigger("crud.reload", res);
-                                        var ref = $form.data('crud_model') + '_' + $form.data('crud_scope');
-                                        var table = $('*[data-list_table_ref='+ref+']');
-                                        if (table.data('form_type') == 'tabs')
-                                        {
-                                            crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
-                                        }
-                                        crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
-
-                                    }
-                                    //$form.trigger('reset');
-                                    //crud.reset_selects();
                                 }
                                 else
                                 {
-                                    if (res.message)
+                                    crud.trigger("crud.reload", res);
+                                    var ref = $form.data('crud_model') + '_' + $form.data('crud_scope');
+                                    var table = $('*[data-list_table_ref='+ref+']');
+                                    if (table.data('form_type') == 'tabs')
                                     {
-                                        alert(res.message);
+                                        crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
                                     }
-                                    if ($form.data('callback_event'))
-                                    {
-                                        crud.trigger($form.data('callback_event'));
-                                    }
-                                    crud.trigger('crud.submitted', {form_id: $form.attr('id'), res: res, frm: $form});
+                                    crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
+
                                 }
-                                if ($form.data("close"))
-                                {
-                                    $form.parents(".modal:first").modal('hide');
-                                }
-                                if ($form.data("reload"))
-                                {
-                                    crud.loc.reload();
-                                }
+                                //$form.trigger('reset');
+                                //crud.reset_selects();
                             }
                             else
                             {
-                                alert(crud.format_error(res.error));
+                                if (res.message)
+                                {
+                                    alert(res.message);
+                                }
+                                if ($form.data('callback_event'))
+                                {
+                                    crud.trigger($form.data('callback_event'));
+                                }
+                                crud.trigger('crud.submitted', {form_id: $form.attr('id'), res: res, frm: $form});
                             }
-                        },
-                        error: function(res){
-                            crud.trigger('form.error_submit', {form: $form});
-                            //crud.toggle_form_progress($form);
-                            if (res.responseJSON && res.responseJSON.error && res.responseJSON.error.message) {
-                                alert(res.responseJSON.error.message)
-                            } else {
-                                alert(i18n.say('error_sending_request'));
+                            if ($form.data("close"))
+                            {
+                                $form.parents(".modal:first").modal('hide');
+                            }
+                            if ($form.data("reload"))
+                            {
+                                crud.loc.reload();
                             }
                         }
-                    });
-                }
-                );
+                        else
+                        {
+                            alert(crud.format_error(res.error));
+                        }
+                    },
+                    error: function(res){
+                        //crud.trigger('form.error_submit', {form: $form});
+                        //crud.toggle_form_progress($form);
+                        if (res.responseJSON && res.responseJSON.error && res.responseJSON.error.message) {
+                            alert(res.responseJSON.error.message)
+                        } else {
+                            alert(i18n.say('error_sending_request'));
+                        }
+                    }
+                });
+            });
+
+//            $form
+                //.on('submit.bv', function(){
+                //    crud.trigger('form.before_validate', {form: $form});
+                //    $("*[data-bv-field]", $form).trigger('change');
+                //})
+
+
+            //    .bootstrapValidator({
+            //    live: 'enabled',
+            //    trigger: null,
+            //    excluded: [
+            //        function(e){
+            //            var p = e.parents(".crud_validate:first");
+            //            if (p.length)
+            //            {
+            //                return p.hasClass('hidden');
+            //            }
+            //            if (e.is(':disabled'))
+            //            {
+            //                return true;
+            //            }
+            //        }
+            //    ]
+            //})
+            //    .on('error.field.bv', function(e, data) {
+            //        console.log('error.field.bv -->', data);
+            //    })
+            //    .on('error.form.bv', function(e){
+            //        console.log($(e.target).data('bootstrapValidator').getInvalidFields());
+            //    })
+            //    .on('success.form.bv', function(e)
+            //    {
+
+                    //e.preventDefault();
+                    //crud.trigger("form.before_submit", {form: $form});
+
+                //    $form.ajaxSubmit({
+                //        type: $form.attr('method'),
+                //        url: $form.attr('action'),
+                //        dataType: 'json',
+                //        context: crud.doc.body,
+                //        success: function(res){
+                //            crud.trigger('form.after_submit', {form: $form})
+                //            //crud.toggle_form_progress($form);
+                //            if (res.success)
+                //            {
+                //
+                //                if ($form.data('crud_model'))
+                //                {
+                //                    var ref_scope = $form.data('crud_model')+'_'+$form.data('crud_scope');
+                //
+                //                    if ($form.data('close'))
+                //                    {
+                //                        crud.trigger("crud.reload", res);
+                //                        crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
+                //
+                //                    }
+                //                    else
+                //                    {
+                //                        crud.trigger("crud.reload", res);
+                //                        var ref = $form.data('crud_model') + '_' + $form.data('crud_scope');
+                //                        var table = $('*[data-list_table_ref='+ref+']');
+                //                        if (table.data('form_type') == 'tabs')
+                //                        {
+                //                            crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
+                //                        }
+                //                        crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
+                //
+                //                    }
+                //                    //$form.trigger('reset');
+                //                    //crud.reset_selects();
+                //                }
+                //                else
+                //                {
+                //                    if (res.message)
+                //                    {
+                //                        alert(res.message);
+                //                    }
+                //                    if ($form.data('callback_event'))
+                //                    {
+                //                        crud.trigger($form.data('callback_event'));
+                //                    }
+                //                    crud.trigger('crud.submitted', {form_id: $form.attr('id'), res: res, frm: $form});
+                //                }
+                //                if ($form.data("close"))
+                //                {
+                //                    $form.parents(".modal:first").modal('hide');
+                //                }
+                //                if ($form.data("reload"))
+                //                {
+                //                    crud.loc.reload();
+                //                }
+                //            }
+                //            else
+                //            {
+                //                alert(crud.format_error(res.error));
+                //            }
+                //        },
+                //        error: function(res){
+                //            //crud.trigger('form.error_submit', {form: $form});
+                //            //crud.toggle_form_progress($form);
+                //            if (res.responseJSON && res.responseJSON.error && res.responseJSON.error.message) {
+                //                alert(res.responseJSON.error.message)
+                //            } else {
+                //                alert(i18n.say('error_sending_request'));
+                //            }
+                //        }
+                //    });
+                //}
+                //);
 
 
 
@@ -213,7 +296,7 @@
                     var name = $(this).attr('name');
                     if (!skip_arr) {
                         if (name.indexOf('[]') > 0) {
-                            var newName = name.replace('[]', '') + '[-' + (qtyAdded + 1) + ']';
+                            var newName = name.replace('[]', '[-' + (qtyAdded + 1) + ']');
                             $(this).attr('name', newName)
                         }
                     }
@@ -318,6 +401,21 @@
             }
         }
 
+    }
+
+    function validate_form(frm)
+    {
+        var valid = true;
+        $(".invalid_field", frm).removeClass("invalid_field");
+        $('[data-required]', frm).each(function(){
+            var e = $(this);
+            if (!e.val())
+            {
+                valid = false;
+                e.parents(".row[data-ref]:first").addClass("invalid_field");
+            }
+        });
+        return valid;
     }
 
     function toggle_progress(elem)
