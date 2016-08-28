@@ -5,7 +5,11 @@
 
 
         {% for input in  crudObj.getForm().fields %}
+            {% if input.config.type == 'checkbox' %}
+                {% include 'crud::crud/fields/line_wrap_compact.twig' %}
+            {%  else  %}
                 {% include 'crud::crud/fields/line_wrap.twig' %}
+            {% endif %}
         {% endfor %}
 
 

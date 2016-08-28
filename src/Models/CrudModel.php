@@ -47,7 +47,6 @@ class CrudModel extends Model
 
         $this->initConfig();
 
-
         parent::__construct($attributes);
 
         $this->validator = $validator ?: $this->app['validator'];
