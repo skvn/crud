@@ -1,50 +1,54 @@
-<?php namespace Skvn\Crud\Traits;
+<?php
+
+namespace Skvn\Crud\Traits;
 
 trait FormControlCommonTrait
 {
-    function controlWidgetUrl():string
+    public function controlWidgetUrl():string
     {
         return false;
     }
 
-    function controlValidateConfig():bool
+    public function controlValidateConfig():bool
     {
         return true;
     }
 
-    function pullFromModel()
+    public function pullFromModel()
     {
         $this->value = $this->model->getAttribute($this->field);
+
         return $this;
     }
 
-    function pullFromData(array $data)
+    public function pullFromData(array $data)
     {
         $this->value = isset($data[$this->field]) ? $data[$this->field] : null;
+
         return $this;
     }
 
-
-    function pushToModel()
+    public function pushToModel()
     {
         $this->model->setAttribute($this->field, $this->value);
+
         return $this;
     }
 
-    function getValue()
+    public function getValue()
     {
         return $this->value;
     }
 
-    function getOutputValue():string
+    public function getOutputValue():string
     {
         return $this->value;
     }
 
-    function setValue($val)
+    public function setValue($val)
     {
-        $this->value =  $val;
+        $this->value = $val;
+
         return $this;
     }
-
 }

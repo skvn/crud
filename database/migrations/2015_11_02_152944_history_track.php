@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class HistoryTrack extends Migration
 {
@@ -21,7 +21,6 @@ class HistoryTrack extends Migration
             $table->string('field_name');
             $table->text('field_old_value');
             $table->text('field_value');
-
         });
     }
 

@@ -1,51 +1,42 @@
-<?php namespace Skvn\Crud\Form;
+<?php
+
+namespace Skvn\Crud\Form;
 
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
-
-class Text extends Field implements  FormControl, FormControlFilterable{
-
-
+class Text extends Field implements FormControl, FormControlFilterable
+{
     use FormControlCommonTrait;
 
-    function pullFromModel()
+    public function pullFromModel()
     {
-        if (!in_array($this->name, $this->model->getHidden()))
-        {
+        if (!in_array($this->name, $this->model->getHidden())) {
             $this->value = $this->model->getAttribute($this->field);
         }
     }
 
-    function getFilterCondition()
+    public function getFilterCondition()
     {
-        if (!empty($this->value))
-        {
+        if (!empty($this->value)) {
             $col = $this->getFilterColumnName();
             $value = str_replace(['*', '?'], ['%', '_'], $this->value);
-            if (strpos($value, "~") === 0)
-            {
-                return ['cond' => [$col, 'NOT LIKE',  substr($value, 1) ]];
-            }
-            else
-            {
-                return ['cond' => [$col, 'LIKE',  $value ]];
+            if (strpos($value, '~') === 0) {
+                return ['cond' => [$col, 'NOT LIKE',  substr($value, 1)]];
+            } else {
+                return ['cond' => [$col, 'LIKE',  $value]];
             }
         }
     }
 
-
-    function controlType():string
+    public function controlType():string
     {
-        return "text";
+        return 'text';
     }
 
-    function controlTemplate():string
+    public function controlTemplate():string
     {
-        return "crud::crud.fields.text";
+        return 'crud::crud.fields.text';
     }
-
-
-
 }

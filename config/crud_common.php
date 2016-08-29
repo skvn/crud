@@ -1,16 +1,16 @@
 <?php
 
 return [
-    'model_namespace' => '\App\Models',
-    'history_trait' => '\Skvn\Crud\Traits\ModelHistoryTrait',
-    'tree_trait' => '\Skvn\Crud\Traits\ModelTreeTrait',
-    'app_title' => env('APPLICATION_TITLE', 'SkVn/CRUD application'),
-    'auto_migrate_allowed' => env('AUTO_MIGRATE_EMABLED', true),
-    'app_logo' => env('APPLICATION_LOGO', null),
+    'model_namespace'                     => '\App\Models',
+    'history_trait'                       => '\Skvn\Crud\Traits\ModelHistoryTrait',
+    'tree_trait'                          => '\Skvn\Crud\Traits\ModelTreeTrait',
+    'app_title'                           => env('APPLICATION_TITLE', 'SkVn/CRUD application'),
+    'auto_migrate_allowed'                => env('AUTO_MIGRATE_EMABLED', true),
+    'app_logo'                            => env('APPLICATION_LOGO', null),
     'replace_morph_classes_with_basename' => false,
-    'assets' => [
+    'assets'                              => [
         'js' => [
-         '/js/app.js'
+         '/js/app.js',
         ],
         'css' => [
 
@@ -37,13 +37,13 @@ return [
     ],
 
     'relations' => [
-        'hasOne' => Skvn\Crud\Models\RelationHasOne :: class,
-        'hasFile' => Skvn\Crud\Models\RelationHasFile :: class,
-        'hasMany' => Skvn\Crud\Models\RelationHasMany :: class,
-        'hasManyFiles' => Skvn\Crud\Models\RelationHasManyFiles :: class,
-        'belongsTo' => Skvn\Crud\Models\RelationBelongsTo :: class,
+        'hasOne'        => Skvn\Crud\Models\RelationHasOne :: class,
+        'hasFile'       => Skvn\Crud\Models\RelationHasFile :: class,
+        'hasMany'       => Skvn\Crud\Models\RelationHasMany :: class,
+        'hasManyFiles'  => Skvn\Crud\Models\RelationHasManyFiles :: class,
+        'belongsTo'     => Skvn\Crud\Models\RelationBelongsTo :: class,
         'belongsToMany' => Skvn\Crud\Models\RelationBelongsToMany :: class,
-        'morphTo' => Skvn\Crud\Models\RelationMorphTo :: class,
-        'morphMany' => Skvn\Crud\Models\RelationMorphMany :: class,
-    ]
+        'morphTo'       => Skvn\Crud\Models\RelationMorphTo :: class,
+        'morphMany'     => Skvn\Crud\Models\RelationMorphMany :: class,
+    ],
 ];

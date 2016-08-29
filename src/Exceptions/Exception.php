@@ -1,6 +1,7 @@
-<?php namespace Skvn\Crud\Exceptions;
+<?php
 
+namespace Skvn\Crud\Exceptions;
 
-class Exception extends \Exception {
-
-} 
+class Exception extends \Exception
+{
+}

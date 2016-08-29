@@ -1,15 +1,15 @@
-<?php namespace Skvn\Crud\Form;
+<?php
+
+namespace Skvn\Crud\Form;
 
 use Illuminate\Container\Container;
-use Skvn\Crud\Models\CrudStubModel;
-use Skvn\Crud\Models\CrudModel;
-use Skvn\Crud\Exceptions\ConfigException;
 use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Exceptions\ConfigException;
+use Skvn\Crud\Models\CrudModel;
+use Skvn\Crud\Models\CrudStubModel;
 
-
-
-class Form {
-
+class Form
+{
     protected static $controls = [];
 
     /**
@@ -33,61 +33,58 @@ class Form {
      *
      * @param array $args
      */
-
     public function __construct($args = [])
     {
         $this->crudObj = isset($args['crudObj']) ? $args['crudObj'] : new CrudStubModel();
         $this->customProperties = isset($args['props']) ? $args['props'] : [];
-        if (!empty($args['fields']) && is_array($args['fields']))
-        {
+        if (!empty($args['fields']) && is_array($args['fields'])) {
             $this->setFields($args['fields']);
         }
-        if (!empty($args['data']) && is_array($args['data']))
-        {
+        if (!empty($args['data']) && is_array($args['data'])) {
             $this->import($args['data']);
         }
-        if (!empty($args['tabs']))
-        {
+        if (!empty($args['tabs'])) {
             $this->setTabs($args['tabs']);
         }
-    }//
+    }
 
-    static function registerControl($class)
+//
+
+    public static function registerControl($class)
     {
         $control = $class :: create();
-        if (! $control instanceof FormControl)
-        {
-            throw new ConfigException("Invalid control class " . $class);
+        if (!$control instanceof FormControl) {
+            throw new ConfigException('Invalid control class '.$class);
         }
-        if (isset(self :: $controls[$control->controlType()]))
-        {
-            throw new ConfigException('Control already registered: ' . $class);
+        if (isset(self :: $controls[$control->controlType()])) {
+            throw new ConfigException('Control already registered: '.$class);
         }
         self :: $controls[$control->controlType()] = $control;
     }
 
-    static function getAvailControls()
+    public static function getAvailControls()
     {
         return self :: $controls;
     }
 
-    static function getAvailControl($type)
+    public static function getAvailControl($type)
     {
-        if (!isset(self :: $controls[$type]))
-        {
-            throw new ConfigException("Invalid control `".$type."`");
+        if (!isset(self :: $controls[$type])) {
+            throw new ConfigException('Invalid control `'.$type.'`');
         }
+
         return self :: $controls[$type];
     }
 
-    static function create($args = [])
+    public static function create($args = [])
     {
         return new self($args);
     }
 
-    static function createControl(CrudModel $model, $config)
+    public static function createControl(CrudModel $model, $config)
     {
         $class = get_class(self :: $controls[$config['type']]);
+
         return $class :: create()->setConfig($config)->setModel($model);
     }
 
@@ -102,20 +99,17 @@ class Form {
 //        $class :: configureModel($model)
 //    }
 
-    function addField($name, $config, $tab = null)
+    public function addField($name, $config, $tab = null)
     {
-        if (empty($config['name']))
-        {
+        if (empty($config['name'])) {
             $config['name'] = $name;
         }
-        if (!empty($tab))
-        {
+        if (!empty($tab)) {
             $config['tab'] = $tab;
         }
         $this->config[$name] = $config;
         $this->fields[$name] = self :: createControl($this->crudObj, $config);
-        if (isset($config['value']))
-        {
+        if (isset($config['value'])) {
             $this->fields[$name]->setValue($config['value']);
         }
 //        if (!$this->crudObj->getField($name))
@@ -125,85 +119,83 @@ class Form {
         return $this;
     }
 
-    function setFields($fields)
+    public function setFields($fields)
     {
         $this->fields = [];
-        foreach ($fields as $col => $colConfig)
-        {
+        foreach ($fields as $col => $colConfig) {
             $this->addField($col, $colConfig);
         }
+
         return $this;
     }
 
-    function setCustomProperties($props)
+    public function setCustomProperties($props)
     {
         $this->customProperties = $props;
+
         return $this;
     }
 
-    function addTab($tab_index, $tab)
+    public function addTab($tab_index, $tab)
     {
         $this->tabs[$tab_index] = $tab;
     }
 
-    function setTabs($tabs)
+    public function setTabs($tabs)
     {
         $this->tabs = $tabs;
+
         return $this;
     }
 
-    function hasTabs()
+    public function hasTabs()
     {
         return !empty($this->tabs);
     }
 
-    function import($data)
+    public function import($data)
     {
-        foreach ($this->fields as $field)
-        {
+        foreach ($this->fields as $field) {
             $field->pullFromData($data);
         }
-        foreach ($this->crudObj->getHiddenFields() as $f)
-        {
-            if (isset($data[$f]))
-            {
+        foreach ($this->crudObj->getHiddenFields() as $f) {
+            if (isset($data[$f])) {
                 $this->crudObj->$f = $data[$f];
             }
         }
+
         return $this;
     }
 
-    function load($data)
+    public function load($data)
     {
         $this->import($data);
         $this->sync();
     }
 
-    function sync()
+    public function sync()
     {
-        foreach ($this->fields as $field)
-        {
-            if (!empty($field->config['acl']) && !Container :: getInstance()['skvn.cms']->checkAcl($field->config['acl'], "u"))
-            {
+        foreach ($this->fields as $field) {
+            if (!empty($field->config['acl']) && !Container :: getInstance()['skvn.cms']->checkAcl($field->config['acl'], 'u')) {
                 continue;
             }
             $field->pushToModel();
         }
     }
 
-
     public function __toString()
     {
         $app = Container :: getInstance();
         $res = $app['view']->make('crud::crud/form', ['crudObj' => $this->crudObj])->render();
+
         return (string) $res;
     }
 
-
     /**
-     * Return One field object by it's field name
+     * Return One field object by it's field name.
      *
      * @param $fieldName
+     *
      * @return array
      */
     public function getFieldByName($fieldName)
@@ -211,21 +203,15 @@ class Form {
         return $this->fields[$fieldName];
     }
 
-
     /**
-     * Return class instance of the control by it's TYPE constant
+     * Return class instance of the control by it's TYPE constant.
      *
      * @param string $type
+     *
      * @return FormControl|null
      */
     public static function getControlByType(string $type)
     {
         return self::$controls[$type] ?? null;
-
     }
-
-
-
-
-
-} 
+}

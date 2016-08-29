@@ -1,67 +1,56 @@
-<?php namespace Skvn\Crud\Models;
+<?php
+
+namespace Skvn\Crud\Models;
 
 class RelationHasMany extends Relation
 {
-
-    function create()
+    public function create()
     {
         $this->relation = $this->model->hasMany(CrudModel :: resolveClass($this->config['model']), $this->config['field'] ?? null);
         $this->sort();
+
         return $this;
     }
 
-    function isMany()
+    public function isMany()
     {
         return true;
     }
 
-    function delete($id = null)
+    public function delete($id = null)
     {
         $col = $this->relation->getForeignKey();
         $delete = $this->config['on_delete'] ?? false;
         $this->get()->each(function ($item, $key) use ($delete, $col, $id) {
-
-            if (!is_null($id))
-            {
-                if ($item->getKey() != $id)
-                {
+            if (!is_null($id)) {
+                if ($item->getKey() != $id) {
                     return;
                 }
             }
-            if ($delete  === "delete")
-            {
+            if ($delete  === 'delete') {
                 $item->delete();
-            }
-            else
-            {
+            } else {
                 $item->$col = null;
                 $item->save();
             }
         });
-
     }
 
-    function save()
+    public function save()
     {
-        if (is_array($this->dirtyValue))
-        {
+        if (is_array($this->dirtyValue)) {
             $oldIds = $this->getIds();
-            foreach ($this->dirtyValue as $id)
-            {
+            foreach ($this->dirtyValue as $id) {
                 $obj = CrudModel :: createInstance($this->config['model'], null, $id);
                 $this->relation->save($obj);
             }
             $toUnlink = array_diff($oldIds, $this->dirtyValue);
-        }
-        else
-        {
+        } else {
             $toUnlink = $this->getIds();
         }
 
-        if ($toUnlink && is_array($toUnlink))
-        {
-            foreach ($toUnlink as $id)
-            {
+        if ($toUnlink && is_array($toUnlink)) {
+            foreach ($toUnlink as $id) {
                 $col = $this->relation->getForeignKey();
 //                if (!empty($field['ref_column']))
 //                {
@@ -72,23 +61,18 @@ class RelationHasMany extends Relation
 //                    $col = $this->classViewName . '_id';
 //                }
                 $obj = CrudModel :: createInstance($this->config['model'], null, $id);
-                if (($this->config['on_delete'] ?? false) === "delete")
-                {
+                if (($this->config['on_delete'] ?? false) === 'delete') {
                     $obj->delete();
-                }
-                else
-                {
+                } else {
                     $obj->$col = null;
                     $obj->save();
                 }
             }
         }
-
     }
 
-    function getIds()
+    public function getIds()
     {
         return $this->get()->lists($this->createRelatedModel()->getKeyName())->all();
     }
-
 }

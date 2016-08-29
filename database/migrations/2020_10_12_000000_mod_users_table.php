@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class ModUsersTable extends Migration
 {
@@ -18,7 +18,6 @@ class ModUsersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->dropColumn('name');
-
         });
 
 
@@ -39,6 +38,5 @@ class ModUsersTable extends Migration
      */
     public function down()
     {
-        
     }
 }

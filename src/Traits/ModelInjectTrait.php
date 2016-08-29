@@ -1,76 +1,65 @@
-<?php namespace Skvn\Crud\Traits;
+<?php
 
-trait ModelInjectTrait {
+namespace Skvn\Crud\Traits;
 
+trait ModelInjectTrait
+{
     protected static $_preconstruct = [];
     protected static $_postconstruct = [];
     protected static $_setters = [];
 
-
-
-    static function registerPreconstruct(callable $handler)
+    public static function registerPreconstruct(callable $handler)
     {
-        if (!isset(static :: $_preconstruct[static :: class]))
-        {
+        if (!isset(static :: $_preconstruct[static :: class])) {
             static :: $_preconstruct[static :: class] = [];
         }
         static :: $_preconstruct[static :: class][] = $handler;
     }
 
-    static function registerPostconstruct(callable $handler)
+    public static function registerPostconstruct(callable $handler)
     {
-        if (!isset(static :: $_postconstruct[static :: class]))
-        {
+        if (!isset(static :: $_postconstruct[static :: class])) {
             static :: $_postconstruct[static :: class] = [];
         }
         static :: $_postconstruct[static :: class][] = $handler;
     }
 
-    static function registerSetter(callable $handler)
+    public static function registerSetter(callable $handler)
     {
-        if (!isset(static :: $_setters[static :: class]))
-        {
+        if (!isset(static :: $_setters[static :: class])) {
             static :: $_setters[static :: class] = [];
         }
         static :: $_setters[static :: class][] = $handler;
     }
 
-    function preconstruct()
+    public function preconstruct()
     {
-        if (!empty(static :: $_preconstruct[static :: class]))
-        {
-            foreach (static :: $_preconstruct[static :: class] as $handler)
-            {
+        if (!empty(static :: $_preconstruct[static :: class])) {
+            foreach (static :: $_preconstruct[static :: class] as $handler) {
                 $handler($this);
             }
         }
     }
 
-    function postconstruct()
+    public function postconstruct()
     {
-        if (!empty(static :: $_postconstruct[static :: class]))
-        {
-            foreach (static :: $_postconstruct[static :: class] as $handler)
-            {
+        if (!empty(static :: $_postconstruct[static :: class])) {
+            foreach (static :: $_postconstruct[static :: class] as $handler) {
                 $handler($this);
             }
         }
     }
 
-    function callSetters($key, $value)
+    public function callSetters($key, $value)
     {
-        if (!empty(static :: $_setters[static :: class]))
-        {
-            foreach (static :: $_setters[static :: class] as $handler)
-            {
-                if ($handler($this, $key, $value) === true)
-                {
+        if (!empty(static :: $_setters[static :: class])) {
+            foreach (static :: $_setters[static :: class] as $handler) {
+                if ($handler($this, $key, $value) === true) {
                     return true;
                 }
             }
         }
     }
-
 
     public static function boot()
     {
@@ -80,64 +69,61 @@ trait ModelInjectTrait {
 
     public static function bootCrud()
     {
-        static::saved(function($instance) {
-//            if ($instance->eventsDisabled)
+        static::saved(function ($instance) {
+            //            if ($instance->eventsDisabled)
 //            {
 //                return true;
 //            }
 //            $instance->crudRelations->save();
             return $instance->onAfterSave();
         });
-        static::saving(function($instance)
-        {
-//            if ($instance->eventsDisabled)
+        static::saving(function ($instance) {
+            //            if ($instance->eventsDisabled)
 //            {
 //                return true;
 //            }
-            if ($instance->validate())
-            {
-                $instance->crudHandleTrackAuthors("update");
+            if ($instance->validate()) {
+                $instance->crudHandleTrackAuthors('update');
+
                 return $instance->onBeforeSave();
             }
+
             return false;
         });
 
-        static::creating(function($instance)
-        {
-//            if ($instance->eventsDisabled)
+        static::creating(function ($instance) {
+            //            if ($instance->eventsDisabled)
 //            {
 //                return true;
 //            }
-            $instance->crudHandleTrackAuthors("create");
+            $instance->crudHandleTrackAuthors('create');
+
             return $instance->onBeforeCreate();
         });
 
-        static::created(function($instance)
-        {
-//            if ($instance->eventsDisabled)
+        static::created(function ($instance) {
+            //            if ($instance->eventsDisabled)
 //            {
 //                return true;
 //            }
             return $instance->onAfterCreate();
         });
 
-        static::deleting(function($instance)
-        {
-//            if ($instance->eventsDisabled)
+        static::deleting(function ($instance) {
+            //            if ($instance->eventsDisabled)
 //            {
 //                return true;
 //            }
             $check = $instance->onBeforeDelete();
-            if ($check !== false)
-            {
+            if ($check !== false) {
                 $instance->crudRelations->delete();
             }
+
             return $check;
         });
 
-        static::deleted(function($instance)
-        {
-//            if ($instance->eventsDisabled)
+        static::deleted(function ($instance) {
+            //            if ($instance->eventsDisabled)
 //            {
 //                return true;
 //            }
@@ -145,49 +131,43 @@ trait ModelInjectTrait {
         });
     }
 
-    protected  function onBeforeCreate()
+    protected function onBeforeCreate()
     {
         return true;
     }
 
-
-    protected  function onAfterCreate()
+    protected function onAfterCreate()
     {
         return true;
     }
 
-    protected  function onBeforeSave()
+    protected function onBeforeSave()
     {
         return true;
     }
 
-    protected  function onAfterSave()
+    protected function onAfterSave()
     {
         return true;
     }
 
-    protected  function onBeforeDelete()
+    protected function onBeforeDelete()
     {
         return true;
     }
 
-    protected  function onAfterDelete()
+    protected function onAfterDelete()
     {
         return true;
     }
-
 
     protected function crudHandleTrackAuthors($op)
     {
-        $const = ($op == "create") ? "static::CREATED_BY" : "static::UPDATED_BY";
-        $fld = ($op == "create") ? "created_by" : "updated_by";
+        $const = ($op == 'create') ? 'static::CREATED_BY' : 'static::UPDATED_BY';
+        $fld = ($op == 'create') ? 'created_by' : 'updated_by';
         $prop = defined($const) ? constant($const) : $fld;
-        if ($this->trackAuthors && $this->app['auth']->check())
-        {
+        if ($this->trackAuthors && $this->app['auth']->check()) {
             $this->$prop = $this->app['auth']->user()->id;
         }
-
     }
-
-
 }

@@ -1,56 +1,46 @@
-<?php namespace Skvn\Crud\Form;
+<?php
 
-use Skvn\Crud\Models\CrudModel;
+namespace Skvn\Crud\Form;
+
 use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
-
-class Tags extends Field implements  FormControl {
-
-
+class Tags extends Field implements FormControl
+{
     use FormControlCommonTrait;
 
-
-    function pullFromModel()
+    public function pullFromModel()
     {
         $class = CrudModel :: resolveClass($this->config['model']);
         $dummyModel = new $class();
         $ids = $this->model->crudRelations->getIds($this->name);
-        if (count($ids))
-        {
+        if (count($ids)) {
             $collection = $class::findMany($ids);
             $this->value = $collection->pluck($dummyModel->confParam('title_field'));
         }
     }
 
-    function pullFromData(array $data)
+    public function pullFromData(array $data)
     {
-        if (!empty($data[$this->name]))
-        {
-            if (is_array($data[$this->name]))
-            {
+        if (!empty($data[$this->name])) {
+            if (is_array($data[$this->name])) {
                 $this->value = $data[$this->name];
+            } else {
+                $this->value = explode(',', $data[$this->name]);
             }
-            else
-            {
-                $this->value = explode(",", $data[$this->name]);
-            }
-        }
-        else
-        {
+        } else {
             $this->value = [];
         }
     }
 
-    function pushToModel()
+    public function pushToModel()
     {
         $ids = [];
         $class = CrudModel :: resolveClass($this->config['model']);
         $dummyModel = new $class();
-        if (!empty($this->value))
-        {
-            foreach ($this->value as $title)
-            {
+        if (!empty($this->value)) {
+            foreach ($this->value as $title) {
                 $obj = $class::firstOrCreate([$dummyModel->confParam('title_field') => trim($title)]);
                 $ids[] = $obj->getKey();
             }
@@ -58,23 +48,18 @@ class Tags extends Field implements  FormControl {
         $this->model->setAttribute($this->name, $ids);
     }
 
-
-    function controlType():string
+    public function controlType():string
     {
-        return "tags";
+        return 'tags';
     }
 
-    function controlTemplate():string
+    public function controlTemplate():string
     {
-        return "crud::crud.fields.tags";
+        return 'crud::crud.fields.tags';
     }
 
-    function controlWidgetUrl():string
+    public function controlWidgetUrl():string
     {
-        return "js/widgets/tags.js";
+        return 'js/widgets/tags.js';
     }
-
-
-
-
-} 
+}

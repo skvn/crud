@@ -1,23 +1,20 @@
-<?php namespace Skvn\Crud\Form;
+<?php
 
+namespace Skvn\Crud\Form;
 
-use Skvn\Crud\Contracts\FormControl;
-use Skvn\Crud\Traits\FormControlCommonTrait;
-use Skvn\Crud\Models\CrudModel;
 use Carbon\Carbon;
+use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Models\CrudModel;
+use Skvn\Crud\Traits\FormControlCommonTrait;
 
-
-
-class Date extends Field implements  FormControl{
-
-
+class Date extends Field implements FormControl
+{
     use FormControlCommonTrait;
 
-    function pullFromModel()
+    public function pullFromModel()
     {
         $this->value = $this->model->getAttribute($this->field);
-        if ($this->value && $this->value->timestamp < 10)
-        {
+        if ($this->value && $this->value->timestamp < 10) {
             $this->value = null;
         }
 //        if (!$this->value)
@@ -33,12 +30,12 @@ class Date extends Field implements  FormControl{
 //        }
     }
 
-    function getOutputValue():string
+    public function getOutputValue():string
     {
-        if (empty($this->value))
-        {
-            return null;
+        if (empty($this->value)) {
+            return;
         }
+
         return $this->value->format($this->config['format']);
 //        if ($this->value instanceof Carbon)
 //        {
@@ -52,10 +49,9 @@ class Date extends Field implements  FormControl{
 //        return $this->value;
     }
 
-    function pullFromData(array $data)
+    public function pullFromData(array $data)
     {
-        if (!empty($data[$this->field]))
-        {
+        if (!empty($data[$this->field])) {
             $this->value = Carbon :: parse($data[$this->field]);
 //            if ($this->isInt())
 //            {
@@ -65,48 +61,40 @@ class Date extends Field implements  FormControl{
 //            {
 //                $this->value = $data[$this->field];
 //            }
-        }
-        else
-        {
+        } else {
             $this->value = null;
         }
     }
 
-    function configureModel(CrudModel $model, array $config)
+    public function configureModel(CrudModel $model, array $config)
     {
         $model->setDates($config['field']);
+
         return $config;
     }
 
-
-    function controlType():string
+    public function controlType():string
     {
-        return "date";
+        return 'date';
     }
 
-    function controlTemplate():string
+    public function controlTemplate():string
     {
-        return "crud::crud.fields.date";
+        return 'crud::crud.fields.date';
     }
 
-    function controlWidgetUrl():string
+    public function controlWidgetUrl():string
     {
-        return "js/widgets/datetime.js";
+        return 'js/widgets/datetime.js';
     }
 
-    function controlValidateConfig():bool
+    public function controlValidateConfig():bool
     {
         return !empty($this->config['format']);
     }
 
-
-
     private function isInt()
     {
-        return (empty($this->config['db_type']) ||$this->config['db_type'] == 'int');
+        return empty($this->config['db_type']) || $this->config['db_type'] == 'int';
     }
-
-
-
-
-} 
+}

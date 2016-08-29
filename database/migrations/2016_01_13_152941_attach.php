@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class Attach extends Migration
@@ -12,7 +11,7 @@ class Attach extends Migration
      */
     public function up()
     {
-        Schema :: create('crud_file', function($table) {
+        Schema :: create('crud_file', function ($table) {
             $table->increments('id');
             $table->string('file_name');
             $table->string('path');

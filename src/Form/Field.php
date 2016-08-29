@@ -1,13 +1,13 @@
-<?php namespace Skvn\Crud\Form;
+<?php
+
+namespace Skvn\Crud\Form;
 
 use Skvn\Crud\Exceptions\ConfigException;
 use Skvn\Crud\Models\CrudModel;
 
-
 abstract class Field
 {
-
-//    const SELECT = 'select';
+    //    const SELECT = 'select';
 //    const TEXT = 'text';
 //    const FILE = 'file';
 //    const IMAGE = 'image';
@@ -23,7 +23,7 @@ abstract class Field
 //    const TAGS = 'tags';
 //    const TREE = 'tree';
 
-    const TYPE = "abstract";
+    const TYPE = 'abstract';
 
 
     public $config;
@@ -33,78 +33,73 @@ abstract class Field
     protected $field;
     protected $uniqid;
 
-
-    static function create()
+    public static function create()
     {
         return new static();
     }
 
-    function setModel(CrudModel $model)
+    public function setModel(CrudModel $model)
     {
         $this->model = $model;
         $this->pullFromModel();
+
         return $this;
     }
 
-    function setConfig($config)
+    public function setConfig($config)
     {
         $this->config = $config;
         $this->name = $config['name'];
         $this->field = $config['field'];
 
-        if (!$this->controlValidateConfig())
-        {
+        if (!$this->controlValidateConfig()) {
             throw new ConfigException('Column '.$this->name.' is not well described');
         }
 
         return $this;
     }
 
-    function configureModel(CrudModel $model, array $config)
+    public function configureModel(CrudModel $model, array $config)
     {
         return $config;
     }
 
-    function getName()
+    public function getName()
     {
         return $this->name;
     }
 
-    function getField()
+    public function getField()
     {
         return $this->field;
     }
 
-    function setField($f)
+    public function setField($f)
     {
         return $this->field = $f;
     }
 
-    function getConfig()
+    public function getConfig()
     {
         return $this->config;
     }
 
-    function  getUniqueId()
+    public function getUniqueId()
     {
-        if (!$this->uniqid)
-        {
+        if (!$this->uniqid) {
             $this->uniqid = uniqid($this->name);
         }
+
         return $this->uniqid;
     }
 
-    function getFilterColumnName()
+    public function getFilterColumnName()
     {
-        return (!empty($this->config['filter_column'])?$this->config['filter_column']:$this->field);
+        return !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->field;
     }
 
-    function setFilterColumnName($col)
+    public function setFilterColumnName($col)
     {
         $this->config['filter_column'] = $col;
     }
-
-
-
-
-} 
+}

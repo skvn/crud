@@ -1,4 +1,6 @@
-<?php namespace Skvn\Crud\Contracts;
+<?php
+
+namespace Skvn\Crud\Contracts;
 
 interface PrefSubject
 {

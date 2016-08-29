@@ -1,15 +1,16 @@
-<?php namespace Skvn\Crud\Twig;
+<?php
 
+namespace Skvn\Crud\Twig;
+
+use Illuminate\Foundation\Application as LaravelApplication;
 use Twig_Extension;
 use Twig_SimpleFilter;
-use Twig_SimpleFunction;
-use Illuminate\Foundation\Application as LaravelApplication;
 
 class Acl extends Twig_Extension
 {
     protected $app;
 
-    function __construct(LaravelApplication $app)
+    public function __construct(LaravelApplication $app)
     {
         $this->app = $app;
     }
@@ -19,9 +20,10 @@ class Acl extends Twig_Extension
         return 'Skvn\Crud_Twig_Acl';
     }
 
-    public function checkAcl($acl, $access = "")
+    public function checkAcl($acl, $access = '')
     {
-        $helper = $this->app->make("skvn.cms");
+        $helper = $this->app->make('skvn.cms');
+
         return $helper->checkAcl($acl, $access);
     }
 
@@ -31,7 +33,4 @@ class Acl extends Twig_Extension
             new Twig_SimpleFilter('allowed', [$this, 'checkAcl']),
         ];
     }
-
-
-
 }

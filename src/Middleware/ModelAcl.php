@@ -1,25 +1,26 @@
-<?php namespace Skvn\Crud\Middleware;
+<?php
+
+namespace Skvn\Crud\Middleware;
 
 use Closure;
 use Skvn\Crud\Models\CrudModel;
 
-class ModelAcl {
-
+class ModelAcl
+{
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         $modelName = $request->route()->parameter('model');
-        if (!empty($modelName))
-        {
+        if (!empty($modelName)) {
             $modelInst = CrudModel::createInstance($modelName);
-            if (!$modelInst->checkAcl())
-            {
+            if (!$modelInst->checkAcl()) {
                 if ($request->ajax() || $request->wantsJson()) {
                     return response('Unauthorized.', 401);
                 } else {
@@ -27,7 +28,7 @@ class ModelAcl {
                 }
             }
         }
+
         return $next($request);
     }
-
 }
