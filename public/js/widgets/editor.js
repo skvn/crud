@@ -395,7 +395,6 @@
                     case 'mde':
                         if (mdes[this.id])
                         {
-                            alert('mde:' + mdes[this.id].value());
                             $(this).val(mdes[this.id].value());
                         }
                     break;
@@ -405,7 +404,6 @@
                         {
                             v = '';
                         }
-                        alert('sn:'+v);
                         $(this).val(v);
                     break;
                 }

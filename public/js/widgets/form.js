@@ -23,6 +23,7 @@
 
             $form.on('submit', function(e){
                 e.preventDefault();
+                crud.trigger('form.before_validate', {form: $form});
                 if (!validate_form($form))
                 {
                     return;
@@ -249,6 +250,7 @@
             {
                 //alert(names[i]+ ':' +$(".form-group[data-ref="+names[i]+"]", this.element).length);
                 $(".row[data-ref="+names[i]+"]", this.element).show();
+                $("[data-required=2]", $(".row[data-ref="+names[i]+"]", this.element)).data('required', '1').attr('data-required', '1');
             }
         },
         hideFields: function(names)
@@ -256,6 +258,7 @@
             for (var i in names)
             {
                 $(".row[data-ref="+names[i]+"]", this.element).hide();
+                $("[data-required=1]", $(".row[data-ref="+names[i]+"]", this.element)).data('required', '2').attr('data-required', '2');
             }
         }
     });
@@ -301,10 +304,10 @@
                         }
                     }
                 });
-                //$("*[data-widget]", $tpl).each(function(){
-                //    var meth = $(this).data('widget');
-                //    $(this)[meth]();
-                //});
+                $("*[data-delayed-widget]", $tpl).each(function(){
+                    var meth = $(this).data('delayed-widget');
+                    $(this)[meth]();
+                });
                 $tpl.attr('data-added',1);
                 //calc order
                 var ord  = $('#'+container_id, crud.getActiveTab(elem)).find('*[data-order]:visible').length;
@@ -407,12 +410,17 @@
     {
         var valid = true;
         $(".invalid_field", frm).removeClass("invalid_field");
-        $('[data-required]', frm).each(function(){
+        $('[data-required=1]', frm).each(function(){
             var e = $(this);
+            if (e.is(":disabled"))
+            {
+                return;
+            }
             if (!e.val())
             {
                 valid = false;
                 e.parents(".row[data-ref]:first").addClass("invalid_field");
+                console.log("Error: " + e.attr('name'));
             }
         });
         return valid;
