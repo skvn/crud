@@ -3,8 +3,11 @@
         {% include input.controlTemplate() %}
     {%  else  %}
     <div class="row" data-ref="{{ input.name }}">
-        <div class="col-md-{{ COL_WIDTH?COL_WIDTH:12 }}" style="margin-top: 10px;">
+        <div class="form-group col-md-{{ COL_WIDTH?COL_WIDTH:12 }}" style="margin-top: 10px;">
            {% include input.controlTemplate() %}
+            {%  if input.config.required %}
+                <span class="help-block" data-rel="error" style="display: none">{{ trans('crud::messages.field_required') }}</span>
+            {% endif %}
         </div>
     </div>
 

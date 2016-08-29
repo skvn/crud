@@ -409,7 +409,7 @@
     function validate_form(frm)
     {
         var valid = true;
-        $(".invalid_field", frm).removeClass("invalid_field");
+        $(".has-error", frm).removeClass("has-error").find('*[data-rel=error]').hide();
         $('[data-required=1]', frm).each(function(){
             var e = $(this);
             if (e.is(":disabled"))
@@ -419,7 +419,7 @@
             if (!e.val())
             {
                 valid = false;
-                e.parents(".row[data-ref]:first").addClass("invalid_field");
+                e.parents(".form-group:first").addClass("has-error").find('*[data-rel=error]').show();
                 console.log("Error: " + e.attr('name'));
             }
         });

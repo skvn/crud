@@ -32,9 +32,7 @@ return [
 	'search' => 'Search',
 	'yes' => 'Yes',
 	'no' => 'No',
-	'choose' => 'Choose'
-
-
-
+	'choose' => 'Choose',
+    'field_required' => 'This field is required'
 
 ];

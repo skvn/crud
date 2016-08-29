@@ -1,3 +1,8 @@
+{#<div class="alert alert-danger">#}
+    {#<span class="pficon pficon-error-circle-o"></span>#}
+    {#<strong>Hey there is a problem!</strong> Yeah this is really messed up and you should <a href="#" class="alert-link">know about it</a>.#}
+{#</div>#}
+
 <form action="{{ route('crud_update',{'model':crudObj.classViewName,'id':id}) }}" method="post" enctype="multipart/form-data" role="form"  data-crud_scope="{{ crudObj.scope }}" data-crud_model="{{ crudObj.classViewName }}" data-crud_id="{{ id }}" data-rel="{{ crudObj.view_ref }}" class="">
     <input type="hidden" id="tree_action" name="tree_action" value=""/>
     <input type="hidden" name="scope" value="{{ crudObj.scope }}" />
@@ -8,9 +13,5 @@
 
     {%  include 'crud::crud/fields.twig' %}
     {%  include 'crud::crud/form_buttons.twig' %}
-
-
-
-
 
 </form>
