@@ -21,7 +21,7 @@
     {#</ol>#}
     <h1>{{ TITLE }}
         {% if crudList.getParam('buttons.add_new') %}
-                <a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> {{ trans('crud::messages.add') }} {{ crudObj.confParam('ent_name_v') }}</a>
+                <a  class="btn btn-success"  data-id='-1'  data-ref="{{ crudObj.classViewName }}_{{ crudObj.scope }}" data-click='crud_event' data-event='crud.edit_element' ><i class="fa fa-plus"></i> {{ trans('crud::messages.add') }} {{ crudList.getParam('ent_name_v')?crudList.getParam('ent_name_v'):crudList.getParam('ent_name') }}</a>
         {% endif %}
     </h1>
 
