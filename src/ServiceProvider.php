@@ -1,11 +1,11 @@
-<?php namespace Skvn\Crud;
+<?php
+
+namespace Skvn\Crud;
 
 use Illuminate\Support\ServiceProvider as LServiceProvider;
 
-
-class ServiceProvider extends LServiceProvider {
-
-
+class ServiceProvider extends LServiceProvider
+{
     public function boot()
     {
 
@@ -13,28 +13,25 @@ class ServiceProvider extends LServiceProvider {
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'crud');
 
         //Assets
-        if (!$this->isLumen())
-        {
-            $this->publishes([__DIR__ . '/../config/' => config_path() . "/"], 'config');
-            $this->publishes([__DIR__ . '/../public/' => public_path() . "/vendor/crud/"], 'assets');
-            $this->publishes([__DIR__ . '/../database/' => base_path("database")], 'database');
+        if (!$this->isLumen()) {
+            $this->publishes([__DIR__.'/../config/' => config_path().'/'], 'config');
+            $this->publishes([__DIR__.'/../public/' => public_path().'/vendor/crud/'], 'assets');
+            $this->publishes([__DIR__.'/../database/' => base_path('database')], 'database');
         }
 
         //Views
         $paths = [];
 
-        foreach ($this->app['config']->get("view.paths") as $path)
-        {
-            $paths[] = $path . "/crud";
+        foreach ($this->app['config']->get('view.paths') as $path) {
+            $paths[] = $path.'/crud';
         }
 
-        $this->app['view']->getFinder()->prependNamespace("crud", $paths);
+        $this->app['view']->getFinder()->prependNamespace('crud', $paths);
 
         $this->loadViewsFrom(dirname(__DIR__).'/resources/views', 'crud');
 
         // Routing
-        include __DIR__ . DIRECTORY_SEPARATOR . 'routes.php';
-
+        include __DIR__.DIRECTORY_SEPARATOR.'routes.php';
     }
 
     public function register()
@@ -66,7 +63,6 @@ class ServiceProvider extends LServiceProvider {
         //$this->app->bind('Crud', \Skvn\Crud\Facades\Crud :: class);
 
         //$this->registerMakeTreeGenerator();
-
     }
 
     /**
@@ -82,39 +78,35 @@ class ServiceProvider extends LServiceProvider {
 //    }
     protected function registerCommands()
     {
-       
     }
 
     protected function registerHelpers()
     {
-        $this->app->bindIf('skvn.cms', function($app){
+        $this->app->bindIf('skvn.cms', function ($app) {
             return new Helper\CmsHelper($app['auth']->user());
         }, true);
-        $this->app->bindIf('skvn.crud', function($app){
+        $this->app->bindIf('skvn.crud', function ($app) {
             return new Helper\CrudHelper($app);
         }, true);
     }
 
     protected function registerControls()
     {
-        foreach ($this->app['config']->get('crud_common')['form_controls'] as $class)
-        {
+        foreach ($this->app['config']->get('crud_common')['form_controls'] as $class) {
             Form\Form :: registerControl($class);
         }
     }
 
-
     public function provides()
     {
-        return array([
+        return [[
             'skvn.cms',
-            'skvn.crud'
-        ]);
+            'skvn.crud',
+        ]];
     }
 
     protected function isLumen()
     {
         return strpos($this->app->version(), 'Lumen') !== false;
     }
-
 }

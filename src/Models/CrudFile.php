@@ -1,9 +1,11 @@
-<?php namespace Skvn\Crud\Models;
+<?php
 
-use \Illuminate\Database\Eloquent\Model;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Skvn\Crud\Traits\ModelAttachedTrait;
+namespace Skvn\Crud\Models;
+
 use Illuminate\Container\Container;
+use Illuminate\Database\Eloquent\Model;
+use Skvn\Crud\Traits\ModelAttachedTrait;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CrudFile extends Model
 {
@@ -14,7 +16,7 @@ class CrudFile extends Model
     protected $guarded = ['id'];
     protected $app;
 
-    function __construct(array $attributes = [])
+    public function __construct(array $attributes = [])
     {
         parent :: __construct($attributes);
         $this->app = Container :: getInstance();
@@ -22,7 +24,6 @@ class CrudFile extends Model
 
     public function setCreatedAtAttribute($value)
     {
-
         if (is_object($value)) {
             $value = $value->timestamp;
         } else {
@@ -33,7 +34,6 @@ class CrudFile extends Model
 
     public function setUpdatedAtAttribute($value)
     {
-
         if (is_object($value)) {
             $value = $value->timestamp;
         } else {
@@ -42,12 +42,9 @@ class CrudFile extends Model
         $this->attributes['updated_at'] = $value;
     }
 
-
-
-
-    public static function  createFromUpload(UploadedFile $file)
+    public static function createFromUpload(UploadedFile $file)
     {
-        $instance = new CrudFile();
+        $instance = new self();
         $file_data = $instance->attachCreateFileInfo();
         $instance->attachStoreFile($file_data);
 
@@ -69,8 +66,5 @@ class CrudFile extends Model
 //        ]);
 //        $instance->save();
         return $instance;
-
     }
-
-
 }

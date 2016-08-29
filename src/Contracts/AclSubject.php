@@ -1,6 +1,8 @@
-<?php namespace Skvn\Crud\Contracts;
+<?php
+
+namespace Skvn\Crud\Contracts;
 
 interface AclSubject
 {
-    function getAcls();
+    public function getAcls();
 }

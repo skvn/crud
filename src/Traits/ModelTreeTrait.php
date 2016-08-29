@@ -1,5 +1,6 @@
-<?php namespace Skvn\Crud\Traits;
+<?php
 
+namespace Skvn\Crud\Traits;
 
 /*
 with(new Page())->makeRoot();
@@ -24,8 +25,6 @@ use Skvn\Crud\Exceptions\TreeException;
 
 trait ModelTreeTrait
 {
-
-
     protected $tree_parent_ids = null;
     protected $tree_parents = null;
 
@@ -45,7 +44,7 @@ trait ModelTreeTrait
 //        return $this;
 //    }
 
-    function treePathSeparator()
+    public function treePathSeparator()
     {
         return defined('static::TREE_PATH_SEPARATOR') ? static :: TREE_PATH_SEPARATOR : '.';
     }
@@ -127,53 +126,51 @@ trait ModelTreeTrait
 
     public function makeLastChildOf($parent)
     {
-        if (!$parent->exists) throw new \Exception('Parent doesnt exist');
-        if ($this->exists && $this->isAncestor($parent)) throw new TreeException('Cant move Ancestor to Descendant');
+        if (!$parent->exists) {
+            throw new \Exception('Parent doesnt exist');
+        }
+        if ($this->exists && $this->isAncestor($parent)) {
+            throw new TreeException('Cant move Ancestor to Descendant');
+        }
 
-        if ($this->exists)
-        {
+        if ($this->exists) {
             $children = $this->children()->get();
 
-            foreach($children as $child)
-            {
-                $child->setAttribute($child->treePathColumn(), str_replace($this->getTreePath(), $parent->getTreePath() . $parent->getKey() . $this->treePathSeparator(), $child->getTreePath()));
+            foreach ($children as $child) {
+                $child->setAttribute($child->treePathColumn(), str_replace($this->getTreePath(), $parent->getTreePath().$parent->getKey().$this->treePathSeparator(), $child->getTreePath()));
                 $child->setAttribute($child->treeDepthColumn(), $parent->getTreeDepth() + 1 + ($child->getTreeDepth() - $this->getTreeDepth()));
                 $child->save();
             }
         }
 
-        $this->forceFill(array(
-            $this->treePathColumn() => $parent->getTreePath().$parent->getKey(). $this->treePathSeparator(),
-            $this->treePidColumn() => $parent->getKey(),
-            $this->treeOrderColumn() => ($parent->children(1)->max($parent->treeOrderColumn())+1),
-            $this->treeDepthColumn() => ($parent->getTreeDepth() + 1)
-        ));
+        $this->forceFill([
+            $this->treePathColumn()  => $parent->getTreePath().$parent->getKey().$this->treePathSeparator(),
+            $this->treePidColumn()   => $parent->getKey(),
+            $this->treeOrderColumn() => ($parent->children(1)->max($parent->treeOrderColumn()) + 1),
+            $this->treeDepthColumn() => ($parent->getTreeDepth() + 1),
+        ]);
 
         $this->save();
 
         return $this;
     }
 
-    function treeReorderRows($args = [])
+    public function treeReorderRows($args = [])
     {
-        if (!empty($args['reorder']))
-        {
-            foreach ($args['reorder'] as $id => $priority)
-            {
+        if (!empty($args['reorder'])) {
+            foreach ($args['reorder'] as $id => $priority) {
                 \DB :: table($this->getTable())->where('id', $id)->update([$this->treeOrderColumn() => $priority]);
             }
-            $row = \DB :: selectOne("select ".$this->getKeyName().", ".$this->treePidColumn()." from " . $this->getTable() . " where ".$this->getKeyName()."=? order by " . $this->treeOrderColumn(), [$id]);
+            $row = \DB :: selectOne('select '.$this->getKeyName().', '.$this->treePidColumn().' from '.$this->getTable().' where '.$this->getKeyName().'=? order by '.$this->treeOrderColumn(), [$id]);
             $this->treeReorderLevel($row[$this->treePidColumn()]);
         }
     }
 
-    function treeReorderLevel($parent_id)
+    public function treeReorderLevel($parent_id)
     {
         \DB :: statement('set @pri=0');
-        \DB :: statement('update '.$this->getTable().' set '.$this->treeOrderColumn().' = (@pri:=@pri+1) where '.$this->treePidColumn().'=? order by ' . $this->treeOrderColumn(), [$parent_id]);
+        \DB :: statement('update '.$this->getTable().' set '.$this->treeOrderColumn().' = (@pri:=@pri+1) where '.$this->treePidColumn().'=? order by '.$this->treeOrderColumn(), [$parent_id]);
     }
-
-
 
 //    public function makePreviousSiblingOf($sibling)
 //    {
@@ -185,31 +182,25 @@ trait ModelTreeTrait
 //        return $this->processSiblingOf($sibling, '>');
 //    }
 
-
     public function parent()
     {
-        return $this->belongsTo(get_class($this),$this->treePidColumn());
+        return $this->belongsTo(get_class($this), $this->treePidColumn());
     }
-    
+
     public function siblings()
     {
         return $this->newQuery()->where($this->treePidColumn(), '=', $this->getTreePid());
     }
 
-    public function children($depth=1)
+    public function children($depth = 1)
     {
-
-        if ($depth == 1)
-        {
-            return $this->hasMany(get_class($this),$this->treePidColumn());
-        }
-        else
-        {
+        if ($depth == 1) {
+            return $this->hasMany(get_class($this), $this->treePidColumn());
+        } else {
             $query = $this->newQuery();
-            $query->where($this->treePathColumn(), 'like', $this->getTreePath() . $this->getKey() . $this->treePathSeparator() . '%');
-            
-            if ($depth)
-            {
+            $query->where($this->treePathColumn(), 'like', $this->getTreePath().$this->getKey().$this->treePathSeparator().'%');
+
+            if ($depth) {
                 $query->where($this->treeDepthColumn(), '<=', $this->getTreeDepth() + $depth);
             }
 
@@ -219,21 +210,27 @@ trait ModelTreeTrait
 
     public function isDescendant($ancestor)
     {
-        if (!$this->exists) throw new \Exception('Model doesnt exist');
+        if (!$this->exists) {
+            throw new \Exception('Model doesnt exist');
+        }
 
-        return strpos($this->getTreePath(), $ancestor->getTreePath().$ancestor->getKey().$this->treePathSeparator())!==false && $ancestor->getTreePath()!==$this->getTreePath();
+        return strpos($this->getTreePath(), $ancestor->getTreePath().$ancestor->getKey().$this->treePathSeparator()) !== false && $ancestor->getTreePath() !== $this->getTreePath();
     }
 
     public function isAncestor($descendant)
     {
-        if (!$this->exists) throw new \Exception('Model doesnt exist');
+        if (!$this->exists) {
+            throw new \Exception('Model doesnt exist');
+        }
 
-        return strpos($descendant->getTreePath(), $this->getTreePath().$this->getKey().$this->treePathSeparator())!==false && $descendant->getTreePath()!==$this->getTreePath();
+        return strpos($descendant->getTreePath(), $this->getTreePath().$this->getKey().$this->treePathSeparator()) !== false && $descendant->getTreePath() !== $this->getTreePath();
     }
 
     public function isLeaf()
     {
-        if (!$this->exists) throw new \Exception('Model doesnt exist');
+        if (!$this->exists) {
+            throw new \Exception('Model doesnt exist');
+        }
 
         return !count($this->children(1)->get()->toArray());
     }
@@ -269,8 +266,6 @@ trait ModelTreeTrait
 //        return $query;
 //    }
 
-
-
     public function getTreePid()
     {
         return $this->getAttribute($this->treePidColumn());
@@ -291,26 +286,24 @@ trait ModelTreeTrait
         return $this->getAttribute($this->treeDepthColumn());
     }
 
-
-
     public function treePidColumn()
     {
-        return $this->getTreeConfig("pid_column");
+        return $this->getTreeConfig('pid_column');
     }
 
     public function treeOrderColumn()
     {
-        return $this->getTreeConfig("order_column");
+        return $this->getTreeConfig('order_column');
     }
 
     public function treePathColumn()
     {
-        return $this->getTreeConfig("path_column");
+        return $this->getTreeConfig('path_column');
     }
 
     public function treeDepthColumn()
     {
-        return $this->getTreeConfig("depth_column");
+        return $this->getTreeConfig('depth_column');
     }
 
 //    protected function processSiblingOf($sibling, $op)
@@ -401,21 +394,16 @@ trait ModelTreeTrait
 //        return $branch;
 //    }
 
-
-
-
-    function saveTree($input)
+    public function saveTree($input)
     {
-        if ($this->id == $this->rootId())
-        {
+        if ($this->id == $this->rootId()) {
             return $this->save();
         }
-        if (empty($input[$this->treePidColumn()]))
-        {
-            if (!$this->exists)
-            {
-                throw new TreeException("Unable to create tree node. Parent is not set");
+        if (empty($input[$this->treePidColumn()])) {
+            if (!$this->exists) {
+                throw new TreeException('Unable to create tree node. Parent is not set');
             }
+
             return $this->save();
         }
 
@@ -428,35 +416,29 @@ trait ModelTreeTrait
 //            $parent = $this->rootId();
 //        }
 
-        if (!$this->exists)
-        {
-            $this->moveTreeAction($parent_id, "last_child");
-        }
-        else
-        {
+        if (!$this->exists) {
+            $this->moveTreeAction($parent_id, 'last_child');
+        } else {
             $oldParent = $this->getAttribute($this->treePidColumn());
-            if ($oldParent == $parent_id)
-            {
+            if ($oldParent == $parent_id) {
                 $this->save();
-            }
-            else
-            {
-                $this->moveTreeAction($parent_id, "last_child");
+            } else {
+                $this->moveTreeAction($parent_id, 'last_child');
             }
         }
-    }//
+    }
 
+//
 
-    function moveTreeAction($parent, $position, $ref_id = null)
+    public function moveTreeAction($parent, $position, $ref_id = null)
     {
         $parentObj = self::find($parent);
-        switch ($position)
-        {
+        switch ($position) {
             case 'last_child':
                 $this->makeLastChildOf($parentObj);
                 break;
             default:
-                throw new TreeException("Unknown position for node moving: " . $position);
+                throw new TreeException('Unknown position for node moving: '.$position);
                 break;
         }
 
@@ -475,23 +457,18 @@ trait ModelTreeTrait
 //        return true;
     }
 
-
-    function getParents()
+    public function getParents()
     {
-        if (is_null($this->parent_ids))
-        {
+        if (is_null($this->parent_ids)) {
             $this->parent_ids = [];
 
             $p_ids = explode($this->treePathSeparator(), $this->getTreePath());
-            foreach ($p_ids as $id)
-            {
-                if (intval($id) > 0 && $id != $this->getRootId())
-                {
+            foreach ($p_ids as $id) {
+                if (intval($id) > 0 && $id != $this->getRootId()) {
                     $this->parent_ids[] = $id;
                 }
             }
-            if (count($this->parent_ids))
-            {
+            if (count($this->parent_ids)) {
                 $this->parents = static::find($this->parents_ids);
             }
         }
@@ -499,12 +476,11 @@ trait ModelTreeTrait
         return $this->parents;
     }
 
-    function rootId()
+    public function rootId()
     {
-        if (defined('static::ROOT_ID'))
-        {
+        if (defined('static::ROOT_ID')) {
             return static :: ROOT_ID;
         }
-        throw new ConfigException('Root node for ' . $this->classViewName . " not defined");
+        throw new ConfigException('Root node for '.$this->classViewName.' not defined');
     }
 }

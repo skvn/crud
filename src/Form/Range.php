@@ -1,144 +1,115 @@
-<?php namespace Skvn\Crud\Form;
+<?php
+
+namespace Skvn\Crud\Form;
 
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
-
-class Range extends Field implements  FormControl, FormControlFilterable
+class Range extends Field implements FormControl, FormControlFilterable
 {
-
     use FormControlCommonTrait;
 
-    function pullFromModel()
+    public function pullFromModel()
     {
-        if (!empty($this->config['fields']))
-        {
-            $this->value = $this->model->getAttribute($this->config['fields'][0]) . "~" . $this->model->getAttribute($this->config['fields'][1]);
+        if (!empty($this->config['fields'])) {
+            $this->value = $this->model->getAttribute($this->config['fields'][0]).'~'.$this->model->getAttribute($this->config['fields'][1]);
         }
     }
 
-    function pushToModel()
+    public function pushToModel()
     {
         $this->model->setAttribute($this->getFromFieldName(), $this->getValueFrom());
         $this->model->setAttribute($this->getToFieldName(), $this->getValueTo());
     }
 
-    function getFromFieldName()
+    public function getFromFieldName()
     {
-        if (!empty($this->config['fields']))
-        {
+        if (!empty($this->config['fields'])) {
             return $this->config['fields'][0];
         }
-        return $this->name . "_from";
+
+        return $this->name.'_from';
     }
 
-    function getToFieldName()
+    public function getToFieldName()
     {
-        if (!empty($this->config['fields']))
-        {
+        if (!empty($this->config['fields'])) {
             return $this->config['fields'][1];
         }
-        return $this->name . "_to";
+
+        return $this->name.'_to';
     }
 
-    function getValueFrom()
+    public function getValueFrom()
     {
-        if (strpos($this->value ?? "", "~") !== false)
-        {
-            return explode('~',$this->value)[0];
+        if (strpos($this->value ?? '', '~') !== false) {
+            return explode('~', $this->value)[0];
         }
     }
 
-    function getValueTo()
+    public function getValueTo()
     {
-        if (strpos($this->value ?? "", "~") !== false)
-        {
-            return explode("~", $this->value)[1];
+        if (strpos($this->value ?? '', '~') !== false) {
+            return explode('~', $this->value)[1];
         }
     }
 
-    function getDefaultFrom()
+    public function getDefaultFrom()
     {
-        if (!empty($this->config['default']) && strpos($this->config['default'], "~") !== false)
-        {
-            return explode('~',$this->config['default'])[0];
+        if (!empty($this->config['default']) && strpos($this->config['default'], '~') !== false) {
+            return explode('~', $this->config['default'])[0];
         }
     }
 
-    function getDefaultTo()
+    public function getDefaultTo()
     {
-        if (!empty($this->config['default']) && strpos($this->config['default'], "~") !== false)
-        {
-            return explode('~',$this->config['default'])[1];
+        if (!empty($this->config['default']) && strpos($this->config['default'], '~') !== false) {
+            return explode('~', $this->config['default'])[1];
         }
     }
 
-    function pullFromData(array $data)
+    public function pullFromData(array $data)
     {
-        if (!empty($data[$this->name]) && strpos($data[$this->name],'~') !== false)
-        {
+        if (!empty($data[$this->name]) && strpos($data[$this->name], '~') !== false) {
             $this->value = $data[$this->name];
-        }
-        else
-        {
-            if (isset($data[$this->getFromFieldName()]) || isset ($data[$this->getToFieldName()]))
-            {
+        } else {
+            if (isset($data[$this->getFromFieldName()]) || isset($data[$this->getToFieldName()])) {
                 $from = 0;
                 $to = 0;
-                if (isset($data[$this->getFromFieldName()]))
-                {
+                if (isset($data[$this->getFromFieldName()])) {
                     $from = $data[$this->getFromFieldName()];
                 }
-                if (isset($data[$this->getToFieldName()]))
-                {
+                if (isset($data[$this->getToFieldName()])) {
                     $to = $data[$this->getToFieldName()];
                 }
-                $this->value = $from . '~' . $to;
+                $this->value = $from.'~'.$to;
             }
         }
-
     }
 
-    function getFilterCondition()
+    public function getFilterCondition()
     {
-        if (!empty($this->value))
-        {
-            $split = explode('~',$this->value);
+        if (!empty($this->value)) {
+            $split = explode('~', $this->value);
             $col = $this->getFilterColumnName();
-            if ($split[0] != '' && $split[1] != '')
-            {
+            if ($split[0] != '' && $split[1] != '') {
                 return ['cond' => [$col, 'BETWEEN', $split]];
-            }
-            elseif ($split[0] != '')
-            {
+            } elseif ($split[0] != '') {
                 return ['cond' => [$col, '>=', $split[0]]];
-            }
-            elseif ($split[1] != '')
-            {
+            } elseif ($split[1] != '') {
                 return ['cond' => [$col, '=<', $split[1]]];
             }
         }
     }
 
-
-
-
-    function controlType():string
+    public function controlType():string
     {
-        return "range";
+        return 'range';
     }
 
-    function controlTemplate():string
+    public function controlTemplate():string
     {
-        return "crud::crud.fields.range";
+        return 'crud::crud.fields.range';
     }
-
-
-
-
-
-
-
-
-} 
+}

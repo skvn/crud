@@ -1,6 +1,7 @@
-<?php namespace Skvn\Crud\Exceptions;
+<?php
 
+namespace Skvn\Crud\Exceptions;
 
-class ConfigException extends Exception {
-
+class ConfigException extends Exception
+{
 }

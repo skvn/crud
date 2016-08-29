@@ -1,15 +1,26 @@
-<?php namespace Skvn\Crud\Contracts;
+<?php
+
+namespace Skvn\Crud\Contracts;
 
 interface FormControl
 {
-    function controlType():string;
-    function controlWidgetUrl():string;
-    function controlTemplate():string;
-    function controlValidateConfig():bool;
-    function pullFromModel();
-    function pushToModel();
-    function pullFromData(array $data);
-    function getValue();
-    function getOutputValue():string;
-    function setValue($value);
+    public function controlType():string;
+
+    public function controlWidgetUrl():string;
+
+    public function controlTemplate():string;
+
+    public function controlValidateConfig():bool;
+
+    public function pullFromModel();
+
+    public function pushToModel();
+
+    public function pullFromData(array $data);
+
+    public function getValue();
+
+    public function getOutputValue():string;
+
+    public function setValue($value);
 }

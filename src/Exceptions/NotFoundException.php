@@ -1,6 +1,7 @@
-<?php namespace Skvn\Crud\Exceptions;
+<?php
 
+namespace Skvn\Crud\Exceptions;
 
-class NotFoundException extends Exception {
-
+class NotFoundException extends Exception
+{
 }

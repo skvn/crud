@@ -1,44 +1,36 @@
-<?php namespace Skvn\Crud\Form;
+<?php
 
+namespace Skvn\Crud\Form;
 
 use Skvn\Crud\Contracts\FormControl;
-use Skvn\Crud\Traits\FormControlCommonTrait;
 use Skvn\Crud\Contracts\FormControlFilterable;
+use Skvn\Crud\Traits\FormControlCommonTrait;
 
-
-class Number extends Field implements  FormControl, FormControlFilterable{
-
-
+class Number extends Field implements FormControl, FormControlFilterable
+{
     use FormControlCommonTrait;
 
-    function pullFromModel()
+    public function pullFromModel()
     {
-        if (!in_array($this->name, $this->model->getHidden()))
-        {
+        if (!in_array($this->name, $this->model->getHidden())) {
             $this->value = $this->model->getAttribute($this->field);
         }
     }
 
-    function getFilterCondition()
+    public function getFilterCondition()
     {
-        if (!empty($this->value))
-        {
-            return ['cond' => [$this->getFilterColumnName(), '=',  $this->value ]];
+        if (!empty($this->value)) {
+            return ['cond' => [$this->getFilterColumnName(), '=',  $this->value]];
         }
     }
 
-
-    function controlType():string
+    public function controlType():string
     {
-        return "number";
+        return 'number';
     }
 
-    function controlTemplate():string
+    public function controlTemplate():string
     {
-        return "crud::crud.fields.number";
+        return 'crud::crud.fields.number';
     }
-
-
-
-
 }

@@ -1,46 +1,43 @@
-<?php namespace Skvn\Crud\Form;
+<?php
 
+namespace Skvn\Crud\Form;
 
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
-
-class MultiFile extends Field implements  FormControl{
-
-
+class MultiFile extends Field implements FormControl
+{
     use FormControlCommonTrait;
 
-    function pullFromModel()
+    public function pullFromModel()
     {
         $this->value = $this->model->getAttribute($this->name);
+
         return $this;
     }
 
-    function pushToModel()
+    public function pushToModel()
     {
         $this->model->setAttribute($this->name, $this->value);
     }
 
-    function pullFromData(array $data)
+    public function pullFromData(array $data)
     {
         $this->value = isset($data[$this->name]) ? $data[$this->name] : null;
     }
 
-    function controlType():string
+    public function controlType():string
     {
-        return "multi_file";
+        return 'multi_file';
     }
 
-    function controlTemplate():string
+    public function controlTemplate():string
     {
-        return "crud::crud.fields.multi_file";
+        return 'crud::crud.fields.multi_file';
     }
 
-
-    function getExisting()
+    public function getExisting()
     {
         return $this->model->getAttribute($this->getName());
     }
-
-
-} 
+}

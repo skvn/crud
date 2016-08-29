@@ -1,41 +1,36 @@
-<?php namespace Skvn\Crud\Form;
+<?php
 
+namespace Skvn\Crud\Form;
 
-use Skvn\Crud\Contracts\FormControl;
-use Skvn\Crud\Traits\FormControlCommonTrait;
-use Skvn\Crud\Models\CrudModel;
 use Illuminate\Support\Collection;
-
+use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Models\CrudModel;
+use Skvn\Crud\Traits\FormControlCommonTrait;
 
 class LinkedModelsTable extends Field implements FormControl
 {
     use FormControlCommonTrait;
 
-
-    function pullFromModel()
+    public function pullFromModel()
     {
         $this->value = $this->model->getAttribute($this->name);
     }
 
-    function pullFromData(array $data)
+    public function pullFromData(array $data)
     {
         $this->value = new Collection();
         $class = CrudModel :: resolveClass($this->config['model']);
-        foreach ($data[$this->name] as $id => $entry)
-        {
+        foreach ($data[$this->name] as $id => $entry) {
             $valid = true;
             $obj = $id > 0 ? $class :: findOrFail($id) : new $class();
-            foreach ($this->getControls($obj, false) as $c)
-            {
+            foreach ($this->getControls($obj, false) as $c) {
                 $c->pullFromData($entry);
                 $c->pushToModel();
-                if ($c->config['required'] && !$c->getValue())
-                {
+                if ($c->config['required'] && !$c->getValue()) {
                     $valid = false;
                 }
             }
-            if ($valid)
-            {
+            if ($valid) {
                 $this->value->push($obj);
             }
             //$obj->saveDirect();
@@ -55,49 +50,42 @@ class LinkedModelsTable extends Field implements FormControl
 //        }
     }
 
-    function pushToModel()
+    public function pushToModel()
     {
         $this->model->setAttribute($this->name, $this->value);
     }
 
-    function getControls(CrudModel $model = null, $forView = true)
+    public function getControls(CrudModel $model = null, $forView = true)
     {
         $controls = [];
-        if (is_null($model))
-        {
-            $model = CrudModel :: createInstance($this->config['model']);;
+        if (is_null($model)) {
+            $model = CrudModel :: createInstance($this->config['model']);
         }
-        foreach ($this->config['fields'] as $field)
-        {
+        foreach ($this->config['fields'] as $field) {
             $control = Form :: createControl($model, $model->getField($field));
-            if ($forView)
-            {
+            if ($forView) {
                 $id = $model->exists ? $model->getKey() : -1;
-                $control->setField($this->name . '[' . $id . '][' . $control->config['name'] . ']');
+                $control->setField($this->name.'['.$id.']['.$control->config['name'].']');
                 $control->config['required'] = false;
             }
             $controls[] = $control;
         }
+
         return $controls;
     }
 
-
-    function controlType():string
+    public function controlType():string
     {
-        return "linked_models_table";
+        return 'linked_models_table';
     }
 
-    function controlTemplate():string
+    public function controlTemplate():string
     {
-        return "crud::crud.fields.linked_models_table";
+        return 'crud::crud.fields.linked_models_table';
     }
 
-    function controlWidgetUrl():string
+    public function controlWidgetUrl():string
     {
-        return "js/widgets/editable_table.js";
+        return 'js/widgets/editable_table.js';
     }
-
-
-
 }
-

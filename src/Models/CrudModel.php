@@ -1,15 +1,15 @@
-<?php namespace Skvn\Crud\Models;
+<?php
 
-
-use \Illuminate\Database\Eloquent\Model;
-use Skvn\Crud\Traits\ModelInjectTrait;
-use Skvn\Crud\Traits\ModelConfigTrait;
-//use Skvn\Crud\Traits\ModelRelationTrait;
-//use Skvn\Crud\Traits\ModelFilterTrait;
-use Skvn\Crud\Traits\ModelFormTrait;
-use Skvn\Crud\Exceptions\NotFoundException;
+namespace Skvn\Crud\Models;
 
 use Illuminate\Container\Container;
+use Illuminate\Database\Eloquent\Model;
+use Skvn\Crud\Exceptions\NotFoundException;
+//use Skvn\Crud\Traits\ModelRelationTrait;
+//use Skvn\Crud\Traits\ModelFilterTrait;
+use Skvn\Crud\Traits\ModelConfigTrait;
+use Skvn\Crud\Traits\ModelFormTrait;
+use Skvn\Crud\Traits\ModelInjectTrait;
 
 abstract class CrudModel extends Model
 {
@@ -33,8 +33,8 @@ abstract class CrudModel extends Model
     private $guessed_id = 0;
 
     protected $errors = [];
-    protected static $rules = array();
-    protected static $messages = array();
+    protected static $rules = [];
+    protected static $messages = [];
     protected $validator;
     public $timestamps = false;
     //protected $eventsDisabled = false;
@@ -42,13 +42,13 @@ abstract class CrudModel extends Model
 
 
     /**
-     * Flag for tracking created_by and updated_by attributes
+     * Flag for tracking created_by and updated_by attributes.
+     *
      * @var bool
      */
     public $trackAuthors = false;
 
-
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
         $this->app = Container :: getInstance();
         $this->bootIfNotBooted();
@@ -57,16 +57,13 @@ abstract class CrudModel extends Model
         $this->classViewName = snake_case($this->classShortName);
         $this->config = $this->app['config']->get('crud.'.(!empty($this->table) ? $this->table : $this->classViewName));
         $this->config['class_name'] = $this->classViewName;
-        if (empty($this->table))
-        {
+        if (empty($this->table)) {
             $this->table = $this->config['table'] ?? $this->classViewName;
         }
         $this->config['file_params'] = [];
 
-        if (!empty($this->config['fields']))
-        {
-            foreach ($this->config['fields'] as $name => $col)
-            {
+        if (!empty($this->config['fields'])) {
+            foreach ($this->config['fields'] as $name => $col) {
                 $this->config['fields'][$name] = $this->configureField($name, $col);
             }
         }
@@ -80,42 +77,38 @@ abstract class CrudModel extends Model
         $this->validator = $this->app['validator'];
     }
 
-    static function resolveClass($model)
+    public static function resolveClass($model)
     {
         $app = Container :: getInstance();
-        return $app['config']['crud_common.model_namespace'] . '\\' . studly_case($model);
+
+        return $app['config']['crud_common.model_namespace'].'\\'.studly_case($model);
     }
 
-    static function createInstance($model, $scope = self :: DEFAULT_SCOPE, $id = null)
+    public static function createInstance($model, $scope = self :: DEFAULT_SCOPE, $id = null)
     {
         $class = static :: resolveClass($model);
-        if (!empty($id))
-        {
-            $obj = $class::findOrNew((int)$id);
-        }
-        else
-        {
+        if (!empty($id)) {
+            $obj = $class::findOrNew((int) $id);
+        } else {
             $obj = new $class();
         }
         $obj->setScope($scope);
+
         return $obj;
     }
 
-    static function createSelfInstance($scope = self :: DEFAULT_SCOPE, $id = null)
+    public static function createSelfInstance($scope = self :: DEFAULT_SCOPE, $id = null)
     {
         $class = get_called_class();
-        if (!empty($id))
-        {
-            $obj = $class::findOrNew((int)$id);
-        }
-        else
-        {
+        if (!empty($id)) {
+            $obj = $class::findOrNew((int) $id);
+        } else {
             $obj = new $class();
         }
         $obj->setScope($scope);
+
         return $obj;
     }
-
 
 //    function saveDirect()
 //    {
@@ -134,118 +127,109 @@ abstract class CrudModel extends Model
 //        return false;
 //    }
 
-    function saveRelations()
+    public function saveRelations()
     {
         return $this->crudRelations->save();
     }
 
-
-    function getApp()
+    public function getApp()
     {
         return $this->app;
     }
 
-
     public function __call($method, $parameters)
     {
-        if ($this->crudRelations->has($method))
-        {
+        if ($this->crudRelations->has($method)) {
             return $this->crudRelations->getRelation($method);
         }
+
         return parent::__call($method, $parameters);
     }
 
-    function __isset($key)
+    public function __isset($key)
     {
         $col = $this->config['fields'][$key] ?? [];
-        if (!empty($col['fields']))
-        {
-            foreach ($this->config['fields'][$key]['fields'] as $f)
-            {
-                if (parent :: __isset($f))
-                {
+        if (!empty($col['fields'])) {
+            foreach ($this->config['fields'][$key]['fields'] as $f) {
+                if (parent :: __isset($f)) {
                     return true;
                 }
             }
         }
-        if (!empty($col['field']) && $col['field'] !== $key)
-        {
+        if (!empty($col['field']) && $col['field'] !== $key) {
             return parent :: __isset($col['field']);
         }
+
         return parent :: __isset($key);
     }
 
     public function getAttribute($key)
     {
-        if ($this->crudRelations->has($key))
-        {
+        if ($this->crudRelations->has($key)) {
             return $this->crudRelations->getAny($key);
         }
 
         return parent::getAttribute($key);
     }
 
-    function setAttribute($key, $value)
+    public function setAttribute($key, $value)
     {
-        if ($this->crudRelations->has($key))
-        {
+        if ($this->crudRelations->has($key)) {
             $this->crudRelations[$key]->set($value);
+
             return;
         }
-        if ($this->callSetters($key, $value) === true)
-        {
+        if ($this->callSetters($key, $value) === true) {
             return;
         }
         $fld = $this->config['fields'][$key] ?? [];
-        if (!empty($fld['field']) && $fld['field'] !== $key)
-        {
+        if (!empty($fld['field']) && $fld['field'] !== $key) {
             return parent :: setAttribute($fld['field'], $value);
         }
+
         return parent :: setAttribute($key, $value);
     }
 
-    function getTitle()
+    public function getTitle()
     {
         $param = $this->confParam('title_field', 'title');
+
         return $this->getAttribute($param);
     }
 
-    function getSelfAttribute()
+    public function getSelfAttribute()
     {
         return $this;
     }
 
     public function getMorphClass()
     {
-        if ($this->app['config']->get('crud_common.replace_morph_classes_with_basename'))
-        {
+        if ($this->app['config']->get('crud_common.replace_morph_classes_with_basename')) {
             return $this->classShortName;
         }
+
         return parent :: getMorphClass();
     }
 
     public function getActualClassNameForMorph($class)
     {
-        if ($this->app['config']->get('crud_common.replace_morph_classes_with_basename'))
-        {
+        if ($this->app['config']->get('crud_common.replace_morph_classes_with_basename')) {
             return self :: resolveClass($class);
         }
+
         return parent :: getActualClassNameForMorph($class);
     }
 
-
-
-
-    function checkAcl($access = "")
+    public function checkAcl($access = '')
     {
-        if (empty($this->config['acl']))
-        {
+        if (empty($this->config['acl'])) {
             return true;
         }
+
         return $this->app['skvn.cms']->checkAcl($this->config['acl'], $access);
     }
 
-    function getInternalCodeAttribute()
+    public function getInternalCodeAttribute()
     {
         return $this->attributes[$this->codeColumn];
     }
@@ -253,11 +237,11 @@ abstract class CrudModel extends Model
     public function validate()
     {
         $v = $this->validator->make($this->attributes, static::$rules, static::$messages);
-        if ($v->passes())
-        {
+        if ($v->passes()) {
             return true;
         }
         $this->setErrors($v->messages()->toArray());
+
         return false;
     }
 
@@ -271,20 +255,21 @@ abstract class CrudModel extends Model
         return $this->errors;
     }
 
-    function addError($error)
+    public function addError($error)
     {
         $this->errors[] = $error;
     }
 
     public function hasErrors()
     {
-        return ! empty($this->errors);
+        return !empty($this->errors);
     }
 
-    function getViewRefAttribute()
+    public function getViewRefAttribute()
     {
-        $id = ($this->id?$this->id:-1);
-        return $this->classViewName . "_" . $this->scope . "_" . $id;
+        $id = ($this->id ? $this->id : -1);
+
+        return $this->classViewName.'_'.$this->scope.'_'.$id;
     }
 
     protected function crudFormatValue($pattern, $args = [])
@@ -293,243 +278,226 @@ abstract class CrudModel extends Model
     }
 
     /**
-     * add id to value
+     * add id to value.
      *
      * @param $val
      * @param array $args
+     *
      * @return string
      */
-    function crudFormatValueId($val, $args = [])
+    public function crudFormatValueId($val, $args = [])
     {
         return $this->crudFormatValue('%s [%s]', [$val, $this->id]);
     }
 
     /**
-     * Wrap value in <b>
+     * Wrap value in <b>.
      *
      * @param $val
      * @param array $args
+     *
      * @return string
      */
-    function crudFormatValueBold($val, $args = [])
+    public function crudFormatValueBold($val, $args = [])
     {
         return $this->crudFormatValue('<strong>%s</strong>', [$val]);
     }
 
     /**
-     * Email value as mailto link
+     * Email value as mailto link.
      *
      * @param $val
      * @param array $args
+     *
      * @return string
      */
-    function crudFormatValueMailto($val, $args = [])
+    public function crudFormatValueMailto($val, $args = [])
     {
         return $this->crudFormatValue('<a href="mailto:%s">%s</a>', [$val, $val]);
     }
 
     /**
-     * Make an activity icon out of the boolean or 1/0 value
+     * Make an activity icon out of the boolean or 1/0 value.
      *
      * @param $val
      * @param array $args
+     *
      * @return string
      */
-    function crudFormatValueActivityIcon($val, $args = [])
+    public function crudFormatValueActivityIcon($val, $args = [])
     {
-        return ( $val ? '<span class="text-succes"><i class="fa fa-check-square-o"></i> '.trans('crud::messages.yes').'</span>':'<span class="text-danger"><i class="fa fa-times-square-o"></i> '.trans('crud::messages.no').'</span>');
+        return  $val ? '<span class="text-succes"><i class="fa fa-check-square-o"></i> '.trans('crud::messages.yes').'</span>' : '<span class="text-danger"><i class="fa fa-times-square-o"></i> '.trans('crud::messages.no').'</span>';
     }
 
     /**
-     * Resize attached image
+     * Resize attached image.
      *
      * @param $val
      * @param array $args
      */
-    function crudFormatValueResizedAttach($val, $args = [])
+    public function crudFormatValueResizedAttach($val, $args = [])
     {
         return '<img src="'.$val->getResizedUrl($args['width'], $args['height']).'" />';
     }
 
     /**
-     * Format date from timestamp or Carbon instance
+     * Format date from timestamp or Carbon instance.
      *
      * @param $val
      * @param array $args
      */
-    function crudFormatValueDate($val, $args = [])
+    public function crudFormatValueDate($val, $args = [])
     {
-        if (is_integer($val)) {
-
+        if (is_int($val)) {
             return date($args['format'] ?? 'd.m.Y', $val);
-
-        } elseif ($val instanceof \Carbon\Carbon ) {
-
+        } elseif ($val instanceof \Carbon\Carbon) {
             return $val->format($args['format'] ?? 'd.m.Y');
         }
-
     }
 
     /**
-     * Remove tags and truncate to $args[length]
+     * Remove tags and truncate to $args[length].
      *
      * @param $val
      * @param array $args
      */
-    function crudFormatValueTruncate($val, $args = [])
+    public function crudFormatValueTruncate($val, $args = [])
     {
         $val = strip_tags($val);
-        if (!empty($args['length']))
-        {
-            if (mb_strlen($val) > $args['length'])
-            {
-                $val = mb_substr($val, 0, $args['length']) . "...";
+        if (!empty($args['length'])) {
+            if (mb_strlen($val) > $args['length']) {
+                $val = mb_substr($val, 0, $args['length']).'...';
             }
         }
+
         return $val;
     }
-
-
 
     protected function listPublicMethods($pattern)
     {
         $flist = [];
         $cls = new \ReflectionClass($this);
         $mlist = $cls->getMethods(\ReflectionMethod :: IS_PUBLIC);
-        foreach ($mlist as $m)
-        {
-            if (preg_match($pattern, $m->name, $matches))
-            {
-                $desc = "";
+        foreach ($mlist as $m) {
+            if (preg_match($pattern, $m->name, $matches)) {
+                $desc = '';
                 $c = $m->getDocComment();
-                if (!empty($c))
-                {
+                if (!empty($c)) {
                     $docLines = preg_split('~\R~u', $c);
-                    if (isset($docLines[1]))
-                    {
+                    if (isset($docLines[1])) {
                         $desc = trim($docLines[1], "\t *");
                     }
                 }
                 $flist[] = ['name' => snake_case($matches[1]), 'method' => $m->name, 'description' => $desc];
             }
         }
+
         return $flist;
     }
+
     /**
-     * Get All available formatters
+     * Get All available formatters.
      *
      * @return array
      */
-    function getAvailFormatters()
+    public function getAvailFormatters()
     {
-        return $this->listPublicMethods("#crudFormatValue([a-zA-Z]+)#");
+        return $this->listPublicMethods('#crudFormatValue([a-zA-Z]+)#');
     }
 
     /**
-     * Get all available select options providers
+     * Get all available select options providers.
      *
      * @return array
      */
-    function getAvailOptionGenerators()
+    public function getAvailOptionGenerators()
     {
-        return $this->listPublicMethods("#selectOptions([a-zA-Z]+)#");
+        return $this->listPublicMethods('#selectOptions([a-zA-Z]+)#');
     }
 
     /**
-     * Get all available scopes
+     * Get all available scopes.
      *
      * @return array
      */
-    function getAvailScopes()
+    public function getAvailScopes()
     {
-        return $this->listPublicMethods("#scope([a-zA-Z]+)#");
+        return $this->listPublicMethods('#scope([a-zA-Z]+)#');
     }
 
-
-
-    function guessNewKey()
+    public function guessNewKey()
     {
-        if (empty($this->guessed_id))
-        {
-            $this->guessed_id = $this->app['db']->table($this->getTable())->max($this->getKeyName())+1;
+        if (empty($this->guessed_id)) {
+            $this->guessed_id = $this->app['db']->table($this->getTable())->max($this->getKeyName()) + 1;
         }
+
         return $this->guessed_id;
     }
 
-    function getParentInstanceId()
+    public function getParentInstanceId()
     {
         return 0;
     }
 
-    function crudExecuteCommand($command, $args = [])
+    public function crudExecuteCommand($command, $args = [])
     {
-        if (!empty($args['selected_rows']))
-        {
+        if (!empty($args['selected_rows'])) {
             $ids = [];
-            foreach ($args['selected_rows'] as $row)
-            {
+            foreach ($args['selected_rows'] as $row) {
                 $ids[] = $row['id'];
             }
             $args['ids'] = $ids;
-            if (method_exists($this, $command . 'Bulk'))
-            {
-                return $this->{$command . 'Bulk'}($args);
-            }
-            else
-            {
-                if (!method_exists($this, $command))
-                {
-                    throw new NotFoundException("Command " . $command . " do not exists on model " . $this->classShortName);
+            if (method_exists($this, $command.'Bulk')) {
+                return $this->{$command.'Bulk'}($args);
+            } else {
+                if (!method_exists($this, $command)) {
+                    throw new NotFoundException('Command '.$command.' do not exists on model '.$this->classShortName);
                 }
-                foreach ($args['ids'] as $id)
-                {
+                foreach ($args['ids'] as $id) {
                     $obj = static :: findOrFail($id);
                     $obj->$command($args);
                 }
+
                 return;
             }
         }
-        if (!method_exists($this, $command))
-        {
-            throw new NotFoundException("Command " . $command . " do not exists on model " . $this->classShortName);
+        if (!method_exists($this, $command)) {
+            throw new NotFoundException('Command '.$command.' do not exists on model '.$this->classShortName);
         }
+
         return $this->$command($args);
     }
 
     public function deleteAttachedModel($args)
     {
         $rel = $args['delete_attach_rel'] ?? false;
-        if ($rel)
-        {
-            if (empty($args['delete_attach_id']))
-            {
+        if ($rel) {
+            if (empty($args['delete_attach_id'])) {
                 $args['delete_attach_id'] = -1;
             }
             $this->crudRelations[$rel]->delete($args['delete_attach_id']);
         }
     }
 
-    public  function appendConditions($conditions)
+    public function appendConditions($conditions)
     {
         return $conditions;
     }
 
-    public  function preApplyConditions($coll, $conditions)
+    public function preApplyConditions($coll, $conditions)
     {
         return $conditions;
     }
 
     /**
-     * Default model scope
+     * Default model scope.
      *
      * @param $query
+     *
      * @return mixed
      */
     public function scopeDefault($query)
     {
         return $query;
     }
-
-
-
 }

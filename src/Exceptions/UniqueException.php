@@ -1,6 +1,7 @@
-<?php namespace Skvn\Crud\Exceptions;
+<?php
 
+namespace Skvn\Crud\Exceptions;
 
-class UniqueException extends Exception {
-
+class UniqueException extends Exception
+{
 }

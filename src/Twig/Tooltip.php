@@ -1,14 +1,16 @@
-<?php namespace Skvn\Crud\Twig;
+<?php
 
+namespace Skvn\Crud\Twig;
+
+use Illuminate\Foundation\Application as LaravelApplication;
 use Twig_Extension;
 use Twig_SimpleFilter;
-use Illuminate\Foundation\Application as LaravelApplication;
 
 class Tooltip extends Twig_Extension
 {
     protected $app;
 
-    function __construct(LaravelApplication $app)
+    public function __construct(LaravelApplication $app)
     {
         $this->app = $app;
     }
@@ -18,11 +20,10 @@ class Tooltip extends Twig_Extension
         return 'Skvn\Crud_Twig_Tooltip';
     }
 
-    public function tooltip($t, $text = "")
+    public function tooltip($t, $text = '')
     {
-        return str_replace("%t", $text, str_replace('%s', $t, $this->app['config']->get('crud_tooltip.pattern')));
+        return str_replace('%t', $text, str_replace('%s', $t, $this->app['config']->get('crud_tooltip.pattern')));
     }
-
 
     public function getFilters()
     {

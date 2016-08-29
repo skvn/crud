@@ -1,40 +1,34 @@
-<?php namespace Skvn\Crud\Form;
+<?php
 
-
+namespace Skvn\Crud\Form;
 
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
-class Checkbox extends Field implements  FormControl, FormControlFilterable
+class Checkbox extends Field implements FormControl, FormControlFilterable
 {
-
     use FormControlCommonTrait;
 
-    function getFilterCondition()
+    public function getFilterCondition()
     {
-        if (!empty($this->value))
-        {
-            return ['cond' => [$this->getFilterColumnName(), '=',  $this->value ]];
+        if (!empty($this->value)) {
+            return ['cond' => [$this->getFilterColumnName(), '=',  $this->value]];
         }
     }
 
-    function controlType():string
+    public function controlType():string
     {
-        return "checkbox";
+        return 'checkbox';
     }
 
-    function controlTemplate():string
+    public function controlTemplate():string
     {
-        return "crud::crud.fields.checkbox";
+        return 'crud::crud.fields.checkbox';
     }
 
-    function controlWidgetUrl():string
+    public function controlWidgetUrl():string
     {
-        return "js/widgets/checkbox.js";
+        return 'js/widgets/checkbox.js';
     }
-
-
-
-
 }

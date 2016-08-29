@@ -1,57 +1,44 @@
-<?php namespace Skvn\Crud\Helper;
+<?php
 
-use Skvn\Crud\Contracts\AclSubject;
+namespace Skvn\Crud\Helper;
 
 class CmsHelper
 {
-
     protected $acls = [];
-    public  $user;
+    public $user;
     protected $menus = [];
     protected $app;
 
-
-
-    public function __construct($user=null)
+    public function __construct($user = null)
     {
-
         $this->app = app();
         if ($user) {
             $this->user = $user;
             $this->acls = $user->getAcls();
         }
-
     }
 
-
-    function getAdminMenu()
+    public function getAdminMenu()
     {
-
         $conf = $this->app['config']->get('admin_menu');
         $menu = [];
-        foreach ($conf as $index=>$parent)
-        {
-            if (empty($parent['acl']) || $this->checkAcl($parent['acl']))
-            {
+        foreach ($conf as $index => $parent) {
+            if (empty($parent['acl']) || $this->checkAcl($parent['acl'])) {
                 $item = $parent;
                 $item['kids'] = null;
 
                 if (!empty($parent['route'])) {
                     if ($this->app['request']->url() == route($parent['route']['name'], $parent['route']['args'])) {
-
                         $item['active'] = true;
-
                     } else {
                         $item['active'] = false;
-
                     }
                 } else {
                     $item['active'] = false;
                 }
 
-                if (!empty($parent['kids'] )) {
+                if (!empty($parent['kids'])) {
                     foreach ($parent['kids'] as $kindex => $kid) {
-
                         if (empty($kid['acl']) || $this->checkAcl($kid['acl'])) {
                             $item['kids'][$kindex] = $kid;
 
@@ -61,17 +48,14 @@ class CmsHelper
                             if ($this->app['request']->url() == rtrim(route($kid['route']['name'], $kid['route']['args']), '?')) {
                                 $item['active'] = true;
                                 $item['kids'][$kindex]['active'] = true;
-
                             } else {
                                 $item['kids'][$kindex]['active'] = false;
                             }
-
                         }
                     }
                 }
 
                 $menu[$index] = $item;
-
             }
         }
 
@@ -79,87 +63,72 @@ class CmsHelper
         return $menu;
     }
 
-
-    function getUser()
+    public function getUser()
     {
         return $this->user;
     }
 
-    function checkAcl($acl, $access = "")
+    public function checkAcl($acl, $access = '')
     {
-        if (empty($acl))
-        {
+        if (empty($acl)) {
             return true;
         }
-        if (array_key_exists("all", $this->acls))
-        {
+        if (array_key_exists('all', $this->acls)) {
             return true;
         }
-        $list = explode(",", $acl);
-        foreach ($list as $check)
-        {
-            if (array_key_exists($check, $this->acls))
-            {
-                if (empty($access))
-                {
+        $list = explode(',', $acl);
+        foreach ($list as $check) {
+            if (array_key_exists($check, $this->acls)) {
+                if (empty($access)) {
                     return true;
                 }
-                if ($this->acls[$check] == "*")
-                {
+                if ($this->acls[$check] == '*') {
                     return true;
                 }
-                if (strpos($this->acls[$check], $access) !== false)
-                {
+                if (strpos($this->acls[$check], $access) !== false) {
                     return true;
                 }
             }
         }
+
         return false;
     }
 
-
-
-
-
-    function setMenu($name, $data)
+    public function setMenu($name, $data)
     {
         $this->menus[$name] = $data;
     }
 
-    function getMenu($name)
+    public function getMenu($name)
     {
         if (!empty($this->menus[$name])) {
-
             return $this->menus[$name];
         }
     }
 
-    function setBreadCrumbs($data)
+    public function setBreadCrumbs($data)
     {
         $this->setMenu('__bc', $data);
     }
 
-    function getBreadCrumbs()
+    public function getBreadCrumbs()
     {
-        $start = ['title'=>'Главная','link'=>'/'];
+        $start = ['title' => 'Главная', 'link' => '/'];
         $bc = $this->getMenu('__bc');
-        if (count($bc))
-        {
-            array_unshift($bc,$start);
+        if (count($bc)) {
+            array_unshift($bc, $start);
 
             return $bc;
-
-
         } else {
             $start['link'] = null;
+
             return [$start];
         }
     }
 
-    function isBot()
+    public function isBot()
     {
-
-        $bot_agents = array(
+        $bot_agents = [
             'msnbot',
             'google',
             'ia_archiver',
@@ -169,21 +138,24 @@ class CmsHelper
             'Yanga',
             'rambler',
             'mail.ru',
-            'yandex'
+            'yandex',
 
-        );
+        ];
         if (!empty($_SERVER['HTTP_USER_AGENT'])) {
-
             $user_agent = $_SERVER['HTTP_USER_AGENT'];
             foreach ($bot_agents as $bot) {
-                if (stripos($user_agent, $bot) !== false) return true;
+                if (stripos($user_agent, $bot) !== false) {
+                    return true;
+                }
             }
         }
+
         return false;
-    }//
+    }
 
+//
 
-    function getMonths()
+    public function getMonths()
     {
         $months['1'] = 'января';
         $months['2'] = 'февраля';
@@ -197,30 +169,27 @@ class CmsHelper
         $months['10'] = 'октября';
         $months['11'] = 'ноября';
         $months['12'] = 'декабря';
+
         return $months;
     }
 
-
-    function smartDate($time_stamp='', $sayMonth=1, $sayToday=0, $dateFormat='dd mm',$smart_year=0)
+    public function smartDate($time_stamp = '', $sayMonth = 1, $sayToday = 0, $dateFormat = 'dd mm', $smart_year = 0)
     {
         $months = $this->getMonths();
-        if ($dateFormat == 'simple')
-        {
+        if ($dateFormat == 'simple') {
             $sayMonth = true;
             $sayToday = false;
             $dateFormat = 'dd mm';
         }
 
-        if ($dateFormat == 'list')
-        {
+        if ($dateFormat == 'list') {
             $sayMonth = false;
             $sayToday = false;
             $dateFormat = 'dd.mm.yyyy';
             $smart_year = 1;
         }
 
-        if ($dateFormat == 'full')
-        {
+        if ($dateFormat == 'full') {
             $sayMonth = true;
             $sayToday = false;
             $dateFormat = 'dd mm yyyy';
@@ -228,25 +197,18 @@ class CmsHelper
 
         //$dateFormat='dd,mm,yyyy H:M'
 
-        if (!empty($time_stamp))
-        {
+        if (!empty($time_stamp)) {
             $mysqldate = date('Y-m-d H:i:s', $time_stamp);
-        }
-        else
-        {
+        } else {
             $mysqldate = date('Y-m-d H:i:s');
         }
 
-        if (!empty($mysqldate))
-        {
+        if (!empty($mysqldate)) {
             $datearr = explode(' ', $mysqldate);
             $date = $datearr[0];
-            if (isset($datearr[1]))
-            {
+            if (isset($datearr[1])) {
                 $time = $datearr[1];
-            }
-            else
-            {
+            } else {
                 $time = '00:00:00';
             }
 
@@ -263,30 +225,23 @@ class CmsHelper
 
 
 
-            if ($sayToday)
-            {
-                if (date("Ymd") == $year . $month . $day)
-                {
+            if ($sayToday) {
+                if (date('Ymd') == $year.$month.$day) {
                     $day = 'сегодня';
                     $month = '';
                     $year = '';
-                }
-                elseif (date("Ymd", strtotime('yesterday')) == $year . $month . $day)
-                {
+                } elseif (date('Ymd', strtotime('yesterday')) == $year.$month.$day) {
                     $day = 'вчера';
                     $month = '';
                     $year = '';
-                }
-                elseif (date("Ymd", strtotime('tomorrow')) == $year . $month . $day)
-                {
+                } elseif (date('Ymd', strtotime('tomorrow')) == $year.$month.$day) {
                     $day = 'завтра';
                     $month = '';
                     $year = '';
                 }
             }
 
-            if ($month != '')
-            {
+            if ($month != '') {
                 //if (!substr_count($dateFormat, 'dd'))
                 // {
                 $day = intval($day);
@@ -295,39 +250,30 @@ class CmsHelper
 
 
 
-            if ($sayMonth && $month != '')
-            {
+            if ($sayMonth && $month != '') {
                 $month = (int) $month;
-                if (isset($months[$month]))
-                {
+                if (isset($months[$month])) {
                     $month = $months[intval($month)];
                 }
             }
 
-            if ($month != '')
-            {
-                if (!substr_count($dateFormat, 'mm'))
-                {
+            if ($month != '') {
+                if (!substr_count($dateFormat, 'mm')) {
                     $month = intval($month);
                 }
             }
 
             $numDigY = substr_count($dateFormat, 'y');
 
-            if ($smart_year)
-            {
-                if ($year == date('Y'))
-                {
+            if ($smart_year) {
+                if ($year == date('Y')) {
                     $year = '';
                     $returnDate = preg_replace('/\.(y)+/', $year, $dateFormat);
                     $returnDate = preg_replace('/(y)+/', $year, $returnDate);
-                } else
-                {
+                } else {
                     $returnDate = preg_replace('/(y)+/', $year, $dateFormat);
                 }
-
-            } else
-            {
+            } else {
                 $year = substr($year, -$numDigY, 4);
                 $returnDate = preg_replace('/(y)+/', $year, $dateFormat);
             }
@@ -354,21 +300,20 @@ class CmsHelper
 
             return $returnDate;
         }
+
         return false;
     }
 
-
-    function getLocale()
+    public function getLocale()
     {
         return $this->app->getLocale();
     }
 
-
-    function getVendorJs()
+    public function getVendorJs()
     {
-        $config = json_decode(file_get_contents(__DIR__ .'/../../gulp-config.json'), true)['paths']['vendor_js_src'];
+        $config = json_decode(file_get_contents(__DIR__.'/../../gulp-config.json'), true)['paths']['vendor_js_src'];
         array_walk($config, function (&$item) {
-            $item = str_replace('resources','', $item);
+            $item = str_replace('resources', '', $item);
         });
 
         return $config;

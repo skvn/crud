@@ -1,8 +1,13 @@
-<?php namespace Skvn\Crud\Facades;
+<?php
+
+namespace Skvn\Crud\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 class Crud extends Facade
 {
-    protected static function getFacadeAccessor() { return 'skvn.crud'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'skvn.crud';
+    }
 }

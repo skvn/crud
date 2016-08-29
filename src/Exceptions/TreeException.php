@@ -1,6 +1,7 @@
-<?php namespace Skvn\Crud\Exceptions;
+<?php
 
+namespace Skvn\Crud\Exceptions;
 
-class TreeException extends Exception {
-
+class TreeException extends Exception
+{
 }
