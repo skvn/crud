@@ -49,6 +49,7 @@ trait ModelSlugTrait
         try {
             $this->setAttribute($column, $this->generateSlug($this->getAttribute($column)));
         } catch (UniqueException $e) {
+            var_dump($e->getMessage());
             $this->addError($e->getMessage());
 
             return false;

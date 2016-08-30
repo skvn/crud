@@ -408,6 +408,7 @@
 
     function validate_form(frm)
     {
+        console.log("VALIDATING");
         var valid = true;
         $(".has-error", frm).removeClass("has-error").find('*[data-rel=error]').hide();
         $('[data-required=1]', frm).each(function(){
@@ -423,6 +424,7 @@
                 console.log("Error: " + e.attr('name'));
             }
         });
+        console.log(valid ? "SUCCESS" : "FAILED");
         return valid;
     }
 

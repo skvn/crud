@@ -189,6 +189,32 @@
 
             },
 
+            addContextVars: function(args, elem)
+            {
+                var context = elem.parents('[data-context-limiter]:first');
+                var naming = "name";
+                if (context.length <= 0)
+                {
+                    context = elem.parents("form");
+                }
+                else
+                {
+                    naming = context.data('context-limiter');
+                }
+                $("input,select", context).each(function(){
+                    if (naming === 'container')
+                    {
+                        args[$(this).parents('[data-ref]:first').data('ref')] = $(this).val();
+                    }
+                    else
+                    {
+                        args[$(this).attr('name')] = $(this).val();
+                    }
+                });
+
+                return args;
+            },
+
             init_edit_tab: function(model, id, args)
             {
                 args = args || {};
@@ -309,10 +335,8 @@
 
             args['command'] = elem.attr('href');
             args = crud.addModelParams(args, elem);
-            $("input,select", elem.parents("form")).each(function(){
-                args[$(this).attr('name')] = $(this).val();
-            });
-            
+            args = crud.addContextVars(args, elem);
+
             var com_url = crud.format_setting("model_command_url", args );
             var $tbl = $('table[data-list_table_ref='+args['model']+'_'+args['scope']+']');
             

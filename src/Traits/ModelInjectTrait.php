@@ -163,10 +163,10 @@ trait ModelInjectTrait
 
     protected function crudHandleTrackAuthors($op)
     {
-        $const = ($op == 'create') ? 'static::CREATED_BY' : 'static::UPDATED_BY';
-        $fld = ($op == 'create') ? 'created_by' : 'updated_by';
-        $prop = defined($const) ? constant($const) : $fld;
         if ($this->trackAuthors && $this->app['auth']->check()) {
+            $const = ($op == 'create') ? 'static::CREATED_BY' : 'static::UPDATED_BY';
+            $fld = ($op == 'create') ? 'created_by' : 'updated_by';
+            $prop = defined($const) ? constant($const) : $fld;
             $this->$prop = $this->app['auth']->user()->id;
         }
     }
