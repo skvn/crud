@@ -102,11 +102,11 @@ trait ModelConfigTrait
 
     public function setDates($dates)
     {
-        if (!is_array($dates)) {
+        if (! is_array($dates)) {
             $dates = [$dates];
         }
         foreach ($dates as $d) {
-            if (!in_array($d, $this->dates)) {
+            if (! in_array($d, $this->dates)) {
                 $this->dates[] = $d;
             }
         }
@@ -129,7 +129,7 @@ trait ModelConfigTrait
     public function getTreeConfig($prop = '')
     {
         if (isset($this->config['tree'])) {
-            if (!empty($prop)) {
+            if (! empty($prop)) {
                 if (isset($this->config['tree'][$prop])) {
                     return $this->config['tree'][$prop];
                 }
@@ -143,7 +143,7 @@ trait ModelConfigTrait
 
     public function isTree()
     {
-        return !empty($this->config['tree'])/* && !$this->getTreeConfig('use_list')*/;
+        return ! empty($this->config['tree'])/* && !$this->getTreeConfig('use_list')*/;
     }
 
 //    function getDescribedColumnValue($col, $format = false, $format_args = [])
@@ -231,7 +231,7 @@ trait ModelConfigTrait
 
     public function getFilesConfig($name, $param = null)
     {
-        if (!isset($this->config['file_params'][$name])) {
+        if (! isset($this->config['file_params'][$name])) {
             $conf = [
                 'path'        => '%l1'.DIRECTORY_SEPARATOR.'%l2',
                 'inline_path' => 'images'.DIRECTORY_SEPARATOR.'%tbl'.DIRECTORY_SEPARATOR.'%id',
@@ -265,7 +265,7 @@ trait ModelConfigTrait
             $this->config['file_params'][$name] = $conf;
         }
 
-        if (!empty($param)) {
+        if (! empty($param)) {
             return isset($this->config['file_params'][$name][$param]) ? $this->config['file_params'][$name][$param] : false;
         } else {
             return $this->config['file_params'][$name];
@@ -288,22 +288,22 @@ trait ModelConfigTrait
             foreach ($this->app['config']['view.paths'] as $path) {
                 if (isset($hints['crud'])) {
                     foreach ($hints['crud'] as $entry) {
-                        if (!in_array($entry, $target)) {
+                        if (! in_array($entry, $target)) {
                             $target[] = $entry;
                         }
                     }
                 }
-                if (!in_array($path, $target)) {
+                if (! in_array($path, $target)) {
                     $target[] = $path;
                 }
                 foreach ($add as $entry) {
                     $tpath = $path.$entry;
-                    if (!in_array($tpath, $source)) {
+                    if (! in_array($tpath, $source)) {
                         array_unshift($target, $tpath);
                     }
                 }
             }
-            if (!empty($target)) {
+            if (! empty($target)) {
                 $this->app['view']->getFinder()->prependNamespace($key, $target);
             }
         }

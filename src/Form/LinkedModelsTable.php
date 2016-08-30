@@ -26,7 +26,7 @@ class LinkedModelsTable extends Field implements FormControl
             foreach ($this->getControls($obj, false) as $c) {
                 $c->pullFromData($entry);
                 $c->pushToModel();
-                if ($c->config['required'] && !$c->getValue()) {
+                if ($c->config['required'] && ! $c->getValue()) {
                     $valid = false;
                 }
             }

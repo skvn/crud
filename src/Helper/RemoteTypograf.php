@@ -98,7 +98,7 @@ SOAPAction: "http://typograf.artlebedev.ru/webservices/ProcessText"
         $remoteTypograf = fsockopen($host, 80);
         fwrite($remoteTypograf, $SOAPRequest);
         $typografResponse = '';
-        while (!feof($remoteTypograf)) {
+        while (! feof($remoteTypograf)) {
             $typografResponse .= fread($remoteTypograf, 8192);
         }
         fclose($remoteTypograf);

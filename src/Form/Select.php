@@ -51,12 +51,12 @@ class Select extends Field implements FormControl, FormControlFilterable
     {
         $opts = [];
 
-        if (!empty($this->config['find']) && empty($this->config['model'])) {
+        if (! empty($this->config['find']) && empty($this->config['model'])) {
             $method = 'selectOptions'.studly_case($this->config['find']);
             if (method_exists($this->model, $method)) {
                 $opts = $this->formatOptionsArray($this->model->$method());
             }
-        } elseif (!empty($this->config['model'])) {
+        } elseif (! empty($this->config['model'])) {
             $opts = $this->getModelOptions();
         } else {
             $opts = [];
@@ -104,7 +104,7 @@ class Select extends Field implements FormControl, FormControlFilterable
     {
         $data = [];
         foreach ($option as $k => $v) {
-            if (!in_array($k, ['value', 'text'])) {
+            if (! in_array($k, ['value', 'text'])) {
                 $data[] = 'data-'.$k.'="'.$v.'"';
             }
         }
@@ -118,7 +118,7 @@ class Select extends Field implements FormControl, FormControlFilterable
 
         $modelObj = CrudModel :: createInstance($this->config['model'], null, is_numeric($this->value) ? $this->value : null);
         //$modelObj = new $class();
-        if (!empty($this->config['find'])) {
+        if (! empty($this->config['find'])) {
             $method = 'selectOptions'.studly_case($this->config['find']);
 
             return $this->formatOptionsArray($modelObj->$method($this->model));
@@ -127,7 +127,7 @@ class Select extends Field implements FormControl, FormControlFilterable
                 $collection = CrudModelCollectionBuilder :: create($modelObj)->fetch();
             } else {
                 $query = $class :: query();
-                if (!empty($this->config['sort'])) {
+                if (! empty($this->config['sort'])) {
                     foreach ($this->config['sort'] as $c => $d) {
                         $query->orderBy($c, $d);
                     }
@@ -148,7 +148,7 @@ class Select extends Field implements FormControl, FormControlFilterable
 
     public function isGrouped()
     {
-        if (!empty($this->config['options']['group_by'])) {
+        if (! empty($this->config['options']['group_by'])) {
             return true;
         }
 
@@ -159,7 +159,7 @@ class Select extends Field implements FormControl, FormControlFilterable
     {
         $options = [];
         $groupBy = $this->config['options']['group_by'];
-        $dataCols = (!empty($this->config['options']['data']) ? $this->config['options']['data'] : []);
+        $dataCols = (! empty($this->config['options']['data']) ? $this->config['options']['data'] : []);
         $data = [];
         foreach ($collection as $o) {
             if (count($dataCols)) {
@@ -247,12 +247,12 @@ class Select extends Field implements FormControl, FormControlFilterable
      */
     public function formatOptionsArray($options) : array
     {
-        if (!is_array($options) && !count($options)) {
+        if (! is_array($options) && ! count($options)) {
             return $options;
         }
 
 
-        if (!isset($options[0]['value'])) {
+        if (! isset($options[0]['value'])) {
             $ret = [];
             foreach ($options as $value => $text) {
                 $ret[] = [

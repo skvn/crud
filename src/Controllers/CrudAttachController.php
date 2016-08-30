@@ -21,7 +21,7 @@ class CrudAttachController extends Controller
             $fp = fopen($attachObj->attachGetPath(), 'rb');
             if (strpos($attachObj->mime_type, 'image') !== false) {
                 header('Content-Type: '.$attachObj->mime_type);
-                while (!feof($fp)) {
+                while (! feof($fp)) {
                     echo fread($fp, 1024);
                 }
             } else {
@@ -33,7 +33,7 @@ class CrudAttachController extends Controller
                     header('Content-Length: '.(string) filesize($attachObj->path));
                     header('Content-Transfer-Encoding: binary');
 
-                    while (!feof($fp)) {
+                    while (! feof($fp)) {
                         echo fread($fp, 1024);
                     }
                 }

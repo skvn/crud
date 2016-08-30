@@ -12,7 +12,7 @@ class Textarea extends Field implements FormControl, FormControlFilterable
 
     public function getFilterCondition()
     {
-        if (!empty($this->value)) {
+        if (! empty($this->value)) {
             return ['cond' => [$this->getFilterColumnName(), 'LIKE', '%'.$this->value.'%']];
         }
     }

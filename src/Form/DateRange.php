@@ -13,7 +13,7 @@ class DateRange extends Field implements FormControl
 
     public function pullFromModel()
     {
-        if (!empty($this->config['fields'])) {
+        if (! empty($this->config['fields'])) {
             $this->value = [
                 'from' => $this->model->getAttribute($this->config['fields'][0]),
                 'to'   => $this->model->getAttribute($this->config['fields'][1]),
@@ -42,7 +42,7 @@ class DateRange extends Field implements FormControl
 
     public function pullFromData(array $data)
     {
-        if (!empty($data[$this->name]) && strpos($data[$this->name], '~') !== false) {
+        if (! empty($data[$this->name]) && strpos($data[$this->name], '~') !== false) {
             $split = explode('~', $data[$this->name]);
             $this->value = [
                 'from' => Carbon :: parse($split[0]),
@@ -51,12 +51,12 @@ class DateRange extends Field implements FormControl
             //$this->value = $data[$this->name];
         } else {
             if (isset($data[$this->getFromFieldName()]) || isset($data[$this->getToFieldName()])) {
-                if (!empty($data[$this->getFromFieldName()])) {
+                if (! empty($data[$this->getFromFieldName()])) {
                     $this->value['from'] = Carbon :: parse($data[$this->getFromFieldName()]);
                 } else {
                     $this->value['from'] = null;
                 }
-                if (!empty($data[$this->getToFieldName()])) {
+                if (! empty($data[$this->getToFieldName()])) {
                     $this->value['to'] = Carbon :: parse($data[$this->getToFieldName()]);
                 } else {
                     $this->value['to'] = null;
@@ -67,7 +67,7 @@ class DateRange extends Field implements FormControl
 
     public function getFromFieldName()
     {
-        if (!empty($this->config['fields'])) {
+        if (! empty($this->config['fields'])) {
             return $this->config['fields'][0];
         }
 
@@ -76,7 +76,7 @@ class DateRange extends Field implements FormControl
 
     public function getToFieldName()
     {
-        if (!empty($this->config['fields'])) {
+        if (! empty($this->config['fields'])) {
             return $this->config['fields'][1];
         }
 
@@ -95,21 +95,21 @@ class DateRange extends Field implements FormControl
 
     public function getDefaultFrom()
     {
-        if (!empty($this->config['default']) && strpos($this->config['default'], '~') !== false) {
+        if (! empty($this->config['default']) && strpos($this->config['default'], '~') !== false) {
             return explode('~', $this->config['default'])[0];
         }
     }
 
     public function getDefaultTo()
     {
-        if (!empty($this->config['default']) && strpos($this->config['default'], '~') !== false) {
+        if (! empty($this->config['default']) && strpos($this->config['default'], '~') !== false) {
             return explode('~', $this->config['default'])[1];
         }
     }
 
     public function getFilterCondition()
     {
-        if (!empty($this->value)) {
+        if (! empty($this->value)) {
             $split = explode('~', $this->value);
             $col = $this->getFilterColumnName();
             if ($split[0] != '' && $split[1] != '') {

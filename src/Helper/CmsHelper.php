@@ -27,7 +27,7 @@ class CmsHelper
                 $item = $parent;
                 $item['kids'] = null;
 
-                if (!empty($parent['route'])) {
+                if (! empty($parent['route'])) {
                     if ($this->app['request']->url() == route($parent['route']['name'], $parent['route']['args'])) {
                         $item['active'] = true;
                     } else {
@@ -37,12 +37,12 @@ class CmsHelper
                     $item['active'] = false;
                 }
 
-                if (!empty($parent['kids'])) {
+                if (! empty($parent['kids'])) {
                     foreach ($parent['kids'] as $kindex => $kid) {
                         if (empty($kid['acl']) || $this->checkAcl($kid['acl'])) {
                             $item['kids'][$kindex] = $kid;
 
-                            if (!isset($kid['route']['args'])) {
+                            if (! isset($kid['route']['args'])) {
                                 $kid['route']['args'] = null;
                             }
                             if ($this->app['request']->url() == rtrim(route($kid['route']['name'], $kid['route']['args']), '?')) {
@@ -101,7 +101,7 @@ class CmsHelper
 
     public function getMenu($name)
     {
-        if (!empty($this->menus[$name])) {
+        if (! empty($this->menus[$name])) {
             return $this->menus[$name];
         }
     }
@@ -141,7 +141,7 @@ class CmsHelper
             'yandex',
 
         ];
-        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+        if (! empty($_SERVER['HTTP_USER_AGENT'])) {
             $user_agent = $_SERVER['HTTP_USER_AGENT'];
             foreach ($bot_agents as $bot) {
                 if (stripos($user_agent, $bot) !== false) {
@@ -197,13 +197,13 @@ class CmsHelper
 
         //$dateFormat='dd,mm,yyyy H:M'
 
-        if (!empty($time_stamp)) {
+        if (! empty($time_stamp)) {
             $mysqldate = date('Y-m-d H:i:s', $time_stamp);
         } else {
             $mysqldate = date('Y-m-d H:i:s');
         }
 
-        if (!empty($mysqldate)) {
+        if (! empty($mysqldate)) {
             $datearr = explode(' ', $mysqldate);
             $date = $datearr[0];
             if (isset($datearr[1])) {
@@ -258,7 +258,7 @@ class CmsHelper
             }
 
             if ($month != '') {
-                if (!substr_count($dateFormat, 'mm')) {
+                if (! substr_count($dateFormat, 'mm')) {
                     $month = intval($month);
                 }
             }

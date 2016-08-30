@@ -23,7 +23,7 @@ class RelationMorphMany extends Relation
         $col_class = $this->relation->getPlainMorphType();
         $delete = $this->config['on_delete'] ?? false;
         $this->get()->each(function ($item, $key) use ($delete, $col_id, $col_class, $id) {
-            if (!is_null($id)) {
+            if (! is_null($id)) {
                 if ($item->getKey() != $id) {
                     return;
                 }

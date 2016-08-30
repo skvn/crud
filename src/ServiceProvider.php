@@ -13,7 +13,7 @@ class ServiceProvider extends LServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'crud');
 
         //Assets
-        if (!$this->isLumen()) {
+        if (! $this->isLumen()) {
             $this->publishes([__DIR__.'/../config/' => config_path().'/'], 'config');
             $this->publishes([__DIR__.'/../public/' => public_path().'/vendor/crud/'], 'assets');
             $this->publishes([__DIR__.'/../database/' => base_path('database')], 'database');

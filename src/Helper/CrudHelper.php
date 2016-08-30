@@ -68,7 +68,7 @@ class CrudHelper
                 }
                 $opts[] = $opt;
             } else {
-                if (!isset($opts[$item[$groupField]])) {
+                if (! isset($opts[$item[$groupField]])) {
                     $opts[$item[$groupField]] = ['title' => $item[$groupField], 'options' => []];
                 }
                 $opt = ['value' => $item[$valueField], 'text' => $item[$textField]];

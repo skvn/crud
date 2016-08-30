@@ -40,7 +40,7 @@ trait ModelFormTrait
         if (empty($config['type'])) {
             return $config;
         }
-        if (!empty($config['hint_default']) && !empty($config['hint']) &&  $config['hint'] === 'auto') {
+        if (! empty($config['hint_default']) && ! empty($config['hint']) &&  $config['hint'] === 'auto') {
             $config['hint'] = $this->classShortName.'_fields_'.$name;
         }
 
@@ -49,14 +49,14 @@ trait ModelFormTrait
 
     public function getForm($args = [])
     {
-        if (!$this->form) {
+        if (! $this->form) {
             $this->form = Form :: create([
                 'crudObj' => $this,
                 'props'   => $args,
             ]);
 
             $form_alias = $this->getScopeParam('form');
-            if (!empty($form_alias)) {
+            if (! empty($form_alias)) {
                 $config = $this->confParam('forms.'.$form_alias);
                 if ($config) {
                     $plain = isset($config[0]);
@@ -67,7 +67,7 @@ trait ModelFormTrait
                             $this->form->addTab($idx, array_filter($fld, function ($k) {
                                 return $k != 'fields';
                             }, ARRAY_FILTER_USE_KEY));
-                            if (!empty($fld['fields'])) {
+                            if (! empty($fld['fields'])) {
                                 foreach ($fld['fields'] as $field) {
                                     $this->form->addField($field, $this->getField($field, true), $idx);
                                 }
@@ -77,7 +77,7 @@ trait ModelFormTrait
                 }
             }
 
-            if (!empty($args['fillData'])) {
+            if (! empty($args['fillData'])) {
                 $this->form->import($args['fillData']);
             }
         }
@@ -96,7 +96,7 @@ trait ModelFormTrait
         if ($rel !== false) {
             try {
                 $relObj = $this->{$rel['rel']};
-                if (!is_object($relObj)) {
+                if (! is_object($relObj)) {
                     return '';
                 }
                 $value = $relObj->{$rel['attr']};
@@ -105,7 +105,7 @@ trait ModelFormTrait
             }
         } elseif ($this->__isset($col)) {
             $field = $this->getField($col);
-            if (!empty($field['type'])) {
+            if (! empty($field['type'])) {
                 $control = Form :: createControl($this, $field);
                 $value = $control->getOutputValue();
             } else {
@@ -114,7 +114,7 @@ trait ModelFormTrait
         } else {
             return;
         }
-        if (!empty($args['formatter'])) {
+        if (! empty($args['formatter'])) {
             $formatter = 'crudFormatValue'.Str :: camel($args['formatter']);
             if (method_exists($this, $formatter)) {
                 $value = $this->$formatter($value, $args);

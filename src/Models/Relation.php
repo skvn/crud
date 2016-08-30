@@ -25,7 +25,7 @@ abstract class Relation
     {
         //$name = Str :: camel($name);
         $name = $this->config['name'];
-        if (!$this->model->relationLoaded($name)) {
+        if (! $this->model->relationLoaded($name)) {
             $data = $this->getRelation($name)->getResults();
             $this->model->setRelation($name, $data);
         }
@@ -41,7 +41,7 @@ abstract class Relation
 
     protected function sort()
     {
-        if (!empty($this->config['sort'])) {
+        if (! empty($this->config['sort'])) {
             foreach ($this->config['sort'] as $col => $dir) {
                 $this->relation->orderBy($col, $dir);
             }

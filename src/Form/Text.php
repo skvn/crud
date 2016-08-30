@@ -12,14 +12,14 @@ class Text extends Field implements FormControl, FormControlFilterable
 
     public function pullFromModel()
     {
-        if (!in_array($this->name, $this->model->getHidden())) {
+        if (! in_array($this->name, $this->model->getHidden())) {
             $this->value = $this->model->getAttribute($this->field);
         }
     }
 
     public function getFilterCondition()
     {
-        if (!empty($this->value)) {
+        if (! empty($this->value)) {
             $col = $this->getFilterColumnName();
             $value = str_replace(['*', '?'], ['%', '_'], $this->value);
             if (strpos($value, '~') === 0) {

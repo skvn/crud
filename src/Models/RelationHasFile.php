@@ -26,7 +26,7 @@ class RelationHasFile extends Relation
                 $obj->delete();
             }
         }
-        if (!is_null($id)) {
+        if (! is_null($id)) {
             $this->model->setAttribute($this->relation->getForeignKey(), null);
             $this->model->save();
         }
@@ -38,7 +38,7 @@ class RelationHasFile extends Relation
         if ($this->dirtyValue instanceof UploadedFile) {
             $obj = $class :: findOrNew($this->model->getAttribute($this->config['field']));
             $fileInfo = $obj->attachStoreTmpFile($this->dirtyValue);
-            if (!empty($fileInfo['originalPath'])) {
+            if (! empty($fileInfo['originalPath'])) {
                 $obj->attachStoreFile($fileInfo, $this->model->getFilesConfig($fileInfo['originalName']));
                 $this->model->setAttribute($this->relation->getForeignKey(), $obj->getKey());
                 $this->model->save();

@@ -126,7 +126,7 @@ trait ModelTreeTrait
 
     public function makeLastChildOf($parent)
     {
-        if (!$parent->exists) {
+        if (! $parent->exists) {
             throw new \Exception('Parent doesnt exist');
         }
         if ($this->exists && $this->isAncestor($parent)) {
@@ -157,7 +157,7 @@ trait ModelTreeTrait
 
     public function treeReorderRows($args = [])
     {
-        if (!empty($args['reorder'])) {
+        if (! empty($args['reorder'])) {
             foreach ($args['reorder'] as $id => $priority) {
                 \DB :: table($this->getTable())->where('id', $id)->update([$this->treeOrderColumn() => $priority]);
             }
@@ -210,7 +210,7 @@ trait ModelTreeTrait
 
     public function isDescendant($ancestor)
     {
-        if (!$this->exists) {
+        if (! $this->exists) {
             throw new \Exception('Model doesnt exist');
         }
 
@@ -219,7 +219,7 @@ trait ModelTreeTrait
 
     public function isAncestor($descendant)
     {
-        if (!$this->exists) {
+        if (! $this->exists) {
             throw new \Exception('Model doesnt exist');
         }
 
@@ -228,11 +228,11 @@ trait ModelTreeTrait
 
     public function isLeaf()
     {
-        if (!$this->exists) {
+        if (! $this->exists) {
             throw new \Exception('Model doesnt exist');
         }
 
-        return !count($this->children(1)->get()->toArray());
+        return ! count($this->children(1)->get()->toArray());
     }
 
 //    public function relativeDepth($object)
@@ -400,7 +400,7 @@ trait ModelTreeTrait
             return $this->save();
         }
         if (empty($input[$this->treePidColumn()])) {
-            if (!$this->exists) {
+            if (! $this->exists) {
                 throw new TreeException('Unable to create tree node. Parent is not set');
             }
 
@@ -416,7 +416,7 @@ trait ModelTreeTrait
 //            $parent = $this->rootId();
 //        }
 
-        if (!$this->exists) {
+        if (! $this->exists) {
             $this->moveTreeAction($parent_id, 'last_child');
         } else {
             $oldParent = $this->getAttribute($this->treePidColumn());

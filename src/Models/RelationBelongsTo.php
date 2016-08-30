@@ -21,7 +21,7 @@ class RelationBelongsTo extends Relation
         if (($this->config['on_delete'] ?? false) === 'delete') {
             $this->get()->delete();
         }
-        if (!is_null($id)) {
+        if (! is_null($id)) {
             $this->model->setAttribute($this->relation->getForeignField(), null);
             $this->model->save();
         }

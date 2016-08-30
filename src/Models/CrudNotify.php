@@ -12,7 +12,7 @@ class CrudNotify extends CrudModel
         if (empty($args['message'])) {
             throw new \Exception('Crud::Notify message is not set');
         }
-        if (!empty($args['broadcast']) && empty($args['ttl'])) {
+        if (! empty($args['broadcast']) && empty($args['ttl'])) {
             throw new \Exception('Crud::Notify broadcast message must have time to live');
         }
         if (empty($args['created_by'])) {
@@ -70,15 +70,15 @@ class CrudNotify extends CrudModel
                 continue;
             }
             if (is_callable($validator)) {
-                if (!$validator($entry)) {
+                if (! $validator($entry)) {
                     continue;
                 }
             }
             $notify = $entry;
             break;
         }
-        if (!empty($notify)) {
-            if ($notify->target_user_id || !$notify->broadcast) {
+        if (! empty($notify)) {
+            if ($notify->target_user_id || ! $notify->broadcast) {
                 app()['db']->table('crud_notify')->where('id', '=', $notify->id)->update(['delivered' => 1, 'delivered_at' => time()]);
             } else {
                 app()['db']->table('crud_notify')->where('id', '=', $notify->id)->update(['delivered_at' => time()]);

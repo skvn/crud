@@ -21,7 +21,7 @@ class CrudModelCollectionBuilder
         $this->params = $args;
         $this->params['buttons'] = $this->model->getList()->getParam('buttons');
         $this->params['sort'] = $this->model->getList()->getParam('sort');
-        if (!isset($this->params['view_type'])) {
+        if (! isset($this->params['view_type'])) {
             $this->params['view_type'] = '';
         }
     }
@@ -90,7 +90,7 @@ class CrudModelCollectionBuilder
 
     public function createCollection()
     {
-        if (!empty($this->params['raw'])) {
+        if (! empty($this->params['raw'])) {
             $this->collectionQuery = $this->model->newQuery();
 
             return $this;
@@ -151,7 +151,7 @@ class CrudModelCollectionBuilder
             $basic->orderBy($this->model->treePathColumn(), 'asc');
             $basic->orderBy($this->model->treeOrderColumn(), 'asc');
         } else {
-            if (!empty($this->params['sort'])) {
+            if (! empty($this->params['sort'])) {
                 foreach ($this->params['sort'] as $o => $v) {
                     $basic->orderBy($o, $v);
                 }
@@ -174,14 +174,14 @@ class CrudModelCollectionBuilder
         } else {
             $conditions = $this->model->appendConditions($conditions);
         }
-        if (!empty($this->params['search'])) {
+        if (! empty($this->params['search'])) {
             $c = [];
             foreach ($this->columns as $column) {
-                if (!empty($column['searchable'])) {
+                if (! empty($column['searchable'])) {
                     $c[] = [$column['data'], 'like', $this->params['search'].'%'];
                 }
             }
-            if (!empty($c)) {
+            if (! empty($c)) {
                 $conditions[] = ['cond' => $c];
             }
         }
@@ -212,7 +212,7 @@ class CrudModelCollectionBuilder
 
         foreach ($conditions as $cond) {
             if (empty($cond['join'])) {
-                if (!empty($cond['cond'])) {
+                if (! empty($cond['cond'])) {
                     $this->applyFilterWhere($cond['cond']);
                 }
             } else {
@@ -326,17 +326,17 @@ class CrudModelCollectionBuilder
     {
         $columns = $this->params['columns'] ?? $this->columns;
 
-        if (!empty($this->params['order'])) {
+        if (! empty($this->params['order'])) {
             $this->collectionQuery->getQuery()->orders = [];
             $order = $this->params['order'];
             if (is_array($order)) {
                 foreach ($order as $oc) {
-                    $this->collectionQuery->orderBy(!empty($columns[$oc['column']]['name']) ? $columns[$oc['column']]['name'] : $columns[$oc['column']]['data'], $oc['dir']);
+                    $this->collectionQuery->orderBy(! empty($columns[$oc['column']]['name']) ? $columns[$oc['column']]['name'] : $columns[$oc['column']]['data'], $oc['dir']);
                 }
             }
         }
         $data = [];
-        $total = !empty($this->collectionQuery->cnt) ? $this->collectionQuery->cnt : 0;
+        $total = ! empty($this->collectionQuery->cnt) ? $this->collectionQuery->cnt : 0;
         $q = $this->collectionQuery->getQuery();
         $this->app['session']->set('current_query_info', ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
         \Log :: info($this->collectionQuery->getQuery()->toSQL(), ['browsify' => true]);
@@ -348,10 +348,10 @@ class CrudModelCollectionBuilder
             foreach ($columns as $col) {
                 $row[$col['data']] = '';
                 $args = [];
-                if (!empty($col['format'])) {
+                if (! empty($col['format'])) {
                     $args['formatter'] = $col['format'];
                 }
-                if (!empty($col['format_args'])) {
+                if (! empty($col['format_args'])) {
                     $args = array_merge($args, $col['format_args']);
                 }
                 $row[$col['data']] = $obj->formatted($col['data'], $args);
@@ -385,16 +385,16 @@ class CrudModelCollectionBuilder
 
         $this->collectionQuery->withCount('children');
 
-        if (!empty($this->params['order'])) {
+        if (! empty($this->params['order'])) {
             $order = $this->params['order'];
             if (is_array($order)) {
                 foreach ($order as $oc) {
-                    $this->collection->orderBy(!empty($columns[$oc['column']]['name']) ? $columns[$oc['column']]['name'] : $columns[$oc['column']]['data'], $oc['dir']);
+                    $this->collection->orderBy(! empty($columns[$oc['column']]['name']) ? $columns[$oc['column']]['name'] : $columns[$oc['column']]['data'], $oc['dir']);
                 }
             }
         }
         $data = [];
-        $total = !empty($this->collectionQuery->cnt) ? $this->collectionQuery->cnt : 0;
+        $total = ! empty($this->collectionQuery->cnt) ? $this->collectionQuery->cnt : 0;
         $q = $this->collectionQuery->getQuery();
         $this->app['session']->set('current_query_info', ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
         \Log :: info($this->collectionQuery->getQuery()->toSQL(), ['browsify' => true]);
@@ -406,10 +406,10 @@ class CrudModelCollectionBuilder
             foreach ($columns as $col) {
                 $row[$col['data']] = '';
                 $args = [];
-                if (!empty($col['format'])) {
+                if (! empty($col['format'])) {
                     $args['formatter'] = $col['format'];
                 }
-                if (!empty($col['format_args'])) {
+                if (! empty($col['format_args'])) {
                     $args = array_merge($args, $col['format_args']);
                 }
                 $row[$col['data']] = $obj->formatted($col['data'], $args);
@@ -448,15 +448,15 @@ class CrudModelCollectionBuilder
         $ret = [];
         foreach ($data as $row) {
             $text = $row->getTitle();
-            if (!empty($this->columns)) {
+            if (! empty($this->columns)) {
                 foreach ($this->columns as $col) {
                     $text .= ' <span class="badge">'.$row->formatted($col['data']).'</span>';
                 }
             }
-            if (!empty($this->params['buttons']['single_edit'])) {
+            if (! empty($this->params['buttons']['single_edit'])) {
                 $text .= '&nbsp;&nbsp;<a class="text-info" data-id="'.$row->id.'" data-click="crud_event" data-event="crud.edit_tree_element"><i class="fa fa-edit"> </i></a>';
             }
-            if (!empty($this->params['buttons']['single_delete'])) {
+            if (! empty($this->params['buttons']['single_delete'])) {
                 $text .= '&nbsp;&nbsp;<a class="text-danger" data-confirm="'.trans('crud::messages.really_delete').'?" data-id="'.$row->id.'" data-click="crud_event" data-event="crud.delete_tree_element" ><i class="fa fa-trash-o"> </i></a>';
             }
             $node = [

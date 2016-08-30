@@ -45,7 +45,7 @@ class CrudController extends Controller
     {
         $obj = CrudModel :: createInstance($model, $scope);
 
-        $view = !empty($args['view']) ? $args['view'] : $obj->resolveView('index');
+        $view = ! empty($args['view']) ? $args['view'] : $obj->resolveView('index');
 
         return $this->view->make($view, ['crudObj' => $obj, 'crudList' => $obj->getList()]);
     }
@@ -56,7 +56,7 @@ class CrudController extends Controller
     {
         $obj = CrudModel :: createInstance($model, $scope);
 
-        $view = !empty($args['view']) ? $args['view'] : $obj->resolveView('popup_index');
+        $view = ! empty($args['view']) ? $args['view'] : $obj->resolveView('popup_index');
 
         return $this->view->make($view, ['crudObj' => $obj, 'crudList' => $obj->getList()]);
     }
@@ -69,7 +69,7 @@ class CrudController extends Controller
 
         if ($this->request->ajax()) {
             $params = $this->request->all();
-            $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
+            $params['search'] = ! empty($params['search']['value']) ? $params['search']['value'] : '';
 
             return CrudModelCollectionBuilder :: createTree($obj, $params)
                 ->applyContextFilter()
@@ -92,7 +92,7 @@ class CrudController extends Controller
         $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE);
         $class = CrudModel :: resolveClass($model);
 
-        if (!($obj->confParam('title_field'))) {
+        if (! ($obj->confParam('title_field'))) {
             throw new CrudException('Unable to init AutocompleteList: title_field is not configured');
         }
 
@@ -129,7 +129,7 @@ class CrudController extends Controller
         $skip = (int) $this->request->get('start', 0);
         $take = (int) $this->request->get('length', 0);
         $params = $this->request->all();
-        $params['search'] = !empty($params['search']['value']) ? $params['search']['value'] : '';
+        $params['search'] = ! empty($params['search']['value']) ? $params['search']['value'] : '';
 
         return CrudModelCollectionBuilder :: createDataTables($obj, $params)
             ->applyContextFilter()
@@ -156,7 +156,7 @@ class CrudController extends Controller
         $xls[] = $row;
 
         $query = $this->app['session']->get('current_query_info');
-        if (empty($query) || !isset($query['sql']) || !isset($query['bind'])) {
+        if (empty($query) || ! isset($query['sql']) || ! isset($query['bind'])) {
             $q = CrudModelCollectionBuilder :: createDataTables($obj, $params)
                 ->applyContextFilter()->getCollectionQuery()->getQuery();
             $query = ['sql' => $q->toSQL(), 'bind' => $q->getBindings()];
@@ -222,7 +222,7 @@ class CrudController extends Controller
             } else {
                 //$obj->fillFromRequest($this->request->all());
 
-                if (!$obj->save()) {
+                if (! $obj->save()) {
                     return ['success' => false, 'error' => implode("\n", array_values($obj->getErrors()))];
                 }
 
@@ -361,9 +361,9 @@ class CrudController extends Controller
             fwrite($fp, "User-Agent: PHP Script\n");
             fwrite($fp, "Connection: close\n\n");
             fwrite($fp, $data);
-            while (fgets($fp, 2048) != "\r\n" && !feof($fp));
+            while (fgets($fp, 2048) != "\r\n" && ! feof($fp));
             $buf = '';
-            while (!feof($fp)) {
+            while (! feof($fp)) {
                 $buf .= fread($fp, 2048);
             }
             fclose($fp);
