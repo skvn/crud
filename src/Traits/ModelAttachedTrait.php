@@ -31,7 +31,7 @@ trait ModelAttachedTrait
         $this->forceFill(['file_name' => $fileInfo['originalName'],
             'mime_type'               => $fileInfo['originalMime'],
             'file_size'               => $fileInfo['originalSize'],
-            'title'                   => (!empty($fileInfo['title']) ? $fileInfo['title'] : ''),
+            'title'                   => (! empty($fileInfo['title']) ? $fileInfo['title'] : ''),
             'path'                    => $newPath,
         ]);
         $this->save();
@@ -52,7 +52,7 @@ trait ModelAttachedTrait
         $ret = $this->attachCreateFileInfo($file);
         $name = str_replace('.', '_', uniqid('tmp', true));
         $target = $this->app['config']->get('attach.root').DIRECTORY_SEPARATOR.'tmp';
-        if (!file_exists($target)) {
+        if (! file_exists($target)) {
             $this->app['files']->makeDirectory($target, 0755, true, true);
         }
         $file->move($target, $name);
@@ -66,7 +66,7 @@ trait ModelAttachedTrait
     {
         $parts = [];
         $parts[] = $args['path'];
-        $parts[] = str_replace('.', '_', uniqid(!empty($args['prefix']) ? $args['prefix'] : 'img', true)).'.'.$fileInfo['originalExt'];
+        $parts[] = str_replace('.', '_', uniqid(! empty($args['prefix']) ? $args['prefix'] : 'img', true)).'.'.$fileInfo['originalExt'];
 
         return implode(DIRECTORY_SEPARATOR, $parts);
     }
@@ -94,7 +94,7 @@ trait ModelAttachedTrait
         try {
             $filename = $this->attachGetPath();
             $resized_filename = str_replace($this->app['config']->get('attach.root'), $this->app['config']->get('attach.resized_path'), dirname($filename)).DIRECTORY_SEPARATOR.$w.'z'.$h.'_'.($crop ? 'crop' : 'full').'_'.basename($filename);
-            if (!file_exists($resized_filename)) {
+            if (! file_exists($resized_filename)) {
                 \Log :: info('resizing', ['browsify' => true]);
                 $img = \Image :: make($filename);
                 if ($crop) {
@@ -104,7 +104,7 @@ trait ModelAttachedTrait
                         $constraint->aspectRatio();
                     });
                 }
-                if (!file_exists(dirname($resized_filename))) {
+                if (! file_exists(dirname($resized_filename))) {
                     $this->app['files']->makeDirectory(dirname($resized_filename), 0755, true, true);
                 }
                 $img->save($resized_filename);
@@ -131,7 +131,7 @@ trait ModelAttachedTrait
     public function getDownloadLinkAttribute()
     {
         $symlink = $this->app['config']->get('attach.symlink');
-        if (!empty($symlink)) {
+        if (! empty($symlink)) {
             return '/'.str_replace($this->app['config']->get('attach.root'), $symlink, $this->attachGetPath());
         }
 

@@ -30,7 +30,7 @@ class DateTime extends Field implements FormControl
 
     public function pullFromData(array $data)
     {
-        if (!empty($data[$this->field])) {
+        if (! empty($data[$this->field])) {
             $this->value = Carbon :: parse($data[$this->field]);
         } else {
             $this->value = null;
@@ -56,7 +56,7 @@ class DateTime extends Field implements FormControl
 
     public function controlValidateConfig():bool
     {
-        return !empty($this->config['format']);
+        return ! empty($this->config['format']);
     }
 
     private function isInt()

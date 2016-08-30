@@ -12,14 +12,14 @@ class Number extends Field implements FormControl, FormControlFilterable
 
     public function pullFromModel()
     {
-        if (!in_array($this->name, $this->model->getHidden())) {
+        if (! in_array($this->name, $this->model->getHidden())) {
             $this->value = $this->model->getAttribute($this->field);
         }
     }
 
     public function getFilterCondition()
     {
-        if (!empty($this->value)) {
+        if (! empty($this->value)) {
             return ['cond' => [$this->getFilterColumnName(), '=',  $this->value]];
         }
     }

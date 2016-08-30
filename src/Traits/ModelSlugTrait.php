@@ -28,7 +28,7 @@ trait ModelSlugTrait
 
     public function getFrontUrlAttribute()
     {
-        if (!defined('static::SLUG_URL')) {
+        if (! defined('static::SLUG_URL')) {
             throw new ConfigException('Url pattern not defined');
         }
         if ($this->getAttribute(static :: slugColumn())) {
@@ -71,7 +71,7 @@ trait ModelSlugTrait
     private function generateUniqueSlug($slug)
     {
         $column = static :: slugColumn();
-        if (!preg_match('#^[a-zA-Z0-9_-]+$#', $slug)) {
+        if (! preg_match('#^[a-zA-Z0-9_-]+$#', $slug)) {
             if (defined('static::SLUG_FORCE_TRANSLIT')) {
                 $slug = $this->translitRussian($slug);
                 $slug = Str :: slug($slug);
@@ -134,7 +134,7 @@ trait ModelSlugTrait
 
     public function slugTransliterate($args = [])
     {
-        if (!empty($args['source']) && !empty($args[$args['source']])) {
+        if (! empty($args['source']) && ! empty($args[$args['source']])) {
             $slug = $this->translitRussian($args[$args['source']]);
             $slug = Str :: slug($slug);
 

@@ -39,7 +39,7 @@ class Relations implements ArrayAccess
 
     public function define($name)
     {
-        if (!$this->defined($name)) {
+        if (! $this->defined($name)) {
             $info = $this->model->getField($name, true);
             $class = $this->model->getApp()['config']->get('crud_common.relations')[$info['relation']] ?? null;
             if (empty($class)) {
@@ -115,7 +115,7 @@ class Relations implements ArrayAccess
     public function delete()
     {
         foreach ($this->model->confParam('fields') as $name => $field) {
-            if (!empty($field['relation'])) {
+            if (! empty($field['relation'])) {
                 $this->define($name)->delete();
             }
         }

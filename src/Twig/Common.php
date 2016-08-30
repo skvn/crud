@@ -26,13 +26,13 @@ class Common extends Twig_Extension
         if (strpos($asset, '/') === 0) {
             return $asset.'?s='.$this->app['config']->get('app.serial');
         }
-        if (!$use_skin) {
+        if (! $use_skin) {
             return '/vendor/'.$package.'/'.$asset.'?s='.$this->app['config']->get('app.serial');
         } else {
             $path = '/skins/';
             $path  .= $this->app['config']->get('view.skin').'/';
 
-            if (!empty($package)) {
+            if (! empty($package)) {
                 $path .= 'vendor/'.$package.'/';
             }
 

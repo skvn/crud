@@ -35,7 +35,7 @@ trait ModelHistoryTrackTrait
             return;
         }
         $track_cols = array_filter($this->getFieldsByField(), function ($item) {
-            if (!empty($item['track_history'])) {
+            if (! empty($item['track_history'])) {
                 return true;
             }
         });

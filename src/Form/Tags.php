@@ -23,7 +23,7 @@ class Tags extends Field implements FormControl
 
     public function pullFromData(array $data)
     {
-        if (!empty($data[$this->name])) {
+        if (! empty($data[$this->name])) {
             if (is_array($data[$this->name])) {
                 $this->value = $data[$this->name];
             } else {
@@ -39,7 +39,7 @@ class Tags extends Field implements FormControl
         $ids = [];
         $class = CrudModel :: resolveClass($this->config['model']);
         $dummyModel = new $class();
-        if (!empty($this->value)) {
+        if (! empty($this->value)) {
             foreach ($this->value as $title) {
                 $obj = $class::firstOrCreate([$dummyModel->confParam('title_field') => trim($title)]);
                 $ids[] = $obj->getKey();

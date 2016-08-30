@@ -29,7 +29,7 @@ class Tree extends Field implements FormControl
 
     public function pullFromData(array $data)
     {
-        if (!empty($data[$this->name])) {
+        if (! empty($data[$this->name])) {
             if (is_array($data[$this->name])) {
                 $this->value = $data[$this->name];
             } else {
@@ -65,11 +65,11 @@ class Tree extends Field implements FormControl
         $class = CrudModel :: resolveClass($this->config['model']);
         $modelObj = new $class();
 
-        if (!empty($this->config['find']) && !empty($this->config['model'])) {
+        if (! empty($this->config['find']) && ! empty($this->config['model'])) {
             $method = $method = 'selectOptions'.studly_case($this->config['find']);
 
             $val = $this->getValue();
-            if (!is_array($val)) {
+            if (! is_array($val)) {
                 if ($val instanceof Collection) {
                     $val = $val->toArray();
                 } elseif (is_scalar($val)) {
@@ -80,10 +80,10 @@ class Tree extends Field implements FormControl
             return $modelObj->$method($this->getName(), $val);
         }
 
-        if (!empty($this->config['model'])) {
+        if (! empty($this->config['model'])) {
             return CrudModelCollectionBuilder :: createTree($modelObj)
                         ->fetch();
-        } elseif (!empty($this->config['find']) && empty($this->config['model'])) {
+        } elseif (! empty($this->config['find']) && empty($this->config['model'])) {
             $method = $method = 'selectOptions'.studly_case($this->config['find']);
 
             return $this->model->{$method}($this->getName());

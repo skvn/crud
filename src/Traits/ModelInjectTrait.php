@@ -10,7 +10,7 @@ trait ModelInjectTrait
 
     public static function registerPreconstruct(callable $handler)
     {
-        if (!isset(static :: $_preconstruct[static :: class])) {
+        if (! isset(static :: $_preconstruct[static :: class])) {
             static :: $_preconstruct[static :: class] = [];
         }
         static :: $_preconstruct[static :: class][] = $handler;
@@ -18,7 +18,7 @@ trait ModelInjectTrait
 
     public static function registerPostconstruct(callable $handler)
     {
-        if (!isset(static :: $_postconstruct[static :: class])) {
+        if (! isset(static :: $_postconstruct[static :: class])) {
             static :: $_postconstruct[static :: class] = [];
         }
         static :: $_postconstruct[static :: class][] = $handler;
@@ -26,7 +26,7 @@ trait ModelInjectTrait
 
     public static function registerSetter(callable $handler)
     {
-        if (!isset(static :: $_setters[static :: class])) {
+        if (! isset(static :: $_setters[static :: class])) {
             static :: $_setters[static :: class] = [];
         }
         static :: $_setters[static :: class][] = $handler;
@@ -34,7 +34,7 @@ trait ModelInjectTrait
 
     public function preconstruct()
     {
-        if (!empty(static :: $_preconstruct[static :: class])) {
+        if (! empty(static :: $_preconstruct[static :: class])) {
             foreach (static :: $_preconstruct[static :: class] as $handler) {
                 $handler($this);
             }
@@ -43,7 +43,7 @@ trait ModelInjectTrait
 
     public function postconstruct()
     {
-        if (!empty(static :: $_postconstruct[static :: class])) {
+        if (! empty(static :: $_postconstruct[static :: class])) {
             foreach (static :: $_postconstruct[static :: class] as $handler) {
                 $handler($this);
             }
@@ -52,7 +52,7 @@ trait ModelInjectTrait
 
     public function callSetters($key, $value)
     {
-        if (!empty(static :: $_setters[static :: class])) {
+        if (! empty(static :: $_setters[static :: class])) {
             foreach (static :: $_setters[static :: class] as $handler) {
                 if ($handler($this, $key, $value) === true) {
                     return true;

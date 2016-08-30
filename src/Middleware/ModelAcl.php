@@ -18,9 +18,9 @@ class ModelAcl
     public function handle($request, Closure $next)
     {
         $modelName = $request->route()->parameter('model');
-        if (!empty($modelName)) {
+        if (! empty($modelName)) {
             $modelInst = CrudModel::createInstance($modelName);
-            if (!$modelInst->checkAcl()) {
+            if (! $modelInst->checkAcl()) {
                 if ($request->ajax() || $request->wantsJson()) {
                     return response('Unauthorized.', 401);
                 } else {

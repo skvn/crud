@@ -12,7 +12,7 @@ class Range extends Field implements FormControl, FormControlFilterable
 
     public function pullFromModel()
     {
-        if (!empty($this->config['fields'])) {
+        if (! empty($this->config['fields'])) {
             $this->value = $this->model->getAttribute($this->config['fields'][0]).'~'.$this->model->getAttribute($this->config['fields'][1]);
         }
     }
@@ -25,7 +25,7 @@ class Range extends Field implements FormControl, FormControlFilterable
 
     public function getFromFieldName()
     {
-        if (!empty($this->config['fields'])) {
+        if (! empty($this->config['fields'])) {
             return $this->config['fields'][0];
         }
 
@@ -34,7 +34,7 @@ class Range extends Field implements FormControl, FormControlFilterable
 
     public function getToFieldName()
     {
-        if (!empty($this->config['fields'])) {
+        if (! empty($this->config['fields'])) {
             return $this->config['fields'][1];
         }
 
@@ -57,21 +57,21 @@ class Range extends Field implements FormControl, FormControlFilterable
 
     public function getDefaultFrom()
     {
-        if (!empty($this->config['default']) && strpos($this->config['default'], '~') !== false) {
+        if (! empty($this->config['default']) && strpos($this->config['default'], '~') !== false) {
             return explode('~', $this->config['default'])[0];
         }
     }
 
     public function getDefaultTo()
     {
-        if (!empty($this->config['default']) && strpos($this->config['default'], '~') !== false) {
+        if (! empty($this->config['default']) && strpos($this->config['default'], '~') !== false) {
             return explode('~', $this->config['default'])[1];
         }
     }
 
     public function pullFromData(array $data)
     {
-        if (!empty($data[$this->name]) && strpos($data[$this->name], '~') !== false) {
+        if (! empty($data[$this->name]) && strpos($data[$this->name], '~') !== false) {
             $this->value = $data[$this->name];
         } else {
             if (isset($data[$this->getFromFieldName()]) || isset($data[$this->getToFieldName()])) {
@@ -90,7 +90,7 @@ class Range extends Field implements FormControl, FormControlFilterable
 
     public function getFilterCondition()
     {
-        if (!empty($this->value)) {
+        if (! empty($this->value)) {
             $split = explode('~', $this->value);
             $col = $this->getFilterColumnName();
             if ($split[0] != '' && $split[1] != '') {

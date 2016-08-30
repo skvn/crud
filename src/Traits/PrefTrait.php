@@ -53,7 +53,7 @@ trait PrefTrait
     public function crudPrefGetVal($type, $scope)
     {
         $pref = $this->crudPrefGet($type, $scope);
-        if (!empty($pref) && !empty($pref['pref'])) {
+        if (! empty($pref) && ! empty($pref['pref'])) {
             return json_decode($pref['pref'], true);
         }
     }
@@ -78,7 +78,7 @@ trait PrefTrait
 
     protected function crudPrefSave($pref)
     {
-        if (!empty($pref['id'])) {
+        if (! empty($pref['id'])) {
             $id = $pref['id'];
             unset($pref['id']);
             $this->app['db']->table('crud_user_pref')->where('id', $id)->update($pref);

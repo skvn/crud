@@ -27,7 +27,7 @@ class Filter
         $filter = new self();
         foreach ($args as $k => $v) {
             $method = camel_case('set_'.$k);
-            if (!method_exists($filter, $method)) {
+            if (! method_exists($filter, $method)) {
                 throw new Exception('No '.$k.' argument exists for filter '.get_class($filter));
             }
             $filter->$method($v);
@@ -53,14 +53,14 @@ class Filter
     public function addFilter($name, $field = null)
     {
         $col = $this->model->getField($name);
-        if (!$col) {
+        if (! $col) {
             return;
         }
         if ($col['type'] == 'date') {
             $col['type'] = 'date_range';
         }
         $control = Form :: getControlByType($col['type']);
-        if (!$control instanceof FormControlFilterable) {
+        if (! $control instanceof FormControlFilterable) {
             return;
         }
         $col['required'] = false;
@@ -73,7 +73,7 @@ class Filter
             $col['default'] = is_array($this->defaults[$name]) ? implode(',', $this->defaults[$name]) : $this->defaults[$name];
         }
         $filter = Form :: createControl($this->model, $col);
-        if (!empty($field) && $field != $name) {
+        if (! empty($field) && $field != $name) {
             $filter->setFilterColumnName($field);
         }
         $this->filters[] = $filter;
@@ -98,12 +98,12 @@ class Filter
         $data = array_merge($this->defaults, $stored);
         foreach ($this->filters as $filter) {
             $filter->setValue($data[$filter->name] ?? null);
-            if (!empty($input)) {
+            if (! empty($input)) {
                 $filter->pullFromData($input);
                 $store[$filter->name] = $filter->getValue();
             }
         }
-        if (!empty($store)) {
+        if (! empty($store)) {
             $this->app['session']->put($this->getStorageKey(), $store);
         }
 

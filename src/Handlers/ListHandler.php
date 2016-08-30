@@ -37,38 +37,38 @@ class ListHandler
         $this->options = $this->prepareOptions($options);
         $this->columns = $options['list'] ?? [];
         $this->loadPrefs();
-        if (!empty($this->options['multiselect'])) {
+        if (! empty($this->options['multiselect'])) {
             $this->prependColumn(['data' => $this->model->getKeyName(), 'width' => 30, 'ctype' => 'checkbox']);
         } else {
             $this->prependColumn(['data' => $this->model->getKeyName(), 'invisible' => true]);
         }
-        if (!empty($this->options['buttons']['single_edit']) || !empty($this->options['buttons']['single_delete'])
-            || !empty($this->options['list_single_actions'])) {
+        if (! empty($this->options['buttons']['single_edit']) || ! empty($this->options['buttons']['single_delete'])
+            || ! empty($this->options['list_single_actions'])) {
             $this->appendColumn(['data' => 'actions', 'width' => 100, 'ctype' => 'actions']);
         }
         foreach ($this->columns as $k => $col) {
             if (empty($col['title'])) {
                 $cdesc = $this->model->getField($col['data']);
-                if (!empty($cdesc['title'])) {
+                if (! empty($cdesc['title'])) {
                     $this->columns[$k]['title'] = $cdesc['title'];
                 }
             }
-            if (!empty($col['hint']) && empty($col['hint']['index'])) {
+            if (! empty($col['hint']) && empty($col['hint']['index'])) {
                 $this->columns[$k]['hint']['index'] = $this->model->classViewName.'_'.$this->model->scope.'_'.$col['data'];
             }
-            if (empty($col['hint']) && !empty($col['hint_default'])) {
+            if (empty($col['hint']) && ! empty($col['hint_default'])) {
                 $this->columns[$k]['hint'] = [
                     'index'   => $this->model->classViewName.'_'.$this->model->scope.'_'.$col['data'],
                     'default' => $col['hint_default'],
                 ];
             }
-            if (!empty($col['acl']) && !$this->app['skvn.cms']->checkAcl($col['acl'], 'r')) {
+            if (! empty($col['acl']) && ! $this->app['skvn.cms']->checkAcl($col['acl'], 'r')) {
                 unset($this->columns[$k]);
             }
         }
         $cols = $this->filterColumns();
         foreach ($this->columns as $col) {
-            if (!empty($col['invisible'])) {
+            if (! empty($col['invisible'])) {
                 $cols[] = $col;
             }
         }
@@ -85,7 +85,7 @@ class ListHandler
     {
         $cols = [];
         foreach ($this->columns as $column) {
-            if (!empty($column['ctype']) || $this->isColumnVisible($column['data'])) {
+            if (! empty($column['ctype']) || $this->isColumnVisible($column['data'])) {
                 $cols[] = $column;
             }
         }
@@ -124,24 +124,24 @@ class ListHandler
 
     public function getFilter()
     {
-        if (!$this->filter) {
+        if (! $this->filter) {
             $cols = [];
             foreach ($this->columns as $column) {
-                if (!empty($column['filterable'])) {
+                if (! empty($column['filterable'])) {
                     $rel = $this->model->crudRelations->resolveReference($column['data']);
                     if ($rel !== false) {
                         $column['data'] = $rel['rel'];
                     }
                     $cols[$column['data']] = $column['data'];
                     if ($fld = $this->model->getField($column['data'], true)) {
-                        if (!empty($fld['field'])) {
+                        if (! empty($fld['field'])) {
                             $cols[$column['data']] = $fld['field'];
                         }
                     }
                 }
             }
             foreach ($this->options['filter'] ?? [] as $column) {
-                if (!array_key_exists($column, $cols) && $fld = $this->model->getField($column)) {
+                if (! array_key_exists($column, $cols) && $fld = $this->model->getField($column)) {
                     $cols[$column] = $fld['field'];
                 }
             }
@@ -162,7 +162,7 @@ class ListHandler
 
     public function hasFilter()
     {
-        return !empty($this->getFilter()->filters);
+        return ! empty($this->getFilter()->filters);
     }
 
     public function fillFilter($input)
@@ -182,7 +182,7 @@ class ListHandler
         }
         if (strpos($prop, '.') !== false) {
             list($s, $p) = explode('.', $prop, 2);
-            if (!isset($this->options[$s])) {
+            if (! isset($this->options[$s])) {
                 return;
             }
 
@@ -207,19 +207,19 @@ class ListHandler
     private function prepareOptions($options)
     {
         $combined_options = array_merge($this->default_options, $options);
-        if (!empty($combined_options['list_actions'])) {
+        if (! empty($combined_options['list_actions'])) {
             array_walk($combined_options['list_actions'], function (&$act, $idx) {
                 switch ($act) {
-                    case !empty($act['popup']):
+                    case ! empty($act['popup']):
                         $act['href'] = $act['popup'];
                         $act['click'] = 'crud_popup';
                     break;
-                    case !empty($act['command']):
+                    case ! empty($act['command']):
                         $act['href'] = $act['command'];
                         $act['click'] = 'crud_action';
                         $act['action'] = 'crud_command';
                     break;
-                    case !empty($act['event']):
+                    case ! empty($act['event']):
                         $act['href'] = '#';
                         $act['click'] = 'crud_event';
                     break;
@@ -229,11 +229,11 @@ class ListHandler
                 }
             });
             $combined_options['list_single_actions'] = array_filter($combined_options['list_actions'], function ($item) {
-                return !empty($item['single']);
+                return ! empty($item['single']);
             });
 
             $combined_options['list_mass_actions'] = array_filter($combined_options['list_actions'], function ($item) {
-                return !empty($item['mass']);
+                return ! empty($item['mass']);
             });
         }
 

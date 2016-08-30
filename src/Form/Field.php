@@ -52,7 +52,7 @@ abstract class Field
         $this->name = $config['name'];
         $this->field = $config['field'];
 
-        if (!$this->controlValidateConfig()) {
+        if (! $this->controlValidateConfig()) {
             throw new ConfigException('Column '.$this->name.' is not well described');
         }
 
@@ -86,7 +86,7 @@ abstract class Field
 
     public function getUniqueId()
     {
-        if (!$this->uniqid) {
+        if (! $this->uniqid) {
             $this->uniqid = uniqid($this->name);
         }
 
@@ -95,7 +95,7 @@ abstract class Field
 
     public function getFilterColumnName()
     {
-        return !empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->field;
+        return ! empty($this->config['filter_column']) ? $this->config['filter_column'] : $this->field;
     }
 
     public function setFilterColumnName($col)

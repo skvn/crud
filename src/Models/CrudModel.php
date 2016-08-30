@@ -55,14 +55,14 @@ abstract class CrudModel extends Model
 
         $this->classShortName = class_basename($this);
         $this->classViewName = snake_case($this->classShortName);
-        $this->config = $this->app['config']->get('crud.'.(!empty($this->table) ? $this->table : $this->classViewName));
+        $this->config = $this->app['config']->get('crud.'.(! empty($this->table) ? $this->table : $this->classViewName));
         $this->config['class_name'] = $this->classViewName;
         if (empty($this->table)) {
             $this->table = $this->config['table'] ?? $this->classViewName;
         }
         $this->config['file_params'] = [];
 
-        if (!empty($this->config['fields'])) {
+        if (! empty($this->config['fields'])) {
             foreach ($this->config['fields'] as $name => $col) {
                 $this->config['fields'][$name] = $this->configureField($name, $col);
             }
@@ -87,7 +87,7 @@ abstract class CrudModel extends Model
     public static function createInstance($model, $scope = self :: DEFAULT_SCOPE, $id = null)
     {
         $class = static :: resolveClass($model);
-        if (!empty($id)) {
+        if (! empty($id)) {
             $obj = $class::findOrNew((int) $id);
         } else {
             $obj = new $class();
@@ -100,7 +100,7 @@ abstract class CrudModel extends Model
     public static function createSelfInstance($scope = self :: DEFAULT_SCOPE, $id = null)
     {
         $class = get_called_class();
-        if (!empty($id)) {
+        if (! empty($id)) {
             $obj = $class::findOrNew((int) $id);
         } else {
             $obj = new $class();
@@ -149,14 +149,14 @@ abstract class CrudModel extends Model
     public function __isset($key)
     {
         $col = $this->config['fields'][$key] ?? [];
-        if (!empty($col['fields'])) {
+        if (! empty($col['fields'])) {
             foreach ($this->config['fields'][$key]['fields'] as $f) {
                 if (parent :: __isset($f)) {
                     return true;
                 }
             }
         }
-        if (!empty($col['field']) && $col['field'] !== $key) {
+        if (! empty($col['field']) && $col['field'] !== $key) {
             return parent :: __isset($col['field']);
         }
 
@@ -183,7 +183,7 @@ abstract class CrudModel extends Model
             return;
         }
         $fld = $this->config['fields'][$key] ?? [];
-        if (!empty($fld['field']) && $fld['field'] !== $key) {
+        if (! empty($fld['field']) && $fld['field'] !== $key) {
             return parent :: setAttribute($fld['field'], $value);
         }
 
@@ -262,7 +262,7 @@ abstract class CrudModel extends Model
 
     public function hasErrors()
     {
-        return !empty($this->errors);
+        return ! empty($this->errors);
     }
 
     public function getViewRefAttribute()
@@ -364,7 +364,7 @@ abstract class CrudModel extends Model
     public function crudFormatValueTruncate($val, $args = [])
     {
         $val = strip_tags($val);
-        if (!empty($args['length'])) {
+        if (! empty($args['length'])) {
             if (mb_strlen($val) > $args['length']) {
                 $val = mb_substr($val, 0, $args['length']).'...';
             }
@@ -382,7 +382,7 @@ abstract class CrudModel extends Model
             if (preg_match($pattern, $m->name, $matches)) {
                 $desc = '';
                 $c = $m->getDocComment();
-                if (!empty($c)) {
+                if (! empty($c)) {
                     $docLines = preg_split('~\R~u', $c);
                     if (isset($docLines[1])) {
                         $desc = trim($docLines[1], "\t *");
@@ -441,7 +441,7 @@ abstract class CrudModel extends Model
 
     public function crudExecuteCommand($command, $args = [])
     {
-        if (!empty($args['selected_rows'])) {
+        if (! empty($args['selected_rows'])) {
             $ids = [];
             foreach ($args['selected_rows'] as $row) {
                 $ids[] = $row['id'];
@@ -450,7 +450,7 @@ abstract class CrudModel extends Model
             if (method_exists($this, $command.'Bulk')) {
                 return $this->{$command.'Bulk'}($args);
             } else {
-                if (!method_exists($this, $command)) {
+                if (! method_exists($this, $command)) {
                     throw new NotFoundException('Command '.$command.' do not exists on model '.$this->classShortName);
                 }
                 foreach ($args['ids'] as $id) {
@@ -461,7 +461,7 @@ abstract class CrudModel extends Model
                 return;
             }
         }
-        if (!method_exists($this, $command)) {
+        if (! method_exists($this, $command)) {
             throw new NotFoundException('Command '.$command.' do not exists on model '.$this->classShortName);
         }
 

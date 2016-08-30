@@ -24,7 +24,7 @@ class RelationHasManyFiles extends Relation
         $col = $this->relation->getForeignKey();
         $delete = $this->config['on_delete'] ?? false;
         $this->get()->each(function ($item, $key) use ($delete, $col, $id) {
-            if (!is_null($id)) {
+            if (! is_null($id)) {
                 if ($id != $item->getKey()) {
                     return;
                 }
@@ -49,14 +49,14 @@ class RelationHasManyFiles extends Relation
                 $obj = new $class();
                 $fileInfo = $obj->attachStoreTmpFile($file);
                 $fileInfo['title'] = $titles[$idx] ?? $fileInfo['originalName'];
-                if (!empty($fileInfo['originalPath'])) {
+                if (! empty($fileInfo['originalPath'])) {
                     $obj->setAttribute($this->relation->getForeignKey(), $this->model->getKey());
                     $obj->attachStoreFile($fileInfo, $this->model->getFilesConfig($fileInfo['originalName']));
                 }
             }
         }
         $titles = $this->model->getApp()['request']->get($this->config['name'].'_title');
-        if ($titles && !empty($titles)) {
+        if ($titles && ! empty($titles)) {
             foreach ($titles as $iid => $title) {
                 if ($iid > 0) {
                     $obj = $class :: findOrFail($iid);

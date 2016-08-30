@@ -22,9 +22,9 @@ trait ModelInlineImgTrait
     protected function appendInlineImgConfig()
     {
         $cols = [];
-        if (!empty($this->config['fields'])) {
+        if (! empty($this->config['fields'])) {
             foreach ($this->config['fields'] as $name => $field) {
-                if (!empty($field['type']) && in_array($field['type'], ['textarea']) && !empty($field['editor'])) {
+                if (! empty($field['type']) && in_array($field['type'], ['textarea']) && ! empty($field['editor'])) {
                     $cols[] = $name;
                 }
             }
@@ -62,7 +62,7 @@ trait ModelInlineImgTrait
     {
         if (preg_match_all('#(<img\s(?>(?!src=)[^>])*?src=")(data:image/(gif|png|jpeg);base64,([\w=+/]++))("[^>].*>)#siUm', $text, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $m) {
-                if (!empty($m[4])) {
+                if (! empty($m[4])) {
                     if (preg_match('#width:(.*);#siU', $m[0], $wm)) {
                         $width = trim($wm[1]);
                     }

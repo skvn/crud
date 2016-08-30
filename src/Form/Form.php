@@ -37,13 +37,13 @@ class Form
     {
         $this->crudObj = isset($args['crudObj']) ? $args['crudObj'] : new CrudStubModel();
         $this->customProperties = isset($args['props']) ? $args['props'] : [];
-        if (!empty($args['fields']) && is_array($args['fields'])) {
+        if (! empty($args['fields']) && is_array($args['fields'])) {
             $this->setFields($args['fields']);
         }
-        if (!empty($args['data']) && is_array($args['data'])) {
+        if (! empty($args['data']) && is_array($args['data'])) {
             $this->import($args['data']);
         }
-        if (!empty($args['tabs'])) {
+        if (! empty($args['tabs'])) {
             $this->setTabs($args['tabs']);
         }
     }
@@ -53,7 +53,7 @@ class Form
     public static function registerControl($class)
     {
         $control = $class :: create();
-        if (!$control instanceof FormControl) {
+        if (! $control instanceof FormControl) {
             throw new ConfigException('Invalid control class '.$class);
         }
         if (isset(self :: $controls[$control->controlType()])) {
@@ -69,7 +69,7 @@ class Form
 
     public static function getAvailControl($type)
     {
-        if (!isset(self :: $controls[$type])) {
+        if (! isset(self :: $controls[$type])) {
             throw new ConfigException('Invalid control `'.$type.'`');
         }
 
@@ -104,7 +104,7 @@ class Form
         if (empty($config['name'])) {
             $config['name'] = $name;
         }
-        if (!empty($tab)) {
+        if (! empty($tab)) {
             $config['tab'] = $tab;
         }
         $this->config[$name] = $config;
@@ -150,7 +150,7 @@ class Form
 
     public function hasTabs()
     {
-        return !empty($this->tabs);
+        return ! empty($this->tabs);
     }
 
     public function import($data)
@@ -176,7 +176,7 @@ class Form
     public function sync()
     {
         foreach ($this->fields as $field) {
-            if (!empty($field->config['acl']) && !Container :: getInstance()['skvn.cms']->checkAcl($field->config['acl'], 'u')) {
+            if (! empty($field->config['acl']) && ! Container :: getInstance()['skvn.cms']->checkAcl($field->config['acl'], 'u')) {
                 continue;
             }
             $field->pushToModel();

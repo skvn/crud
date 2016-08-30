@@ -31,7 +31,7 @@ class CrudUser extends CrudModel implements AuthenticatableContract, CanResetPas
 
     public function setPasswordAttribute($password)
     {
-        if (!empty($password)) {
+        if (! empty($password)) {
             $this->attributes['password'] = bcrypt($password);
         }
     }
@@ -69,7 +69,7 @@ class CrudUser extends CrudModel implements AuthenticatableContract, CanResetPas
 
     public function getFullNameAttribute()
     {
-        if (!$this->fullname) {
+        if (! $this->fullname) {
             $this->fullname = $this->first_name.' '.$this->middle_name.' '.$this->last_name;
         }
 
@@ -97,7 +97,7 @@ class CrudUser extends CrudModel implements AuthenticatableContract, CanResetPas
     public function onBeforeCreate()
     {
         $count_all = self::count();
-        if (!$count_all) {
+        if (! $count_all) {
             $this->acl_role = 'root';
         }
 
