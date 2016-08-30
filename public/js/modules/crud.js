@@ -215,6 +215,16 @@
                 return args;
             },
 
+            getElemContext: function(elem)
+            {
+                var context = elem.parents('[data-context-limiter]:first');
+                if (context.length <= 0)
+                {
+                    context = elem.parents("form");
+                }
+                return context;
+            },
+
             init_edit_tab: function(model, id, args)
             {
                 args = args || {};
