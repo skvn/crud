@@ -39,6 +39,11 @@ abstract class Relation
         $this->isDirty = true;
     }
 
+    function getErrors()
+    {
+        return [];
+    }
+
     protected function sort()
     {
         if (! empty($this->config['sort'])) {

@@ -38,6 +38,7 @@ Route::group($adm_route_params, function () {
     Route::get('crud/{model}/excel/{scope}', ['as' => 'crud_list_excel',            'uses' => 'CrudController@crudListExcel']);
     Route::post('crud/{model}/delete', ['as' => 'crud_delete',                'uses' => 'CrudController@crudDelete']);
     Route::post('crud/{model}/{id}/command/{command_name}', ['as' => 'crud_command',               'uses' => 'CrudController@crudCommand']);
+    Route::post('crud/validate', ['as' => 'crud_validate',               'uses' => 'CrudController@crudRunValidators']);
 });
 
 Route::group(['namespace' => 'Skvn\Crud\Controllers'], function () {

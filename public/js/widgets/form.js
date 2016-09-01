@@ -12,7 +12,21 @@
             //init controls
             crud.trigger('form.init', {form: $form});
             $("[required]", $form).each(function(){
-                $(this).removeAttr('required').attr('data-required',1).data('required', 1);
+                var validator = $(this).data('crud-validator');
+                if (validator)
+                {
+                    var v = validator.split(",");
+                    if ($.inArray('required', v) < 0)
+                    {
+                        v.push('required');
+                    }
+                    validator = v.join(",");
+                }
+                else
+                {
+                    validator = "required";
+                }
+                $(this).removeAttr('required').attr('data-crud-validator',validator).data('crud-validator', validator);
             });
 
             //submit
@@ -249,16 +263,37 @@
             for (var i in names)
             {
                 //alert(names[i]+ ':' +$(".form-group[data-ref="+names[i]+"]", this.element).length);
-                $(".row[data-ref="+names[i]+"]", this.element).show();
-                $("[data-required=2]", $(".row[data-ref="+names[i]+"]", this.element)).data('required', '1').attr('data-required', '1');
+                var c = $(".row[data-ref="+names[i]+"]", this.element);
+                c.show();
+                //$("[data-crud-validator]", c).each(function(){
+                //    var v = $(this).data('crud-validator');
+                //    if ((""+v).substr(0, 1) == "~")
+                //    {
+                //        v = (""+v).substr(1);
+                //    }
+                //    $(this).attr('data-crud-validator', v).data('crud-validator', v);
+                //});
+                $("[data-crud-validator]", c).data('crud-validator-disabled', '0').attr('data-crud-validator-disabled', '0');
+                //var e = $("[data-crud-validator]", c);
+                //e.data('crud-validator-disabled', e.data('crud-validator')).attr('data-crud-validator', 'required');
             }
         },
         hideFields: function(names)
         {
             for (var i in names)
             {
-                $(".row[data-ref="+names[i]+"]", this.element).hide();
-                $("[data-required=1]", $(".row[data-ref="+names[i]+"]", this.element)).data('required', '2').attr('data-required', '2');
+                var c = $(".row[data-ref="+names[i]+"]", this.element);
+                c.hide();
+                //$("[data-crud-validator]", c).each(function(){
+                //    var v = $(this).data('crud-validator');
+                //    if ((""+v).substr(0, 1) != "~")
+                //    {
+                //        v = "~" + (""+v);
+                //    }
+                //    $(this).attr('data-crud-validator', v).data('crud-validator', v);
+                //});
+                //$("[data-crud-validator=required]", $(".row[data-ref="+names[i]+"]", this.element)).data('crud-validator', 'required-disabled').attr('data-crud-validator', 'required-disabled');
+                $("[data-crud-validator]", c).data('crud-validator-disabled', '1').attr('data-crud-validator-disabled', '1');
             }
         }
     });
@@ -410,20 +445,61 @@
     {
         console.log("VALIDATING");
         var valid = true;
+        var remote = [];
         $(".has-error", frm).removeClass("has-error").find('*[data-rel=error]').hide();
-        $('[data-required=1]', frm).each(function(){
+        $("[data-remote-validator]", frm).removeAttr("data-remote-validator");
+        $('[data-crud-validator]', frm).each(function()
+        {
             var e = $(this);
             if (e.is(":disabled"))
             {
                 return;
             }
-            if (!e.val())
+            if (e.data('crud-validator-disabled') == "1")
             {
-                valid = false;
-                e.parents(".form-group:first").addClass("has-error").find('*[data-rel=error]').show();
-                console.log("Error: " + e.attr('name'));
+                console.log(e.attr('name') + ' validation disabled');
+                return;
+            }
+            var validators = e.data('crud-validator').split(",");
+            for (var i in validators)
+            {
+                //alert(validators[i]);
+                switch (validators[i])
+                {
+                    case 'required':
+                        if (!e.val())
+                        {
+                            valid = false;
+                            e.parents(".form-group:first").addClass("has-error").find('*[data-rel=error]').html('Это поле необходимо заполнить').show();
+                            console.log("Error: " + e.attr('name'));
+                        }
+                    break;
+                    case 'slug':
+                        var row = {validator: 'slug', value: e.val()};
+                        row = crud.addModelParams(row, e);
+                        e.attr("data-remote-validator", remote.length);
+                        remote.push(row);
+                    break;
+                }
             }
         });
+        if (remote.length)
+        {
+            $.ajaxSetup({async: false});
+            var o = $.post(crud.format_setting('model_validate_url', {}), {validates: remote}, function(res){
+                $.ajaxSetup({async: true});
+                for (var i in res)
+                {
+                    if (!res[i].valid)
+                    {
+                        var elm = $('[data-remote-validator='+i+']', frm);
+                        elm.parents(".form-group:first").addClass("has-error").find('*[data-rel=error]').html(res[i].error_message).show();
+                        console.log("Error: " + elm.attr('name'));
+                        valid = false;
+                    }
+                }
+            });
+        }
         console.log(valid ? "SUCCESS" : "FAILED");
         return valid;
     }

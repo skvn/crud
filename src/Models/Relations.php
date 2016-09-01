@@ -93,6 +93,16 @@ class Relations implements ArrayAccess
         }
     }
 
+    function getErrors()
+    {
+        $errors = [];
+        foreach ($this->relations as $relation)
+        {
+            $errors = array_merge($errors, $relation->getErrors());
+        }
+        return $errors;
+    }
+
     public function set($name, $value)
     {
         $this->define($name)->set($value);

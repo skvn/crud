@@ -13,6 +13,7 @@
         model_autocomplete_url: '/admin/crud/{model}/autocomplete',
         model_select_options_url: '/admin/crud/{model}/select_options',
         model_command_url: '/admin/crud/{model}/{id}/command/{command}?scope={scope}',
+        model_validate_url: '/admin/crud/validate'
 
     };
     var crud_actions = {};
@@ -124,11 +125,25 @@
                 return decodeURIComponent(results[2].replace(/\+/g, " "));
             },
 
+
             addModelParams: function(args, elem)
             {
                 args['id'] = elem.data('id');
                 args['model'] = elem.data('model') || "";
                 args['scope'] = elem.data('scope') ? elem.data('scope') : "default";
+                var context = elem.parents("[data-context-limiter]:first");
+                if (context.length)
+                {
+                    if (!args['model'] && context.data('model'))
+                    {
+                        args['model'] = context.data('model');
+                    }
+                    if (!args['id'] && context.data('id'))
+                    {
+                        args['id'] = context.data('id');
+                    }
+                }
+
                 var tbl = elem.parents("table[data-crud_table]:first");
                 if (tbl.length)
                 {

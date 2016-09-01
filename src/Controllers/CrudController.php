@@ -216,25 +216,74 @@ class CrudController extends Controller
             $form = $obj->getForm();
 
             $form->load($this->request->all());
-            if ($obj->isTree()) {
-                $obj->saveTree($this->request->all());
-                $obj->saveRelations();
-            } else {
-                //$obj->fillFromRequest($this->request->all());
-
-                if (! $obj->save()) {
-                    return ['success' => false, 'error' => implode("\n", array_values($obj->getErrors()))];
-                }
-
-                $obj->saveRelations();
+            $obj->isTree() ? $obj->saveTree($this->request->all) : $obj->save();
+            $obj->saveRelations();
+            if ($obj->hasErrors())
+            {
+                return ['success' => false, 'errors' => $obj->getErrors()];
             }
+            else
+            {
+                return ['success' => true, 'crud_id' => $obj->getKey(), 'crud_model' => $obj->classShortName, 'crud_table' => $obj->classViewName];
+            }
+//            if ($obj->isTree())
+//            {
+//                $obj->saveTree($this->request->all());
+//                $obj->saveRelations();
+//            }
+//            else
+//            {
+//
+//                if (! $obj->save()) {
+//                    return ['success' => false, 'error' => implode("\n", array_values($obj->getErrors()))];
+//                }
+//
+//                $obj->saveRelations();
+//            }
 
-            return ['success' => true, 'crud_id' => $obj->id, 'crud_model' => $obj->classShortName, 'crud_table' => $obj->classViewName];
+//            return ['success' => true, 'crud_id' => $obj->id, 'crud_model' => $obj->classShortName, 'crud_table' => $obj->classViewName];
         } catch (\Exception $e) {
             var_dump($e->getTraceAsString());
 
             return ['success' => false, 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()];
         }
+    }
+
+    function crudRunValidators()
+    {
+        $checks = $this->request->get('validates');
+        $slugs = [];
+        foreach ($checks as $idx => $check)
+        {
+            $check['valid'] = true;
+            switch ($check['validator'])
+            {
+                case 'slug':
+                    if (!isset($slugs[$check['model']]))
+                    {
+                        $slugs[$check['model']] = [];
+                    }
+                    if (in_array($check['value'], $slugs[$check['model']]))
+                    {
+                        $check['valid'] = false;
+                        $check['error_message'] = "Значение не уникально";
+                    }
+                    else
+                    {
+                        $obj = CrudModel :: createInstance($check['model'], null, $check['id'] > 0 ? $check['id'] : null);
+                        $valid = $obj->validateSlug($check['value']);
+                        if ($valid < 0)
+                        {
+                            $check['valid'] = false;
+                            $check['error_message'] = $valid === -99 ? "Неподдерживаемый для URL формат" : "Значение не уникально";
+                        }
+                        $slugs[$check['model']][] = $check['value'];
+                    }
+                break;
+            }
+            $checks[$idx] = $check;
+        }
+        return $checks;
     }
 
     public function crudFilter($model, $scope)

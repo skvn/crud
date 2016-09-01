@@ -252,12 +252,12 @@ abstract class CrudModel extends Model
 
     public function getErrors()
     {
-        return $this->errors;
+        return array_merge($this->errors, $this->crudRelations->getErrors());
     }
 
-    public function addError($error)
+    public function addError($error, $field = null)
     {
-        $this->errors[] = $error;
+        $this->errors[] = ['field' => $field, 'message' => $error];
     }
 
     public function hasErrors()

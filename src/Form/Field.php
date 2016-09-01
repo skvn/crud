@@ -51,6 +51,10 @@ abstract class Field
         $this->config = $config;
         $this->name = $config['name'];
         $this->field = $config['field'];
+        if (in_array("required", $this->getValidators()))
+        {
+            $this->config['required'] = true;
+        }
 
         if (! $this->controlValidateConfig()) {
             throw new ConfigException('Column '.$this->name.' is not well described');
@@ -101,5 +105,10 @@ abstract class Field
     public function setFilterColumnName($col)
     {
         $this->config['filter_column'] = $col;
+    }
+
+    function getValidators()
+    {
+        return explode(",", $this->config['validators'] ?? "");
     }
 }
