@@ -4,6 +4,7 @@ return [
     'model_namespace'                     => '\App\Models',
     'history_trait'                       => '\Skvn\Crud\Traits\ModelHistoryTrait',
     'tree_trait'                          => '\Skvn\Crud\Traits\ModelTreeTrait',
+    'collection_class'                    => \Skvn\Crud\Models\CrudCollection :: class,
     'app_title'                           => env('APPLICATION_TITLE', 'SkVn/CRUD application'),
     'auto_migrate_allowed'                => env('AUTO_MIGRATE_EMABLED', true),
     'app_logo'                            => env('APPLICATION_LOGO', null),

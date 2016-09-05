@@ -166,7 +166,7 @@ abstract class CrudModel extends Model
     public function getAttribute($key)
     {
         if ($this->crudRelations->has($key)) {
-            return $this->crudRelations->getAny($key);
+            return $this->crudRelations->get($key);
         }
 
         return parent::getAttribute($key);
@@ -500,4 +500,11 @@ abstract class CrudModel extends Model
     {
         return $query;
     }
+
+    public function newCollection(array $models = [])
+    {
+        $class = $this->app['config']['crud_common.collection_class'];
+        return new $class($models);
+    }
+
 }

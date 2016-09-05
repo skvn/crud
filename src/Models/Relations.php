@@ -17,20 +17,21 @@ class Relations implements ArrayAccess
 
     public function has($name)
     {
-        return array_key_exists('relation', $this->model->getField($this->stripName($name)[0]));
+        //return array_key_exists('relation', $this->model->getField($this->stripName($name)[0]));
+        return array_key_exists('relation', $this->model->getField($name));
     }
 
-    protected function stripName($name)
-    {
-        if (strpos($name, '_') !== false) {
-            $split = explode('_', $name);
-            if (count($split) == 2 && in_array($split[1], ['ids', 'first', 'count'])) {
-                return $split;
-            }
-        }
-
-        return [$name, null];
-    }
+//    protected function stripName($name)
+//    {
+//        if (strpos($name, '_') !== false) {
+//            $split = explode('_', $name);
+//            if (count($split) == 2 && in_array($split[1], ['ids', 'first', 'count'])) {
+//                return $split;
+//            }
+//        }
+//
+//        return [$name, null];
+//    }
 
     public function defined($name)
     {
@@ -77,21 +78,21 @@ class Relations implements ArrayAccess
         return $this->define($name)->get();
     }
 
-    public function getAny($name)
-    {
-        $rel = $this->stripName($name);
-        switch ($rel[1]) {
-            case 'ids':
-                return $this->getIds($rel[0]);
-            case 'first':
-                return $this->get($rel[0])->first();
-            case 'count':
-                return $this->get($rel[0])->count();
-            default:
-                return $this->get($rel[0]);
-
-        }
-    }
+//    public function getAny($name)
+//    {
+//        $rel = $this->stripName($name);
+//        switch ($rel[1]) {
+//            case 'ids':
+//                return $this->getIds($rel[0]);
+//            case 'first':
+//                return $this->get($rel[0])->first();
+//            case 'count':
+//                return $this->get($rel[0])->count();
+//            default:
+//                return $this->get($rel[0]);
+//
+//        }
+//    }
 
     function getErrors()
     {
