@@ -5,6 +5,7 @@ namespace Skvn\Crud\Models;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Skvn\Crud\Exceptions\NotFoundException;
+use Skvn\Crud\Exceptions\ValidationException;
 //use Skvn\Crud\Traits\ModelRelationTrait;
 //use Skvn\Crud\Traits\ModelFilterTrait;
 use Skvn\Crud\Traits\ModelConfigTrait;
@@ -17,10 +18,7 @@ abstract class CrudModel extends Model
     use ModelConfigTrait;
     use ModelFormTrait;
 
-
-
     const DEFAULT_SCOPE = 'default';
-
 
     protected $app;
     protected $codeColumn = 'id';
@@ -32,13 +30,12 @@ abstract class CrudModel extends Model
 
     private $guessed_id = 0;
 
-    protected $errors = [];
-    protected static $rules = [];
-    protected static $messages = [];
-    protected $validator;
+    protected $validationErrors = [];
+    protected $validationRules = [];
+    protected $validationMessages = [];
     public $timestamps = false;
-    //protected $eventsDisabled = false;
     public $crudRelations;
+
 
 
     /**
@@ -46,7 +43,7 @@ abstract class CrudModel extends Model
      *
      * @var bool
      */
-    public $trackAuthors = false;
+    protected $trackAuthors = false;
 
     public function __construct(array $attributes = [])
     {
@@ -73,8 +70,6 @@ abstract class CrudModel extends Model
         $this->crudRelations = new Relations($this);
 
         $this->postconstruct();
-
-        $this->validator = $this->app['validator'];
     }
 
     public static function resolveClass($model)
@@ -110,26 +105,20 @@ abstract class CrudModel extends Model
         return $obj;
     }
 
-//    function saveDirect()
-//    {
-//        //$this->eventsDisabled = true;
-//        $result = parent :: save();
-//        //$this->eventsDisabled = false;
-//        return $result;
-//    }
 
-//    function saveFull()
-//    {
-//        if ($this->save())
-//        {
-//            return $this->crudRelations->save();
-//        }
-//        return false;
-//    }
-
-    public function saveRelations()
+    function save(array $options = [])
     {
-        return $this->crudRelations->save();
+        $saved = parent :: save($options);
+        if ($saved)
+        {
+            $saved = $this->crudRelations->save();
+        }
+        return $saved;
+    }
+
+    public function saveRelations($name = null)
+    {
+        return $this->crudRelations->save($name);
     }
 
     public function getApp()
@@ -234,35 +223,168 @@ abstract class CrudModel extends Model
         return $this->attributes[$this->codeColumn];
     }
 
-    public function validate()
+    protected function getValidationMessage($field, $rule, $message = "")
     {
-        $v = $this->validator->make($this->attributes, static::$rules, static::$messages);
-        if ($v->passes()) {
+        if (!empty($message))
+        {
+            return $message;
+        }
+        if (isset($this->validationMessages[$field . '.*']))
+        {
+            return $this->validationMessages[$field . '.*'];
+        }
+        if (isset($this->validationMessages[$field . '.' . $rule]))
+        {
+            return $this->validationMessages[$field . '.' . $rule];
+        }
+        if (isset($this->validationMessages[$rule]))
+        {
+            return $this->validationMessages[$rule];
+        }
+        return $this->app['translator']->trans('crud::rules.' . $rule);
+    }
+
+    protected function parseValidationRule($field, $rule)
+    {
+        if (strpos($rule, ":") !== false)
+        {
+            $parts = explode(":", $rule);
+            $r = $parts[0];
+            if (strpos($parts[1], ",") !== false)
+            {
+                $p = explode(",", $parts[1]);
+            }
+            else
+            {
+                $p = [];
+            }
+            $m = $this->getValidationMessage($field, $r, $parts[2] ?? "");
+        }
+        else
+        {
+            $r = $rule;
+            $p = [];
+            $m = $this->getValidationMessage($field, $rule);
+        }
+        switch ($r)
+        {
+            case 'unique':
+                if (empty($p))
+                {
+                    $p[] = $this->getTable();
+                    $p[] = $field;
+                    if ($this->exists)
+                    {
+                        $p[] = $this->getKey();
+                    }
+                }
+            break;
+        }
+        return ['rule' => $r, 'params' => $p, 'message' => $m];
+    }
+
+    protected function appendValidationRule(&$rules, &$messages, $field, $rule)
+    {
+        //var_dump($field);
+        //var_dump($rule);
+        $parsed = $this->parseValidationRule($field, $rule);
+        //var_dump($parsed);
+        $parts = isset($rules[$field]) ? explode("|", $rules[$field]) : [];
+        $parts[] = $parsed['rule'] . (!empty($parsed['params']) ? ':' : '') . implode(",", $parsed['params']);
+        $rules[$field] = implode("|", $parts);
+        if (!isset($messages[$field . "." . $parsed['rule']]))
+        {
+            $messages[$field . "." . $parsed['rule']] = $parsed['message'];
+        }
+    }
+
+
+    function createValidator()
+    {
+        $rules = [];
+        $messages = [];
+        foreach ($this->validationRules as $field => $rule_list)
+        {
+            foreach (explode("|", $rule_list) as $rule)
+            {
+                $this->appendValidationRule($rules, $messages, $field, $rule);
+            }
+        }
+        foreach ($this->config['fields'] ?? [] as $field => $conf)
+        {
+            if (!empty($conf['validators']))
+            {
+                foreach (explode("|", $conf['validators']) as $rule)
+                {
+//                    $this->appendValidationRule($rules, $messages, $field, $rule);
+                    if (!empty($conf['field']) && empty($conf['relation']))
+                    {
+                        $this->appendValidationRule($rules, $messages, $conf['field'], $rule);
+                    }
+                    else
+                    {
+                        $this->appendValidationRule($rules, $messages, $field, $rule);
+                    }
+                }
+            }
+        }
+        $data = array_merge($this->attributes, $this->crudRelations->getAll());
+        //var_dump($data);
+        //var_dump($rules);
+        return $this->app['validator']->make($data, $rules, $messages);
+    }
+
+    public function validate($throw = false)
+    {
+        $v = $this->createValidator();
+        if ($v->passes())
+        {
             return true;
         }
+
         $this->setErrors($v->messages()->toArray());
+
+        if ($throw)
+        {
+            throw new ValidationException(json_encode($v->messages()->toArray()));
+        }
 
         return false;
     }
 
     protected function setErrors($errors)
     {
-        $this->errors = $errors;
+        $this->validationErrors = $errors;
     }
 
     public function getErrors()
     {
-        return array_merge($this->errors, $this->crudRelations->getErrors());
+        return array_merge($this->validationErrors, $this->crudRelations->getErrors());
     }
 
-    public function addError($error, $field = null)
+    public function addError($field, $error)
     {
-        $this->errors[] = ['field' => $field, 'message' => $error];
+        if (!isset($this->validationErrors[$field]))
+        {
+            $this->validationErrors[$field] = [];
+        }
+        $this->validationErrors[$field][] = $error;
+    }
+
+    function transferErrors(CrudModel $model, $prefix)
+    {
+        foreach ($model->getErrors() as $fld => $errors)
+        {
+            foreach ($errors as $error)
+            {
+                $this->addError($prefix . "." . $fld, $error);
+            }
+        }
     }
 
     public function hasErrors()
     {
-        return ! empty($this->errors);
+        return ! empty($this->validationErrors);
     }
 
     public function getViewRefAttribute()

@@ -15,3 +15,6 @@
 .invalid_field {
     background-color: red;
 }
+.has-error label {
+    color: #a94442;
+}

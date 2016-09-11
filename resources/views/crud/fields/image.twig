@@ -7,7 +7,9 @@
     {% if input.getValue() %}
         <div class="col-md-4">
             <a href="{{ input.getValue().getAttribute('download_link') }}" target="_blank"><img src="{{ input.getValue().getAttribute('download_link') }}" width="100" /></a><br />
-            <a class="label label-danger" href="delete_attached_model" data-model="{{ input.model.classViewName }}" data-id="{{ input.model.getKey() }}" data-confirm="{{ trans('crud::messages.really_delete') }}?" data-args='{"delete_attach_rel":"{{ input.name }}" }' data-callback="elem.parent().remove();" data-click="crud_action" data-action="crud_command"><i class="fa fa-times-circle"></i> {{ trans('crud::messages.delete') }} {{ trans('crud::messages.file') }}</a>
+            {% if not input.config.required %}
+                <a class="label label-danger" href="delete_attached_model" data-model="{{ input.model.classViewName }}" data-id="{{ input.model.getKey() }}" data-confirm="{{ trans('crud::messages.really_delete') }}?" data-args='{"delete_attach_rel":"{{ input.name }}" }' data-callback="elem.parent().remove();" data-click="crud_action" data-action="crud_command"><i class="fa fa-times-circle"></i> {{ trans('crud::messages.delete') }} {{ trans('crud::messages.file') }}</a>
+            {% endif %}
         </div>
     {% endif %}
 </div>

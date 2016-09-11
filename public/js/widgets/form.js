@@ -8,6 +8,7 @@
             console.log('form created');
             
             var $form = this.element;
+            var self = this;
 
             //init controls
             crud.trigger('form.init', {form: $form});
@@ -101,7 +102,18 @@
                         }
                         else
                         {
-                            alert(crud.format_error(res.error));
+                            if (typeof res.errors != "undefined")
+                            {
+                                for (var f in res.errors)
+                                {
+                                    self.showError(f, res.errors[f].join('<br />'));
+                                }
+                                self.gotoError();
+                            }
+                            else
+                            {
+                                alert(crud.format_error(res.error));
+                            }
                         }
                     },
                     error: function(res){
@@ -295,6 +307,49 @@
                 //$("[data-crud-validator=required]", $(".row[data-ref="+names[i]+"]", this.element)).data('crud-validator', 'required-disabled').attr('data-crud-validator', 'required-disabled');
                 $("[data-crud-validator]", c).data('crud-validator-disabled', '1').attr('data-crud-validator-disabled', '1');
             }
+        },
+        resetErrors: function()
+        {
+            $(".has-error", this.element).removeClass("has-error").find('*[data-rel=error]').hide();
+            $("[data-remote-validator]", this.element).removeAttr("data-remote-validator");
+        },
+        showError: function(control, message)
+        {
+            var p = this.element;
+            if (control.indexOf('.') > 0)
+            {
+                var segments = control.split('.');
+                $('[data-context-limiter]', this.element).each(function(){
+                    var c = $(this);
+                    if (c.data('model') === segments[0] && parseInt(c.data('id')) === parseInt(segments[1]))
+                    {
+                        p = c;
+                        control = segments[2];
+                    }
+                });
+            }
+            var row = $(".row[data-ref="+control+"]", p);
+            //$(".form-group:first", row).addClass("has-error").find('*[data-rel=error]').html(message).show();
+            row.addClass("has-error").find('*[data-rel=error]').html(message).show();
+        },
+        gotoError: function()
+        {
+            var e = $('.has-error:first', this.element);
+            if (e.length < 1)
+            {
+                return;
+            }
+            if ($("[data-toggle=tab]", this.element).length > 0)
+            {
+                var tab = e.parents(".tab-pane:first").attr('id');
+                if (tab)
+                {
+                    $(".nav-tabs", this.element).find("a[href='#"+tab+"']").click();
+                }
+            }
+            $('html, body').animate({
+                scrollTop: e.offset().top
+            }, 500);
         }
     });
 
@@ -448,6 +503,7 @@
         var remote = [];
         $(".has-error", frm).removeClass("has-error").find('*[data-rel=error]').hide();
         $("[data-remote-validator]", frm).removeAttr("data-remote-validator");
+        return true;
         $('[data-crud-validator]', frm).each(function()
         {
             var e = $(this);

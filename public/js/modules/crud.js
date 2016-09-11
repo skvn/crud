@@ -217,6 +217,10 @@
                     naming = context.data('context-limiter');
                 }
                 $("input,select", context).each(function(){
+                    if ($(this).is(':disabled'))
+                    {
+                        return;
+                    }
                     if (naming === 'container')
                     {
                         args[$(this).parents('[data-ref]:first').data('ref')] = $(this).val();

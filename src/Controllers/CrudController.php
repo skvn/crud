@@ -11,6 +11,7 @@ use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Skvn\Crud\Models\CrudNotify as Notify;
 use Skvn\Crud\Traits\TooltipTrait;
+use Skvn\Crud\Exceptions\ValidationException;
 
 class CrudController extends Controller
 {
@@ -216,33 +217,24 @@ class CrudController extends Controller
             $form = $obj->getForm();
 
             $form->load($this->request->all());
-            $obj->isTree() ? $obj->saveTree($this->request->all) : $obj->save();
-            $obj->saveRelations();
-            if ($obj->hasErrors())
-            {
-                return ['success' => false, 'errors' => $obj->getErrors()];
-            }
-            else
-            {
-                return ['success' => true, 'crud_id' => $obj->getKey(), 'crud_model' => $obj->classShortName, 'crud_table' => $obj->classViewName];
-            }
-//            if ($obj->isTree())
-//            {
-//                $obj->saveTree($this->request->all());
-//                $obj->saveRelations();
-//            }
-//            else
-//            {
-//
-//                if (! $obj->save()) {
-//                    return ['success' => false, 'error' => implode("\n", array_values($obj->getErrors()))];
-//                }
-//
-//                $obj->saveRelations();
-//            }
-
-//            return ['success' => true, 'crud_id' => $obj->id, 'crud_model' => $obj->classShortName, 'crud_table' => $obj->classViewName];
-        } catch (\Exception $e) {
+            $obj->validate(true);
+            $data = $this->request->all();
+            $this->app['db']->transaction(function() use ($obj, $data){
+                $obj->isTree() ? $obj->saveTree($this->request->all) : $obj->save();
+                foreach ($obj->getScopeParam("on_save") ?? [] as $saver)
+                {
+                    $obj->$saver($data);
+                }
+                //$obj->saveRelations();
+            });
+            return ['success' => true, 'crud_id' => $obj->getKey(), 'crud_model' => $obj->classShortName, 'crud_table' => $obj->classViewName];
+        }
+        catch (ValidationException $e)
+        {
+            return ['success' => false, 'errors' => $obj->getErrors()];
+        }
+        catch (\Exception $e)
+        {
             var_dump($e->getTraceAsString());
 
             return ['success' => false, 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()];

@@ -9,6 +9,7 @@ class Relations implements ArrayAccess
 {
     protected $model;
     protected $relations = [];
+    protected $saving = false;
 
     public function __construct(CrudModel $model)
     {
@@ -36,6 +37,17 @@ class Relations implements ArrayAccess
     public function defined($name)
     {
         return isset($this->relations[$name]);
+    }
+
+    function defineAll()
+    {
+        foreach ($this->model->confParam('fields') as $field => $conf)
+        {
+            if (!empty($conf['relation']))
+            {
+                $this->define($field);
+            }
+        }
     }
 
     public function define($name)
@@ -71,6 +83,17 @@ class Relations implements ArrayAccess
     public function getRelation($name)
     {
         return $this->define($name)->getRelation();
+    }
+
+    function getAll()
+    {
+        $this->defineAll();
+        $data = [];
+        foreach ($this->relations as $name => $rel)
+        {
+            $data[$name] = $rel->isDirty() ? $rel->getDirtyValue() : $rel->get();
+        }
+        return $data;
     }
 
     public function get($name)
@@ -111,17 +134,30 @@ class Relations implements ArrayAccess
         return $this;
     }
 
-    public function save()
+    public function save($name = null)
     {
-        foreach ($this->relations as $relation) {
-            if ($relation->isDirty()) {
+        if ($this->saving)
+        {
+            return;
+        }
+        $this->saving = true;
+        foreach ($this->relations as $rel_name => $relation)
+        {
+            if (!empty($name) && $name != $rel_name)
+            {
+                continue;
+            }
+            if ($relation->isDirty())
+            {
                 $relation->save();
                 $relation->resetDirty();
             }
         }
+        $this->saving = false;
 
         return true;
     }
+
 
     public function delete()
     {

@@ -10,9 +10,6 @@ use Skvn\Crud\Models\CrudFile;
 
 trait ModelConfigTrait
 {
-    //    protected $config;
-//    public $classShortName;
-//    public $classViewName;
     public $scope = 'default';
 
 
@@ -21,66 +18,6 @@ trait ModelConfigTrait
 
 
 
-//    public static function bootModelConfigTrait()
-//    {
-//        static::registerPreconstruct(function($instance){
-//            $instance->initConfig();
-//        });
-//    }
-
-
-//    protected function initConfig()
-//    {
-//        $this->classShortName = class_basename($this);
-//        $this->classViewName = snake_case($this->classShortName);
-//        $this->config = $this->app['config']->get('crud.'.(!empty($this->table) ? $this->table : $this->classViewName));
-//        $this->config['class_name'] = $this->classViewName;
-//        if (empty($this->table))
-//        {
-//            $this->table = $this->config['table'] ?? $this->classViewName;
-//        }
-//        $this->config['file_params'] = [];
-//
-//        if (!empty($this->config['fields']))
-//        {
-//            foreach ($this->config['fields'] as $name => $col)
-//            {
-//                if (empty($col['field']))
-//                {
-//                    $col['field'] = $name;
-//                }
-//                if (!empty($col['hint_default']) && !empty($col['hint']) &&  $col['hint'] === 'auto')
-//                {
-//                    $col['hint'] = $this->classShortName.'_fields_'.$name;
-//                }
-//                $this->config['fields'][$name] = $col;
-//            }
-//        }
-//
-//    }
-
-
-
-//    function getFieldsByField()
-//    {
-//        $list = [];
-//        foreach ($this->config['fields'] as $fld)
-//        {
-//            $list[$fld['field']] = $fld;
-//        }
-//        return $list;
-//    }
-//
-//    function getField($name, $throw = false)
-//    {
-//        $field = $this->config['fields'][$name] ?? [];
-//        if (empty($field) && $throw)
-//        {
-//            throw new ConfigException('Field ' . $name . ' on ' . $this->classShortName . ' do not exist');
-//        }
-//        $field['name'] = $name;
-//        return $field;
-//    }
 
     /**
      * @param $key
@@ -146,58 +83,6 @@ trait ModelConfigTrait
         return ! empty($this->config['tree'])/* && !$this->getTreeConfig('use_list')*/;
     }
 
-//    function getDescribedColumnValue($col, $format = false, $format_args = [])
-//    {
-//        $value = null;
-//        if ($relSpl = $this->crudRelations->resolveReference($col))
-//        {
-//            $rel = $relSpl['rel'];
-//            $attr = $relSpl['attr'];
-//            try
-//            {
-//                $relObj = $this->$rel;
-//                $value = is_object($relObj) ? $relObj->$attr : "";
-//                if (!empty($format))
-//                {
-//                    $method = "crudFormatValue" . camel_case($format);
-//                    if (method_exists($relObj, $method))
-//                    {
-//                        $value = $relObj->$method($value, $format_args);
-//                    }
-//                }
-//            }
-//            catch (\Exception $e)
-//            {
-//                $value = "(not found)" . $e->getMessage() . ":" . $e->getFile() . ":" . $e->getLine();
-//            }
-//        }
-//        else
-//        {
-//            if ($this->__isset($col))
-//            {
-//                $form_config = $this->getField($col);
-//                if ($form_config && !empty($form_config['type']))
-//                {
-//                    $form_config['name'] = $col;
-//                    $field = Form :: createControl($this, $form_config);
-//                    $value = $field->getOutputValue();
-//                }
-//                else
-//                {
-//                    $value = $this->$col;
-//                }
-//                if (!empty($format))
-//                {
-//                    $method = "crudFormatValue" . camel_case($format);
-//                    if (method_exists($this, $method))
-//                    {
-//                        $value = $this->$method($value, $format_args);
-//                    }
-//                }
-//            }
-//        }
-//        return $value;
-//    }
 
     public function setScope($scope = null)
     {

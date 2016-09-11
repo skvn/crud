@@ -53,7 +53,8 @@ trait ModelSlugTrait
         catch (UniqueException $e)
         {
             var_dump($e->getMessage());
-            $this->addError($e->getMessage());
+            //var_dump($e->getTraceAsString());
+            $this->addError($column, $e->getMessage());
 
             return false;
         }

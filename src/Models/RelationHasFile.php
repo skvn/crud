@@ -13,6 +13,14 @@ class RelationHasFile extends Relation
         return $this;
     }
 
+    function set($value)
+    {
+        if (!empty($value))
+        {
+            return parent :: set($value);
+        }
+    }
+
     public function isMany()
     {
         return false;

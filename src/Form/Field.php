@@ -109,6 +109,6 @@ abstract class Field
 
     function getValidators()
     {
-        return explode(",", $this->config['validators'] ?? "");
+        return explode("|", $this->config['validators'] ?? "");
     }
 }

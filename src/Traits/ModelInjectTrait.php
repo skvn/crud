@@ -70,50 +70,30 @@ trait ModelInjectTrait
     public static function bootCrud()
     {
         static::saved(function ($instance) {
-            //            if ($instance->eventsDisabled)
-//            {
-//                return true;
-//            }
 //            $instance->crudRelations->save();
             return $instance->onAfterSave();
         });
         static::saving(function ($instance) {
-            //            if ($instance->eventsDisabled)
-//            {
-//                return true;
-//            }
-            if ($instance->validate()) {
+            //if ($instance->validate()) {
                 $instance->crudHandleTrackAuthors('update');
 
                 return $instance->onBeforeSave();
-            }
+            //}
 
             return false;
         });
 
         static::creating(function ($instance) {
-            //            if ($instance->eventsDisabled)
-//            {
-//                return true;
-//            }
             $instance->crudHandleTrackAuthors('create');
 
             return $instance->onBeforeCreate();
         });
 
         static::created(function ($instance) {
-            //            if ($instance->eventsDisabled)
-//            {
-//                return true;
-//            }
             return $instance->onAfterCreate();
         });
 
         static::deleting(function ($instance) {
-            //            if ($instance->eventsDisabled)
-//            {
-//                return true;
-//            }
             $check = $instance->onBeforeDelete();
             if ($check !== false) {
                 $instance->crudRelations->delete();
@@ -123,10 +103,6 @@ trait ModelInjectTrait
         });
 
         static::deleted(function ($instance) {
-            //            if ($instance->eventsDisabled)
-//            {
-//                return true;
-//            }
             return $instance->onAfterDelete();
         });
     }

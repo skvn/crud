@@ -64,6 +64,11 @@ abstract class Relation
         $this->isDirty = false;
     }
 
+    function getDirtyValue()
+    {
+        return $this->dirtyValue;
+    }
+
     public function createRelatedModel()
     {
         return CrudModel :: createInstance($this->config['model']);
