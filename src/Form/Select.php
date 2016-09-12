@@ -95,10 +95,16 @@ class Select extends Field {
 
     private function isSelected($idx)
     {
+
         if (is_null($this->value))
         {
             return false;
         }
+
+        if ($this->value instanceof \Illuminate\Support\Collection) {
+            $this->value = $this->value->toArray();
+        }
+
         if (is_array($this->value))
         {
             return in_array($idx, $this->value);
