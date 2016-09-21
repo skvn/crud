@@ -14,7 +14,7 @@ class DateTime extends Field implements FormControl
     public function pullFromModel()
     {
         $this->value = $this->model->getAttribute($this->field);
-        if ($this->value && $this->value->timestamp  < 10) {
+        if ($this->value && $this->value->timestamp < 10) {
             $this->value = null;
         }
     }

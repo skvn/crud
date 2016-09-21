@@ -30,7 +30,7 @@ class Common extends Twig_Extension
             return '/vendor/'.$package.'/'.$asset.'?s='.$this->app['config']->get('app.serial');
         } else {
             $path = '/skins/';
-            $path  .= $this->app['config']->get('view.skin').'/';
+            $path .= $this->app['config']->get('view.skin').'/';
 
             if (! empty($package)) {
                 $path .= 'vendor/'.$package.'/';

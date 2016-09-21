@@ -13,10 +13,9 @@ class RelationHasFile extends Relation
         return $this;
     }
 
-    function set($value)
+    public function set($value)
     {
-        if (!empty($value))
-        {
+        if (! empty($value)) {
             return parent :: set($value);
         }
     }

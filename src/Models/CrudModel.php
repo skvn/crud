@@ -105,14 +105,13 @@ abstract class CrudModel extends Model
         return $obj;
     }
 
-
-    function save(array $options = [])
+    public function save(array $options = [])
     {
         $saved = parent :: save($options);
-        if ($saved)
-        {
+        if ($saved) {
             $saved = $this->crudRelations->save();
         }
+
         return $saved;
     }
 
@@ -223,63 +222,52 @@ abstract class CrudModel extends Model
         return $this->attributes[$this->codeColumn];
     }
 
-    protected function getValidationMessage($field, $rule, $message = "")
+    protected function getValidationMessage($field, $rule, $message = '')
     {
-        if (!empty($message))
-        {
+        if (! empty($message)) {
             return $message;
         }
-        if (isset($this->validationMessages[$field . '.*']))
-        {
-            return $this->validationMessages[$field . '.*'];
+        if (isset($this->validationMessages[$field.'.*'])) {
+            return $this->validationMessages[$field.'.*'];
         }
-        if (isset($this->validationMessages[$field . '.' . $rule]))
-        {
-            return $this->validationMessages[$field . '.' . $rule];
+        if (isset($this->validationMessages[$field.'.'.$rule])) {
+            return $this->validationMessages[$field.'.'.$rule];
         }
-        if (isset($this->validationMessages[$rule]))
-        {
+        if (isset($this->validationMessages[$rule])) {
             return $this->validationMessages[$rule];
         }
-        return $this->app['translator']->trans('crud::rules.' . $rule);
+
+        return $this->app['translator']->trans('crud::rules.'.$rule);
     }
 
     protected function parseValidationRule($field, $rule)
     {
-        if (strpos($rule, ":") !== false)
-        {
-            $parts = explode(":", $rule);
+        if (strpos($rule, ':') !== false) {
+            $parts = explode(':', $rule);
             $r = $parts[0];
-            if (strpos($parts[1], ",") !== false)
-            {
-                $p = explode(",", $parts[1]);
+            if (strpos($parts[1], ',') !== false) {
+                $p = explode(',', $parts[1]);
+            } else {
+                $p = ! empty($parts[1]) ? [$parts[1]] : [];
             }
-            else
-            {
-                $p = !empty($parts[1]) ? [$parts[1]] : [];
-            }
-            $m = $this->getValidationMessage($field, $r, $parts[2] ?? "");
-        }
-        else
-        {
+            $m = $this->getValidationMessage($field, $r, $parts[2] ?? '');
+        } else {
             $r = $rule;
             $p = [];
             $m = $this->getValidationMessage($field, $rule);
         }
-        switch ($r)
-        {
+        switch ($r) {
             case 'unique':
-                if (empty($p))
-                {
+                if (empty($p)) {
                     $p[] = $this->getTable();
                     $p[] = $field;
-                    if ($this->exists)
-                    {
+                    if ($this->exists) {
                         $p[] = $this->getKey();
                     }
                 }
             break;
         }
+
         return ['rule' => $r, 'params' => $p, 'message' => $m];
     }
 
@@ -289,40 +277,30 @@ abstract class CrudModel extends Model
         //var_dump($rule);
         $parsed = $this->parseValidationRule($field, $rule);
         //var_dump($parsed);
-        $parts = isset($rules[$field]) ? explode("|", $rules[$field]) : [];
-        $parts[] = $parsed['rule'] . (!empty($parsed['params']) ? ':' : '') . implode(",", $parsed['params']);
-        $rules[$field] = implode("|", $parts);
-        if (!isset($messages[$field . "." . $parsed['rule']]))
-        {
-            $messages[$field . "." . $parsed['rule']] = $parsed['message'];
+        $parts = isset($rules[$field]) ? explode('|', $rules[$field]) : [];
+        $parts[] = $parsed['rule'].(! empty($parsed['params']) ? ':' : '').implode(',', $parsed['params']);
+        $rules[$field] = implode('|', $parts);
+        if (! isset($messages[$field.'.'.$parsed['rule']])) {
+            $messages[$field.'.'.$parsed['rule']] = $parsed['message'];
         }
     }
 
-
-    function createValidator()
+    public function createValidator()
     {
         $rules = [];
         $messages = [];
-        foreach ($this->validationRules as $field => $rule_list)
-        {
-            foreach (explode("|", $rule_list) as $rule)
-            {
+        foreach ($this->validationRules as $field => $rule_list) {
+            foreach (explode('|', $rule_list) as $rule) {
                 $this->appendValidationRule($rules, $messages, $field, $rule);
             }
         }
-        foreach ($this->config['fields'] ?? [] as $field => $conf)
-        {
-            if (!empty($conf['validators']))
-            {
-                foreach (explode("|", $conf['validators']) as $rule)
-                {
-//                    $this->appendValidationRule($rules, $messages, $field, $rule);
-                    if (!empty($conf['field']) && empty($conf['relation']))
-                    {
+        foreach ($this->config['fields'] ?? [] as $field => $conf) {
+            if (! empty($conf['validators'])) {
+                foreach (explode('|', $conf['validators']) as $rule) {
+                    //                    $this->appendValidationRule($rules, $messages, $field, $rule);
+                    if (! empty($conf['field']) && empty($conf['relation'])) {
                         $this->appendValidationRule($rules, $messages, $conf['field'], $rule);
-                    }
-                    else
-                    {
+                    } else {
                         $this->appendValidationRule($rules, $messages, $field, $rule);
                     }
                 }
@@ -337,15 +315,13 @@ abstract class CrudModel extends Model
     public function validate($throw = false)
     {
         $v = $this->createValidator();
-        if ($v->passes())
-        {
+        if ($v->passes()) {
             return true;
         }
 
         $this->setErrors($v->messages()->toArray());
 
-        if ($throw)
-        {
+        if ($throw) {
             throw new ValidationException(json_encode($v->messages()->toArray()));
         }
 
@@ -364,20 +340,17 @@ abstract class CrudModel extends Model
 
     public function addError($field, $error)
     {
-        if (!isset($this->validationErrors[$field]))
-        {
+        if (! isset($this->validationErrors[$field])) {
             $this->validationErrors[$field] = [];
         }
         $this->validationErrors[$field][] = $error;
     }
 
-    function transferErrors(CrudModel $model, $prefix)
+    public function transferErrors(CrudModel $model, $prefix)
     {
-        foreach ($model->getErrors() as $fld => $errors)
-        {
-            foreach ($errors as $error)
-            {
-                $this->addError($prefix . "." . $fld, $error);
+        foreach ($model->getErrors() as $fld => $errors) {
+            foreach ($errors as $error) {
+                $this->addError($prefix.'.'.$fld, $error);
             }
         }
     }
@@ -626,7 +599,7 @@ abstract class CrudModel extends Model
     public function newCollection(array $models = [])
     {
         $class = $this->app['config']['crud_common.collection_class'];
+
         return new $class($models);
     }
-
 }

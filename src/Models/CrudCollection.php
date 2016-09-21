@@ -1,4 +1,6 @@
-<?php namespace Skvn\Crud\Models;
+<?php
+
+namespace Skvn\Crud\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 
@@ -10,5 +12,4 @@ class CrudCollection extends Collection
             return $m->getTitle();
         }, $this->items);
     }
-
 }

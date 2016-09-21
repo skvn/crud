@@ -46,12 +46,9 @@ trait ModelSlugTrait
 
             return;
         }
-        try
-        {
+        try {
             $this->setAttribute($column, $this->generateSlug($this->getAttribute($column)));
-        }
-        catch (UniqueException $e)
-        {
+        } catch (UniqueException $e) {
             var_dump($e->getMessage());
             //var_dump($e->getTraceAsString());
             $this->addError($column, $e->getMessage());
@@ -74,19 +71,16 @@ trait ModelSlugTrait
 
     private function generateUniqueSlug($slug)
     {
-//        $column = static :: slugColumn();
+        //        $column = static :: slugColumn();
         $valid = $this->validateSlug($slug);
-        if ($valid === -99)
-        {
+        if ($valid === -99) {
             if (defined('static::SLUG_FORCE_TRANSLIT')) {
                 $slug = $this->translitRussian($slug);
                 $slug = Str :: slug($slug);
             } else {
                 throw new UniqueException('Slug('.$slug.') in model '.$this->classShortName.'#'.$this->getKey().' not in URI format. Acceptable format is [a-zA-Z0-9_-]');
             }
-        }
-        elseif ($valid < 0)
-        {
+        } elseif ($valid < 0) {
             if (defined('static::SLUG_GENERATE_NEXT')) {
                 return $slug.'.'.(abs($valid) + 1);
             }
@@ -120,18 +114,17 @@ trait ModelSlugTrait
         return $slug;
     }
 
-    function validateSlug($slug)
+    public function validateSlug($slug)
     {
-        if (! preg_match('#^[a-zA-Z0-9_-]+$#', $slug))
-        {
+        if (! preg_match('#^[a-zA-Z0-9_-]+$#', $slug)) {
             return -99;
         }
         $column = static :: slugColumn();
         $exists = $this->app['db']->table($this->table)->where($column, 'like', $slug)->where('id', '<>', $this->getKey())->get();
-        if (count($exists) > 0)
-        {
+        if (count($exists) > 0) {
             return count($exists);
         }
+
         return 0;
     }
 

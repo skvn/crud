@@ -51,8 +51,7 @@ abstract class Field
         $this->config = $config;
         $this->name = $config['name'];
         $this->field = $config['field'];
-        if (in_array("required", $this->getValidators()))
-        {
+        if (in_array('required', $this->getValidators())) {
             $this->config['required'] = true;
         }
 
@@ -107,8 +106,8 @@ abstract class Field
         $this->config['filter_column'] = $col;
     }
 
-    function getValidators()
+    public function getValidators()
     {
-        return explode("|", $this->config['validators'] ?? "");
+        return explode('|', $this->config['validators'] ?? '');
     }
 }

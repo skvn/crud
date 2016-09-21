@@ -39,12 +39,10 @@ class Relations implements ArrayAccess
         return isset($this->relations[$name]);
     }
 
-    function defineAll()
+    public function defineAll()
     {
-        foreach ($this->model->confParam('fields') as $field => $conf)
-        {
-            if (!empty($conf['relation']))
-            {
+        foreach ($this->model->confParam('fields') as $field => $conf) {
+            if (! empty($conf['relation'])) {
                 $this->define($field);
             }
         }
@@ -85,14 +83,14 @@ class Relations implements ArrayAccess
         return $this->define($name)->getRelation();
     }
 
-    function getAll()
+    public function getAll()
     {
         $this->defineAll();
         $data = [];
-        foreach ($this->relations as $name => $rel)
-        {
+        foreach ($this->relations as $name => $rel) {
             $data[$name] = $rel->isDirty() ? $rel->getDirtyValue() : $rel->get();
         }
+
         return $data;
     }
 
@@ -117,13 +115,13 @@ class Relations implements ArrayAccess
 //        }
 //    }
 
-    function getErrors()
+    public function getErrors()
     {
         $errors = [];
-        foreach ($this->relations as $relation)
-        {
+        foreach ($this->relations as $relation) {
             $errors = array_merge($errors, $relation->getErrors());
         }
+
         return $errors;
     }
 
@@ -136,19 +134,15 @@ class Relations implements ArrayAccess
 
     public function save($name = null)
     {
-        if ($this->saving)
-        {
+        if ($this->saving) {
             return;
         }
         $this->saving = true;
-        foreach ($this->relations as $rel_name => $relation)
-        {
-            if (!empty($name) && $name != $rel_name)
-            {
+        foreach ($this->relations as $rel_name => $relation) {
+            if (! empty($name) && $name != $rel_name) {
                 continue;
             }
-            if ($relation->isDirty())
-            {
+            if ($relation->isDirty()) {
                 $relation->save();
                 $relation->resetDirty();
             }
@@ -157,7 +151,6 @@ class Relations implements ArrayAccess
 
         return true;
     }
-
 
     public function delete()
     {

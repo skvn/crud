@@ -28,7 +28,7 @@ class RelationMorphMany extends Relation
                     return;
                 }
             }
-            if ($delete  === 'delete') {
+            if ($delete === 'delete') {
                 $item->delete();
             } else {
                 $item->$col_id = null;

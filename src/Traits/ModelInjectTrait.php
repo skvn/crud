@@ -70,14 +70,14 @@ trait ModelInjectTrait
     public static function bootCrud()
     {
         static::saved(function ($instance) {
-//            $instance->crudRelations->save();
+            //            $instance->crudRelations->save();
             return $instance->onAfterSave();
         });
         static::saving(function ($instance) {
             //if ($instance->validate()) {
                 $instance->crudHandleTrackAuthors('update');
 
-                return $instance->onBeforeSave();
+            return $instance->onBeforeSave();
             //}
 
             return false;
