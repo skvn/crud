@@ -29,12 +29,12 @@ class CrudUser extends CrudModel implements AuthenticatableContract, CanResetPas
     protected $guarded = ['id', 'remember_token', 'password_confirmation'];
     protected $fullname;
 
-    public function setPasswordAttribute($password)
-    {
-        if (! empty($password)) {
-            $this->attributes['password'] = bcrypt($password);
-        }
-    }
+//    public function setPasswordAttribute($password)
+//    {
+//        if (! empty($password)) {
+//            $this->attributes['password'] = bcrypt($password);
+//        }
+//    }
 
     public function getAcls()
     {

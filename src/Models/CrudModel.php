@@ -256,7 +256,7 @@ abstract class CrudModel extends Model
             }
             else
             {
-                $p = [];
+                $p = !empty($parts[1]) ? [$parts[1]] : [];
             }
             $m = $this->getValidationMessage($field, $r, $parts[2] ?? "");
         }
