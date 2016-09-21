@@ -219,55 +219,44 @@ class CrudController extends Controller
             $form->load($this->request->all());
             $obj->validate(true);
             $data = $this->request->all();
-            $this->app['db']->transaction(function() use ($obj, $data){
+            $this->app['db']->transaction(function () use ($obj, $data) {
                 $obj->isTree() ? $obj->saveTree($this->request->all) : $obj->save();
-                foreach ($obj->getScopeParam("on_save") ?? [] as $saver)
-                {
+                foreach ($obj->getScopeParam('on_save') ?? [] as $saver) {
                     $obj->$saver($data);
                 }
                 //$obj->saveRelations();
             });
+
             return ['success' => true, 'crud_id' => $obj->getKey(), 'crud_model' => $obj->classShortName, 'crud_table' => $obj->classViewName];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['success' => false, 'errors' => $obj->getErrors()];
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             var_dump($e->getTraceAsString());
 
             return ['success' => false, 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()];
         }
     }
 
-    function crudRunValidators()
+    public function crudRunValidators()
     {
         $checks = $this->request->get('validates');
         $slugs = [];
-        foreach ($checks as $idx => $check)
-        {
+        foreach ($checks as $idx => $check) {
             $check['valid'] = true;
-            switch ($check['validator'])
-            {
+            switch ($check['validator']) {
                 case 'slug':
-                    if (!isset($slugs[$check['model']]))
-                    {
+                    if (! isset($slugs[$check['model']])) {
                         $slugs[$check['model']] = [];
                     }
-                    if (in_array($check['value'], $slugs[$check['model']]))
-                    {
+                    if (in_array($check['value'], $slugs[$check['model']])) {
                         $check['valid'] = false;
-                        $check['error_message'] = "Значение не уникально";
-                    }
-                    else
-                    {
+                        $check['error_message'] = 'Значение не уникально';
+                    } else {
                         $obj = CrudModel :: createInstance($check['model'], null, $check['id'] > 0 ? $check['id'] : null);
                         $valid = $obj->validateSlug($check['value']);
-                        if ($valid < 0)
-                        {
+                        if ($valid < 0) {
                             $check['valid'] = false;
-                            $check['error_message'] = $valid === -99 ? "Неподдерживаемый для URL формат" : "Значение не уникально";
+                            $check['error_message'] = $valid === -99 ? 'Неподдерживаемый для URL формат' : 'Значение не уникально';
                         }
                         $slugs[$check['model']][] = $check['value'];
                     }
@@ -275,6 +264,7 @@ class CrudController extends Controller
             }
             $checks[$idx] = $check;
         }
+
         return $checks;
     }
 

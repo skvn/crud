@@ -4,7 +4,6 @@ namespace Skvn\Crud\Traits;
 
 use Illuminate\Support\Arr;
 use Skvn\Crud\Exceptions\ConfigException;
-use Skvn\Crud\Form\Form;
 use Skvn\Crud\Handlers\ListHandler;
 use Skvn\Crud\Models\CrudFile;
 
@@ -15,9 +14,6 @@ trait ModelConfigTrait
 
 
     protected $listObj = null;
-
-
-
 
     /**
      * @param $key
@@ -82,7 +78,6 @@ trait ModelConfigTrait
     {
         return ! empty($this->config['tree'])/* && !$this->getTreeConfig('use_list')*/;
     }
-
 
     public function setScope($scope = null)
     {

@@ -30,7 +30,7 @@ class RelationHasManyFiles extends Relation
                 }
             }
 
-            if ($delete  === 'delete') {
+            if ($delete === 'delete') {
                 $item->delete();
             } else {
                 $item->$col = null;

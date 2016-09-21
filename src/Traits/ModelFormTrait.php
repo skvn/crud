@@ -40,7 +40,7 @@ trait ModelFormTrait
         if (empty($config['type'])) {
             return $config;
         }
-        if (! empty($config['hint_default']) && ! empty($config['hint']) &&  $config['hint'] === 'auto') {
+        if (! empty($config['hint_default']) && ! empty($config['hint']) && $config['hint'] === 'auto') {
             $config['hint'] = $this->classShortName.'_fields_'.$name;
         }
 

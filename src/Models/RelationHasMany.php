@@ -27,7 +27,7 @@ class RelationHasMany extends Relation
                     return;
                 }
             }
-            if ($delete  === 'delete') {
+            if ($delete === 'delete') {
                 $item->delete();
             } else {
                 $item->$col = null;
@@ -71,19 +71,17 @@ class RelationHasMany extends Relation
         }
     }
 
-    function getErrors()
+    public function getErrors()
     {
         $errors = [];
-        foreach ($this->get() as $obj)
-        {
-            if ($obj->hasErrors())
-            {
-                foreach ($obj->getErrors() as $err)
-                {
-                    $errors[] = ['field' => $obj->classViewName . '::' . $err['field'], 'message' => $err['message']];
+        foreach ($this->get() as $obj) {
+            if ($obj->hasErrors()) {
+                foreach ($obj->getErrors() as $err) {
+                    $errors[] = ['field' => $obj->classViewName.'::'.$err['field'], 'message' => $err['message']];
                 }
             }
         }
+
         return $errors;
     }
 

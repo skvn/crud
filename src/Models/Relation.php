@@ -39,7 +39,7 @@ abstract class Relation
         $this->isDirty = true;
     }
 
-    function getErrors()
+    public function getErrors()
     {
         return [];
     }
@@ -64,7 +64,7 @@ abstract class Relation
         $this->isDirty = false;
     }
 
-    function getDirtyValue()
+    public function getDirtyValue()
     {
         return $this->dirtyValue;
     }
