@@ -33,21 +33,18 @@ trait ModelFormTrait
 
     public function hasField($name)
     {
-        foreach ($this->config['fields'] as $column => $field)
-        {
-            if ($column === $name)
-            {
+        foreach ($this->config['fields'] as $column => $field) {
+            if ($column === $name) {
                 return true;
             }
-            if (!empty($field['field']) && $field['field'] === $name)
-            {
+            if (! empty($field['field']) && $field['field'] === $name) {
                 return true;
             }
-            if (!empty($field['fields']) && in_array($name, $field['fields']))
-            {
+            if (! empty($field['fields']) && in_array($name, $field['fields'])) {
                 return true;
             }
         }
+
         return false;
     }
 
