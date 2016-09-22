@@ -33,7 +33,7 @@ trait ModelFormTrait
 
     function hasField($name)
     {
-        return array_key_exists($name, $this->config['fields']['name']);
+        return array_key_exists($name, $this->config['fields']);
     }
 
     protected function configureField($name, $config)
