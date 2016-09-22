@@ -31,7 +31,7 @@ trait ModelFormTrait
         return $field;
     }
 
-    function hasField($name)
+    public function hasField($name)
     {
         return array_key_exists($name, $this->config['fields']);
     }
