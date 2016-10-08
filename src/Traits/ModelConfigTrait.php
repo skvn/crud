@@ -428,7 +428,9 @@ trait ModelConfigTrait
         {
             $rel = $relSpl[0];
             $attr = $relSpl[1];
-            return $this->$rel->$attr;
+            if ($this->$rel) {
+                return $this->$rel->$attr;
+            }
         }
         else
         {

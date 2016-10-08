@@ -10,6 +10,7 @@
        {% endfor %}
 
 {% else %}
+    <option value=""></option>
     {% for op in input.getOptions() %}
         <option value="{{ op.value }}" {{ op.selected ? 'selected' }}>{{ op.text }}</option>
     {% endfor %}
