@@ -2,14 +2,13 @@
     {%  if input.config.type == 'multi_file' %}
         {% include input.controlTemplate() %}
     {%  else  %}
-    <div class="row" data-ref="{{ input.name }}">
-        <div class="form-group col-md-{{ COL_WIDTH?COL_WIDTH:12 }}" style="margin-top: 10px;">
+
+        <div class="form-group {{ input.config.css_class?input.config.css_class}}"  data-ref="{{ input.name }}">
            {% include input.controlTemplate() %}
             {%  if input.config.required %}
                 <span class="help-block" data-rel="error" style="display: none">{{ trans('crud::messages.field_required') }}</span>
             {% endif %}
         </div>
-    </div>
 
     {% endif %}
 {% endif %}

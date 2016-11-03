@@ -117,3 +117,14 @@ Example:
             ]
             
 ```
+
+
+<a name="fields"></a>
+### Fields
+
+#### Common options
+
+- **type**  
+- **title** 
+- **css_class**
+- **validators**
