@@ -61,10 +61,13 @@ class Select extends Field implements FormControl, FormControlFilterable
         } else {
             $opts = [];
         }
+
         if ($this->isGrouped()) {
             foreach ($opts as $gid => $g) {
-                foreach ($g['options'] as $iid => $opt) {
-                    $opts[$gid]['options'][$iid]['selected'] = $this->isSelected($opt['value']);
+                if (isset($g['options']) && is_array($g['options'])) {
+                    foreach ($g['options'] as $iid => $opt) {
+                        $opts[$gid]['options'][$iid]['selected'] = $this->isSelected($opt['value']);
+                    }
                 }
             }
         } else {
@@ -247,10 +250,16 @@ class Select extends Field implements FormControl, FormControlFilterable
      */
     public function formatOptionsArray($options) : array
     {
-        if (! is_array($options) && ! count($options)) {
+
+        //no transformations on grouped data
+        if ($this->isGrouped()) {
             return $options;
         }
 
+
+        if (! is_array($options) && ! count($options)) {
+            return $options;
+        }
 
         if (! isset($options[0]['value'])) {
             $ret = [];
