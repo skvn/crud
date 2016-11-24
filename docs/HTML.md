@@ -8,6 +8,7 @@ CRUD package supports several types of events and directives.
 **Events:**
 - [**click**](#click_events)
 - [**change**](#change_events)
+- [**Crud events**](#crud_events)
 
 **Directives:**
 - [**crud_action**](#crud_action)
@@ -47,6 +48,9 @@ Also you can define the ID for the modal div with `data-popup` attribute. The ID
 ```
 <button data-uri="/admin/utls/show_stat" data-popup="stats_form" data-click="crud_popup">Open popup</button>
 ```
+
+<a name="crud_events"></a>
+## CRUD Events
 
 <a name="crud_actions"></a>
 ## CRUD Actions

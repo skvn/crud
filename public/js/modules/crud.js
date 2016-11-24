@@ -249,6 +249,7 @@
                 args = args || {};
                 var scope = args.scope || "";
                 var $tab_cont = args.table.parents('div.tabs-container').first();
+
                 if ( $('a[href=#tab_'+model+'_'+scope+'_'+id+']',$tab_cont).length)
                 {
                     $('a[href=#tab_'+model+'_'+scope+'_'+id+']',$tab_cont).first().click();

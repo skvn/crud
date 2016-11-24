@@ -109,6 +109,15 @@
     <script src="{{ js|asset }}" ></script>
 {% endfor %}
 {% endif %}
+{# Entitty assets #}
+{% if crudObj %}
+{% set entAssets = crudObj.confParam('assets') %}
+    {% if entAssets.js %}
+        {% for js in  entAssets.js %}
+            <script src="{{ js|asset }}" ></script>
+        {% endfor %}
+    {% endif %}
+{% endif %}
 
 
 

@@ -22,3 +22,21 @@ The build process is configured in `gulpfile.js` and `gulp-config.json` files. I
 - Combine  and minified all vendor javascript modules and plugins to the `vendor.min.js` file
 - Combine  and minified all vendor javascript localization files to the public directory
 
+
+## Common assets
+
+
+## Entity assets
+
+Sometimes it's required to add entity specific assets to the admin page.
+You can do it by providing  `assets` param in config
+```
+  "assets" =>
+     [
+         "js" => [
+             "/js/admin/banner.js",
+         ]
+     ],
+```
+The following files would be added to the scripts when navigated to the list page for the chosen entity type.      
+

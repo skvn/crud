@@ -12,6 +12,11 @@
 
             //init controls
             crud.trigger('form.init', {form: $form});
+
+            $form.find('.nav-tabs li').on('click', function () {
+                crud.trigger('form.tab_click', {form: $form, tab: $(this)});
+            });
+
             $("[required]", $form).each(function(){
                 var validator = $(this).data('crud-validator');
                 if (validator)
