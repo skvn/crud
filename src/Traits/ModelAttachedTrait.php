@@ -112,6 +112,7 @@ trait ModelAttachedTrait
 
             return $resized_filename;
         } catch (\Exception $e) {
+            var_dump($e->getMessage());
             return '/images/noimage.gif';
         }
     }

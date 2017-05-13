@@ -199,9 +199,10 @@ abstract class CrudModel extends Model
         return parent :: getMorphClass();
     }
 
-    public function getActualClassNameForMorph($class)
+    public static  function getActualClassNameForMorph($class)
     {
-        if ($this->app['config']->get('crud_common.replace_morph_classes_with_basename')) {
+        $app = Container :: getInstance();
+        if ($app['config']->get('crud_common.replace_morph_classes_with_basename')) {
             return self :: resolveClass($class);
         }
 
@@ -569,6 +570,7 @@ abstract class CrudModel extends Model
         if ($rel) {
             if (empty($args['delete_attach_id'])) {
                 $args['delete_attach_id'] = -1;
+                $args['delete_attach_id'] = -1;
             }
             $this->crudRelations[$rel]->delete($args['delete_attach_id']);
         }
@@ -599,7 +601,6 @@ abstract class CrudModel extends Model
     public function newCollection(array $models = [])
     {
         $class = $this->app['config']['crud_common.collection_class'];
-
         return new $class($models);
     }
 }
