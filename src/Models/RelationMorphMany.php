@@ -72,6 +72,6 @@ class RelationMorphMany extends Relation
 
     public function getIds()
     {
-        return $this->get()->lists($this->createRelatedModel()->getKeyName())->all();
+        return $this->get()->pluck($this->createRelatedModel()->getKeyName())->all();
     }
 }

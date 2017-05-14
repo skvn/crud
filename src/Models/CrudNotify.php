@@ -86,7 +86,7 @@ class CrudNotify extends CrudModel
             }
             $notify->title = 'Уведомление';
         }
-        app()['session']->set('crud_notify', $received);
+        app()['session']->put('crud_notify', $received);
 
         return $notify;
     }

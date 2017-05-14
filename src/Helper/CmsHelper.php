@@ -9,17 +9,31 @@ class CmsHelper
     protected $menus = [];
     protected $app;
 
-    public function __construct($user = null)
+    public function __construct()
     {
         $this->app = app();
-        if ($user) {
-            $this->user = $user;
-            $this->acls = $user->getAcls();
-        }
     }
 
+    public function getUser()
+    {
+        if (!$this->user) {
+            $this->user = $this->app['auth']->user();
+            $this->acls = $this->user->getAcls();
+
+        }
+        return $this->user;
+    }
+
+    public function getAcls()
+    {
+        if (!count($this->acls)) {
+            $this->getUser();
+        }
+        return $this->acls;
+    }
     public function getAdminMenu()
     {
+
         $conf = $this->app['config']->get('admin_menu');
         $menu = [];
         foreach ($conf as $index => $parent) {
@@ -63,13 +77,12 @@ class CmsHelper
         return $menu;
     }
 
-    public function getUser()
-    {
-        return $this->user;
-    }
+
 
     public function checkAcl($acl, $access = '')
     {
+
+        $this->getAcls();
         if (empty($acl)) {
             return true;
         }

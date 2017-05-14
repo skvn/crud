@@ -338,7 +338,7 @@ class CrudModelCollectionBuilder
         $data = [];
         $total = ! empty($this->collectionQuery->cnt) ? $this->collectionQuery->cnt : 0;
         $q = $this->collectionQuery->getQuery();
-        $this->app['session']->set('current_query_info', ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
+        $this->app['session']->put('current_query_info', ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
         \Log :: info($this->collectionQuery->getQuery()->toSQL(), ['browsify' => true]);
         \Log :: info($this->collectionQuery->getQuery()->getBindings(), ['browsify' => true]);
         $rs = $this->collectionQuery->get();
@@ -396,7 +396,7 @@ class CrudModelCollectionBuilder
         $data = [];
         $total = ! empty($this->collectionQuery->cnt) ? $this->collectionQuery->cnt : 0;
         $q = $this->collectionQuery->getQuery();
-        $this->app['session']->set('current_query_info', ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
+        $this->app['session']->put('current_query_info', ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
         \Log :: info($this->collectionQuery->getQuery()->toSQL(), ['browsify' => true]);
         \Log :: info($this->collectionQuery->getQuery()->getBindings(), ['browsify' => true]);
         $rs = $this->collectionQuery->get();

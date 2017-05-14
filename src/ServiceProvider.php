@@ -83,7 +83,7 @@ class ServiceProvider extends LServiceProvider
     protected function registerHelpers()
     {
         $this->app->bindIf('skvn.cms', function ($app) {
-            return new Helper\CmsHelper($app['auth']->user());
+            return new Helper\CmsHelper();
         }, true);
         $this->app->bindIf('skvn.crud', function ($app) {
             return new Helper\CrudHelper($app);
