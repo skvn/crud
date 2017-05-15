@@ -47,6 +47,7 @@ abstract class CrudModel extends Model
 
     public function __construct(array $attributes = [])
     {
+
         $this->app = Container :: getInstance();
         $this->bootIfNotBooted();
 
@@ -153,8 +154,10 @@ abstract class CrudModel extends Model
 
     public function getAttribute($key)
     {
-        if ($this->crudRelations->has($key)) {
-            return $this->crudRelations->get($key);
+        if ($this->crudRelations) {
+            if ($this->crudRelations->has($key)) {
+                return $this->crudRelations->get($key);
+            }
         }
 
         return parent::getAttribute($key);
@@ -162,10 +165,12 @@ abstract class CrudModel extends Model
 
     public function setAttribute($key, $value)
     {
-        if ($this->crudRelations->has($key)) {
-            $this->crudRelations[$key]->set($value);
+        if ($this->crudRelations) {
+            if ($this->crudRelations->has($key)) {
+                $this->crudRelations[$key]->set($value);
 
-            return;
+                return;
+            }
         }
         if ($this->callSetters($key, $value) === true) {
             return;

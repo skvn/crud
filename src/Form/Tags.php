@@ -42,6 +42,14 @@ class Tags extends Field implements FormControl
         if (! empty($this->value)) {
             foreach ($this->value as $title) {
                 $obj = $class::firstOrCreate([$dummyModel->confParam('title_field') => trim($title)]);
+
+//                $obj = $class::where($dummyModel->confParam('title_field'), trim($title))->first();
+//                if (!$obj) {
+//                    $obj = CrudModel :: createInstance($this->config['model']);
+//                    $obj->setAttribute($dummyModel->confParam('title_field'), trim($title));
+//                    $obj->save();
+//
+//                }
                 $ids[] = $obj->getKey();
             }
         }
