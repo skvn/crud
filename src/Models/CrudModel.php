@@ -279,10 +279,7 @@ abstract class CrudModel extends Model
 
     protected function appendValidationRule(&$rules, &$messages, $field, $rule)
     {
-        //var_dump($field);
-        //var_dump($rule);
         $parsed = $this->parseValidationRule($field, $rule);
-        //var_dump($parsed);
         $parts = isset($rules[$field]) ? explode('|', $rules[$field]) : [];
         $parts[] = $parsed['rule'].(! empty($parsed['params']) ? ':' : '').implode(',', $parsed['params']);
         $rules[$field] = implode('|', $parts);
@@ -313,8 +310,6 @@ abstract class CrudModel extends Model
             }
         }
         $data = array_merge($this->attributes, $this->crudRelations->getAll());
-        //var_dump($data);
-        //var_dump($rules);
         return $this->app['validator']->make($data, $rules, $messages);
     }
 

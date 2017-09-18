@@ -19,17 +19,13 @@
 
             $("[required]", $form).each(function(){
                 var validator = $(this).data('crud-validator');
-                if (validator)
-                {
+                if (validator) {
                     var v = validator.split(",");
-                    if ($.inArray('required', v) < 0)
-                    {
+                    if ($.inArray('required', v) < 0) {
                         v.push('required');
                     }
                     validator = v.join(",");
-                }
-                else
-                {
+                } else {
                     validator = "required";
                 }
                 $(this).removeAttr('required').attr('data-crud-validator',validator).data('crud-validator', validator);
@@ -44,79 +40,59 @@
             $form.on('submit', function(e){
                 e.preventDefault();
                 crud.trigger('form.before_validate', {form: $form});
-                if (!validate_form($form))
-                {
+                if (!validate_form($form)) {
                     return;
                 }
+                crud.trigger('form.before_submit', {form: $form});
                 $form.ajaxSubmit({
                     type: $form.attr('method'),
                     url: $form.attr('action'),
                     dataType: 'json',
                     context: crud.doc.body,
                     success: function(res){
-                        crud.trigger('form.after_submit', {form: $form})
-                        //crud.toggle_form_progress($form);
-                        if (res.success)
-                        {
-
-                            if ($form.data('crud_model'))
-                            {
+                        crud.trigger('form.after_submit', {form: $form});
+                        if (res.success) {
+                            if ($form.data('crud_model')) {
                                 var ref_scope = $form.data('crud_model')+'_'+$form.data('crud_scope');
-
-                                if ($form.data('close'))
-                                {
+                                var ref_model = $form.data('crud_model');
+                                if ($form.data('close')) {
                                     crud.trigger("crud.reload", res);
                                     crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
 
-                                }
-                                else
-                                {
+                                } else {
                                     crud.trigger("crud.reload", res);
                                     var ref = $form.data('crud_model') + '_' + $form.data('crud_scope');
                                     var table = $('*[data-list_table_ref='+ref+']');
-                                    if (table.data('form_type') == 'tabs')
-                                    {
+                                    if (table.data('form_type') == 'tabs') {
                                         crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
                                     }
-                                    crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
+                                    crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope, model: ref_model});
 
                                 }
                                 //$form.trigger('reset');
                                 //crud.reset_selects();
-                            }
-                            else
-                            {
-                                if (res.message)
-                                {
+                            } else {
+                                if (res.message) {
                                     alert(res.message);
                                 }
-                                if ($form.data('callback_event'))
-                                {
+                                if ($form.data('callback_event')) {
                                     crud.trigger($form.data('callback_event'));
                                 }
                                 crud.trigger('crud.submitted', {form_id: $form.attr('id'), res: res, frm: $form});
                             }
-                            if ($form.data("close"))
-                            {
+                            if ($form.data("close")) {
                                 $form.parents(".modal:first").modal('hide');
                             }
-                            if ($form.data("reload"))
-                            {
+                            if ($form.data("reload")) {
                                 crud.loc.reload();
                             }
-                        }
-                        else
-                        {
-                            if (typeof res.errors != "undefined")
-                            {
-                                for (var f in res.errors)
-                                {
+                        } else {
+                            if (typeof res.errors != "undefined") {
+                                for (var f in res.errors) {
                                     self.showError(f, res.errors[f].join('<br />'));
                                 }
                                 self.gotoError();
-                            }
-                            else
-                            {
+                            } else {
                                 alert(crud.format_error(res.error));
                             }
                         }
@@ -132,133 +108,6 @@
                     }
                 });
             });
-
-//            $form
-                //.on('submit.bv', function(){
-                //    crud.trigger('form.before_validate', {form: $form});
-                //    $("*[data-bv-field]", $form).trigger('change');
-                //})
-
-
-            //    .bootstrapValidator({
-            //    live: 'enabled',
-            //    trigger: null,
-            //    excluded: [
-            //        function(e){
-            //            var p = e.parents(".crud_validate:first");
-            //            if (p.length)
-            //            {
-            //                return p.hasClass('hidden');
-            //            }
-            //            if (e.is(':disabled'))
-            //            {
-            //                return true;
-            //            }
-            //        }
-            //    ]
-            //})
-            //    .on('error.field.bv', function(e, data) {
-            //        console.log('error.field.bv -->', data);
-            //    })
-            //    .on('error.form.bv', function(e){
-            //        console.log($(e.target).data('bootstrapValidator').getInvalidFields());
-            //    })
-            //    .on('success.form.bv', function(e)
-            //    {
-
-                    //e.preventDefault();
-                    //crud.trigger("form.before_submit", {form: $form});
-
-                //    $form.ajaxSubmit({
-                //        type: $form.attr('method'),
-                //        url: $form.attr('action'),
-                //        dataType: 'json',
-                //        context: crud.doc.body,
-                //        success: function(res){
-                //            crud.trigger('form.after_submit', {form: $form})
-                //            //crud.toggle_form_progress($form);
-                //            if (res.success)
-                //            {
-                //
-                //                if ($form.data('crud_model'))
-                //                {
-                //                    var ref_scope = $form.data('crud_model')+'_'+$form.data('crud_scope');
-                //
-                //                    if ($form.data('close'))
-                //                    {
-                //                        crud.trigger("crud.reload", res);
-                //                        crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
-                //
-                //                    }
-                //                    else
-                //                    {
-                //                        crud.trigger("crud.reload", res);
-                //                        var ref = $form.data('crud_model') + '_' + $form.data('crud_scope');
-                //                        var table = $('*[data-list_table_ref='+ref+']');
-                //                        if (table.data('form_type') == 'tabs')
-                //                        {
-                //                            crud.trigger('crud.cancel_edit', {rel:$form.data('rel')});
-                //                        }
-                //                        crud.trigger('crud.edit_element', { id: res.crud_id, ref: ref_scope});
-                //
-                //                    }
-                //                    //$form.trigger('reset');
-                //                    //crud.reset_selects();
-                //                }
-                //                else
-                //                {
-                //                    if (res.message)
-                //                    {
-                //                        alert(res.message);
-                //                    }
-                //                    if ($form.data('callback_event'))
-                //                    {
-                //                        crud.trigger($form.data('callback_event'));
-                //                    }
-                //                    crud.trigger('crud.submitted', {form_id: $form.attr('id'), res: res, frm: $form});
-                //                }
-                //                if ($form.data("close"))
-                //                {
-                //                    $form.parents(".modal:first").modal('hide');
-                //                }
-                //                if ($form.data("reload"))
-                //                {
-                //                    crud.loc.reload();
-                //                }
-                //            }
-                //            else
-                //            {
-                //                alert(crud.format_error(res.error));
-                //            }
-                //        },
-                //        error: function(res){
-                //            //crud.trigger('form.error_submit', {form: $form});
-                //            //crud.toggle_form_progress($form);
-                //            if (res.responseJSON && res.responseJSON.error && res.responseJSON.error.message) {
-                //                alert(res.responseJSON.error.message)
-                //            } else {
-                //                alert(i18n.say('error_sending_request'));
-                //            }
-                //        }
-                //    });
-                //}
-                //);
-
-
-
-            //events
-            //$('.crud_checkbox', $form).on('change', function () {
-            //
-            //    var name = $(this).data('name');
-            //    var hidden = $form.find('input[name='+name+']');
-            //    if ($(this).prop('checked'))
-            //    {
-            //        hidden.val('1');
-            //    } else
-            //    {
-            //        hidden.val('0');
-            //    }
-            //});
 
             $('input[type=file]', $form).on('change', function (e) {
 
@@ -277,8 +126,7 @@
         },
         showFields: function(names)
         {
-            for (var i in names)
-            {
+            for (var i in names) {
                 //alert(names[i]+ ':' +$(".form-group[data-ref="+names[i]+"]", this.element).length);
                 var c = $(".row[data-ref="+names[i]+"]", this.element);
                 c.show();
@@ -297,8 +145,7 @@
         },
         hideFields: function(names)
         {
-            for (var i in names)
-            {
+            for (var i in names) {
                 var c = $(".row[data-ref="+names[i]+"]", this.element);
                 c.hide();
                 //$("[data-crud-validator]", c).each(function(){
@@ -321,19 +168,17 @@
         showError: function(control, message)
         {
             var p = this.element;
-            if (control.indexOf('.') > 0)
-            {
+            if (control.indexOf('.') > 0) {
                 var segments = control.split('.');
                 $('[data-context-limiter]', this.element).each(function(){
                     var c = $(this);
-                    if (c.data('model') === segments[0] && parseInt(c.data('id')) === parseInt(segments[1]))
-                    {
+                    if (c.data('model') === segments[0] && parseInt(c.data('id')) === parseInt(segments[1])) {
                         p = c;
                         control = segments[2];
                     }
                 });
             }
-            var row = $(".row[data-ref="+control+"]", p);
+            var row = $(".form-group[data-ref="+control+"]", p);
             //$(".form-group:first", row).addClass("has-error").find('*[data-rel=error]').html(message).show();
             row.addClass("has-error").find('*[data-rel=error]').html(message).show();
         },
@@ -344,11 +189,9 @@
             {
                 return;
             }
-            if ($("[data-toggle=tab]", this.element).length > 0)
-            {
+            if ($("[data-toggle=tab]", this.element).length > 0) {
                 var tab = e.parents(".tab-pane:first").attr('id');
-                if (tab)
-                {
+                if (tab) {
                     $(".nav-tabs", this.element).find("a[href='#"+tab+"']").click();
                 }
             }
@@ -418,8 +261,7 @@
 
             //?? tab ??
             var id = 'tab_'+data.rel;
-            if ($('div#'+id+'.tab-pane').length)
-            {
+            if ($('div#'+id+'.tab-pane').length) {
                 var cont = $('div#'+id);
                 cont.parents('div[data-tabs_container]').first().find('.nav-tabs li:first a:first').click();
                 var id = cont.attr('id');
@@ -441,14 +283,14 @@
 
         crud.bind('crud.edit_element', function(data){
 
-            if (data.ref)
-            {
-
+            if (data.ref) {
                 data.table = $('*[data-list_table_ref='+data.ref+']');
             }
 
-
             var model = data.table.data('crud_table')?data.table.data('crud_table'):data.table.data('crud_tree');
+            if (!model && data.model) {
+                model = data.model;
+            }
             if (data.table && data.table.data('form_type') == 'tabs') {
                 //open edit  tab
                 crud.init_edit_tab(model, data.id, {table: data.table, scope: data.table.data('crud_scope'), rargs:data.rargs?data.rargs:{}});
@@ -458,8 +300,7 @@
             }
         });
 
-        $(crud.doc).on('click', '.crud_submit', function (e)
-        {
+        $(crud.doc).on('click', '.crud_submit', function (e) {
             e.preventDefault();
             var frm = $(this).parents("form:first");
             prepare_form(frm, $(this));
@@ -467,7 +308,7 @@
 
         });
 
-        crud.bind("form.before_submit", function(data){
+        crud.bind("form.before_submit", function(data) {
             toggle_progress(data['form']);
             init_progress(data['form']);
         });
@@ -491,10 +332,8 @@
     function prepare_form(frm, elem)
     {
         var attrs = ['close', 'reload'];
-        for (var i =0; i<attrs.length; i++)
-        {
-            if (elem.data(attrs[i]) != undefined)
-            {
+        for (var i =0; i<attrs.length; i++) {
+            if (elem.data(attrs[i]) != undefined) {
                 frm.data(attrs[i], elem.data(attrs[i]));
             }
         }
@@ -509,8 +348,7 @@
         $(".has-error", frm).removeClass("has-error").find('*[data-rel=error]').hide();
         $("[data-remote-validator]", frm).removeAttr("data-remote-validator");
         return true;
-        $('[data-crud-validator]', frm).each(function()
-        {
+        $('[data-crud-validator]', frm).each(function() {
             var e = $(this);
             if (e.is(":disabled"))
             {
@@ -544,15 +382,12 @@
                 }
             }
         });
-        if (remote.length)
-        {
+        if (remote.length) {
             $.ajaxSetup({async: false});
-            var o = $.post(crud.format_setting('model_validate_url', {}), {validates: remote}, function(res){
+            var o = $.post(crud.format_setting('model_validate_url', {}), {validates: remote}, function(res) {
                 $.ajaxSetup({async: true});
-                for (var i in res)
-                {
-                    if (!res[i].valid)
-                    {
+                for (var i in res) {
+                    if (!res[i].valid) {
                         var elm = $('[data-remote-validator='+i+']', frm);
                         elm.parents(".form-group:first").addClass("has-error").find('*[data-rel=error]').html(res[i].error_message).show();
                         console.log("Error: " + elm.attr('name'));
@@ -570,8 +405,7 @@
         $('.modal-footer button, .modal-footer .progress', elem).toggleClass('hide');
         $('.modal-footer button', elem).each(function () {
 
-            if (!$(this).hasClass('hide'))
-            {
+            if (!$(this).hasClass('hide')) {
                 $(this).removeAttr('disabled');
             }
         });

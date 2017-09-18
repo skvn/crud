@@ -15,6 +15,9 @@
                 case 'mde':
                     createMDE(this.element);
                 break;
+                default:
+                    createTextarea(this.element);
+                break;
             }
         }
     });
@@ -125,6 +128,11 @@
             language: i18n.say('locale_short')
         });
 
+    }
+    
+    function createTextarea(elem) 
+    {
+        elem.css('height', elem.data('height'));
     }
 
     function snAnchorDialog()
