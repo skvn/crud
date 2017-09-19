@@ -33,7 +33,7 @@ class Date extends Field implements FormControl
     public function getOutputValue():string
     {
         if (empty($this->value)) {
-            return;
+            return '';
         }
 
         return $this->value->format($this->config['format']);
