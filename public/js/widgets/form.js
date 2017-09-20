@@ -266,7 +266,7 @@
                 cont.parents('div[data-tabs_container]').first().find('.nav-tabs li:first a:first').click();
                 var id = cont.attr('id');
                 cont.remove();
-                $('a[href=#'+id+']').parent().remove();
+                $('a[href="#'+id+'"]').parent().remove();
 
                 $("html, body").animate({ scrollTop: 0 }, "slow");
 
