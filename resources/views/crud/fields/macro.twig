@@ -90,6 +90,7 @@
                                         value="{{ input.getValue() }}"
                                         data-default="{{ input.config.default }}"
                                         data-crud-validator="{{ input.config.validators }}"
+                                        {{ input.config.disabled ? 'disabled="disabled"' }}
     />
 {% endmacro %}
 
@@ -101,6 +102,7 @@
             data-type="{{ input.config.editor_type }}"
             class="form-control" {{ input.config.required ? 'required' }}
             name="{{ input.field }}"
+            {{ input.config.disabled ? 'disabled="disabled"' }}
             id="{{ input.getUniqueId() }}"  >{{ input.getValue()}}</textarea>
 
 {% endmacro %}
