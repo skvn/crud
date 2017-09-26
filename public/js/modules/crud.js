@@ -26,56 +26,42 @@
             loc: l,
             con: c,
             //crudObj : w.crud_object_conf,
-            bind: function(event, listener)
-            {
-                if (typeof(listeners[event]) == "undefined")
-                {
+            bind: function(event, listener) {
+                if (typeof(listeners[event]) == "undefined") {
                     listeners[event] = [];
                 }
                 listeners[event].push(listener);
-                if (typeof(events[event]) != "undefined")
-                {
+                if (typeof(events[event]) != "undefined") {
                     listener(events[event]);
                 }
             },
-            trigger : function(event, data)
-            {
-                if (typeof(data) == "undefined")
-                {
+            trigger : function(event, data) {
+                if (typeof(data) == "undefined") {
                     data = {};
                 }
-                if (typeof(listeners[event]) != "undefined")
-                {
-                    for (var i=0; i<listeners[event].length; i++)
-                    {
+                if (typeof(listeners[event]) != "undefined") {
+                    for (var i=0; i<listeners[event].length; i++) {
                         listeners[event][i](data);
                     }
                 }
                 events[event] = data;
             },
-            format_setting: function(key, args)
-            {
+            format_setting: function(key, args) {
                 return this.format_string(settings[key] || "", args);
             },
-            format_string: function(str, args)
-            {
-                for (var i in args)
-                {
+            format_string: function(str, args) {
+                for (var i in args) {
                     str = str.replace('{' + i + '}', args[i] || "");
                 }
                 return str;
             },
-            set_config: function(config)
-            {
-                for (var i in config)
-                {
+            set_config: function(config) {
+                for (var i in config) {
                     settings[i] = config[i];
                 }
             },
-            add_actions: function(actions)
-            {
-                for (var i in actions)
-                {
+            add_actions: function(actions) {
+                for (var i in actions) {
                     crud_actions[i] = actions[i];
                 }
             },
@@ -95,19 +81,15 @@
                 return hval >>> 0;
             },
 
-            getActiveTab: function(elem)
-            {
-                if (elem && elem.parents("div.modal-dialog").length > 0)
-                {
+            getActiveTab: function(elem) {
+                if (elem && elem.parents("div.modal-dialog").length > 0) {
                     return null;
                 }
                 var c = $('div[data-tabs_container]');
-                if (c.length == 1)
-                {
+                if (c.length == 1) {
                     var ul = $(".nav.nav-tabs:first", c);
                     var li = $("li.active", c);
-                    if (li.length > 0)
-                    {
+                    if (li.length > 0) {
                         var tab_id = $("a[data-toggle]", li).attr('href');
                         var tab = $(".tab-pane"+tab_id, c);
                         return tab;
@@ -115,8 +97,7 @@
                 }
             },
 
-            getUrlParam: function(name, url, default_value)
-            {
+            getUrlParam: function(name, url, default_value) {
                 if (!url) url = this.loc.href;
                 name = name.replace(/[\[\]]/g, "\\$&");
                 var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"), results = regex.exec(url);
@@ -126,49 +107,36 @@
             },
 
 
-            addModelParams: function(args, elem)
-            {
+            addModelParams: function(args, elem) {
                 args['id'] = elem.data('id');
                 args['model'] = elem.data('model') || "";
                 args['scope'] = elem.data('scope') ? elem.data('scope') : "default";
                 var context = elem.parents("[data-context-limiter]:first");
-                if (context.length)
-                {
-                    if (!args['model'] && context.data('model'))
-                    {
+                if (context.length) {
+                    if (!args['model'] && context.data('model')) {
                         args['model'] = context.data('model');
                     }
-                    if (!args['id'] && context.data('id'))
-                    {
+                    if (!args['id'] && context.data('id')) {
                         args['id'] = context.data('id');
                     }
                 }
 
                 var tbl = elem.parents("table[data-crud_table]:first");
-                if (tbl.length)
-                {
-                    if (!args['model'] && tbl.data('crud_table'))
-                    {
+                if (tbl.length) {
+                    if (!args['model'] && tbl.data('crud_table')) {
                         args['model'] = tbl.data('crud_table');
-                        if (tbl.data('crud_scope'))
-                        {
+                        if (tbl.data('crud_scope')) {
                             args['scope'] = tbl.data('crud_scope');
                         }
                     }
-                    if (!args['id'])
-                    {
+                    if (!args['id']) {
                         var row = elem.parents('tr:first');
-                        if (row.length)
-                        {
-                            if (row.data('id'))
-                            {
+                        if (row.length) {
+                            if (row.data('id')) {
                                 args['id'] = row.data('id');
-                            }
-                            else
-                            {
+                            } else {
                                 var cell = $("td[data-id]:first", row);
-                                if (cell.length && cell.data('id'))
-                                {
+                                if (cell.length && cell.data('id')) {
                                     args['id'] = cell.data('id');
                                 }
                             }
@@ -176,58 +144,54 @@
                     }
                 }
                 var frm = elem.parents("form[data-crud_model]:first");
-                if (frm.length)
-                {
-                    if (!args['model'] && frm.data('crud_model'))
-                    {
+                if (frm.length) {
+                    if (!args['model'] && frm.data('crud_model')) {
                         args['model'] = frm.data('crud_model');
-                        if (frm.data('crud_scope'))
-                        {
+                        if (frm.data('crud_scope')) {
                             args['scope'] = frm.data('crud_scope');
                         }
                     }
-                    if (!args['id'])
-                    {
-                        if (frm.data('crud_id'))
-                        {
+                    if (!args['id']) {
+                        if (frm.data('crud_id')) {
                             args['id'] = frm.data('crud_id');
                         }
                     }
                 }
 
                 args['id'] = parseInt(args['id']);
-                if (!args['id'])
-                {
+                if (!args['id']) {
                     args['id'] = -1;
                 }
                 return args;
 
             },
 
-            addContextVars: function(args, elem)
-            {
+            addContextVars: function(args, elem) {
                 var context = elem.parents('[data-context-limiter]:first');
-                var naming = "name";
-                if (context.length <= 0)
-                {
-                    context = elem.parents("form");
-                }
-                else
-                {
+                var naming = 'name';
+                if (context.length <= 0) {
+                    context = elem.parents('form');
+                } else {
                     naming = context.data('context-limiter');
                 }
-                $("input,select", context).each(function(){
-                    if ($(this).is(':disabled'))
-                    {
+                this.trigger('form.before_validate', {form: context});
+                $('input,select,textarea', context).each(function(){
+                    var elm = $(this);
+                    if (elm.is(':disabled')) {
                         return;
                     }
-                    if (naming === 'container')
-                    {
-                        args[$(this).parents('[data-ref]:first').data('ref')] = $(this).val();
-                    }
-                    else
-                    {
-                        args[$(this).attr('name')] = $(this).val();
+                    if (naming === 'container') {
+                        args[elm.parents('[data-ref]:first').data('ref')] = elm.val();
+                    } else {
+                        if (elm.attr('name') && elm.attr('name').indexOf('[]') >= 0) {
+                            var idx = elm.attr('name').replace('[]', '');
+                            if (typeof(args[idx]) == 'undefined') {
+                                args[idx] = [];
+                            }
+                            args[idx].push(elm.val());
+                        } else {
+                            args[elm.attr('name')] = elm.val();
+                        }
                     }
                 });
 
