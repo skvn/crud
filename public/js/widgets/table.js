@@ -36,6 +36,20 @@
                         }
                         //$('thead tr:first td:first',tbl).html('<input class="i-checks" type="checkbox">');
                     }
+                    else if (col.ctype === "drag")
+                    {
+                        col.fnCreatedCell = function(td, cellData, rowData, row, col){
+                            $(td).addClass("reorder_rows").html('<i class="fa fa-arrows"></i>');
+                            if (rowData['id'])
+                            {
+                                $(td).data('id',rowData['id']).attr('data-id', rowData['id']);
+                            }
+                            else
+                            {
+                                $(td).data('id',cellData).attr('data-id', cellData);
+                            }
+                        }
+                    }
                     else
                     {
                         col.fnCreatedCell = function(td, cellData, rowData, row, col){
