@@ -145,36 +145,38 @@ class CrudController extends Controller
         $obj = CrudModel :: createInstance($model, $scope);
 
         $params = $this->request->all();
-
-        $cols = $obj->getList()->getParam('columns');
-        $xls = [];
-        $row = [];
-        foreach ($cols as $col) {
-            if ((empty($col['ctype']) || $col['ctype'] != 'checkbox') && $col['data'] != 'actions' && empty($col['invisible'])) {
-                $row[] = $col['title'];
-            }
-        }
-        $xls[] = $row;
-
-        $query = $this->app['session']->get('current_query_info');
-        if (empty($query) || ! isset($query['sql']) || ! isset($query['bind'])) {
-            $q = CrudModelCollectionBuilder :: createDataTables($obj, $params)
-                ->applyContextFilter()->getCollectionQuery()->getQuery();
-            $query = ['sql' => $q->toSQL(), 'bind' => $q->getBindings()];
-        }
-
-        $rs = \DB :: select($query['sql'], $query['bind']);
-        foreach ($rs as $r) {
+        
+        if (method_exists($obj, 'dumpRowsForExcel')) {
+            $xls = $obj->dumpRowsForExcel();
+        } else {
+            $cols = $obj->getList()->getParam('columns');
+            $xls = [];
             $row = [];
             foreach ($cols as $col) {
                 if ((empty($col['ctype']) || $col['ctype'] != 'checkbox') && $col['data'] != 'actions' && empty($col['invisible'])) {
-                    $row[] = $r[$col['data']] ?? '';
+                    $row[] = $col['title'];
                 }
             }
             $xls[] = $row;
+    
+            $query = $this->app['session']->get('current_query_info');
+            if (empty($query) || ! isset($query['sql']) || ! isset($query['bind'])) {
+                $q = CrudModelCollectionBuilder :: createDataTables($obj, $params)
+                    ->applyContextFilter()->getCollectionQuery()->getQuery();
+                $query = ['sql' => $q->toSQL(), 'bind' => $q->getBindings()];
+            }
+    
+            $rs = \DB :: select($query['sql'], $query['bind']);
+            foreach ($rs as $r) {
+                $row = [];
+                foreach ($cols as $col) {
+                    if ((empty($col['ctype']) || $col['ctype'] != 'checkbox') && $col['data'] != 'actions' && empty($col['invisible'])) {
+                        $row[] = $r[$col['data']] ?? '';
+                    }
+                }
+                $xls[] = $row;
+            }
         }
-
-
 
         $writer = new \XLSXWriter();
         $writer->writeSheet($xls, 'Sheet1');
