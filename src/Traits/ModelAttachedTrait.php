@@ -92,10 +92,12 @@ trait ModelAttachedTrait
     public function attachResize($w, $h, $crop = false)
     {
         try {
+            if ($this->attachCheckSource() === false) {
+                return $this->app['config']->get('attach.noimage_url', '/images/noimage.gif');
+            }
             $filename = $this->attachGetPath();
             $resized_filename = str_replace($this->app['config']->get('attach.root'), $this->app['config']->get('attach.resized_path'), dirname($filename)).DIRECTORY_SEPARATOR.$w.'z'.$h.'_'.($crop ? 'crop' : 'full').'_'.basename($filename);
             if (! file_exists($resized_filename)) {
-                \Log :: info('resizing', ['browsify' => true]);
                 $img = \Image :: make($filename);
                 if ($crop) {
                     $img->fit($w, $h);
@@ -112,9 +114,13 @@ trait ModelAttachedTrait
 
             return $resized_filename;
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
-            return '/images/noimage.gif';
+            return $this->app['config']->get('attach.noimage_url', '/images/noimage.gif');
         }
+    }
+    
+    protected function attachCheckSource($filename)
+    {
+        return true;
     }
 
     public function getResizedPath($w, $h, $crop = false)
