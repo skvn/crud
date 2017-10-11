@@ -12,6 +12,7 @@ use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Skvn\Crud\Models\CrudNotify as Notify;
 use Skvn\Crud\Traits\TooltipTrait;
 use Skvn\Crud\Exceptions\ValidationException;
+use Skvn\Crud\Exceptions\ConfigException;
 
 class CrudController extends Controller
 {
@@ -94,7 +95,7 @@ class CrudController extends Controller
         $class = CrudModel :: resolveClass($model);
 
         if (! ($obj->confParam('title_field'))) {
-            throw new CrudException('Unable to init AutocompleteList: title_field is not configured');
+            throw new ConfigException('Unable to init AutocompleteList: title_field is not configured');
         }
 
 
