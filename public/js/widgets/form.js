@@ -84,7 +84,11 @@
                                 $form.parents(".modal:first").modal('hide');
                             }
                             if ($form.data("reload")) {
-                                crud.loc.reload();
+                                if (crud.loc.href.indexOf('#') > 0) {
+                                    crud.loc.assign(crud.loc.href.substr(0, crud.loc.href.indexOf('#')));
+                                } else {
+                                    crud.loc.reload();
+                                }
                             }
                         } else {
                             if (typeof res.errors != "undefined") {
