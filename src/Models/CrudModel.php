@@ -115,6 +115,14 @@ abstract class CrudModel extends Model
 
         return $saved;
     }
+    
+    public function crudSaved()
+    {
+    }
+    
+    public function crudDeleted()
+    {
+    }
 
     public function saveRelations($name = null)
     {

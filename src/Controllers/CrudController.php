@@ -229,6 +229,7 @@ class CrudController extends Controller
                 }
                 //$obj->saveRelations();
             });
+            $obj->crudSaved();
 
             return ['success' => true, 'crud_id' => $obj->getKey(), 'crud_model' => $obj->classShortName, 'crud_table' => $obj->classViewName];
         } catch (ValidationException $e) {
@@ -293,6 +294,8 @@ class CrudController extends Controller
             if (is_array($ids)) {
                 $class::destroy($ids);
             }
+            $obj = new $class();
+            $obj->crudDeleted();
 
             return ['success' => true];
         } catch (Exception $e) {
