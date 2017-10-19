@@ -154,7 +154,7 @@ class Relations implements ArrayAccess
 
     public function delete()
     {
-        foreach ($this->model->confParam('fields') as $name => $field) {
+        foreach ($this->model->confParam('fields') ?? [] as $name => $field) {
             if (! empty($field['relation'])) {
                 $this->define($name)->delete();
             }
