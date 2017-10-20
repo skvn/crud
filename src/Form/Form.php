@@ -156,7 +156,9 @@ class Form
     public function import($data)
     {
         foreach ($this->fields as $field) {
-            $field->pullFromData($data);
+            if (empty($field->config['disabled'])) {
+                $field->pullFromData($data);
+            }
         }
         foreach ($this->crudObj->getHiddenFields() as $f) {
             if (isset($data[$f])) {
@@ -179,7 +181,9 @@ class Form
             if (! empty($field->config['acl']) && ! Container :: getInstance()['skvn.cms']->checkAcl($field->config['acl'], 'u')) {
                 continue;
             }
-            $field->pushToModel();
+            if (empty($field->config['disabled'])) {
+                $field->pushToModel();
+            }
         }
     }
 
