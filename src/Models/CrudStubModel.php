@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class CrudStubModel extends CrudModel
 {
-    public function saveRelations()
+    public function saveRelations($name = null)
     {
     }
 
