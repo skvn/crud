@@ -41,7 +41,7 @@ class Relations implements ArrayAccess
 
     public function defineAll()
     {
-        foreach ($this->model->confParam('fields') as $field => $conf) {
+        foreach ($this->model->confParam('fields') ?? [] as $field => $conf) {
             if (! empty($conf['relation'])) {
                 $this->define($field);
             }
