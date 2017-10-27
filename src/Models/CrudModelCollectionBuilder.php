@@ -178,7 +178,7 @@ class CrudModelCollectionBuilder
             $c = [];
             foreach ($this->columns as $column) {
                 if (! empty($column['searchable'])) {
-                    $c[] = [$column['data'], 'like', $this->params['search'].'%'];
+                    $c[] = [$column['data'], 'like', '%' . $this->params['search'].'%'];
                 }
             }
             if (! empty($c)) {
