@@ -21,7 +21,7 @@ class RelationHasManyFiles extends Relation
 
     public function delete($id = null)
     {
-        $col = $this->relation->getForeignKey();
+        $col = $this->relation->getForeignKeyName();
         $delete = $this->config['on_delete'] ?? false;
         $this->get()->each(function ($item, $key) use ($delete, $col, $id) {
             if (! is_null($id)) {
@@ -50,7 +50,7 @@ class RelationHasManyFiles extends Relation
                 $fileInfo = $obj->attachStoreTmpFile($file);
                 $fileInfo['title'] = $titles[$idx] ?? $fileInfo['originalName'];
                 if (! empty($fileInfo['originalPath'])) {
-                    $obj->setAttribute($this->relation->getForeignKey(), $this->model->getKey());
+                    $obj->setAttribute($this->relation->getForeignKeyName(), $this->model->getKey());
                     $obj->attachStoreFile($fileInfo, $this->model->getFilesConfig($fileInfo['originalName']));
                 }
             }

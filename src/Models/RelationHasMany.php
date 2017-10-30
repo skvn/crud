@@ -19,7 +19,7 @@ class RelationHasMany extends Relation
 
     public function delete($id = null)
     {
-        $col = $this->relation->getForeignKey();
+        $col = $this->relation->getForeignKeyName();
         $delete = $this->config['on_delete'] ?? false;
         $this->get()->each(function ($item, $key) use ($delete, $col, $id) {
             if (! is_null($id)) {
@@ -51,7 +51,7 @@ class RelationHasMany extends Relation
 
         if ($toUnlink && is_array($toUnlink)) {
             foreach ($toUnlink as $id) {
-                $col = $this->relation->getForeignKey();
+                $col = $this->relation->getForeignKeyName();
 //                if (!empty($field['ref_column']))
 //                {
 //                    $col = $field['ref_column'];
