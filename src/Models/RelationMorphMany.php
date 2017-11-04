@@ -19,7 +19,7 @@ class RelationMorphMany extends Relation
 
     public function delete($id = null)
     {
-        $col_id = $this->relation->getForeignKey();
+        $col_id = $this->relation->getForeignKeyName();
         $col_class = $this->relation->getPlainMorphType();
         $delete = $this->config['on_delete'] ?? false;
         $this->get()->each(function ($item, $key) use ($delete, $col_id, $col_class, $id) {
@@ -56,7 +56,7 @@ class RelationMorphMany extends Relation
 
         if ($toUnlink && is_array($toUnlink)) {
             foreach ($toUnlink as $id) {
-                $col_id = $this->relation->getForeignKey();
+                $col_id = $this->relation->getForeignKeyName();
                 $col_class = $this->relation->getPlainMorphType();
                 $obj = CrudModel :: createInstance($this->config['model'], null, $id);
                 if (($this->config['on_delete'] ?? false) === 'delete') {
