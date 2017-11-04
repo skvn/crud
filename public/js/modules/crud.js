@@ -310,7 +310,9 @@
 
             action: function  (elm, action)
             {
-                return  crud_actions[action](elm);
+                if (crud_actions[action]) {
+                    return crud_actions[action](elm);
+                }
             }
 
         };
