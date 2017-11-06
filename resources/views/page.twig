@@ -92,25 +92,29 @@
     window.i18n.init("{{ messages_uri|asset }}");
 </script>
 
-<!-- CRUD MODULES AND WIDGETS -->
-<script src="{{ 'js/modules/crud.js'|asset }}"></script>
-<script src="{{ 'js/widgets/table.js'|asset }}"></script>
-<script src="{{ 'js/widgets/form.js'|asset }}"></script>
-<script src="{{ 'js/widgets/tree.js'|asset }}"></script>
-<script src="{{ 'js/modules/tooltip.js'|asset }}"></script>
-{% for c in avail_controls %}
-    {% if c.controlWidgetUrl() %}
-        <script src="{{ c.controlWidgetUrl()|asset }}"></script>
+{% if config_get('crud_common.assets.builtjs') and not config_get('app.src_asset') %}
+    <script src="{{ config_get('crud_common.assets.builtjs')|asset }}"></script>
+{% else %}
+    <!-- CRUD MODULES AND WIDGETS -->
+    <script src="{{ 'js/modules/crud.js'|asset }}"></script>
+    <script src="{{ 'js/widgets/table.js'|asset }}"></script>
+    <script src="{{ 'js/widgets/form.js'|asset }}"></script>
+    <script src="{{ 'js/widgets/tree.js'|asset }}"></script>
+    <script src="{{ 'js/modules/tooltip.js'|asset }}"></script>
+    {% for c in avail_controls %}
+        {% if c.controlWidgetUrl() %}
+            <script src="{{ c.controlWidgetUrl()|asset }}"></script>
+        {% endif %}
+    {% endfor %}
+    {#<script src="{{ 'js/modules/notify.js'|asset }}"></script>#}
+    <!-- ASSETS -->
+    {% if config_get('crud_common.assets.js') %}
+        {% for js in  config_get('crud_common.assets.js')%}
+            <script src="{{ js|asset }}" ></script>
+        {% endfor %}
     {% endif %}
-{% endfor %}
-{#<script src="{{ 'js/modules/notify.js'|asset }}"></script>#}
-
-<!-- ASSETS -->
-{% if config_get('crud_common.assets.js') %}
-{% for js in  config_get('crud_common.assets.js')%}
-    <script src="{{ js|asset }}" ></script>
-{% endfor %}
 {% endif %}
+
 {# Entitty assets #}
 {% if crudObj %}
 {% set entAssets = crudObj.confParam('assets') %}

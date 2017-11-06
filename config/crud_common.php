@@ -16,6 +16,7 @@ return [
         'css' => [
 
         ],
+        'builtjs' => null
     ],
     'form_controls' => [
         Skvn\Crud\Form\Checkbox :: class,
