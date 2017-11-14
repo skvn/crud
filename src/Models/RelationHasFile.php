@@ -34,7 +34,7 @@ class RelationHasFile extends Relation
             }
         }
         if (! is_null($id)) {
-            $this->model->setAttribute($this->relation->getForeignKeyName(), null);
+            $this->model->setAttribute($this->relation->getForeignKey(), null);
             $this->model->save();
         }
     }
@@ -47,7 +47,7 @@ class RelationHasFile extends Relation
             $fileInfo = $obj->attachStoreTmpFile($this->dirtyValue);
             if (! empty($fileInfo['originalPath'])) {
                 $obj->attachStoreFile($fileInfo, $this->model->getFilesConfig($fileInfo['originalName']));
-                $this->model->setAttribute($this->relation->getForeignKeyName(), $obj->getKey());
+                $this->model->setAttribute($this->relation->getForeignKey(), $obj->getKey());
                 $this->model->save();
             }
         }
