@@ -109,7 +109,7 @@ trait ModelAttachedTrait
                 if (! file_exists(dirname($resized_filename))) {
                     $this->app['files']->makeDirectory(dirname($resized_filename), 0755, true, true);
                 }
-                $img->save($resized_filename);
+                $img->save($resized_filename, $this->app['config']->get('attach.resize_quality', 90));
             }
 
             return $resized_filename;
