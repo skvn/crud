@@ -468,7 +468,12 @@
             });
 
             $('input', $form).each(function (){
-                $(this).val($(this).data('default'));
+                var e = $(this);
+                if (e.is(':checkbox')) {
+                    e.prop('checked', false).iCheck();
+                } else {
+                    e.val($(this).data('default'));
+                }
             });
 
 
