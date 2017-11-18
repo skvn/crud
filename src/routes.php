@@ -2,10 +2,10 @@
 $adm_route_params = [
     'prefix'=>'admin',
     'namespace' => 'Skvn\Crud\Controllers',
-    'middleware' =>  explode(',',env('APP_BACKEND_MIDDLEWARE',"web,auth"))
+    'middleware' =>  explode(',', Config::get('crud_common.middleware'))
 ];
 
-$domain = env('APP_BACKEND_DOMAIN');
+$domain = Config::get('crud_common.domain');
 if ($domain)
 {
     $adm_route_params['domain'] = $domain;

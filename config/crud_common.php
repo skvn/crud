@@ -8,6 +8,8 @@ return [
     'app_title'                           => env('APPLICATION_TITLE', 'SkVn/CRUD application'),
     'auto_migrate_allowed'                => env('AUTO_MIGRATE_EMABLED', true),
     'app_logo'                            => env('APPLICATION_LOGO', null),
+    'middleware'                          => env('APP_BACKEND_MIDDLEWARE', 'web,auth'),
+    'domain'                              => env('APP_BACKEND_DOMAIN'),
     'replace_morph_classes_with_basename' => false,
     'assets'                              => [
         'js' => [
