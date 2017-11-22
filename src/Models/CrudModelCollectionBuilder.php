@@ -324,7 +324,17 @@ class CrudModelCollectionBuilder
 
     public function fetchDataTables()
     {
-        $columns = $this->params['columns'] ?? $this->columns;
+        $cols = $this->params['columns'] ?? $this->columns;
+        $columns = [];
+        foreach ($cols as $col) {
+            if (empty($col['invisible'])) {
+                $columns[] = $col;
+            }
+        }
+//        $columns = array_filter($columns, function ($col) {
+//            return empty($col['invisible']);
+//        });
+//        var_dump($columns);
 
         if (! empty($this->params['order'])) {
             $this->collectionQuery->getQuery()->orders = [];
