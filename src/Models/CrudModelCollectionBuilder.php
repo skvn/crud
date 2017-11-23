@@ -324,11 +324,12 @@ class CrudModelCollectionBuilder
 
     public function fetchDataTables()
     {
+        $columns = $this->params['columns'] ?? $this->columns;
         $cols = $this->params['columns'] ?? $this->columns;
-        $columns = [];
+        $sort_columns = [];
         foreach ($cols as $col) {
             if (empty($col['invisible'])) {
-                $columns[] = $col;
+                $sort_columns[] = $col;
             }
         }
 //        $columns = array_filter($columns, function ($col) {
@@ -341,7 +342,7 @@ class CrudModelCollectionBuilder
             $order = $this->params['order'];
             if (is_array($order)) {
                 foreach ($order as $oc) {
-                    $this->collectionQuery->orderBy(! empty($columns[$oc['column']]['name']) ? $columns[$oc['column']]['name'] : $columns[$oc['column']]['data'], $oc['dir']);
+                    $this->collectionQuery->orderBy(! empty($sort_columns[$oc['column']]['name']) ? $sort_columns[$oc['column']]['name'] : $sort_columns[$oc['column']]['data'], $oc['dir']);
                 }
             }
         }
