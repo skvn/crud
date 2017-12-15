@@ -235,9 +235,10 @@ class CrudController extends Controller
         } catch (ValidationException $e) {
             return ['success' => false, 'errors' => $obj->getErrors()];
         } catch (\Exception $e) {
-            var_dump($e->getTraceAsString());
+            //var_dump($e->getTraceAsString());
 
-            return ['success' => false, 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()];
+            return ['success' => false, 'error' => $e->getMessage() .
+                PHO_EOL . $e->getTraceAsString(), 'trace' => $e->getTraceAsString()];
         }
     }
 
