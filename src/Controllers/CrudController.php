@@ -238,7 +238,7 @@ class CrudController extends Controller
             //var_dump($e->getTraceAsString());
 
             return ['success' => false, 'error' => $e->getMessage() .
-                PHO_EOL . $e->getTraceAsString(), 'trace' => $e->getTraceAsString()];
+                PHP_EOL . $e->getTraceAsString(), 'trace' => $e->getTraceAsString()];
         }
     }
 
