@@ -312,9 +312,8 @@ class CrudController extends Controller
 
             return ['success' => true, 'ret' => $ret, 'message' => isset($ret['message']) ? $ret['message'] : null];
         } catch (\Exception $e) {
-            var_dump($e->getTraceAsString());
 
-            return ['success' => false, 'error' => $e->getMessage()];
+            return ['success' => false, 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()];
         }
     }
 

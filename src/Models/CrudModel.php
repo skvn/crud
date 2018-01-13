@@ -430,7 +430,7 @@ abstract class CrudModel extends Model
      */
     public function crudFormatValueActivityIcon($val, $args = [])
     {
-        return  $val ? '<span class="text-succes"><i class="fa fa-check-square-o"></i> '.trans('crud::messages.yes').'</span>' : '<span class="text-danger"><i class="fa fa-times-square-o"></i> '.trans('crud::messages.no').'</span>';
+        return  $val ? '<span class="text-succes"><i class="fa fa-check-square-o"></i> '.trans('crud::messages.yes').'</span>' : '<span class="text-danger"><i class="fa fa-square-o"></i> '.trans('crud::messages.no').'</span>';
     }
 
     /**
