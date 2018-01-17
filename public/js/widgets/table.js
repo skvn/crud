@@ -463,6 +463,12 @@
                     } else {
                         val = $(this).data('default')
                     }
+                    if ($(this).data('default') === '*') {
+                        val = [];
+                        $("option", $(this)).each(function () {
+                            val.push($(this).attr('value'));
+                        });
+                    }
                 }
                 $(this).selectpicker("val", val);
             });
@@ -492,6 +498,7 @@
 
                 }
             );
+            crud.trigger('crud.filter_reset');
 
         });
 
