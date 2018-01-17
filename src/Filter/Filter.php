@@ -49,6 +49,15 @@ class Filter
 
         return $this;
     }
+    
+    public function getFilterByName($name)
+    {
+        foreach ($this->filters as $filter) {
+            if ($filter->name == $name) {
+                return $filter;
+            }
+        }
+    }
 
     public function addFilter($name, $field = null)
     {
