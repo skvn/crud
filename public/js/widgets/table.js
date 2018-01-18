@@ -464,10 +464,14 @@
                         val = $(this).data('default')
                     }
                     if ($(this).data('default') === '*') {
-                        val = [];
-                        $("option", $(this)).each(function () {
-                            val.push($(this).attr('value'));
-                        });
+                        $('option', $(this)).attr('selected', 'selected');
+                        //$(this).selectpicker("selectAll");
+                        $(this).selectpicker("refresh");
+                        return;
+                        //val = [];
+                        //$("option", $(this)).each(function () {
+                        //    val.push($(this).attr('value'));
+                        //});
                     }
                 }
                 $(this).selectpicker("val", val);
@@ -476,7 +480,8 @@
             $('input', $form).each(function (){
                 var e = $(this);
                 if (e.is(':checkbox')) {
-                    e.prop('checked', false).iCheck();
+                    var hidden = $('input[type=hidden]', e.parent().parent());
+                    e.prop('checked', hidden.data('default') == 1 ? true : false).iCheck('update').trigger('ifChanged');
                 } else {
                     e.val($(this).data('default'));
                 }
