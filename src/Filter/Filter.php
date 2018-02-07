@@ -75,7 +75,7 @@ class Filter
         $col['required'] = false;
         $col['name'] = $name;
         $col['field'] = $field ?? $name;
-        if ($col['type'] == 'select') {
+        if ($col['type'] == 'select' && empty($col['single_filter'])) {
             $col['multiple'] = true;
         }
         if (isset($this->defaults[$name])) {
