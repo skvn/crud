@@ -342,7 +342,8 @@
                 var rows =[];
                 var selected_objs =  $tbl.DataTable().rows('.selected').data();
                 for (var i = 0; i < selected_objs.length; i++) {
-                    rows.push(selected_objs[i]);
+                    //rows.push(selected_objs[i]);
+                    rows.push({'id': selected_objs[i]['id']});
                 }
 
                 args['selected_rows'] = rows;
