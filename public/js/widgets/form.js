@@ -96,6 +96,7 @@
                                     self.showError(f, res.errors[f].join('<br />'));
                                 }
                                 self.gotoError();
+                                crud.trigger('crud.error', {form: $form, resp: res});
                             } else {
                                 alert(crud.format_error(res.error));
                             }
