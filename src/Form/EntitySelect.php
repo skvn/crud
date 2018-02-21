@@ -6,8 +6,9 @@ use Illuminate\Support\Collection;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Traits\FormControlCommonTrait;
+use Skvn\Crud\Contracts\FormControlFilterable;
 
-class EntitySelect extends Field implements FormControl
+class EntitySelect extends Field implements FormControl,FormControlFilterable
 {
     use FormControlCommonTrait;
 
@@ -104,4 +105,33 @@ class EntitySelect extends Field implements FormControl
 
         return $options;
     }
+
+    public function getFilterCondition()
+    {
+        if (empty($this->value)) {
+            return;
+        }
+        if (is_array($this->value) && count($this->value) == 1 && $this->value[0] == '') {
+            return;
+        }
+        $join = null;
+        if ($this->model->crudRelations->isMany($this->getName())) {
+            //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
+            $join = $this->name;
+            $col = snake_case(class_basename($this->config['model'])).'_id';
+        } else {
+            $col = $this->getFilterColumnName();
+        }
+
+        $action = '=';
+        if (is_array($this->value)) {
+            $action = 'IN';
+        }
+
+        return [
+            'join' => $join,
+            'cond' => [$col, $action, $this->value],
+        ];
+    }
+    
 }

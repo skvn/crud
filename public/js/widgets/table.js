@@ -451,6 +451,12 @@
             //e.preventDefault();
             var $form = $(this);
             $('select', $form).each(function (){
+                if ($(this).data('widget') == 'crud_ent_select') {
+                    $(this).val('');
+                    $(this).crud_ent_select('destroy');
+                    $(this).crud_ent_select();
+                    return;
+                }
                 var val = null;
                 if ($(this).data('default'))
                 {
