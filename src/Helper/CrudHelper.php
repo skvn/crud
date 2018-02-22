@@ -3,6 +3,8 @@
 namespace Skvn\Crud\Helper;
 
 use Illuminate\Support\Collection;
+use Skvn\Crud\Models\CrudModel;
+use Skvn\Crud\Exceptions\ConfigException;
 
 class CrudHelper
 {
@@ -80,5 +82,27 @@ class CrudHelper
         }
 
         return $opts;
+    }
+    
+    public function getModelAutocompleteList(CrudModel $model, $params = [])
+    {
+        $class = get_class($model);
+        if (! ($model->confParam('title_field'))) {
+            throw new ConfigException('Unable to init AutocompleteList for ' . $model->classViewName . ': title_field is not configured');
+        }
+        if (method_exists($model, 'scopeAutocomplete')) {
+            $query = $class::autocomplete($params)->where($model->confParam('title_field'), 'like', $params['q'].'%');
+        } else {
+            $query = $class::where($model->confParam('title_field'), 'like', $params['q'].'%');
+        }
+        if (!empty($params['titlesOnly'])) {
+            return  $query->pluck($model->confParam('title_field'))->toArray();
+        }
+        $res = $query->get();
+        $items = [];
+        foreach ($res as $v) {
+            $items[] = ['id' => $v->getKey(), 'text' => $v->getTitle()];
+        }
+        return $items;
     }
 }

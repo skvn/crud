@@ -12,7 +12,6 @@ use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Skvn\Crud\Models\CrudNotify as Notify;
 use Skvn\Crud\Traits\TooltipTrait;
 use Skvn\Crud\Exceptions\ValidationException;
-use Skvn\Crud\Exceptions\ConfigException;
 
 class CrudController extends Controller
 {
@@ -91,36 +90,10 @@ class CrudController extends Controller
     public function crudAutocompleteSelectOptions($model, $titlesOnly = false)
     {
         $params = $this->request->all();
-        $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE);
-        $class = CrudModel :: resolveClass($model);
-
-        if (! ($obj->confParam('title_field'))) {
-            throw new ConfigException('Unable to init AutocompleteList: title_field is not configured');
-        }
-
-
-        if (method_exists($obj, 'scopeAutocomplete')) {
-            $query = $class :: autocomplete($params)->where($obj->confParam('title_field'), 'like', $params['q'].'%');
-        } else {
-            $query = $class :: where($obj->confParam('title_field'), 'like', $params['q'].'%');
-        }
-
-        if ($titlesOnly) {
-            return  $query->pluck($obj->confParam('title_field'))->toArray();
-        }
-
-        //$attr = property_exists($obj, "autocompleteAttr") ? $obj->autocompleteAttr : $obj->confParam('title_field');
-        //var_dump($attr);
-        //
-        //$res = $obj->getAutocompleteList(\Request::get('q'));
-        $res = $query->get();
-        $items = [];
-        foreach ($res as $v) {
-            $items[] = ['id' => $v->getKey(), 'text' => $v->getTitle()];
-        }
+        $params['titlesOnly'] = $titlesOnly;
 
         return [
-            'results' => $items,
+            'results' => $this->helper->getModelAutoCompleteList(CrudModel::createInstance($model), $params),
         ];
     }
 
