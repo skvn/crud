@@ -27,6 +27,7 @@
     "datatables": "latest",
     "datatables-rowreorder": "*",
     "skvn-datatables": "https://github.com/skvn/dt.git",
-    "select2": "latest"
+    "select2": "latest",
+    "bootstrap-daterangepicker": "latest"
   }
 }

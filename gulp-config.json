@@ -24,6 +24,7 @@
           "resources/bower_components/jquery-treetable/css/jquery.treetable.css",
           "resources/bower_components/datatables-treetable/css/treeTable.dataTables.css",
           "resources/bower_components/datatables-treetable/css/treeTable.bootstrap.css",
+          "resources/bower_components/bootstrap-daterangepicker/daterangepicker.css",
           "resources/assets/css/rowReorder.css",
           "resources/bower_components/select2/dist/css/select2.css"
 
@@ -74,7 +75,8 @@
           "resources/bower_components/jquery-treetable/jquery.treetable.js",
           "resources/bower_components/datatables-treetable/js/dataTables.treeTable.js",
           "resources/bower_components/datatables-rowreorder/js/dataTables.rowReorder.js",
-          "resources/bower_components/select2/dist/js/select2.full.min.js"
+          "resources/bower_components/select2/dist/js/select2.full.min.js",
+          "resources/bower_components/bootstrap-daterangepicker/daterangepicker.js"
 
         ],
       "vendor_js_src": [
@@ -107,8 +109,8 @@
         "resources/bower_components/jquery-treetable/jquery.treetable.js",
         "resources/bower_components/datatables-treetable/js/dataTables.treeTable.js",
         "resources/bower_components/datatables-rowreorder/js/dataTables.rowReorder.js",
-        "resources/bower_components/select2/dist/js/select2.full.js"
-
+        "resources/bower_components/select2/dist/js/select2.full.js",
+        "resources/bower_components/bootstrap-daterangepicker/daterangepicker.js"
       ],
 
       "vendor_js_locales": {
