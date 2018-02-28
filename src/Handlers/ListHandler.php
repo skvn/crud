@@ -42,6 +42,10 @@ class ListHandler
         } else {
             $this->prependColumn(['data' => $this->model->getKeyName(), 'invisible' => true]);
         }
+        $acl = $this->model->confParam('acl');
+        if (!empty($acl) && !empty($this->options['buttons']['single_delete']) && !$this->app->make('skvn.cms')->checkAcl($acl, 'd')) {
+            $this->options['buttons']['single_delete'] = 0;
+        }
         if (! empty($this->options['buttons']['single_edit']) || ! empty($this->options['buttons']['single_delete'])
             || ! empty($this->options['list_single_actions'])) {
             $this->appendColumn(['data' => 'actions', 'ctype' => 'actions']);
