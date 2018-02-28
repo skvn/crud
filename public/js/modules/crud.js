@@ -458,7 +458,11 @@
     $(crud.doc).ajaxError(function(e, xhr){
         if (xhr.status == 401)
         {
-            crud.loc.reload();
+            if (crud.handleXhrUnauthorized) {
+                crud.handleXhrUnauthorized();
+            } else {
+                crud.loc.reload();
+            }
         }
     });
     $(crud.doc).on('click','*[data-click]', function (e){
