@@ -458,7 +458,6 @@
     $(crud.doc).ajaxError(function(e, xhr){
         if (xhr.status == 401)
         {
-            alert('Unauthorized');
             crud.loc.reload();
         }
     });
