@@ -58,6 +58,8 @@ class Select extends Field implements FormControl, FormControlFilterable
             }
         } elseif (! empty($this->config['model'])) {
             $opts = $this->getModelOptions();
+        } elseif (!empty($this->config['options'])) {
+            $opts = $this->formatOptionsArray($this->config['options']);
         } else {
             $opts = [];
         }

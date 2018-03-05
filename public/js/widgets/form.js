@@ -133,7 +133,7 @@
         {
             for (var i in names) {
                 //alert(names[i]+ ':' +$(".form-group[data-ref="+names[i]+"]", this.element).length);
-                var c = $(".row[data-ref="+names[i]+"]", this.element);
+                var c = $(".form-group[data-ref="+names[i]+"]", this.element);
                 c.show();
                 //$("[data-crud-validator]", c).each(function(){
                 //    var v = $(this).data('crud-validator');
@@ -151,7 +151,7 @@
         hideFields: function(names)
         {
             for (var i in names) {
-                var c = $(".row[data-ref="+names[i]+"]", this.element);
+                var c = $(".form-group[data-ref="+names[i]+"]", this.element);
                 c.hide();
                 //$("[data-crud-validator]", c).each(function(){
                 //    var v = $(this).data('crud-validator');
