@@ -2,6 +2,8 @@
 
 namespace Skvn\Crud\Traits;
 
+use Intervention\Image\Image;
+
 /**
  * Class ModelInlineImgTrait
  * Provides process inline images functionality.
@@ -69,6 +71,7 @@ trait ModelInlineImgTrait
                     $src = $m[2];
                     $base_64 = $m[4];
                     $img = \Image :: make(base64_decode($base_64));
+                    $img = $this->prepareRawInlineImage($img);
                     $originalWidth = $img->width();
                     if (strpos($width, '%') !== false) {
                         $newWidth = $originalWidth / 100 * intval(trim(str_replace('%', '', $width)));
@@ -82,6 +85,7 @@ trait ModelInlineImgTrait
                     $img->resize($resizeWidth, null, function ($constraint) {
                         $constraint->aspectRatio();
                     });
+                    $img = $this->prepareResizedInlineImage($img);
                     $ext = $m[3];
                     if ($ext == 'jpeg') {
                         $ext = 'jpg';
@@ -96,6 +100,16 @@ trait ModelInlineImgTrait
         }
 
         return $text;
+    }
+
+    protected function prepareRawInlineImage(Image $image)
+    {
+        return $image;
+    }
+
+    protected function prepareResizedInlineImage(Image $image)
+    {
+        return $image;
     }
 
     protected function getInlineImgFilename($filename)
