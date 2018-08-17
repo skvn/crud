@@ -313,6 +313,7 @@
                 if (crud_actions[action]) {
                     return crud_actions[action](elm);
                 }
+                return false;
             }
 
         };

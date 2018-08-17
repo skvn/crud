@@ -50,7 +50,7 @@
                     var ed = $(this);
                     
                     setTimeout(function () {
-                        var cleaned = crud.action(ed, 'summernote_cleanup_html');
+                        var cleaned = crud.action(ed, 'summernote_paste_html');
                         if (cleaned) {
                             ed.summernote('code', cleaned);
                         }
@@ -378,10 +378,9 @@
                         }
                     break;
                     case 'summernote':
-                        var v = $(this).summernote('code');
-                        if (v == '<p><br></p>')
-                        {
-                            v = '';
+                        var v = crud.action($(this), 'summernote_save_html');
+                        if (v === false) {
+                            v = $(this).summernote('code');
                         }
                         $(this).val(v);
                     break;
