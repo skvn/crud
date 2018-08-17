@@ -40,6 +40,7 @@
                     {
                         col.fnCreatedCell = function(td, cellData, rowData, row, col){
                             $(td).addClass("reorder_rows").html('<i class="fa fa-arrows"></i>');
+                            $(td).closest('tr').data('priority', rowData['priority']).attr('data-priority', rowData['priority']);
                             if (rowData['id'])
                             {
                                 $(td).data('id',rowData['id']).attr('data-id', rowData['id']);
@@ -74,6 +75,7 @@
                     {
                         col.fnCreatedCell = function(td, cellData, rowData, row, col){
                             $(td).addClass("reorder_rows").html('<i class="fa fa-arrows"></i>');
+                            $(td).closest('tr').data('priority', rowData['priority']).attr('data-priority', rowData['priority']);
                         }
                     }
 
@@ -207,21 +209,26 @@
                 },
                 rowCallback: rowCallBack
             };
-            if (tbl.data('rows_draggable'))
-            {
+            if (tbl.data('rows_draggable')) {
                 dtConfig.rowReorder = {
                     update: false,
                     dataSrc: tbl.data('rows.draggable'),
                     selector: 'td.reorder_rows'
                 };
-                tbl.on('row-reorder.dt', function ( e, diff, edit)
-                {
-                    if (diff.length > 0)
-                    {
+                tbl.on('row-reorder.dt', function ( e, diff, edit) {
+                    if (diff.length > 0) {
+                        if (tbl.data('disable-drag')) {
+                            alert('Операция невозможно, т.к. данные отсортированы или отфильрованы');
+                            return;
+                        }
                         var reorder = {};
-                        for (var i in diff)
-                        {
-                            reorder[$('td[data-id]', diff[i].node).data('id')] = diff[i].newPosition+1;
+                        for (var i in diff) {
+                            for (var j in diff) {
+                                if (diff[j].oldPosition == diff[i].newPosition && $(diff[j].node).data('priority')) {
+                                    reorder[$('td[data-id]', diff[i].node).data('id')] = $(diff[j].node).data('priority');
+                                }
+                            }
+                            //reorder[$('td[data-id]', diff[i].node).data('id')] = diff[i].newPosition+1;
                         }
                         var trigger = $('#' + tbl.data('list_table_ref') + '_reorder_trigger');
                         trigger.data('args', {'reorder': reorder}).click();
@@ -229,9 +236,28 @@
                     }
                 });
             }
+            
+            tbl.on('order.dt', function (e, s) {
+                if (tbl.data('rows_draggable')) {
+                    if (s.aLastSort.length > 0 || (s.oPreviousSearch && s.oPreviousSearch.sSearch)) {
+                        tbl.data('disable-drag', true);
+                    } else {
+                        tbl.data('disable-drag', false);
+                    }
+                }
+            });
+            
+            tbl.on('search.dt', function (e, s) {
+                if (tbl.data('rows_draggable')) {
+                    if (s.aLastSort.length > 0 || (s.oPreviousSearch && s.oPreviousSearch.sSearch)) {
+                        tbl.data('disable-drag', true);
+                    } else {
+                        tbl.data('disable-drag', false);
+                    }
+                }
+            });
 
-            if (tbl.data('list_type') == 'dt_tree')
-            {
+            if (tbl.data('list_type') == 'dt_tree') {
 
                 dtConfig['processing'] = false;
                 dtConfig['serverSide']  = false;
