@@ -33,10 +33,9 @@
 
     function createSummernote(elem)
     {
-        elem.summernote({
-            //FIXME
-            lang: 'ru-RU',
-            toolbar: [
+        var toolbar = crud.action(elem, 'summernote_build_toolbar');
+        if (!toolbar) {
+            toolbar = [
                 ['style', ['style', 'bold', 'italic', 'underline', 'clear']],
                 ['font', ['strikethrough', 'superscript', 'subscript']],
                 ['fontsize', ['fontsize']],
@@ -44,7 +43,12 @@
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['insert', elem.data('no-media') ? ['link', 'anchor', 'table', 'hr'] : ['picture', 'link', 'anchor', 'video', 'table', 'hr']],
                 ['misc', ['codeview', 'typo', 'typo2']]
-            ],
+            ];
+        }
+        elem.summernote({
+            //FIXME
+            lang: 'ru-RU',
+            toolbar: toolbar,
             callbacks: {
                 onPaste: function (e) {
                     var ed = $(this);
