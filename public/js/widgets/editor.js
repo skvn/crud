@@ -45,6 +45,7 @@
                 ['misc', ['codeview', 'typo', 'typo2']]
             ];
         }
+        
         elem.summernote({
             //FIXME
             lang: 'ru-RU',
