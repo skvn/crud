@@ -35,6 +35,8 @@ abstract class CrudModel extends Model
     protected $validationMessages = [];
     public $timestamps = false;
     public $crudRelations;
+    
+    protected static $modelCache = [];
 
 
 
@@ -47,8 +49,7 @@ abstract class CrudModel extends Model
 
     public function __construct(array $attributes = [])
     {
-
-        $this->app = Container :: getInstance();
+        $this->app = Container::getInstance();
         $this->bootIfNotBooted();
 
         $this->classShortName = class_basename($this);
@@ -75,14 +76,13 @@ abstract class CrudModel extends Model
 
     public static function resolveClass($model)
     {
-        $app = Container :: getInstance();
-
+        $app = Container::getInstance();
         return $app['config']['crud_common.model_namespace'].'\\'.studly_case($model);
     }
 
-    public static function createInstance($model, $scope = self :: DEFAULT_SCOPE, $id = null)
+    public static function createInstance($model, $scope = self::DEFAULT_SCOPE, $id = null)
     {
-        $class = static :: resolveClass($model);
+        $class = static::resolveClass($model);
         if (! empty($id)) {
             $obj = $class::findOrNew($id);
         } else {
@@ -93,11 +93,11 @@ abstract class CrudModel extends Model
         return $obj;
     }
 
-    public static function createSelfInstance($scope = self :: DEFAULT_SCOPE, $id = null)
+    public static function createSelfInstance($scope = self::DEFAULT_SCOPE, $id = null)
     {
         $class = get_called_class();
         if (! empty($id)) {
-            $obj = $class::findOrNew( $id);
+            $obj = $class::findOrNew($id);
         } else {
             $obj = new $class();
         }
@@ -105,10 +105,23 @@ abstract class CrudModel extends Model
 
         return $obj;
     }
+    
+    public static function make($data)
+    {
+        $id = is_numeric($data) ? $data : ($data['id'] ?? null);
+        if (!array_key_exists($id, static::$modelCache)) {
+            if (is_numeric($data)) {
+                static::$modelCache[$id] = static::findOrFail($id);
+            } else {
+                static::$modelCache[$id] = (new static)->newFromBuilder($data);
+            }
+        }
+        return static::$modelCache[$id];
+    }
 
     public function save(array $options = [])
     {
-        $saved = parent :: save($options);
+        $saved = parent::save($options);
         if ($saved) {
             $saved = $this->crudRelations->save();
         }
@@ -148,16 +161,16 @@ abstract class CrudModel extends Model
         $col = $this->config['fields'][$key] ?? [];
         if (! empty($col['fields'])) {
             foreach ($this->config['fields'][$key]['fields'] as $f) {
-                if (parent :: __isset($f)) {
+                if (parent::__isset($f)) {
                     return true;
                 }
             }
         }
         if (! empty($col['field']) && $col['field'] !== $key) {
-            return parent :: __isset($col['field']);
+            return parent::__isset($col['field']);
         }
 
-        return parent :: __isset($key);
+        return parent::__isset($key);
     }
 
     public function getAttribute($key)
@@ -185,10 +198,10 @@ abstract class CrudModel extends Model
         }
         $fld = $this->config['fields'][$key] ?? [];
         if (! empty($fld['field']) && $fld['field'] !== $key) {
-            return parent :: setAttribute($fld['field'], $value);
+            return parent::setAttribute($fld['field'], $value);
         }
 
-        return parent :: setAttribute($key, $value);
+        return parent::setAttribute($key, $value);
     }
 
     public function getTitle()
@@ -209,17 +222,17 @@ abstract class CrudModel extends Model
             return $this->classShortName;
         }
 
-        return parent :: getMorphClass();
+        return parent::getMorphClass();
     }
 
-    public static  function getActualClassNameForMorph($class)
+    public static function getActualClassNameForMorph($class)
     {
         $app = Container :: getInstance();
         if ($app['config']->get('crud_common.replace_morph_classes_with_basename')) {
-            return self :: resolveClass($class);
+            return self::resolveClass($class);
         }
 
-        return parent :: getActualClassNameForMorph($class);
+        return parent::getActualClassNameForMorph($class);
     }
 
     public function checkAcl($access = '')
@@ -279,7 +292,7 @@ abstract class CrudModel extends Model
                         $p[] = $this->getKey();
                     }
                 }
-            break;
+                break;
         }
 
         return ['rule' => $r, 'params' => $p, 'message' => $m];
@@ -308,7 +321,6 @@ abstract class CrudModel extends Model
         foreach ($this->config['fields'] ?? [] as $field => $conf) {
             if (! empty($conf['validators'])) {
                 foreach (explode('|', $conf['validators']) as $rule) {
-                    //                    $this->appendValidationRule($rules, $messages, $field, $rule);
                     if (! empty($conf['field']) && empty($conf['relation'])) {
                         $this->appendValidationRule($rules, $messages, $conf['field'], $rule);
                     } else {
@@ -359,7 +371,7 @@ abstract class CrudModel extends Model
     {
         foreach ($model->getErrors() as $fld => $errors) {
             foreach ($errors as $error) {
-                $this->addError($prefix.'.'.$fld, $error);
+                $this->addError($prefix . '.' . $fld, $error);
             }
         }
     }
@@ -373,7 +385,7 @@ abstract class CrudModel extends Model
     {
         $id = ($this->id ? $this->id : -1);
 
-        return $this->classViewName.'_'.$this->scope.'_'.$id;
+        return $this->classViewName . '_' . $this->scope . '_' . $id;
     }
 
     protected function crudFormatValue($pattern, $args = [])
