@@ -85,6 +85,9 @@ class Select extends Field implements FormControl, FormControlFilterable
     private function getValueAsArray()
     {
         if (is_null($this->value)) {
+            if (array_key_exists('default', $this->config)) {
+                return [$this->config['default']];
+            }
             return [];
         }
 
