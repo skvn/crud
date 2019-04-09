@@ -367,17 +367,9 @@ class CrudModelCollectionBuilder
                 }
                 $row[$col['data']] = $obj->formatted($col['data'], $args);
             }
-//            foreach ($this->columns as $col)
-//            {
-//                if (!empty($col['invisible']))
-//                {
-//                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
-//                }
-//                if (isset($row[$col['data']]) && !empty($col['format']))
-//                {
-//                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'], $col['format_args'] ?? []);
-//                }
-//            }
+            if (!array_key_exists('id', $row)) {
+                $row['id'] = $obj->getKey();
+            }
             $data[] = $row;
         }
 
