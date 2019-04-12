@@ -108,8 +108,8 @@ abstract class CrudModel extends Model
     
     public static function make($data)
     {
-        $id = is_numeric($data) ? $data : ($data['id'] ?? null);
         $class = static::class;
+        $id = is_numeric($data) ? $data : ($data[(new static)->getKeyName()] ?? null);
         if (!array_key_exists($class, static::$modelCache)) {
             static::$modelCache[$class] = [];
         }
