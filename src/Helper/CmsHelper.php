@@ -186,7 +186,7 @@ class CmsHelper
             $input = mb_strtolower($input, 'UTF-8');
         }
         $result = str_replace($arrRus, $arrEng, $input);
-        $result = preg_replace('#[^_-a-zA-Z0-9]#i', '', $result);
+        $result = preg_replace('#[^_\.a-zA-Z0-9-]#i', '', $result);
         if ($url_escape) {
             $result = str_replace([' ', '/', '\\'], '_', $result);
             $result = urlencode($result);
