@@ -166,7 +166,7 @@ class CmsHelper
         return false;
     }
 
-    public function translitRussian($input, $url_escape = false, $tolower = false)
+    public function translitRussian($input, $url_escape = false, $tolower = false, $allow_dot = false)
     {
         $arrRus = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м',
                    'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ь',
@@ -186,7 +186,11 @@ class CmsHelper
             $input = mb_strtolower($input, 'UTF-8');
         }
         $result = str_replace($arrRus, $arrEng, $input);
-        $result = preg_replace('#[^_\.a-zA-Z0-9-]#i', '', $result);
+        if ($allow_dot) {
+            $result = preg_replace('#[^_\.a-zA-Z0-9-]#i', '', $result);
+        } else {
+            $result = preg_replace('#[^_a-zA-Z0-9-]#i', '', $result);
+        }
         if ($url_escape) {
             $result = str_replace([' ', '/', '\\'], '_', $result);
             $result = urlencode($result);
