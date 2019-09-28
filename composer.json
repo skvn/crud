@@ -14,8 +14,8 @@
     ],
     "require": {
             "php": ">=7.0.0",
-	        "rcrowe/twigbridge": "^0.9.5",
-        	"twig/extensions": "^1.5",
+	        "rcrowe/twigbridge": "dev-master",
+        	"twig/extensions": "dev-master",
             "intervention/image": "^2.3",
             "mk-j/php_xlsxwriter": "^0.22"
 	},
