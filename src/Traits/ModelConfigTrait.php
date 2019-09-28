@@ -3,6 +3,7 @@
 namespace Skvn\Crud\Traits;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Skvn\Crud\Exceptions\ConfigException;
 use Skvn\Crud\Handlers\ListHandler;
 use Skvn\Crud\Models\CrudFile;
@@ -86,7 +87,7 @@ trait ModelConfigTrait
         } else {
             $this->scope = $scope;
         }
-        $method = camel_case('get_scope_config_'.$scope);
+        $method = Str::camel('get_scope_config_'.$scope);
         if (method_exists($this, $method)) {
             $this->config['scopes'][$this->scope] = array_merge($this->config['scopes'][$this->scope] ?? [], $this->$method());
         }

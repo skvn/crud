@@ -2,6 +2,7 @@
 
 namespace Skvn\Crud\Form;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Models\CrudModel;
@@ -118,7 +119,7 @@ class EntitySelect extends Field implements FormControl,FormControlFilterable
         if ($this->model->crudRelations->isMany($this->getName())) {
             //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
             $join = $this->name;
-            $col = snake_case(class_basename($this->config['model'])).'_id';
+            $col = Str::snake(class_basename($this->config['model'])).'_id';
         } else {
             $col = $this->getFilterColumnName();
         }

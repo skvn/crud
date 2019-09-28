@@ -11,6 +11,7 @@ use Skvn\Crud\Exceptions\ValidationException;
 use Skvn\Crud\Traits\ModelConfigTrait;
 use Skvn\Crud\Traits\ModelFormTrait;
 use Skvn\Crud\Traits\ModelInjectTrait;
+use Illuminate\Support\Str;
 
 abstract class CrudModel extends Model
 {
@@ -53,7 +54,7 @@ abstract class CrudModel extends Model
         $this->bootIfNotBooted();
 
         $this->classShortName = class_basename($this);
-        $this->classViewName = snake_case($this->classShortName);
+        $this->classViewName = Str::snake($this->classShortName);
         $this->config = $this->app['config']->get('crud.'.(! empty($this->table) ? $this->table : $this->classViewName));
         $this->config['class_name'] = $this->classViewName;
         if (empty($this->table)) {
@@ -77,7 +78,7 @@ abstract class CrudModel extends Model
     public static function resolveClass($model)
     {
         $app = Container::getInstance();
-        return $app['config']['crud_common.model_namespace'].'\\'.studly_case($model);
+        return $app['config']['crud_common.model_namespace'].'\\'.Str::studly($model);
     }
 
     public static function createInstance($model, $scope = self::DEFAULT_SCOPE, $id = null)
@@ -268,7 +269,7 @@ abstract class CrudModel extends Model
             return $this->validationMessages[$rule];
         }
 
-        return $this->app['translator']->trans('crud::rules.'.$rule);
+        return $this->app['translator']->get('crud::rules.'.$rule);
     }
 
     protected function parseValidationRule($field, $rule)
@@ -508,7 +509,7 @@ abstract class CrudModel extends Model
                         $desc = trim($docLines[1], "\t *");
                     }
                 }
-                $flist[] = ['name' => snake_case($matches[1]), 'method' => $m->name, 'description' => $desc];
+                $flist[] = ['name' => Str::snake($matches[1]), 'method' => $m->name, 'description' => $desc];
             }
         }
 

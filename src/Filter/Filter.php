@@ -8,6 +8,7 @@ use Skvn\Crud\Exceptions\Exception;
 use Skvn\Crud\Form\Field;
 use Skvn\Crud\Form\Form;
 use Skvn\Crud\Models\CrudModel;
+use Illuminate\Support\Str;
 
 class Filter
 {
@@ -26,7 +27,7 @@ class Filter
     {
         $filter = new self();
         foreach ($args as $k => $v) {
-            $method = camel_case('set_'.$k);
+            $method = Str::camel('set_'.$k);
             if (! method_exists($filter, $method)) {
                 throw new Exception('No '.$k.' argument exists for filter '.get_class($filter));
             }

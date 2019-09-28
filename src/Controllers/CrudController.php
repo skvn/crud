@@ -12,6 +12,7 @@ use Skvn\Crud\Models\CrudModelCollectionBuilder;
 use Skvn\Crud\Models\CrudNotify as Notify;
 use Skvn\Crud\Traits\TooltipTrait;
 use Skvn\Crud\Exceptions\ValidationException;
+use Illuminate\Support\Str;
 
 class CrudController extends Controller
 {
@@ -281,7 +282,7 @@ class CrudController extends Controller
     {
         try {
             $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
-            $ret = $obj->crudExecuteCommand(camel_case($command), $this->request->all());
+            $ret = $obj->crudExecuteCommand(Str::camel($command), $this->request->all());
 
             return ['success' => true, 'ret' => $ret, 'message' => isset($ret['message']) ? $ret['message'] : null];
         } catch (\Exception $e) {

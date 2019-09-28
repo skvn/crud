@@ -95,11 +95,6 @@ class CrudModelCollectionBuilder
 
             return $this;
         }
-//        if (!empty($scope))
-//        {
-//            $method = camel_case('get_' . $scope . '_list_collection');
-//            $method_query = camel_case('get_' . $scope . '_list_query');
-//        }
         $joins = [];
         foreach ($this->columns as $listCol) {
             //if ($relSpl = $this->model->resolveListRelation($listCol['data']))
@@ -112,14 +107,6 @@ class CrudModelCollectionBuilder
         if (method_exists($this->model, 'scope'.Str :: studly($scope))) {
             $this->collectionQuery = $this->model->{Str :: camel($scope)}();
         }
-//        if (method_exists($this->model, $method))
-//        {
-//            $this->collectionQuery = $this->model->$method($joins);
-//        }
-//        else if (method_exists($this->model, $method_query))
-//        {
-//            $this->collectionQuery = $this->model->$method_query($joins);
-//        }
         else {
             $this->collectionQuery = $this->createBasicListQuery($joins);
         }
@@ -167,7 +154,7 @@ class CrudModelCollectionBuilder
 //        {
 //            return $this;
 //        }
-        $methodCond = camel_case('append_'.$this->model->getScope().'_conditions');
+        $methodCond = Str::camel('append_'.$this->model->getScope().'_conditions');
         $conditions = $this->model->getList()->getFilter()->getConditions();
         if (method_exists($this->model, $methodCond)) {
             $conditions = $this->model->$methodCond($conditions);

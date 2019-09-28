@@ -2,6 +2,7 @@
 
 namespace Skvn\Crud\Form;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Contracts\FormControlFilterable;
@@ -52,7 +53,7 @@ class Select extends Field implements FormControl, FormControlFilterable
         $opts = [];
 
         if (! empty($this->config['find']) && empty($this->config['model'])) {
-            $method = 'selectOptions'.studly_case($this->config['find']);
+            $method = 'selectOptions'.Str::studly($this->config['find']);
             if (method_exists($this->model, $method)) {
                 $opts = $this->formatOptionsArray($this->model->$method());
             }
@@ -127,7 +128,7 @@ class Select extends Field implements FormControl, FormControlFilterable
         $modelObj = CrudModel :: createInstance($this->config['model'], null, is_numeric($this->value) ? $this->value : null);
         //$modelObj = new $class();
         if (! empty($this->config['find'])) {
-            $method = 'selectOptions'.studly_case($this->config['find']);
+            $method = 'selectOptions'.Str::studly($this->config['find']);
 
             return $this->formatOptionsArray($modelObj->$method($this->model));
         } else {
@@ -221,7 +222,7 @@ class Select extends Field implements FormControl, FormControlFilterable
         if ($this->model->crudRelations->isMany($this->getName())) {
             //if (!empty($this->config['relation']) && $this->model->isManyRelation($this->config['relation']))
             $join = $this->name;
-            $col = snake_case(class_basename($this->config['model'])).'_id';
+            $col = Str::snake(class_basename($this->config['model'])).'_id';
         } else {
             $col = $this->getFilterColumnName();
         }

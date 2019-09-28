@@ -2,6 +2,7 @@
 
 namespace Skvn\Crud\Form;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Skvn\Crud\Contracts\FormControl;
 use Skvn\Crud\Models\CrudModel;
@@ -66,7 +67,7 @@ class Tree extends Field implements FormControl
         $modelObj = new $class();
 
         if (! empty($this->config['find']) && ! empty($this->config['model'])) {
-            $method = $method = 'selectOptions'.studly_case($this->config['find']);
+            $method = $method = 'selectOptions'.Str::studly($this->config['find']);
 
             $val = $this->getValue();
             if (! is_array($val)) {
@@ -84,7 +85,7 @@ class Tree extends Field implements FormControl
             return CrudModelCollectionBuilder :: createTree($modelObj)
                         ->fetch();
         } elseif (! empty($this->config['find']) && empty($this->config['model'])) {
-            $method = $method = 'selectOptions'.studly_case($this->config['find']);
+            $method = $method = 'selectOptions'.Str::studly($this->config['find']);
 
             return $this->model->{$method}($this->getName());
         }

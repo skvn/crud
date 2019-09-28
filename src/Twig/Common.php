@@ -103,9 +103,9 @@ class Common extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction('snake_case', 'snake_case'),
-            new Twig_SimpleFunction('camel_case', 'camel_case'),
-            new Twig_SimpleFunction('studly_case', 'studly_case'),
+            new Twig_SimpleFunction('snake_case', '\\Illuminate\\Support\\Str::snake'),
+            new Twig_SimpleFunction('camel_case', '\\Illuminate\\Support\\Str::camel'),
+            new Twig_SimpleFunction('studly_case', '\\Illuminate\\Support\\Str::studly'),
             new Twig_SimpleFunction('crud_dump', function ($v) {
                 return '<pre>'.print_r($v, true).'</pre>';
             }, ['is_safe' => ['html']]),
