@@ -33,6 +33,7 @@
 
     function createSummernote(elem)
     {
+        $('.note-popover').hide();
         var toolbar = crud.action(elem, 'summernote_build_toolbar');
         if (!toolbar) {
             toolbar = [
@@ -45,7 +46,11 @@
                 ['misc', ['codeview', 'typo', 'typo2']]
             ];
         }
-        
+
+        var popover = crud.action($.summernote.options.popover, 'summernote_build_popover') || $.summernote.options.popover;
+        var buttons = {anchor: snAnchorButton(), typo: snTypoButton(), typo2: snTypoButton2()};
+        buttons = crud.action(buttons, 'summernote_build_buttons') || buttons;
+
         elem.summernote({
             //FIXME
             lang: 'ru-RU',
@@ -62,8 +67,9 @@
                     }, 10);
                 },
             },
+            popover: popover,
             modules: $.extend($.summernote.options.modules, {anchorDialog: snAnchorDialog()}),
-            buttons: {anchor: snAnchorButton(), typo: snTypoButton(), typo2: snTypoButton2()},
+            buttons: buttons,
             //modules: {
             //AnchorDialog: getAnchorDialog()
             //},

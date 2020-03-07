@@ -53,6 +53,11 @@ trait ModelInlineImgTrait
         });
     }
 
+    protected function postProcessInlineImgs($text, $url)
+    {
+        return $text;
+    }
+
     /**
      * Proces text for inline images.
      *
@@ -95,6 +100,7 @@ trait ModelInlineImgTrait
                     $img->save($this->getInlineImgPath($filename));
 
                     $text = str_replace($src, $this->getInlineImgUrl($filename), $text);
+                    $text = $this->postProcessInlineImgs($text, $this->getInlineImgUrl($filename));
                 }
             }
         }
