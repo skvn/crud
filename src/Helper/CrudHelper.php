@@ -91,7 +91,11 @@ class CrudHelper
             throw new ConfigException('Unable to init AutocompleteList for ' . $model->classViewName . ': title_field is not configured');
         }
         if (method_exists($model, 'scopeAutocomplete')) {
-            $query = $class::autocomplete($params)->where($model->confParam('title_field'), 'like', $params['q'].'%');
+            if (method_exists($model, 'autocompleteScopeOnly') && $model->autocompleteScopeOnly()) {
+                $query = $class::autocomplete($params);
+            } else {
+                $query = $class::autocomplete($params)->where($model->confParam('title_field'), 'like', $params['q'] . '%');
+            }
         } else {
             $query = $class::where($model->confParam('title_field'), 'like', $params['q'].'%');
         }
