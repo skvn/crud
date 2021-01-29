@@ -4,10 +4,11 @@ namespace Skvn\Crud\Form;
 
 use Carbon\Carbon;
 use Skvn\Crud\Contracts\FormControl;
+use Skvn\Crud\Contracts\FormControlFilterable;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Traits\FormControlCommonTrait;
 
-class DateRange extends Field implements FormControl
+class DateRange extends Field implements FormControl, FormControlFilterable
 {
     use FormControlCommonTrait;
 
@@ -24,13 +25,11 @@ class DateRange extends Field implements FormControl
             if ($this->value['to'] && $this->value['to']->timestamp < 10) {
                 $this->value['to'] = null;
             }
-            //$this->value = $this->model->getAttribute($this->config['fields'][0]) . "~" . $this->model->getAttribute($this->config['fields'][1]);
         }
     }
 
     public function getOutputValue():string
     {
-        //return date($this->config['format'], $this->getValueFrom()) . "-" . date($this->config['format'], $this->getValueTo());
         return $this->getValueFrom()->format($this->config['format']).'-'.$this->getValueTo()->format($this->config['format']);
     }
 
@@ -48,7 +47,6 @@ class DateRange extends Field implements FormControl
                 'from' => Carbon :: parse($split[0]),
                 'to'   => Carbon :: parse($split[1]),
             ];
-            //$this->value = $data[$this->name];
         } else {
             if (isset($data[$this->getFromFieldName()]) || isset($data[$this->getToFieldName()])) {
                 if (! empty($data[$this->getFromFieldName()])) {
@@ -110,14 +108,15 @@ class DateRange extends Field implements FormControl
     public function getFilterCondition()
     {
         if (! empty($this->value)) {
-            $split = explode('~', $this->value);
             $col = $this->getFilterColumnName();
-            if ($split[0] != '' && $split[1] != '') {
-                return ['cond' => [$col, 'BETWEEN', $split]];
-            } elseif ($split[0] != '') {
-                return ['cond' => [$col, '>=', $split[0]]];
-            } elseif ($split[1] != '') {
-                return ['cond' => [$col, '=<', $split[1]]];
+            $from = $this->value['from'] ? $this->value['from']->timestamp : 0;
+            $to = $this->value['to'] ? $this->value['to']->timestamp : 0;
+            if (!empty($from) && !empty($to)) {
+                return ['cond' => [$col, 'BETWEEN', [$from, $to]]];
+            } elseif (!empty($from)) {
+                return ['cond' => [$col, '>=', $from]];
+            } elseif (!empty($to)) {
+                return ['cond' => [$col, '=<', $to]];
             }
         }
     }
@@ -139,5 +138,4 @@ class DateRange extends Field implements FormControl
         return 'crud::crud.fields.date_range';
     }
 
-//
 }
