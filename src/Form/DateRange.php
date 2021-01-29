@@ -48,7 +48,7 @@ class DateRange extends Field implements FormControl, FormControlFilterable
                 'to'   => Carbon :: parse($split[1]),
             ];
         } else {
-            if (isset($data[$this->getFromFieldName()]) || isset($data[$this->getToFieldName()])) {
+            if (array_key_exists($this->getFromFieldName(), $data) || array_key_exists($this->getToFieldName(), $data)) {
                 if (! empty($data[$this->getFromFieldName()])) {
                     $this->value['from'] = Carbon :: parse($data[$this->getFromFieldName()]);
                 } else {
