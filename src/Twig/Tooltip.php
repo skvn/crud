@@ -3,10 +3,11 @@
 namespace Skvn\Crud\Twig;
 
 use Illuminate\Foundation\Application as LaravelApplication;
-use Twig_Extension;
-use Twig_SimpleFilter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+use Twig\TwigFilter;
 
-class Tooltip extends Twig_Extension
+class Tooltip extends AbstractExtension
 {
     protected $app;
 
@@ -28,7 +29,7 @@ class Tooltip extends Twig_Extension
     public function getFilters()
     {
         return [
-            new Twig_SimpleFilter('tooltip', [$this, 'tooltip'], ['is_safe' => ['html']]),
+            new TwigFilter('tooltip', [$this, 'tooltip'], ['is_safe' => ['html']]),
         ];
     }
 }

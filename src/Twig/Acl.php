@@ -3,10 +3,12 @@
 namespace Skvn\Crud\Twig;
 
 use Illuminate\Foundation\Application as LaravelApplication;
-use Twig_Extension;
-use Twig_SimpleFilter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+use Twig\TwigFilter;
 
-class Acl extends Twig_Extension
+
+class Acl extends AbstractExtension
 {
     protected $app;
 
@@ -30,7 +32,7 @@ class Acl extends Twig_Extension
     public function getFilters()
     {
         return [
-            new Twig_SimpleFilter('allowed', [$this, 'checkAcl']),
+            new TwigFilter('allowed', [$this, 'checkAcl']),
         ];
     }
 }

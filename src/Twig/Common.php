@@ -3,11 +3,11 @@
 namespace Skvn\Crud\Twig;
 
 use Illuminate\Foundation\Application as LaravelApplication;
-use Twig_Extension;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+use Twig\TwigFilter;
 
-class Common extends Twig_Extension
+class Common extends AbstractExtension
 {
     protected $app;
 
@@ -91,22 +91,22 @@ class Common extends Twig_Extension
     public function getFilters()
     {
         return [
-            new Twig_SimpleFilter('asset', [$this, 'asset']),
-            new Twig_SimpleFilter('readable_filesize', [$this, 'readableFilesize']),
-            new Twig_SimpleFilter('model_view', [$this, 'modelView']),
-            new Twig_SimpleFilter('is_numeric', [$this, 'isNumeric']),
-            new Twig_SimpleFilter('array_value', [$this, 'arrayValue']),
-            new Twig_SimpleFilter('abs_url', [$this, 'absoluteUrl']),
+            new TwigFilter('asset', [$this, 'asset']),
+            new TwigFilter('readable_filesize', [$this, 'readableFilesize']),
+            new TwigFilter('model_view', [$this, 'modelView']),
+            new TwigFilter('is_numeric', [$this, 'isNumeric']),
+            new TwigFilter('array_value', [$this, 'arrayValue']),
+            new TwigFilter('abs_url', [$this, 'absoluteUrl']),
         ];
     }
 
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction('snake_case', '\\Illuminate\\Support\\Str::snake'),
-            new Twig_SimpleFunction('camel_case', '\\Illuminate\\Support\\Str::camel'),
-            new Twig_SimpleFunction('studly_case', '\\Illuminate\\Support\\Str::studly'),
-            new Twig_SimpleFunction('crud_dump', function ($v) {
+            new TwigFunction('snake_case', '\\Illuminate\\Support\\Str::snake'),
+            new TwigFunction('camel_case', '\\Illuminate\\Support\\Str::camel'),
+            new TwigFunction('studly_case', '\\Illuminate\\Support\\Str::studly'),
+            new TwigFunction('crud_dump', function ($v) {
                 return '<pre>'.print_r($v, true).'</pre>';
             }, ['is_safe' => ['html']]),
 
