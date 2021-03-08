@@ -180,6 +180,10 @@
                     if (elm.is(':disabled')) {
                         return;
                     }
+                    if (elm.is(':checkbox')) {
+                        args[elm.attr('name')] = elm.prop('checked') ? elm.val() : '';
+                        return;
+                    }
                     if (naming === 'container') {
                         args[elm.parents('[data-ref]:first').data('ref')] = elm.val();
                     } else {
