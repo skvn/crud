@@ -186,20 +186,24 @@ class Relations implements ArrayAccess
     {
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return $this->has($offset);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->define($offset);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
     }
