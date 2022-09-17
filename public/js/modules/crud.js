@@ -158,7 +158,6 @@
                     }
                 }
 
-                args['id'] = parseInt(args['id']);
                 if (!args['id']) {
                     args['id'] = -1;
                 }
