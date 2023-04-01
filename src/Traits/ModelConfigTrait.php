@@ -40,8 +40,8 @@ trait ModelConfigTrait
             $dates = [$dates];
         }
         foreach ($dates as $d) {
-            if (! in_array($d, $this->dates)) {
-                $this->dates[] = $d;
+            if (!array_key_exists($d, $this->casts) || $thid->casts[$d] !== 'datetime') {
+                $this->casts[$d] = 'datetime';
             }
         }
     }
