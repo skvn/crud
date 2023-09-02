@@ -66,6 +66,9 @@ class Filter
         if (! $col) {
             return;
         }
+        if (!empty($col['filter_type'])) {
+            $col['type'] = $col['filter_type'];
+        }
         if ($col['type'] == 'date') {
             $col['type'] = 'date_range';
         }
