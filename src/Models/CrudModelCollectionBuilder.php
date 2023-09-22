@@ -4,6 +4,8 @@ namespace Skvn\Crud\Models;
 
 use Illuminate\Container\Container;
 use Illuminate\Support\Str;
+use Illuminate\Database\Query\Builder as LaravelBuilder;
+use Illuminate\Database\Eloquent\Builder as EloquestBuilder;
 
 class CrudModelCollectionBuilder
 {
@@ -43,21 +45,21 @@ class CrudModelCollectionBuilder
             $args['view_type'] = 'data_tables';
         }
 
-        return self :: create($model, $args);
+        return self::create($model, $args);
     }
 
     public static function createTree(CrudModel $model, $args = [])
     {
         $args['view_type'] = 'tree';
 
-        return self :: create($model, $args);
+        return self::create($model, $args);
     }
 
     public static function createQuery(CrudModel $model, $args = [])
     {
         $args['raw'] = true;
 
-        return self :: create($model, $args);
+        return self::create($model, $args);
     }
 
     public static function createEmpty(CrudModel $model, $args = [])
@@ -92,20 +94,18 @@ class CrudModelCollectionBuilder
     {
         if (! empty($this->params['raw'])) {
             $this->collectionQuery = $this->model->newQuery();
-
             return $this;
         }
         $joins = [];
         foreach ($this->columns as $listCol) {
             //if ($relSpl = $this->model->resolveListRelation($listCol['data']))
             if ($relSpl = $this->model->crudRelations->resolveReference($listCol['data'])) {
-                $joins[$relSpl['rel']] = function ($query) {
-                };
+                $joins[$relSpl['rel']] = function ($query) { };
             }
         }
         $scope = $this->model->getScope();
-        if (method_exists($this->model, 'scope'.Str :: studly($scope))) {
-            $this->collectionQuery = $this->model->{Str :: camel($scope)}();
+        if (method_exists($this->model, 'scope'.Str::studly($scope))) {
+            $this->collectionQuery = $this->model->{Str::camel($scope)}();
         }
         else {
             $this->collectionQuery = $this->createBasicListQuery($joins);
@@ -135,12 +135,11 @@ class CrudModelCollectionBuilder
         }
 
         if ($this->model->isTree()) {
-            $basic->orderBy($this->model->treePathColumn(), 'asc');
-            $basic->orderBy($this->model->treeOrderColumn(), 'asc');
+            $this->buildSort($basic, $this->model->treePathColumn())->buildSort($basic, $this->model->treeOrderColumn());
         } else {
             if (! empty($this->params['sort'])) {
                 foreach ($this->params['sort'] as $o => $v) {
-                    $basic->orderBy($o, $v);
+                    $this->buildSort($basic, $o, $v);
                 }
             }
         }
@@ -319,17 +318,13 @@ class CrudModelCollectionBuilder
                 $sort_columns[] = $col;
             }
         }
-//        $columns = array_filter($columns, function ($col) {
-//            return empty($col['invisible']);
-//        });
-//        var_dump($columns);
 
         if (! empty($this->params['order'])) {
             $this->collectionQuery->getQuery()->orders = [];
             $order = $this->params['order'];
             if (is_array($order)) {
                 foreach ($order as $oc) {
-                    $this->collectionQuery->orderBy(! empty($sort_columns[$oc['column']]['name']) ? $sort_columns[$oc['column']]['name'] : $sort_columns[$oc['column']]['data'], $oc['dir']);
+                    $this->buildSort($this->collectionQuery, $sort_columns[$oc['column']], $oc['dir']);
                 }
             }
         }
@@ -337,8 +332,6 @@ class CrudModelCollectionBuilder
         $total = ! empty($this->collectionQuery->cnt) ? $this->collectionQuery->cnt : 0;
         $q = $this->collectionQuery->getQuery();
         $this->app['session']->put('current_query_info', ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
-        //\Log :: info($this->collectionQuery->getQuery()->toSQL(), ['browsify' => true]);
-        //\Log :: info($this->collectionQuery->getQuery()->getBindings(), ['browsify' => true]);
         $rs = $this->collectionQuery->get();
 
         foreach ($rs as $obj) {
@@ -379,7 +372,7 @@ class CrudModelCollectionBuilder
             $order = $this->params['order'];
             if (is_array($order)) {
                 foreach ($order as $oc) {
-                    $this->collection->orderBy(! empty($columns[$oc['column']]['name']) ? $columns[$oc['column']]['name'] : $columns[$oc['column']]['data'], $oc['dir']);
+                    $this->buildSort($this->collectionQuery, $columns[$oc['column']], $oc['dir']);
                 }
             }
         }
@@ -404,17 +397,7 @@ class CrudModelCollectionBuilder
                 }
                 $row[$col['data']] = $obj->formatted($col['data'], $args);
             }
-//            foreach ($this->columns as $col)
-//            {
-//                if (!empty($col['invisible']))
-//                {
-//                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data']);
-//                }
-//                if (isset($row[$col['data']]) && !empty($col['format']))
-//                {
-//                    $row[$col['data']] = $obj->getDescribedColumnValue($col['data'], $col['format'], $col['format_args'] ?? []);
-//                }
-//            }
+
             $treeColumn = $obj->treePidColumn();
             $row[$treeColumn] = $obj->$treeColumn;
             if ($obj->children_count > 0) {
@@ -485,4 +468,25 @@ class CrudModelCollectionBuilder
     {
         return $this->collectionQuery->count();
     }
+
+
+    private function buildSort(LaravelBuilder|EloquestBuilder $query, $column, $direction = 'asc')
+    {
+        if (is_array($column)) {
+            $f = !empty($column['name']) ? $column['name'] : $column['data'];
+        } else {
+            $f = $column;
+        }
+        if (strpos($f, '>') !== false) {
+            $query->orderByRaw($f . ' ' . $direction);
+        } else {
+            if ($direction !== 'asc') {
+                $query->orderByDesc($f);
+            } else {
+                $query->orderBy($f);
+            }
+        }
+        return $this;
+    }
+
 }
