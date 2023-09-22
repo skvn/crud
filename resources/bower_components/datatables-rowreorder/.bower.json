@@ -1,0 +1,22 @@
+{
+  "name": "datatables-rowreorder",
+  "main": [
+    "js/dataTables.rowReorder.js",
+    "css/rowReorder.dataTables.scss"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7.0",
+    "datatables": ">=1.10.8"
+  },
+  "homepage": "https://github.com/DataTables/RowReorder",
+  "version": "1.2.8",
+  "_release": "1.2.8",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.2.8",
+    "commit": "4d1504cd65940bb959a09c5d20fec699d7c5a0dc"
+  },
+  "_source": "https://github.com/DataTables/RowReorder.git",
+  "_target": "*",
+  "_originalSource": "datatables-rowreorder"
+}

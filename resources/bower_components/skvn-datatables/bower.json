@@ -1,0 +1,24 @@
+{
+  "name": "dt",
+  "homepage": "https://github.com/skvn/dt",
+  "description": "",
+  "main": [
+    "media/js/jquery.dataTables.js",
+    "media/css/jquery.dataTables.css",
+    "media/images/sort_asc.png",
+    "media/images/sort_asc_disabled.png",
+    "media/images/sort_both.png",
+    "media/images/sort_desc.png",
+    "media/images/sort_desc_disabled.png"
+  ],
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
