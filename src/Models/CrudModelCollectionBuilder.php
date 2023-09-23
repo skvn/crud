@@ -14,6 +14,7 @@ class CrudModelCollectionBuilder
     protected $columns;
     protected $collectionQuery;
     protected $params = [];
+    protected $fieldMap = null;
 
     public function __construct(CrudModel $model, $args = [])
     {
@@ -26,6 +27,7 @@ class CrudModelCollectionBuilder
         if (! isset($this->params['view_type'])) {
             $this->params['view_type'] = '';
         }
+
     }
 
     public static function create(CrudModel $model, $args = [])
@@ -235,6 +237,7 @@ class CrudModelCollectionBuilder
         } else {
             //simple and
             list($col, $act, $val) = $cond;
+            $fld = $this->getDbField($col);
             $coll = is_null($q) ? $this->collectionQuery : $q;
             switch (strtolower($act)) {
                 case 'in':
@@ -246,7 +249,11 @@ class CrudModelCollectionBuilder
                     break;
 
                 default:
-                    $coll->where($col, $act, $val);
+                    if (strpos($fld, '>') !== false) {
+                        $coll->whereRaw($fld . ' ' . $act . ' ?', $val);
+                    } else {
+                        $coll->where($col, $act, $val);
+                    }
                     break;
             }
         }
@@ -275,6 +282,20 @@ class CrudModelCollectionBuilder
         }
 
         return $this;
+    }
+
+    private function getDbField($col)
+    {
+        if (is_null($this->fieldMap)) {
+            $this->fieldMap = [];
+            $cols = $this->params['columns'] ?? $this->columns;
+            foreach ($cols as $colInfo) {
+                if (!array_key_exists($colInfo['data'], $this->fieldMap)) {
+                    $this->fieldMap[$colInfo['data']] = !empty($colInfo['name']) ? $colInfo['name'] : $colInfo['data'];
+                }
+            }
+        }
+        return $this->fieldMap[$col] ?? $col;
     }
 
     public function paginate($skip, $take)
