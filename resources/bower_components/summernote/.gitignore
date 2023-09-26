@@ -35,8 +35,6 @@ build/
 #log files
 *.log
 
-# Ignoring dist folder content
-dist/*
 
 # Ignoring visual studio
 .vs
