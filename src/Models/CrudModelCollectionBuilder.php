@@ -241,7 +241,7 @@ class CrudModelCollectionBuilder
             $coll = is_null($q) ? $this->collectionQuery : $q;
             switch (strtolower($act)) {
                 case 'in':
-                    $coll->whereIn($col, $val);
+                    $coll->whereIn($fld, $val);
                     break;
 
                 case 'between':
