@@ -72,6 +72,11 @@ class Filter
         if ($col['type'] == 'date') {
             $col['type'] = 'date_range';
         }
+        if ($col['type'] == 'date_time') {
+            $col['type'] = 'date_range';
+            $col['format'] = 'd.m.Y H:i:s';
+            $col['jsformat'] = 'dd.mm.yyyy';
+        }
         $control = Form :: getControlByType($col['type']);
         if (! $control instanceof FormControlFilterable) {
             return;
