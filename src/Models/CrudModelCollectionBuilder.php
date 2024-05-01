@@ -166,7 +166,12 @@ class CrudModelCollectionBuilder
             $c = [];
             foreach ($this->columns as $column) {
                 if (! empty($column['searchable'])) {
-                    $c[] = [$column['data'], 'like', '%' . $this->params['search'].'%'];
+                    $fld = !empty($column['name']) ? $column['name'] : $column['data'];
+                    if (!empty($column['search_lower'])) {
+                        $c[] = ['lower(' . $fld . ')', 'like', "'" . '%' . mb_strtolower($this->params['search']) . '%' . "'"];
+                    } else {
+                        $c[] = [$fld, 'like', '%' . $this->params['search'] . '%'];
+                    }
                 }
             }
             if (! empty($c)) {
@@ -277,7 +282,11 @@ class CrudModelCollectionBuilder
                 break;
 
             default:
-                $coll->orWhere($col, $act, $val);
+                if (strpos($col, '>') !== false) {
+                    $coll->orWhereRaw($col . ' ' . $act . ' ' . $val);
+                } else {
+                    $coll->orWhere($col, $act, $val);
+                }
                 break;
         }
 
