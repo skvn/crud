@@ -111,6 +111,9 @@ class DateRange extends Field implements FormControl, FormControlFilterable
             $col = $this->getFilterColumnName();
             $from = $this->value['from'] ? $this->value['from']->timestamp : 0;
             $to = $this->value['to'] ? $this->value['to']->timestamp : 0;
+            if (!empty($to)) {
+                $to = strtotime(date('Y-m-d 23:59:59', $to));
+            }
             if (!empty($from) && !empty($to)) {
                 return ['cond' => [$col, 'BETWEEN', [$from, $to]]];
             } elseif (!empty($from)) {
