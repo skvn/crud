@@ -119,7 +119,7 @@ class DateRange extends Field implements FormControl, FormControlFilterable
             } elseif (!empty($from)) {
                 return ['cond' => [$col, '>=', $from]];
             } elseif (!empty($to)) {
-                return ['cond' => [$col, '=<', $to]];
+                return ['cond' => [$col, '<=', $to]];
             }
         }
     }
