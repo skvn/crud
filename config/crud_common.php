@@ -18,7 +18,8 @@ return [
         'css' => [
 
         ],
-        'builtjs' => null
+        'builtjs' => null,
+        'ymaps_key' => null,
     ],
     'form_controls' => [
         Skvn\Crud\Form\Checkbox :: class,
