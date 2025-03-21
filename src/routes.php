@@ -6,10 +6,14 @@ $adm_route_params = [
 ];
 
 $domain = Config::get('crud_common.domain');
-if ($domain)
-{
+if ($domain)  {
     $adm_route_params['domain'] = $domain;
 }
+$domain = Request::server('HTTP_HOST');
+if (in_array($domain, Config::get('crud_common.domain_aliases') ?? [])) {
+    $adm_route_params['domain'] = $domain;
+}
+
 Route::group($adm_route_params, function() {
 
     Route::get('/',                                                 ['as' => 'crud_welcome',               'uses' => 'CrudController@welcome']);
