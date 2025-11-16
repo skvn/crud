@@ -283,7 +283,8 @@
                     }
                     if (!$('#crud_form').hasClass('in')) {
                         //alert('show');
-                        $('#crud_form').modal('show');
+                        var openArg = $('form', $('#crud_form')).is('[data-skip-overlay-close]') ? {backdrop: 'static', keyboard: false} :  'show';
+                        $('#crud_form').modal(openArg);
                         //alert('after_show');
                     }
                     var frm = $('form:first', $('#crud_form'));
