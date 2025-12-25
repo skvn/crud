@@ -45,7 +45,7 @@ gulp.task('js', function() {
     return gulp
         .src(config.paths.vendor_js)
         .pipe(concat('vendor.min.js'))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest(config.paths.dist_js));
 });
 
