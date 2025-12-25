@@ -1,14 +1,14 @@
 {
   "private": true,
   "devDependencies": {
-    "gulp": "^3.8.8",
-    "gulp-concat": "^2.6.0"
+    "gulp": "^4",
+    "gulp-concat": "*"
   },
   "dependencies": {
-    "bower": "^1.7.9",
-    "gulp-clean-css": "^2.0.3",
-    "gulp-less": "^3.0.5",
-    "gulp-uglify": "^1.5.3"
-
+    "bower": "*",
+    "gulp-clean-css": "*",
+    "gulp-less": "*",
+    "gulp-uglify": "*",
+    "gulp-cssmin": "^0.2.0"
   }
 }

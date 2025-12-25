@@ -2,13 +2,16 @@ var config = require('./gulp-config.json');
 var gulp = require('gulp');
 var cleanCSS = require('gulp-clean-css');
 var concat = require('gulp-concat');
+var cssmin = require('gulp-cssmin');
+var uglify = require('gulp-uglify');
 
-gulp.task('default',['css','css_images','css_fonts','fonts','js','js_locales']);
+//gulp.task('build',['css','css_images','css_fonts','fonts','js','js_locales']);
 
 gulp.task('css', function() {
     return gulp
         .src(config.paths.vendor_css)
         .pipe(concat('vendor.min.css'))
+        .pipe(cssmin())
         .pipe(gulp.dest(config.paths.dist_css));
 });
 
@@ -42,6 +45,7 @@ gulp.task('js', function() {
     return gulp
         .src(config.paths.vendor_js)
         .pipe(concat('vendor.min.js'))
+        .pipe(uglify())
         .pipe(gulp.dest(config.paths.dist_js));
 });
 
