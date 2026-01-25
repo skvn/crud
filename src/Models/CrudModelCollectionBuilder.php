@@ -174,6 +174,12 @@ class CrudModelCollectionBuilder
                     }
                 }
             }
+            if (method_exists($this->model, 'appendSearchCondition')) {
+                $addcond = $this->model->appendSearchCondition($this->params['search']);
+                if ($addcond) {
+                    $c[] = $addcond;
+                }
+            }
             if (! empty($c)) {
                 $conditions[] = ['cond' => $c];
             }
