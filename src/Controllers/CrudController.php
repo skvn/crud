@@ -117,12 +117,20 @@ class CrudController extends Controller
 
     public function crudListExcel($model, $scope)
     {
-        $obj = CrudModel :: createInstance($model, $scope);
+        $obj = CrudModel::createInstance($model, $scope);
 
         $params = $this->request->all();
-        
+
+        $query = $this->app['session']->get('current_query_info');
+        if (empty($query) || ! isset($query['sql']) || ! isset($query['bind'])) {
+            $q = CrudModelCollectionBuilder::createDataTables($obj, $params)
+                ->applyContextFilter()->getCollectionQuery()->getQuery();
+            $query = ['sql' => $q->toSQL(), 'bind' => $q->getBindings()];
+        }
+        $query['rparams'] = $params;
+
         if (method_exists($obj, 'dumpRowsForExcel')) {
-            $xls = $obj->dumpRowsForExcel();
+            $xls = $obj->dumpRowsForExcel($query);
         } else {
             $cols = $obj->getList()->getParam('columns');
             $xls = [];
@@ -134,14 +142,7 @@ class CrudController extends Controller
             }
             $xls[] = $row;
     
-            $query = $this->app['session']->get('current_query_info');
-            if (empty($query) || ! isset($query['sql']) || ! isset($query['bind'])) {
-                $q = CrudModelCollectionBuilder :: createDataTables($obj, $params)
-                    ->applyContextFilter()->getCollectionQuery()->getQuery();
-                $query = ['sql' => $q->toSQL(), 'bind' => $q->getBindings()];
-            }
-    
-            $rs = \DB :: select($query['sql'], $query['bind']);
+            $rs = \DB::select($query['sql'], $query['bind']);
             foreach ($rs as $r) {
                 $row = [];
                 foreach ($cols as $col) {
@@ -166,9 +167,7 @@ class CrudController extends Controller
         echo $data;
         exit;
     }
-
 //
-
     public function crudEdit($model, $id)
     {
         $obj = CrudModel :: createInstance($model, $this->request->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
