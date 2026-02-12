@@ -207,7 +207,18 @@
                 language: {
                     url: "/vendor/crud/js/i18n/vendor/dataTables/"+win.CURRENT_LOCALE+".json"
                 },
-                rowCallback: rowCallBack
+                rowCallback: rowCallBack,
+                initComplete: function () {
+                    if ($(this).data('search_by_enter') != '1') {
+                        return;
+                    }
+                    var api = this.api();
+                    $('.dataTables_filter:first input').off('.DT').on('keyup.DT', function (e) {
+                        if (e.keyCode == 13) {
+                            api.search(this.value).draw();
+                        }
+                    });
+                }
             };
             if (tbl.data('rows_draggable')) {
                 dtConfig.rowReorder = {
