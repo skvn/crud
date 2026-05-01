@@ -3,8 +3,7 @@
     bind_events();
     $.widget("crud.crud_form", {
         options: {},
-        _create: function()
-        {
+        _create: function(){
             console.log('form created');
             
             var $form = this.element;
@@ -129,8 +128,7 @@
 
 
         },
-        showFields: function(names)
-        {
+        showFields: function(names) {
             for (var i in names) {
                 //alert(names[i]+ ':' +$(".form-group[data-ref="+names[i]+"]", this.element).length);
                 var c = $(".form-group[data-ref="+names[i]+"]", this.element);
@@ -148,8 +146,7 @@
                 //e.data('crud-validator-disabled', e.data('crud-validator')).attr('data-crud-validator', 'required');
             }
         },
-        hideFields: function(names)
-        {
+        hideFields: function(names) {
             for (var i in names) {
                 var c = $(".form-group[data-ref="+names[i]+"]", this.element);
                 c.hide();
@@ -165,13 +162,11 @@
                 $("[data-crud-validator]", c).data('crud-validator-disabled', '1').attr('data-crud-validator-disabled', '1');
             }
         },
-        resetErrors: function()
-        {
+        resetErrors: function() {
             $(".has-error", this.element).removeClass("has-error").find('*[data-rel=error]').hide();
             $("[data-remote-validator]", this.element).removeAttr("data-remote-validator");
         },
-        showError: function(control, message)
-        {
+        showError: function(control, message) {
             var p = this.element;
             if (control.indexOf('.') > 0) {
                 var segments = control.split('.');
@@ -187,11 +182,9 @@
             //$(".form-group:first", row).addClass("has-error").find('*[data-rel=error]').html(message).show();
             row.addClass("has-error").find('*[data-rel=error]').html(message).show();
         },
-        gotoError: function()
-        {
+        gotoError: function() {
             var e = $('.has-error:first', this.element);
-            if (e.length < 1)
-            {
+            if (e.length < 1) {
                 return;
             }
             if ($("[data-toggle=tab]", this.element).length > 0) {
@@ -222,8 +215,7 @@
                 var skip_arr = elem.data('skip_arr');
                 var only_children = elem.data('only_children');
 
-                if (only_children)
-                {
+                if (only_children) {
                     var $tpl = $($('#'+tpl_id, crud.getActiveTab(elem)).html());
                 } else {
                     var $tpl = $('#'+tpl_id, crud.getActiveTab(elem)).clone(true).attr('id','');
@@ -236,8 +228,7 @@
 
 
 
-                $tpl.find('*[name]').each(function ()
-                {
+                $tpl.find('*[name]').each(function () {
                     $(this).attr('disabled', false);
                     var name = $(this).attr('name');
                     if (!skip_arr) {
@@ -262,8 +253,8 @@
         };
 
         crud.add_actions(crud_actions);
-        crud.bind('crud.cancel_edit', function(data){
-
+        crud.bind('crud.cancel_edit', function(data) {
+            win.location.hash = '';
             //?? tab ??
             var id = 'tab_'+data.rel;
             if ($('div#'+id+'.tab-pane').length) {
@@ -286,7 +277,7 @@
 
 
 
-        crud.bind('crud.edit_element', function(data){
+        crud.bind('crud.edit_element', function(data) {
 
             if (data.ref) {
                 data.table = $('*[data-list_table_ref='+data.ref+']');
@@ -301,6 +292,9 @@
                 crud.init_edit_tab(model, data.id, {table: data.table, scope: data.table.data('crud_scope'), rargs:data.rargs?data.rargs:{}});
             } else {
                 //init edit modal
+                if (data.id > 0) {
+                    win.location.hash = data.id
+                }
                 crud.init_modal(model, data.id, {scope: data.table.data('crud_scope'), rargs:data.rargs?data.rargs:{}});
             }
         });

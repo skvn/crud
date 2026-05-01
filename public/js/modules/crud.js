@@ -204,8 +204,7 @@
             getElemContext: function(elem)
             {
                 var context = elem.parents('[data-context-limiter]:first');
-                if (context.length <= 0)
-                {
+                if (context.length <= 0) {
                     context = elem.parents("form");
                 }
                 return context;
@@ -217,8 +216,7 @@
                 var scope = args.scope || "";
                 var $tab_cont = args.table.parents('div.tabs-container').first();
 
-                if ( $('a[href="#tab_'+model+'_'+scope+'_'+id+'"]',$tab_cont).length)
-                {
+                if ( $('a[href="#tab_'+model+'_'+scope+'_'+id+'"]',$tab_cont).length) {
                     $('a[href="#tab_'+model+'_'+scope+'_'+id+'"]',$tab_cont).first().click();
                     return;
                 }
@@ -249,8 +247,7 @@
                     var frm = $cont.find('form').first();
                     frm.crud_form();
                     var handler = 'onShow_' + frm.data('crud_model') + '_' + frm.data('crud_scope');
-                    if (crud_actions[handler])
-                    {
+                    if (crud_actions[handler]) {
                         crud_actions[handler]($cont);
                     }
                     self.trigger('crud.content_loaded', {cont: $cont});
@@ -275,8 +272,7 @@
                     $('#crud_form').html(res);
                     //$('.modal-backdrop').remove();
                     $.ajaxSetup({async: true});
-                    if (res == 'Access denied')
-                    {
+                    if (res == 'Access denied') {
                         alert('Недостаточно прав доступа');
                         $('#crud_form').modal('hide');
                         return;
@@ -290,8 +286,7 @@
                     var frm = $('form:first', $('#crud_form'));
                     frm.crud_form();
                     var handler = 'onShow_' + frm.data('crud_model') + '_' + frm.data('crud_scope');
-                    if (crud_actions[handler])
-                    {
+                    if (crud_actions[handler]) {
                         crud_actions[handler]($('#crud_form'));
                     }
                     self.trigger('crud.content_loaded', {cont: $('#crud_form')});
@@ -302,12 +297,9 @@
             },
             format_error: function(error)
             {
-                if (error.indexOf("SQLSTATE[23000]")>=0)
-                {
+                if (error.indexOf("SQLSTATE[23000]")>=0) {
                     return i18n.say('error_duplicate');
-                }
-                else
-                {
+                } else {
                     return i18n.say('error_occured')+': ' + error;
                 }
             },
@@ -341,8 +333,7 @@
             var com_url = crud.format_setting("model_command_url", args );
             var $tbl = $('table[data-list_table_ref='+args['model']+'_'+args['scope']+']');
             
-            if (args['id']<0)
-            {
+            if (args['id']<0) {
 
                 var rows =[];
                 var selected_objs =  $tbl.DataTable().rows('.selected').data();
@@ -359,37 +350,26 @@
 
             $.post(com_url, args, function (res)
             {
-                if (res.success)
-                {
-                    if (res.message)
-                    {
+                if (res.success) {
+                    if (res.message) {
                         alert(res.message);
                     }
-                    if (elem.data('callback_event'))
-                    {
+                    if (elem.data('callback_event')) {
                         res['elem'] = elem;
                         crud.trigger(elem.data('callback_event'), res);
                     }
-                    else if (elem.data('callback'))
-                    {
+                    else if (elem.data('callback')) {
                         var idx = 'callback_' + elem.data('callback');
-                        if (typeof(crud_actions[idx]) != "undefined")
-                        {
+                        if (typeof(crud_actions[idx]) != "undefined") {
                             res['elem'] = elem;
                             crud_actions[idx](res);
-                        }
-                        else
-                        {
+                        } else {
                             eval(elem.data('callback'));
                         }
-                    }
-                    else
-                    {
+                    } else {
                         crud.trigger('crud.reload', res);
                     }
-                }
-                else
-                {
+                } else {
                     alert(res.error);
                 }
 
@@ -485,11 +465,8 @@
 
     function handle_action(el, action)
     {
-
-        if (el.data('confirm'))
-        {
-            if (!confirm(el.data('confirm')))
-            {
+        if (el.data('confirm')) {
+            if (!confirm(el.data('confirm'))) {
                 return;
             }
         }
@@ -497,12 +474,9 @@
         switch (action)
         {
             case 'crud_action':
-                if (crud_actions[el.data('action')])
-                {
+                if (crud_actions[el.data('action')]) {
                     crud_actions[el.data('action')](el);
-                }
-                else
-                {
+                } else {
                     alert('Undefined action '+ el.data('action'));
                 }
                 break;
@@ -515,8 +489,7 @@
                 //try to find table
                 var params = {};
                 var $table = el.parents('*[data-list_table_ref]').first();
-                if ($table)
-                {
+                if ($table) {
                     params = $.extend({}, $table.data());
                     params.table = $table;
 
@@ -537,13 +510,16 @@
         $("form[data-crud_form=ajax]").crud_form();
         $('[data-toggle="tooltip"]').tooltip({container: 'body'});
         $(crud.doc).on("shown.bs.tab", "a[data-toggle=tab]", function(e){
-            if ($(e.target).data('id'))
-            {
+            if ($(e.target).data('id')) {
                 crud.loc.hash = $(e.target).data('id');
             }
         });
+        var id = parseInt(win.location.hash.replace('#', ''));
+        var t = $('table[data-crud_table]');
+        if (id > 0 && t.length == 1) {
+            crud.trigger('crud.edit_element', {model: t.data('crid_table'), id: id, table: t});
+        }
     });
-
 
 
 })(window, document, location, console, jQuery);
