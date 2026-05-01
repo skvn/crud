@@ -517,7 +517,7 @@
         var id = parseInt(win.location.hash.replace('#', ''));
         var t = $('table[data-crud_table]');
         if (id > 0 && t.length == 1) {
-            crud.trigger('crud.edit_element', {model: t.data('crid_table'), id: id, table: t});
+            crud.trigger('crud.edit_element', {model: t.data('crud_table'), id: id, table: t});
         }
     });
 
