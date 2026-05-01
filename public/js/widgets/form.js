@@ -254,7 +254,6 @@
 
         crud.add_actions(crud_actions);
         crud.bind('crud.cancel_edit', function(data) {
-            win.location.hash = '';
             //?? tab ??
             var id = 'tab_'+data.rel;
             if ($('div#'+id+'.tab-pane').length) {

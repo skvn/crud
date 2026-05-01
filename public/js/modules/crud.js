@@ -514,7 +514,15 @@
                 crud.loc.hash = $(e.target).data('id');
             }
         });
-        var id = parseInt(win.location.hash.replace('#', ''));
+        $(crud.doc).on("hide.bs.modal", function(e) {
+            var formId = $('form', e.target).data('crud_id');
+            var locId = crud.loc.hash.replace('#', '');
+            if (formId && locId && locId == formId) {
+                crud.loc.hash = '';
+            }
+        });
+
+        var id = parseInt(w.location.hash.replace('#', ''));
         var t = $('table[data-crud_table]');
         if (id > 0 && t.length == 1) {
             crud.trigger('crud.edit_element', {model: t.data('crud_table'), id: id, table: t});
