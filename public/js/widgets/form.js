@@ -292,7 +292,8 @@
             } else {
                 //init edit modal
                 if (data.id > 0) {
-                    win.location.hash = data.id
+                    //win.location.hash = data.id
+                    history.pushState(null, null, '#' + data.id);
                 }
                 crud.init_modal(model, data.id, {scope: data.table.data('crud_scope'), rargs:data.rargs?data.rargs:{}});
             }

@@ -518,7 +518,8 @@
             var formId = $('form', e.target).data('crud_id');
             var locId = crud.loc.hash.replace('#', '');
             if (formId && locId && locId == formId) {
-                crud.loc.hash = '';
+                //crud.loc.hash = '';
+                w.history.pushState(null, null, '#');
             }
         });
 
