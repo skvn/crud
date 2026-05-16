@@ -14,6 +14,8 @@ class Select extends Field implements FormControl, FormControlFilterable
 {
     use FormControlCommonTrait;
 
+    public static $optionsCache = [];
+
     public function pullFromModel()
     {
         $this->value = $this->model->crudRelations->has($this->getName()) ? $this->model->crudRelations[$this->getName()]->getIds() : $this->model->getAttribute($this->getField());
@@ -50,6 +52,9 @@ class Select extends Field implements FormControl, FormControlFilterable
 
     public function getOptions()
     {
+        if (!empty($this->config['shared_options']) && array_key_exists($this->config['shared_options'], self::$optionsCache)) {
+            return self::$optionsCache[$this->config['shared_options']];
+        }
         $opts = [];
 
         if (! empty($this->config['find']) && empty($this->config['model'])) {
@@ -80,6 +85,9 @@ class Select extends Field implements FormControl, FormControlFilterable
         }
 
         //return array_merge($options, $opts);
+        if (!empty($this->config['shared_options'])) {
+            self::$optionsCache[$this->config['shared_options']] = $opts;
+        }
         return $opts;
     }
 
