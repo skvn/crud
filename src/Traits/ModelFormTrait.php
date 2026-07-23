@@ -82,10 +82,15 @@ trait ModelFormTrait
                             $this->form->addField($fld, $this->getField($fld, true));
                         } else {
                             $this->form->addTab($idx, array_filter($fld, function ($k) {
-                                return $k != 'fields';
+                                return $k != 'fields' && $k != 'fields_top';
                             }, ARRAY_FILTER_USE_KEY));
                             if (! empty($fld['fields'])) {
                                 foreach ($fld['fields'] as $field) {
+                                    $this->form->addField($field, $this->getField($field, true), $idx);
+                                }
+                            }
+                            if (! empty($fld['fields_top'])) {
+                                foreach ($fld['fields_top'] as $field) {
                                     $this->form->addField($field, $this->getField($field, true), $idx);
                                 }
                             }
