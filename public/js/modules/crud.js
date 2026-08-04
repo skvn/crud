@@ -402,7 +402,7 @@
 
                 $.get(url, $.extend({}, elem.data()), function (res) {
 
-                    $new_content = $(res);
+                    var $new_content = $(res);
                     $new_content.attr('id', popup);
                     if ($('#' + popup).length <= 0) {
                         
