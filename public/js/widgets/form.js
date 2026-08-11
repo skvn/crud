@@ -286,16 +286,21 @@
             if (!model && data.model) {
                 model = data.model;
             }
+
+            var scope = data.scope;
+            if (!scope) {
+                scope = data.table.data('crud_scope');
+            }
             if (data.table && data.table.data('form_type') == 'tabs') {
                 //open edit  tab
-                crud.init_edit_tab(model, data.id, {table: data.table, scope: data.table.data('crud_scope'), rargs:data.rargs?data.rargs:{}});
+                crud.init_edit_tab(model, data.id, {table: data.table, scope: scope, rargs:data.rargs?data.rargs:{}});
             } else {
                 //init edit modal
                 if (data.id > 0) {
                     //win.location.hash = data.id
                     history.pushState(null, null, '#' + data.id);
                 }
-                crud.init_modal(model, data.id, {scope: data.table.data('crud_scope'), rargs:data.rargs?data.rargs:{}});
+                crud.init_modal(model, data.id, {scope: scope, rargs:data.rargs?data.rargs:{}});
             }
         });
 
