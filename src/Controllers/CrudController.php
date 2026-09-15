@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Routing\Controller;
 use League\Flysystem\Exception;
+use Skvn\Crud\Exceptions\PassException;
 use Skvn\Crud\Form\Form;
 use Skvn\Crud\Models\CrudModel;
 use Skvn\Crud\Models\CrudModelCollectionBuilder;
@@ -189,7 +190,7 @@ class CrudController extends Controller
     public function crudUpdate($model, $id)
     {
         try {
-            $obj = CrudModel :: createInstance($model, $this->request->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
+            $obj = CrudModel:: createInstance($model, $this->request->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
             $form = $obj->getForm();
 
             $form->load($this->request->all());
@@ -205,6 +206,8 @@ class CrudController extends Controller
             $obj->crudSaved();
 
             return ['success' => true, 'crud_id' => $obj->getKey(), 'crud_model' => $obj->classShortName, 'crud_table' => $obj->classViewName];
+        } catch (PassException $e) {
+            throw $e;
         } catch (ValidationException $e) {
             return ['success' => false, 'errors' => $obj->getErrors()];
         } catch (\Exception $e) {
