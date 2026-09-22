@@ -10,6 +10,7 @@ return [
     'app_logo'                            => env('APPLICATION_LOGO', null),
     'middleware'                          => env('APP_BACKEND_MIDDLEWARE', 'web,auth'),
     'domain'                              => env('APP_BACKEND_DOMAIN'),
+    'filter_storage'                      => env('APP_FILTER_STORAGE', 'session'),
     'replace_morph_classes_with_basename' => false,
     'assets'                              => [
         'js' => [

@@ -112,26 +112,9 @@ class Filter
 
     public function fill($input = [])
     {
-        $stored = $this->app['session']->get($this->getStorageKey()) ?? [];
-        $store = [];
-        $data = array_merge($this->defaults, $stored);
-        foreach ($this->filters as $filter) {
-            $filter->setValue($data[$filter->name] ?? null);
-            if (! empty($input)) {
-                $filter->pullFromData($input);
-                $store[$filter->name] = $filter->getValue();
-            }
-        }
-        if (! empty($store)) {
-            $this->app['session']->put($this->getStorageKey(), $store);
-        }
+        $this->app['skvn.crud.filter.storage']->fill($this->model, $this->filters, $this->defaults, $input);
 
         return $this;
-    }
-
-    public function getStorageKey()
-    {
-        return 'crud_filter_'.$this->model->classViewName.'_'.$this->model->scope;
     }
 
     public function getConditions()

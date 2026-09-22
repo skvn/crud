@@ -189,6 +189,8 @@
             //console.log(cols);
             //var list_name = crud.crudObj.list_name ? crud.crudObj.list_name : 'index';
             var rowCallBack = crud.win.crudRowCallback ? crud.win.crudRowCallback : null;
+            var url = crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), url_params: tbl.data('list_url_params')});
+            url += win.location.search;
             var dtConfig = {
                 searching: tbl.data('searchable')?true:false,
                 processing: true,
@@ -196,7 +198,7 @@
                 pageLength: 30,
                 lengthMenu: [10, 30, 50, 100],
 
-                ajax: crud.format_setting("model_list_url", {model: tbl.data('crud_table'), scope: tbl.data('crud_scope'), url_params: tbl.data('list_url_params')}),
+                ajax: url,
                 order: order,
                 //rowReorder: {
                 //    update: false,
@@ -360,15 +362,11 @@
     {
 
         var crud_actions = {
-            refresh_table: function (elem)
-            {
-                if (elem.data('ref'))
-                {
+            refresh_table: function (elem) {
+                if (elem.data('ref')) {
                     $('table[data-list_table_ref='+elem.data('ref')+']').DataTable().ajax.reload();
-                }
-                else
-                {
-                    $('table[data-crud_table]').each(function(){
+                } else {
+                    $('table[data-crud_table]').each(function() {
                         $(this).DataTable().ajax.reload();
                     });
                 }
@@ -484,7 +482,7 @@
 
         });
 
-        $(crud.doc).on('reset', '#crud_filter_form', function (e) {
+        $(crud.doc).on('reset', '[data-crud-filters-form]', function (e) {
             //e.preventDefault();
             var $form = $(this);
             $('select', $form).each(function (){
@@ -532,22 +530,26 @@
 
 
             crud.trigger('form.before_submit', {form: $form});
-            $form.ajaxSubmit(
-                {
-                    type:'POST',
-                    url: crud.format_setting('model_filter_url', {model: $form.data('crud_model'), scope: $form.data('crud_scope')}),
-                    //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
-                    dataType: 'json',
-                    success: function (res) {
-                        crud.trigger('form.after_submit', {form: $form});
-                        //crud.toggle_form_progress($form)
-                        crud.trigger('crud.filter_set',res);
+            if ($form.attr('id') === 'crud_filter_form') {
+                $form.ajaxSubmit(
+                    {
+                        type:'POST',
+                        url: crud.format_setting('model_filter_url', {model: $form.data('crud_model'), scope: $form.data('crud_scope')}),
+                        //url: '/admin/crud/'+crud.crudObj['class_name']+'/filter/'+$(this).data('crud_context'),
+                        dataType: 'json',
+                        success: function (res) {
+                            crud.trigger('form.after_submit', {form: $form});
+                            //crud.toggle_form_progress($form)
+                            crud.trigger('crud.filter_set',res);
+                        }
+
                     }
-
-                }
-            );
+                );
+            }
+            if ($form.attr('id') === 'crud_filter_form_url') {
+                $form.submit();
+            }
             crud.trigger('crud.filter_reset');
-
         });
 
 

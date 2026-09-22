@@ -45,8 +45,8 @@ class ServiceProvider extends LServiceProvider
 
         // Register dependancy aliases
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-        $loader->alias('Crud', Facades\Crud :: class);
-        $loader->alias('Cms', Facades\Cms :: class);
+        $loader->alias('Crud', Facades\Crud::class);
+        $loader->alias('Cms', Facades\Cms::class);
         $loader->alias('Image', \Intervention\Image\Facades\Image::class);
 
 
@@ -88,12 +88,15 @@ class ServiceProvider extends LServiceProvider
         $this->app->bindIf('skvn.crud', function ($app) {
             return new Helper\CrudHelper($app);
         }, true);
+        $this->app->bindIf('skvn.crud.filter.storage', function ($app) {
+            return new Filter\Storage($app);
+        }, true);
     }
 
     protected function registerControls()
     {
         foreach ($this->app['config']->get('crud_common')['form_controls'] as $class) {
-            Form\Form :: registerControl($class);
+            Form\Form::registerControl($class);
         }
     }
 
@@ -102,6 +105,7 @@ class ServiceProvider extends LServiceProvider
         return [[
             'skvn.cms',
             'skvn.crud',
+            'skvn.crud.filter.storage',
         ]];
     }
 

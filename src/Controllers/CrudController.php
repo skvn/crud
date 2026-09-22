@@ -36,7 +36,8 @@ class CrudController extends Controller
         $this->view = $this->app['view'];
         $this->view->share('cmsHelper', $this->cmsHelper);
         $this->view->share('config', $this->app['config']->get('crud_common'));
-        $this->view->share('avail_controls', Form :: getAvailControls());
+        $this->view->share('avail_controls', Form::getAvailControls());
+        $this->view->share('filterStorage', $this->app->make('skvn.crud.filter.storage'));
     }
 
     public function welcome()
@@ -44,9 +45,9 @@ class CrudController extends Controller
         return $this->view->make('crud::welcome');
     }
 
-    public function crudIndex($model, $scope = CrudModel :: DEFAULT_SCOPE, $args = [])
+    public function crudIndex($model, $scope = CrudModel::DEFAULT_SCOPE, $args = [])
     {
-        $obj = CrudModel :: createInstance($model, $scope);
+        $obj = CrudModel::createInstance($model, $scope);
 
         $view = ! empty($args['view']) ? $args['view'] : $obj->resolveView('index');
 
@@ -55,9 +56,9 @@ class CrudController extends Controller
 
 //
 
-    public function crudPopupIndex($model, $scope = CrudModel :: DEFAULT_SCOPE, $args = [])
+    public function crudPopupIndex($model, $scope = CrudModel::DEFAULT_SCOPE, $args = [])
     {
-        $obj = CrudModel :: createInstance($model, $scope);
+        $obj = CrudModel::createInstance($model, $scope);
 
         $view = ! empty($args['view']) ? $args['view'] : $obj->resolveView('popup_index');
 
@@ -66,15 +67,15 @@ class CrudController extends Controller
 
 //
 
-    public function crudTree($model, $scope = CrudModel :: DEFAULT_SCOPE)
+    public function crudTree($model, $scope = CrudModel::DEFAULT_SCOPE)
     {
-        $obj = CrudModel :: createInstance($model, $scope);
+        $obj = CrudModel::createInstance($model, $scope);
 
         if ($this->request->ajax()) {
             $params = $this->request->all();
             $params['search'] = ! empty($params['search']['value']) ? $params['search']['value'] : '';
 
-            return CrudModelCollectionBuilder :: createTree($obj, $params)
+            return CrudModelCollectionBuilder::createTree($obj, $params)
                 ->applyContextFilter()
                 ->fetch();
         }
@@ -101,14 +102,14 @@ class CrudController extends Controller
 
     public function crudList($model, $scope)
     {
-        $obj = CrudModel :: createInstance($model, $scope);
+        $obj = CrudModel::createInstance($model, $scope);
 
         $skip = (int) $this->request->get('start', 0);
         $take = (int) $this->request->get('length', 0);
         $params = $this->request->all();
         $params['search'] = ! empty($params['search']['value']) ? $params['search']['value'] : '';
 
-        return CrudModelCollectionBuilder :: createDataTables($obj, $params)
+        return CrudModelCollectionBuilder::createDataTables($obj, $params)
             ->applyContextFilter()
             ->paginate($skip, $take)
             ->fetch();
@@ -171,10 +172,8 @@ class CrudController extends Controller
 //
     public function crudEdit($model, $id)
     {
-        $obj = CrudModel :: createInstance($model, $this->request->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
+        $obj = CrudModel::createInstance($model, $this->request->get('scope', CrudModel::DEFAULT_SCOPE), $id);
         $req = $this->request->all();
-        //var_dump($req);
-        //var_dump($obj->isFillable('parent_id'));
 
         foreach ($req as $k => $v) {
             if ($obj->isFillable($k)) {
@@ -190,7 +189,7 @@ class CrudController extends Controller
     public function crudUpdate($model, $id)
     {
         try {
-            $obj = CrudModel:: createInstance($model, $this->request->get('scope', CrudModel :: DEFAULT_SCOPE), $id);
+            $obj = CrudModel::createInstance($model, $this->request->get('scope', CrudModel::DEFAULT_SCOPE), $id);
             $form = $obj->getForm();
 
             $form->load($this->request->all());
@@ -252,12 +251,12 @@ class CrudController extends Controller
     public function crudFilter($model, $scope)
     {
         try {
-            $obj = CrudModel :: createInstance($model, $scope);
+            $obj = CrudModel::createInstance($model, $scope);
 
             $obj->getList()->fillFilter($this->request->all());
 
             return ['success' => true, 'crud_model' => $obj->classShortName, 'scope' => $scope];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
@@ -265,7 +264,7 @@ class CrudController extends Controller
     public function crudDelete($model)
     {
         try {
-            $class = CrudModel :: resolveClass($model);
+            $class = CrudModel::resolveClass($model);
 
             $ids = $this->request->get('ids');
             if (is_array($ids)) {
@@ -275,7 +274,7 @@ class CrudController extends Controller
             $obj->crudDeleted();
 
             return ['success' => true];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
@@ -283,7 +282,7 @@ class CrudController extends Controller
     public function crudCommand($model, $id, $command)
     {
         try {
-            $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
+            $obj = CrudModel::createInstance($model, CrudModel::DEFAULT_SCOPE, $id);
             $ret = $obj->crudExecuteCommand(Str::camel($command), $this->request->all());
 
             return ['success' => true, 'ret' => $ret, 'message' => isset($ret['message']) ? $ret['message'] : null];
@@ -299,7 +298,7 @@ class CrudController extends Controller
         $parent_id = $this->request->get('parent_id');
         $position = $this->request->get('position');
 
-        $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $id);
+        $obj = CrudModel::createInstance($model, CrudModel::DEFAULT_SCOPE, $id);
 
         $res = $obj->moveTreeAction($parent_id, $position);
         if ($res === true) {
@@ -330,7 +329,7 @@ class CrudController extends Controller
 
     public function crudTreeOptions($model)
     {
-        $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $this->request->get('id'));
+        $obj = CrudModel::createInstance($model, CrudModel::DEFAULT_SCOPE, $this->request->get('id'));
         $fObj = $obj->getForm()->getFieldByName($this->request->get('field'));
 
         return $fObj->getOptions();
@@ -338,7 +337,7 @@ class CrudController extends Controller
 
     public function crudSearchOptions($model)
     {
-        $obj = CrudModel :: createInstance($model, CrudModel :: DEFAULT_SCOPE, $this->request->get('id'));
+        $obj = CrudModel::createInstance($model, CrudModel::DEFAULT_SCOPE, $this->request->get('id'));
         $fObj = $obj->getForm()->getFieldByName($this->request->get('field'));
 
         return $fObj->getSearchOptions($this->request->get('query'));
