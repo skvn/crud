@@ -25,6 +25,10 @@ class CrudController extends Controller
     protected $cmsHelper;
     protected $request;
     protected $view;
+    /**
+     * @var \Skvn\Crud\Filter\Storage $filterStorage
+     */
+    protected $filterStorage;
 
     public function __construct(LaravelApplication $app, Guard $auth)
     {
@@ -34,10 +38,12 @@ class CrudController extends Controller
         $this->cmsHelper = $this->app->make('skvn.cms');
         $this->request = $this->app['request'];
         $this->view = $this->app['view'];
+        $this->filterStorage = $this->app->make('skvn.crud.filter.storage');
         $this->view->share('cmsHelper', $this->cmsHelper);
+        $this->view->share('request', $this->request);
         $this->view->share('config', $this->app['config']->get('crud_common'));
         $this->view->share('avail_controls', Form::getAvailControls());
-        $this->view->share('filterStorage', $this->app->make('skvn.crud.filter.storage'));
+        $this->view->share('filterStorage', $this->filterStorage);
     }
 
     public function welcome()
@@ -123,7 +129,7 @@ class CrudController extends Controller
 
         $params = $this->request->all();
 
-        $query = $this->app['session']->get('current_query_info');
+        $query = $this->filterStorage->getStoredCrudQuery();
         if (empty($query) || ! isset($query['sql']) || ! isset($query['bind'])) {
             $q = CrudModelCollectionBuilder::createDataTables($obj, $params)
                 ->applyContextFilter()->getCollectionQuery()->getQuery();

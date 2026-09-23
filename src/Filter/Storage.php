@@ -38,6 +38,21 @@ class Storage
         $this->$worker($model, $filters, $defaults, $input);
     }
 
+    public function getStoredCrudQuery()
+    {
+        if ($this->storageType === 'url') {
+            return $this->app['session']->get('current_query_info');
+        }
+        return null;
+    }
+
+    public function storeCrudQuery($query)
+    {
+        if ($this->storageType === 'url') {
+            $this->app['session']->put('current_query_info', ['sql' => $query->toSql(), 'bind' => $query->getBindings()]);
+        }
+    }
+
     private function fillFromSession(CrudModel $model, $filters, $defaults, $input)
     {
         $stored = $this->app['session']->get($this->getStorageKey($model)) ?? [];

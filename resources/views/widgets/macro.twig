@@ -1,4 +1,4 @@
-{% macro table(list) %}
+{% macro table(list, request) %}
 
     {%  if  list.getParam('edit_tab') %}
         <div class="tabs-container" data-tabs_container="{{ list.model.classViewName }}" data-scope="{{ list.model.scope }}">

@@ -367,7 +367,7 @@ class CrudModelCollectionBuilder
         $data = [];
         $total = ! empty($this->collectionQuery->cnt) ? $this->collectionQuery->cnt : 0;
         $q = $this->collectionQuery->getQuery();
-        $this->app['session']->put('current_query_info', ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
+        $this->app['skvn.crud.filter.storage']->storeCrudQuery($q);
         $rs = $this->collectionQuery->get();
 
         foreach ($rs as $obj) {
@@ -415,7 +415,7 @@ class CrudModelCollectionBuilder
         $data = [];
         $total = ! empty($this->collectionQuery->cnt) ? $this->collectionQuery->cnt : 0;
         $q = $this->collectionQuery->getQuery();
-        $this->app['session']->put('current_query_info', ['sql' => $q->toSql(), 'bind' => $q->getBindings()]);
+        $this->app['skvn.crud.filter.storage']->storeCrudQuery($q);
         //\Log :: info($this->collectionQuery->getQuery()->toSQL(), ['browsify' => true]);
         //\Log :: info($this->collectionQuery->getQuery()->getBindings(), ['browsify' => true]);
         $rs = $this->collectionQuery->get();
