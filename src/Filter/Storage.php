@@ -34,8 +34,13 @@ class Storage
 
     public function fill(CrudModel $model, $filters, $defaults, $input = [])
     {
-        $getter = 'getFromStorage' . $this->storageType;
-        $stored = $this->$getter($model, $filters);
+        $worker = 'fillFrom' . $this->storageType;
+        $this->$worker($model, $filters, $defaults, $input);
+    }
+
+    private function fillFromSession(CrudModel $model, $filters, $defaults, $input)
+    {
+        $stored = $this->app['session']->get($this->getStorageKey($model)) ?? [];
         $store = [];
         $data = array_merge($defaults, $stored);
         foreach ($filters as $filter) {
@@ -46,36 +51,25 @@ class Storage
             }
         }
         if (! empty($store)) {
-            $setter = 'setToStorage' . $this->storageType;
-            $this->$setter($model, $store);
+            $this->app['session']->put($this->getStorageKey($model), $store);
         }
     }
 
-    public function getFromStorageUrl(CrudModel $model, $filters)
+    private function fillFromUrl(CrudModel $model, $filters, $defaults, $input)
     {
-        $data = $this->app['request']->all();
-        $filterData = [];
+        $data = $defaults;
+        $input = array_merge($input, $this->app['request']->all());
         foreach ($filters as $filter) {
-            $filterData[$filter->name] = $data[$filter->name] ?? null;
+            $filter->setValue($data[$filter->name] ?? null);
+            if (! empty($input)) {
+                $filter->pullFromData($input);
+                $store[$filter->name] = $filter->getValue();
+            }
         }
-        return $filterData;
     }
 
-    public function getFromStorageSession(CrudModel $model, $filters)
-    {
-        return $this->app['session']->get($this->getStorageKey($model)) ?? [];
-    }
 
-    public function setToStorageSession(CrudModel $model, $data)
-    {
-        $this->app['session']->put($this->getStorageKey($model), $data);
-    }
-
-    public function setToStorageUrl(CrudModel $model, $data)
-    {
-    }
-
-    public function getStorageKey(CrudModel $model)
+    private function getStorageKey(CrudModel $model)
     {
         return 'crud_filter_'.$model->classViewName.'_'.$model->scope;
     }
