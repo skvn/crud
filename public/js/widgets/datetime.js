@@ -5,7 +5,7 @@
             switch (this.element.data('type'))
             {
                 case 'date':
-                    createDate(this.element);
+                    createDates(this.element);
                 break;
                 case 'date_time':
                     createDateTime(this.element);
@@ -16,6 +16,16 @@
             }
         }
     });
+
+    function createDates(cont)
+    {
+        if (cont.is('input')) {
+            createDate(this.element);
+        }
+        $('input', cont).each(function () {
+            createDate($(this));
+        });
+    }
 
     function createDate(elem)
     {
